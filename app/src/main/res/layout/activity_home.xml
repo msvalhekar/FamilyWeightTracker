@@ -9,13 +9,12 @@
 
     <include layout="@layout/tool_bar_home" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/button_home_add_user"
+    <Button
+        android:id="@+id/button_home_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@color/colorPrimaryDark"
-        android:src="@android:drawable/ic_input_add" />
+        android:layout_gravity="clip_vertical"
+        android:text="@string/button_home_start_text"
+        />
 
 </android.support.design.widget.CoordinatorLayout>

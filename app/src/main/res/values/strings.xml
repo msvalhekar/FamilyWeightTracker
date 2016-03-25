@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Family Weight Tracker</string>
     <string name="action_settings">Settings</string>
+    <string name="title_item_list">Members</string>
+    <string name="title_item_detail">Member Detail</string>
+    <string name="button_home_start_text">Start</string>
 </resources>
