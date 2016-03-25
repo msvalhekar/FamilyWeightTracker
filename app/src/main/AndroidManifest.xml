@@ -14,13 +14,14 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Activities.UsersListActivity"
             android:label="@string/title_item_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.ItemDetailActivity"
             android:label="@string/title_item_detail"
@@ -30,6 +31,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.UsersListActivity" />
         </activity>
+        <activity
+            android:name=".Activities.AddNewUserActivity"
+            android:label="@string/title_activity_add_new_user"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

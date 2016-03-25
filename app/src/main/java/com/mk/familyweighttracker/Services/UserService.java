@@ -24,4 +24,12 @@ public class UserService {
     public User getUser(int userId) {
         return userRepository.getUser(userId);
     }
+
+    public Boolean isAlreadyAdded(String name) {
+        return userRepository.isAlreadyAdded(name);
+    }
+
+    public User addUser(User newUser) {
+        return userRepository.addUser(newUser);
+    }
 }

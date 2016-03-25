@@ -31,11 +31,13 @@ import java.util.List;
  */
 public class UsersListActivity extends AppCompatActivity {
 
+    private static final int NEW_USER_ADDED_REQUEST = 1;
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
     private boolean mTwoPane;
+    private View mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +52,14 @@ public class UsersListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(getApplicationContext(), )
+                Intent intent = new Intent(getApplicationContext(), AddNewUserActivity.class);
+                startActivityForResult(intent, NEW_USER_ADDED_REQUEST);
             }
         });
 
-        View recyclerView = findViewById(R.id.item_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        mRecyclerView = findViewById(R.id.item_list);
+        assert mRecyclerView != null;
+        setupRecyclerView((RecyclerView) mRecyclerView);
 
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
@@ -64,6 +67,18 @@ public class UsersListActivity extends AppCompatActivity {
             // If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == NEW_USER_ADDED_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // update the list for new record
+                setupRecyclerView((RecyclerView)mRecyclerView);
+            }
         }
     }
 

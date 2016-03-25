@@ -6,12 +6,16 @@ package com.mk.familyweighttracker.Models;
 public class User {
     private int mId;
     private String mName;
+    private double mWeight;
+    private double mHeight;
     private String mImagePath;
 
-    public User(int id, String name, String imagePath)
+    public User(int id, String name, double weight, double height, String imagePath)
     {
         mId = id;
         mName = name;
+        mWeight = weight;
+        mHeight = height;
         mImagePath = imagePath;
     }
 
@@ -25,5 +29,13 @@ public class User {
 
     public String getImagePath() {
         return mImagePath;
+    }
+
+    public double getWeight() {
+        return mWeight;
+    }
+
+    public double getHeight() {
+        return mHeight;
     }
 }
