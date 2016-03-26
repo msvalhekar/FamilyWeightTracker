@@ -9,4 +9,4 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".Activities.UsersListActivity"
-    tools:listitem="@layout/user_list_content" />
+    tools:listitem="@layout/user_record_content" />

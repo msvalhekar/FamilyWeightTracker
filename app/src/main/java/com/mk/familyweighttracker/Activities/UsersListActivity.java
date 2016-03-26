@@ -105,7 +105,7 @@ public class UsersListActivity extends AppCompatActivity {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_list_content, parent, false);
+                    .inflate(R.layout.user_content, parent, false);
             return new ViewHolder(view);
         }
 

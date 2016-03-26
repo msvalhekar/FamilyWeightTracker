@@ -26,15 +26,6 @@
                 android:value=".HomeActivity" />
         </activity>
         <activity
-            android:name=".Activities.ItemDetailActivity"
-            android:label="@string/title_item_detail"
-            android:parentActivityName=".Activities.UsersListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.UsersListActivity" />
-        </activity>
-        <activity
             android:name=".Activities.UserDetailActivity"
             android:label="Member Details"
             android:parentActivityName=".Activities.UsersListActivity"

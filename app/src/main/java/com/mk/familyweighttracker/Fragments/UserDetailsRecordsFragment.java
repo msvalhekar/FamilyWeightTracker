@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mk.familyweighttracker.IUserDetailsFragment;
-import com.mk.familyweighttracker.Models.MinimalUser;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
@@ -59,7 +58,7 @@ public class UserDetailsRecordsFragment extends Fragment implements IUserDetails
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.user_list_content, parent, false);
+                    .inflate(R.layout.user_record_content, parent, false);
             return new ViewHolder(view);
         }
 
@@ -74,7 +73,7 @@ public class UserDetailsRecordsFragment extends Fragment implements IUserDetails
 //                public void onClick(View v) {
 //                    Context context = v.getContext();
 //                    Intent intent = new Intent(context, UserDetailActivity.class);
-//                    intent.putExtra(ItemDetailFragment.ARG_USER_ID, user.getId());
+//                    intent.putExtra(UserDetailActivity.ARG_USER_ID, user.getId());
 //                    context.startActivity(intent);
 //                }
 //            });
