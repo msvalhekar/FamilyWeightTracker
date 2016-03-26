@@ -4,6 +4,7 @@ import com.mk.familyweighttracker.Models.MinimalUser;
 import com.mk.familyweighttracker.Models.User;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,8 +18,8 @@ public class UserRepository {
         if(mUsers == null) {
             mUsers = new ArrayList();
 
-            mUsers.add(new User(0, "Mk", 80, 173, "mk.img"));
-            mUsers.add(new User(1, "Rash", 54, 153, "rash.img"));
+            mUsers.add(createUser(0, "Mk", 80, 173, "mk.img"));
+            mUsers.add(createUser(1, "Rash", 54, 153, "rash.img"));
             //mUsers.add(new User(2, "Soham", "soham.img"));
             //mUsers.add(new User(3, "Ovee", "ovee.img"));
         }
@@ -58,5 +59,28 @@ public class UserRepository {
         newUser = new User(mUsers.size(), newUser.getName(), newUser.getWeight(), newUser.getHeight(), newUser.getImagePath());
         mUsers.add(newUser);
         return newUser;
+    }
+
+    private User createUser(int id, String name, double weight, double height, String imagePath)
+    {
+        User user = new User(id, name, weight, height, imagePath);
+        user.addReading(weight *1.02,height,new Date());
+        user.addReading(weight *1.04,height,new Date());
+        user.addReading(weight *1.08,height,new Date());
+        user.addReading(weight *1.01,height,new Date());
+        if(id == 1)
+        {
+            user.addReading(weight *1.02, height, new Date());
+            user.addReading(weight *1.03, height, new Date());
+            user.addReading(weight *1.07, height, new Date());
+            user.addReading(weight *1.04, height, new Date());
+            user.addReading(weight *1.01, height, new Date());
+            user.addReading(weight *0.92, height, new Date());
+            user.addReading(weight *0.93, height, new Date());
+            user.addReading(weight *0.87, height, new Date());
+            user.addReading(weight *0.84, height, new Date());
+            user.addReading(weight *0.81, height, new Date());
+        }
+        return user;
     }
 }

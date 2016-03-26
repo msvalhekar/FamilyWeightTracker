@@ -2,6 +2,7 @@ package com.mk.familyweighttracker.Services;
 
 import com.mk.familyweighttracker.Models.MinimalUser;
 import com.mk.familyweighttracker.Models.User;
+import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.Repositories.UserRepository;
 
 import java.util.List;

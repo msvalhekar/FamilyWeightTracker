@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.design.widget.FloatingActionButton;
@@ -47,6 +48,11 @@ public class UsersListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_users_list);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
+        // Show the Up button in the action bar.
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.button_users_list_add_user);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -108,29 +114,14 @@ public class UsersListActivity extends AppCompatActivity {
             final MinimalUser user = mUsers.get(position);
 
             holder.setUser(user);
-            //holder.user = mUsers.get(position);
-            //holder.mImageView.setImageResource(mUsers.get(position).getImagePath());
-            //holder.mNameView.setText(mUsers.get(position).getName());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putInt(ItemDetailFragment.ARG_USER_ID, user.getId());
-
-                        ItemDetailFragment fragment = new ItemDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.item_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, ItemDetailActivity.class);
-                        intent.putExtra(ItemDetailFragment.ARG_USER_ID, user.getId());
-
-                        context.startActivity(intent);
-                    }
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, UserDetailActivity.class);
+                    intent.putExtra(UserDetailActivity.ARG_USER_ID, user.getId());
+                    context.startActivity(intent);
                 }
             });
         }
@@ -156,7 +147,7 @@ public class UsersListActivity extends AppCompatActivity {
             public void setUser(MinimalUser user)
             {
                 mUser = user;
-                //holder.mImageView.setImageResource(mUsers.get(position).getImagePath());
+                mImageView.setImageResource(R.drawable.dummy_contact);
                 mNameView.setText(user.getName());
             }
 

@@ -1,9 +1,33 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/item_detail"
-    style="?android:attr/textAppearanceLarge"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:textIsSelectable="true"
-    tools:context="com.mk.familyweighttracker.Activities.ItemDetailFragment" />
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".HomeActivity">
+
+    <!--<com.mk.familyweighttracker.Framework.SlidingTabLayout-->
+        <!--android:id="@+id/tabs"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:elevation="2dp"-->
+        <!--android:background="@color/colorPrimary"-->
+        <!--/>-->
+    <!--<android.support.v4.view.ViewPager-->
+        <!--android:id="@+id/user_detail_pager"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_weight="1"-->
+        <!--/>-->
+</LinearLayout>
+
+<!--<TextView xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--xmlns:tools="http://schemas.android.com/tools"-->
+<!--android:id="@+id/item_detail"-->
+<!--style="?android:attr/textAppearanceLarge"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="match_parent"-->
+<!--android:padding="16dp"-->
+<!--android:textIsSelectable="true"-->
+<!--tools:context="com.mk.familyweighttracker.Activities.ItemDetailFragment" />-->
