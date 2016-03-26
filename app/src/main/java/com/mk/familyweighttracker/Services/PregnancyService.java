@@ -4,6 +4,7 @@ import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Models.WeekWeightGainRange;
 import com.mk.familyweighttracker.Repositories.PregnancyRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,14 +12,36 @@ import java.util.List;
  */
 public class PregnancyService {
 
-    private PregnancyRepository repository;
+    private PregnancyRepository repository = new PregnancyRepository();
 
-    public PregnancyService()
-    {
-        repository = new PregnancyRepository();
+    public PregnancyService() {
     }
 
     public List<WeekWeightGainRange> getWeightGainTableFor(BodyWeightCategory category) {
         return repository.getWeightGainTableFor(category);
+    }
+
+    public List<WeekWeightGainRange> getWeightGainTableFor(double baseWeight, BodyWeightCategory category) {
+        List<WeekWeightGainRange> records = repository.getWeightGainTableFor(category);
+
+        List<WeekWeightGainRange> recordsToReturn = new ArrayList<>();
+        for (WeekWeightGainRange record: records) {
+            recordsToReturn.add(new WeekWeightGainRange(
+                    record.WeekNumber,
+                    record.MinimumWeight + baseWeight,
+                    record.MaximumWeight + baseWeight));
+        }
+        return recordsToReturn;
+    }
+
+    // BMI = (wt in kg) / squareOf(height in meters)
+    public double calculateBmi(double heightInMeter, double weightInKg) {
+        if(heightInMeter < 0) return 0;
+
+        return weightInKg / Math.pow(heightInMeter, 2);
+    }
+
+    public BodyWeightCategory getWeightCategory(double bmi) {
+        return repository.getWeightCategory(bmi);
     }
 }

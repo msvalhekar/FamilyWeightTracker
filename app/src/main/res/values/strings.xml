@@ -5,4 +5,5 @@
     <string name="title_item_detail">Member Detail</string>
     <string name="button_home_start_text">Start</string>
     <string name="title_activity_add_new_user">Add New Member</string>
+    <string name="title_activity_add_user_reading">Add Reading</string>
 </resources>

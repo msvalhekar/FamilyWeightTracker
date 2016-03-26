@@ -1,6 +1,8 @@
 package com.mk.familyweighttracker.Models;
 
-import java.net.URLEncoder;
+import com.mk.familyweighttracker.Enums.BodyWeightCategory;
+import com.mk.familyweighttracker.Services.PregnancyService;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,8 +13,8 @@ import java.util.List;
 public class User {
     private int mId;
     private String mName;
-    private double mWeight;
-    private double mHeight;
+    private double mWeightInKg;
+    private double mHeightInCm;
     private String mImagePath;
     private List<UserReading> mReadings;
 
@@ -20,8 +22,8 @@ public class User {
     {
         mId = id;
         mName = name;
-        mWeight = weight;
-        mHeight = height;
+        mWeightInKg = weight;
+        mHeightInCm = height;
         mImagePath = imagePath;
         mReadings = new ArrayList<>();
     }
@@ -39,11 +41,14 @@ public class User {
     }
 
     public double getWeight() {
-        return mWeight;
+        return mWeightInKg;
     }
 
     public double getHeight() {
-        return mHeight;
+        return mHeightInCm;
+    }
+    public double getHeightInMeter() {
+        return mHeightInCm / 100.0;
     }
 
     public void addReading(double weight, double height, Date takenOn)
@@ -54,5 +59,13 @@ public class User {
 
     public List<UserReading> getReadings() {
         return mReadings;
+    }
+
+    public double getBmi() {
+        return new PregnancyService().calculateBmi(getHeightInMeter(), getWeight());
+    }
+
+    public BodyWeightCategory getWeightCategory() {
+        return new PregnancyService().getWeightCategory(getBmi());
     }
 }

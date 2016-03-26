@@ -10,7 +10,7 @@ public class WeekWeightGainRange {
 
     public final double MinimumWeight;
 
-    public WeekWeightGainRange(int weekNumber, double maximumWeight, double minimumWeight) {
+    public WeekWeightGainRange(int weekNumber, double minimumWeight, double maximumWeight) {
         WeekNumber = weekNumber;
         MaximumWeight = maximumWeight;
         MinimumWeight = minimumWeight;

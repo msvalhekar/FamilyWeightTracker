@@ -14,6 +14,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,6 +43,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.UsersListActivity" />
         </activity>
+        <activity
+            android:name=".Activities.AddUserRecordActivity"
+            android:label="@string/title_activity_add_user_reading"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Activities.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
     </application>
 
 </manifest>

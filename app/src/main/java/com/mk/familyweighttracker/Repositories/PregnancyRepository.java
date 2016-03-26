@@ -10,6 +10,7 @@ import java.util.List;
  * Created by mvalhekar on 26-03-2016.
  */
 public class PregnancyRepository {
+    static List<BmiWeightRange> categories;
     static List<WeekWeightGain> records;
     static List<WeekWeightGainRange> weightGainTableForUnderWeight;
     static List<WeekWeightGainRange> weightGainTableForNormal;
@@ -18,10 +19,11 @@ public class PregnancyRepository {
 
     public PregnancyRepository()
     {
-        loadData();
+        loadWeekWeightGainRecords();
+        loadBmiCategories();
     }
 
-    private void loadData() {
+    private void loadWeekWeightGainRecords() {
         if(records != null) return;
 
         records = new ArrayList();
@@ -69,6 +71,17 @@ public class PregnancyRepository {
         records.add(new WeekWeightGain(40, 12.7, 18.1, 6.8, 11.3, 11.3, 15.9, 5, 9.1));
     }
 
+    private void loadBmiCategories() {
+        if(categories != null) return;
+
+        categories = new ArrayList();
+
+        categories.add(new BmiWeightRange(BodyWeightCategory.UnderWeight, 1, 18.49));
+        categories.add(new BmiWeightRange(BodyWeightCategory.Normal, 18.5, 24.99));
+        categories.add(new BmiWeightRange(BodyWeightCategory.OverWeight, 25, 29.99));
+        categories.add(new BmiWeightRange(BodyWeightCategory.Obese, 30, 100));
+    }
+
     private List<WeekWeightGainRange> createWeightGainTableFor(BodyWeightCategory category) {
         List<WeekWeightGainRange> result = new ArrayList<>();
         for (WeekWeightGain weekWeightGain : records) {
@@ -99,6 +112,32 @@ public class PregnancyRepository {
             return weightGainTableForObese;
         }
         return null;
+    }
+
+    public BodyWeightCategory getWeightCategory(double bmi) {
+        for (BmiWeightRange range: categories)
+        {
+            if(range.isWithinRange(bmi))
+                return range.Category;
+        }
+        return BodyWeightCategory.Invalid;
+    }
+
+    private class BmiWeightRange {
+        public final BodyWeightCategory Category;
+        public final double MaximumBmi;
+        public final double MinimumBmi;
+
+        private BmiWeightRange(BodyWeightCategory category, double minimumBmi, double maximumBmi) {
+            Category = category;
+            MaximumBmi = maximumBmi;
+            MinimumBmi = minimumBmi;
+        }
+
+        public boolean isWithinRange(double bmi)
+        {
+            return MinimumBmi <= bmi && bmi <= MaximumBmi;
+        }
     }
 
     private class WeekWeightGain {

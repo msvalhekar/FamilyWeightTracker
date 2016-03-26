@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
     <ProgressBar
-        android:id="@+id/add_user_progress"
+        android:id="@+id/add_reading_progress"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,55 +23,42 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/add_user_form"
+            android:id="@+id/add_reading_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/add_user_image"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/contact_default"
-                android:scaleType="centerCrop" >
-            </ImageButton>
-
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
-                    android:id="@+id/add_user_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Name"
-                    android:ems="10"
-                    android:inputType="textPersonName"/>
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                >
-                <EditText
-                    android:id="@+id/add_user_weight"
+                    android:id="@+id/add_reading_period"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
-                    android:hint="Weight"
+                    android:hint="period"
                     android:maxLines="1"
                     android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
-            <Switch
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
-                    android:id="@+id/add_user_height"
+                    android:id="@+id/add_reading_weight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:hint="weight (kg)"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/add_reading_height"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="height (cm)"
@@ -86,14 +73,14 @@
                 android:layout_height="match_parent" >
                 <TableRow>
                     <Button
-                        android:id="@+id/add_user_cancel_button"
+                        android:id="@+id/add_reading_cancel_button"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@android:string/cancel" />
 
                     <Button
-                        android:id="@+id/add_user_save_button"
+                        android:id="@+id/add_reading_save_button"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

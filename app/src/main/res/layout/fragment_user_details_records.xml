@@ -2,8 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.mk.familyweighttracker.Fragments.UserDetailsRecordsFragment">
 
     <include layout="@layout/user_reocrds_list" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_user_add_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/colorPrimaryDark"
+        android:src="@android:drawable/ic_input_add" />
 </FrameLayout>

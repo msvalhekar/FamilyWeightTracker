@@ -1,8 +1,10 @@
 package com.mk.familyweighttracker.Fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,17 +12,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mk.familyweighttracker.Activities.AddNewUserActivity;
+import com.mk.familyweighttracker.Activities.AddUserRecordActivity;
+import com.mk.familyweighttracker.Activities.UserDetailActivity;
 import com.mk.familyweighttracker.IUserDetailsFragment;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
+import com.mk.familyweighttracker.Services.UserService;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class UserDetailsRecordsFragment extends Fragment implements IUserDetailsFragment{
 
+    private static final int NEW_USER_RECORD_ADDED_REQUEST = 1;
     private User mUser;
+    private RecyclerView mRecyclerView;
+
     public UserDetailsRecordsFragment() {
         // Required empty public constructor
     }
@@ -36,14 +45,38 @@ public class UserDetailsRecordsFragment extends Fragment implements IUserDetails
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_details_records, container, false);
 
-        View recyclerView = view.findViewById(R.id.user_record_list);
-        setupRecyclerView((RecyclerView) recyclerView);
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.button_user_add_record);
+        fab.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), AddUserRecordActivity.class);
+                intent.putExtra(UserDetailActivity.ARG_USER_ID, mUser.getId());
+                startActivityForResult(intent, NEW_USER_RECORD_ADDED_REQUEST);
+            }
+        });
+
+        mRecyclerView = ((RecyclerView) view.findViewById(R.id.user_record_list));
+        setupRecyclerView(mRecyclerView);
 
         return view;
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+        //mUser = new UserService().getUser(mUser.getId());
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(mUser));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == NEW_USER_RECORD_ADDED_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == -1 /*RESULT_OK*/) {
+                // update the list for new record
+                setupRecyclerView((RecyclerView)mRecyclerView);
+            }
+        }
     }
 
     public class SimpleItemRecyclerViewAdapter
