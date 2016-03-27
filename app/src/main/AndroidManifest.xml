@@ -46,10 +46,8 @@
         <activity
             android:name=".Activities.AddUserRecordActivity"
             android:label="@string/title_activity_add_user_reading"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
-            android:name=".Activities.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>
