@@ -13,8 +13,8 @@ import java.util.List;
 public class User {
     private int mId;
     private String mName;
-    private double mWeightInKg;
-    private double mHeightInCm;
+    //private double mWeightInKg;
+    //private double mHeightInCm;
     private String mImagePath;
     private List<UserReading> mReadings;
 
@@ -22,8 +22,8 @@ public class User {
     {
         mId = id;
         mName = name;
-        mWeightInKg = weight;
-        mHeightInCm = height;
+        //mWeightInKg = weight;
+        //mHeightInCm = height;
         mImagePath = imagePath;
         mReadings = new ArrayList<>();
     }
@@ -41,14 +41,19 @@ public class User {
     }
 
     public double getWeight() {
-        return mWeightInKg;
+        if(mReadings.size() > 0)
+            return mReadings.get(0).Weight;
+        return 0;
     }
 
     public double getHeight() {
-        return mHeightInCm;
+        if(mReadings.size() > 0)
+            return mReadings.get(0).Height;
+        return 0;
     }
-    public double getHeightInMeter() {
-        return mHeightInCm / 100.0;
+
+    private double getHeightInMeter() {
+        return getHeight() / 100.0;
     }
 
     public void addReading(double weight, double height, Date takenOn)

@@ -30,8 +30,8 @@
 
             <ImageButton
                 android:id="@+id/add_user_image"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/contact_default"
                 android:scaleType="centerCrop" >
@@ -45,40 +45,112 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Name"
-                    android:ems="10"
                     android:inputType="textPersonName"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                >
-                <EditText
-                    android:id="@+id/add_user_weight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:hint="Weight"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
-            <Switch
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
-                    android:id="@+id/add_user_height"
+                    android:id="@+id/add_user_dob"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="height (cm)"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:layout_height="match_parent"
+                    android:hint="Date of Birth"/>
             </android.support.design.widget.TextInputLayout>
+
+            <Switch
+                android:id="@+id/add_user_gender"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textOn="Female"
+                android:textOff="Male"
+                android:checked="true"
+                android:enabled="false"
+                />
+            <!-- todo: if female, add element to check if want to track pregnancy weight -->
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TableRow>
+                    <TextView
+                        android:text="Remind to to track readings per period"/>
+                    <Switch
+                        android:id="@+id/add_user_remind_tracking_records"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textOn="Yes"
+                        android:textOff="No"
+                        >
+                    </Switch>
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TableRow>
+                    <TextView
+                        android:text="Choose tracking period"/>
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/add_user_tracking_period"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                    </android.support.v7.widget.AppCompatSpinner>
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TableRow>
+                    <TextView
+                        android:text="Remind on every: "/>
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/add_user_tracking_period_on"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                    </android.support.v7.widget.AppCompatSpinner>
+                </TableRow>
+            </TableLayout>
+            <!--<android.support.design.widget.TextInputLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!-->-->
+                <!--<EditText-->
+                    <!--android:id="@+id/add_user_weight"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:inputType="numberDecimal"-->
+                    <!--android:hint="Weight"-->
+                    <!--android:maxLines="1"-->
+                    <!--android:singleLine="true" />-->
+            <!--</android.support.design.widget.TextInputLayout>-->
+            <!--<Switch-->
+                <!--android:id="@+id/add_user_weight_unit"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:textOn="kilograms"-->
+                <!--android:textOff="pounds (lb)"/>-->
+
+            <!--<android.support.design.widget.TextInputLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
+                <!--<EditText-->
+                    <!--android:id="@+id/add_user_height"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:hint="height"-->
+                    <!--android:inputType="number"-->
+                    <!--android:maxLines="1"-->
+                    <!--android:singleLine="true" />-->
+            <!--</android.support.design.widget.TextInputLayout>-->
+            <!--<Switch-->
+                <!--android:id="@+id/add_user_height_unit"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:textOn="centimeters"-->
+                <!--android:textOff="inches"/>-->
 
             <TableLayout
                 android:id="@+id/actionButtonsLayout"

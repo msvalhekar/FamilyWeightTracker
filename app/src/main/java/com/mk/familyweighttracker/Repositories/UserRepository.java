@@ -18,8 +18,8 @@ public class UserRepository {
         if(mUsers == null) {
             mUsers = new ArrayList();
 
-            mUsers.add(createUser(0, "Mk", 80, 173, "mk.img"));
-            mUsers.add(createUser(1, "Rash", 54, 153, "rash.img"));
+            mUsers.add(createDummyUser(0, "Mk", 80, 173, "mk.img"));
+            mUsers.add(createDummyUser(1, "Rash", 54, 153, "rash.img"));
             //mUsers.add(new User(2, "Soham", "soham.img"));
             //mUsers.add(new User(3, "Ovee", "ovee.img"));
         }
@@ -55,13 +55,13 @@ public class UserRepository {
         return matchedUser != null;
     }
 
-    public User addUser(User newUser) {
+    public int addUser(User newUser) {
         newUser = new User(mUsers.size(), newUser.getName(), newUser.getWeight(), newUser.getHeight(), newUser.getImagePath());
         mUsers.add(newUser);
-        return newUser;
+        return newUser.getId();
     }
 
-    private User createUser(int id, String name, double weight, double height, String imagePath)
+    private User createDummyUser(int id, String name, double weight, double height, String imagePath)
     {
         User user = new User(id, name, weight, height, imagePath);
         user.addReading(weight *1.02,height,new Date());

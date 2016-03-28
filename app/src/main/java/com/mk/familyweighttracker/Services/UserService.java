@@ -30,7 +30,7 @@ public class UserService {
         return userRepository.isAlreadyAdded(name);
     }
 
-    public User addUser(User newUser) {
+    public int addUser(User newUser) {
         return userRepository.addUser(newUser);
     }
 }

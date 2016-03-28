@@ -89,6 +89,8 @@ public class UserDetailsChartFragment extends Fragment implements IUserDetailsFr
 
     private void loadChartDataForPregnancy()
     {
+        if(mUser.getReadings().size() == 0) return;
+
         mLineChart.resetTracking();
 
         BodyWeightCategory weightCategory = mUser.getWeightCategory();
