@@ -63,7 +63,6 @@ public class UserDetailsRecordsFragment extends Fragment implements IUserDetails
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        //mUser = new UserService().getUser(mUser.getId());
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(mUser));
     }
 

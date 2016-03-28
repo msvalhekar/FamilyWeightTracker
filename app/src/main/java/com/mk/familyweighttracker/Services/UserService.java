@@ -11,26 +11,17 @@ import java.util.List;
  * Created by mvalhekar on 25-03-2016.
  */
 public class UserService {
-    private UserRepository userRepository;
-    public UserService()
-    {
-        userRepository = new UserRepository();
-    }
+    private UserRepository userRepository = new UserRepository();
 
-    public List<MinimalUser> getAllUsers()
-    {
-        return userRepository.getAllUsers();
-    }
+    public List<MinimalUser> getAll() { return userRepository.getAll(); }
 
-    public User getUser(int userId) {
-        return userRepository.getUser(userId);
-    }
+    public User get(long userId) { return userRepository.getUser(userId); }
 
     public Boolean isAlreadyAdded(String name) {
         return userRepository.isAlreadyAdded(name);
     }
 
-    public int addUser(User newUser) {
-        return userRepository.addUser(newUser);
-    }
+    public long add(User newUser) { return userRepository.addUser(newUser); }
+
+    public void remove(long userId) { userRepository.remove(userId); }
 }

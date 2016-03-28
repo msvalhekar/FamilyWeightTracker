@@ -11,13 +11,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.Configuration;
 import com.mk.familyweighttracker.Activities.UsersListActivity;
+import com.mk.familyweighttracker.DbModels.UserModel;
 
 public class HomeActivity extends AppCompatActivity {
+
+    private static final String DATABASE_NAME = "MkWeighTracker.db";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //    https://github.com/pardom/ActiveAndroid/wiki/Getting-started
+        //ActiveAndroid.dispose();
+        //getApplicationContext().deleteDatabase(DATABASE_NAME);
+        ActiveAndroid.initialize(getApplicationContext());
+        //Configuration.Builder configurationBuilder = new Configuration.Builder(this);
+        //configurationBuilder.addModelClass(UserModel.class);
+        //ActiveAndroid.initialize(configurationBuilder.create());
+
+
         setContentView(R.layout.activity_home);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_home);

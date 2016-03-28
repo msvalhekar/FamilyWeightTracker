@@ -17,11 +17,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
-import com.mk.familyweighttracker.Services.PregnancyService;
 import com.mk.familyweighttracker.Services.UserService;
 
 import java.text.SimpleDateFormat;
@@ -41,8 +39,6 @@ public class AddNewUserActivity extends AppCompatActivity {
     private EditText mDoBView;
     private android.support.v7.widget.AppCompatSpinner mTrackingPeriodSpinner;
     private android.support.v7.widget.AppCompatSpinner mTrackingPeriodOnSpinner;
-    //private EditText WeightView;
-    //private EditText HeightView;
 
     DatePickerDialog mDoBDatePickerDialog;
 
@@ -54,8 +50,6 @@ public class AddNewUserActivity extends AppCompatActivity {
         initToolbarControl();
 
         mNameView = ((EditText) findViewById(R.id.add_user_name));
-        //WeightView = ((EditText) findViewById(R.id.add_user_weight));
-        //HeightView = ((EditText) findViewById(R.id.add_user_height));
 
         initImageButtonControl();
         initDateOfBirthControl();
@@ -200,8 +194,6 @@ public class AddNewUserActivity extends AppCompatActivity {
     private void resetErrors() {
         // Reset errors.
         mNameView.setError(null);
-        //mHeightView.setError(null);
-        //mWeightView.setError(null);
     }
 
     private HashMap<String, ArrayList<String>> validateInput() {
@@ -247,45 +239,22 @@ public class AddNewUserActivity extends AppCompatActivity {
     }
 
     public class NewUserViewModel {
-        public int Id;
+        public long Id;
         public String ImagePath;
         public String Name;
         public TrackingPeriod TrackingPeriod;
         public int TrackingPeriodOnEvery;
 
-        //public double Weight;
-        //public double Height;
-
-//        public double getHeightInMeter() {
-//            return Height / 100.0;
-//        }
-//
-//        public double getBmi() {
-//            return new PregnancyService().calculateBmi(getHeightInMeter(), Weight);
-//        }
-//
-//        public BodyWeightCategory getWeightCategory() {
-//            return new PregnancyService().getWeightCategory(getBmi());
-//        }
-
-//        private boolean isHeightValid(double height) {
-//            return 0 < height && height < 200;
-//        }
-//
-//        private boolean isWeightValid() {
-//            String weightStr = mAddNewUserActivity.WeightView.getText().toString();
-//
-//            Weight = Double.parseDouble(weightStr);
-//
-//            return 0 < Weight && Weight < 100;
-//        }
+        public User mapToUser() {
+            return new User(0, mNewUser.Name, mNewUser.ImagePath);
+        }
     }
 
     public class AddNewUserTask extends AsyncTask<Void, Void, Boolean>
     {
         @Override
         protected Boolean doInBackground(Void... params) {
-            mNewUser.Id = new UserService().addUser(mapToUser());
+            mNewUser.Id = new UserService().add(mNewUser.mapToUser());
             return true;
         }
 
@@ -303,10 +272,6 @@ public class AddNewUserActivity extends AppCompatActivity {
 //                HeightView.setError("error_incorrect_password");
 //                HeightView.requestFocus();
             }
-        }
-
-        private User mapToUser() {
-            return new User(0, mNewUser.Name, 0, 0, mNewUser.ImagePath);
         }
     }
 }

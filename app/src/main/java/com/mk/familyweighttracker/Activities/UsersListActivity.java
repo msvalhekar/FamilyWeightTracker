@@ -37,7 +37,6 @@ public class UsersListActivity extends AppCompatActivity {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private boolean mTwoPane;
     private View mRecyclerView;
 
     @Override
@@ -66,14 +65,6 @@ public class UsersListActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.item_list);
         assert mRecyclerView != null;
         setupRecyclerView((RecyclerView) mRecyclerView);
-
-        if (findViewById(R.id.item_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
     }
 
     @Override
@@ -89,7 +80,7 @@ public class UsersListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        List users = new UserService().getAllUsers();
+        List users = new UserService().getAll();
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(users));
     }
 

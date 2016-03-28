@@ -1,42 +1,27 @@
 package com.mk.familyweighttracker.Activities;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.mk.familyweighttracker.Framework.SlidingTabLayout;
 import com.mk.familyweighttracker.Framework.UserDetailsTabsFactory;
 import com.mk.familyweighttracker.IUserDetailsFragment;
-import com.mk.familyweighttracker.Models.MinimalUser;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
 
 import com.mk.familyweighttracker.Services.UserService;
 
-import java.util.Collection;
-import java.util.List;
-
 /**
  * An activity representing a list of Items. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link ItemDetailActivity} representing
+ * lead to a {@link UserDetailActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
@@ -49,8 +34,8 @@ public class UserDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
 
-        int userId = getIntent().getIntExtra(ARG_USER_ID, 0);
-        User user = new UserService().getUser(userId);
+        long userId = getIntent().getLongExtra(ARG_USER_ID, 0);
+        User user = new UserService().get(userId);
         this.setTitle(user.getName());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_user_detail);

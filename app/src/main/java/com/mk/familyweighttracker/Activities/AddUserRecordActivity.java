@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 import com.mk.familyweighttracker.Models.User;
-import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
@@ -42,7 +38,7 @@ public class AddUserRecordActivity extends AppCompatActivity {
         mHeightView = ((EditText) findViewById(R.id.add_reading_height));
 
         int userId = getIntent().getIntExtra(UserDetailActivity.ARG_USER_ID, 0);
-        mUser = new UserService().getUser(userId);
+        mUser = new UserService().get(userId);
 
         findViewById(R.id.add_reading_cancel_button)
                 .setOnClickListener(new View.OnClickListener() {
