@@ -1,6 +1,5 @@
 package com.mk.familyweighttracker.Fragments;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,9 +16,10 @@ import com.mk.familyweighttracker.Services.UserService;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserDetailsSummaryFragment extends Fragment implements IUserDetailsFragment {
+public class UserDetailsSummaryFragment extends Fragment implements IUserDetailsFragment, UserDetailsRecordsFragment.OnNewReadingAdded {
 
     private User mUser;
+
     public UserDetailsSummaryFragment() {
         // Required empty public constructor
     }
@@ -45,5 +45,12 @@ public class UserDetailsSummaryFragment extends Fragment implements IUserDetails
             }
         });
         return view;
+    }
+
+    @Override
+    public void onNewReadingAdded() {
+        mUser = new UserService().get(mUser.getId());
+
+        ((TextView) getView().findViewById(R.id.userId)).setText("UserId: " + mUser.getName() + " Readings: " + mUser.getReadings().size());
     }
 }

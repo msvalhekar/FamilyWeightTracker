@@ -1,5 +1,7 @@
 package com.mk.familyweighttracker.Activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,7 +10,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
+import com.mk.familyweighttracker.Fragments.UserDetailsRecordsFragment;
 import com.mk.familyweighttracker.Framework.SlidingTabLayout;
 import com.mk.familyweighttracker.Framework.UserDetailsTabsFactory;
 import com.mk.familyweighttracker.IUserDetailsFragment;
@@ -16,6 +20,8 @@ import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
 
 import com.mk.familyweighttracker.Services.UserService;
+
+import java.util.List;
 
 /**
  * An activity representing a list of Items. This activity
@@ -25,9 +31,11 @@ import com.mk.familyweighttracker.Services.UserService;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class UserDetailActivity extends AppCompatActivity {
+public class UserDetailActivity extends AppCompatActivity implements UserDetailsRecordsFragment.OnNewReadingAdded {
 
     public static final String ARG_USER_ID = "user_id";
+    private boolean mIsDataChanged = false;
+    public static final String ARG_IS_DATA_CHANGED = "IsDataChanged";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +64,36 @@ public class UserDetailActivity extends AppCompatActivity {
         slidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.tabsScrollColor);
+            return getResources().getColor(R.color.tabsScrollColor);
             }
         });
 
         // Setting the ViewPager For the SlidingTabsLayout
         slidingTabLayout.setViewPager(viewPager);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Intent intent = new Intent();
+                intent.putExtra(ARG_IS_DATA_CHANGED, mIsDataChanged);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onNewReadingAdded() {
+        mIsDataChanged = true;
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        for (Fragment fragment: fragments) {
+            if(fragment instanceof UserDetailsRecordsFragment.OnNewReadingAdded)
+                ((UserDetailsRecordsFragment.OnNewReadingAdded) fragment).onNewReadingAdded();
+        }
     }
 
     public class UserDetailsTabPagerAdapter extends FragmentStatePagerAdapter

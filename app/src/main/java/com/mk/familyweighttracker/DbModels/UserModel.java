@@ -56,6 +56,7 @@ public class UserModel extends Model {
     }
 
     public static void delete(long userId) {
+        UserReadingModel.deleteAllFor(userId);
         UserModel.delete(UserModel.class, userId);
     }
 

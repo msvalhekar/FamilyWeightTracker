@@ -22,6 +22,7 @@ import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.Models.WeekWeightGainRange;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.PregnancyService;
+import com.mk.familyweighttracker.Services.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserDetailsChartFragment extends Fragment implements IUserDetailsFragment, OnChartValueSelectedListener {
+public class UserDetailsChartFragment extends Fragment implements IUserDetailsFragment, OnChartValueSelectedListener, UserDetailsRecordsFragment.OnNewReadingAdded {
 
     private User mUser;
     private LineChart mLineChart;
@@ -168,5 +169,11 @@ public class UserDetailsChartFragment extends Fragment implements IUserDetailsFr
     @Override
     public void onNothingSelected() {
 
+    }
+
+    @Override
+    public void onNewReadingAdded() {
+        mUser = new UserService().get(mUser.getId());
+        loadChartDataForPregnancy();
     }
 }

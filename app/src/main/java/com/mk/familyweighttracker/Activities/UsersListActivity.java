@@ -33,6 +33,8 @@ import java.util.List;
 public class UsersListActivity extends AppCompatActivity {
 
     private static final int NEW_USER_ADDED_REQUEST = 1;
+    private static final int USER_DATA_CHANGED_REQUEST = 2;
+
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -77,6 +79,16 @@ public class UsersListActivity extends AppCompatActivity {
                 setupRecyclerView((RecyclerView)mRecyclerView);
             }
         }
+        if (requestCode == USER_DATA_CHANGED_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // update the list for new record
+
+                boolean dataChanged = data.getBooleanExtra(UserDetailActivity.ARG_IS_DATA_CHANGED, false);
+                if(dataChanged)
+                    setupRecyclerView((RecyclerView)mRecyclerView);
+            }
+        }
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -112,7 +124,7 @@ public class UsersListActivity extends AppCompatActivity {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, UserDetailActivity.class);
                     intent.putExtra(UserDetailActivity.ARG_USER_ID, user.getId());
-                    context.startActivity(intent);
+                    startActivityForResult(intent, USER_DATA_CHANGED_REQUEST);
                 }
             });
         }

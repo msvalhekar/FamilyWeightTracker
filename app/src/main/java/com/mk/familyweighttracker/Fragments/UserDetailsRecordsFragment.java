@@ -24,7 +24,7 @@ import com.mk.familyweighttracker.Services.UserService;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserDetailsRecordsFragment extends Fragment implements IUserDetailsFragment{
+public class UserDetailsRecordsFragment extends Fragment implements IUserDetailsFragment {
 
     private static final int NEW_USER_RECORD_ADDED_REQUEST = 1;
     private User mUser;
@@ -63,7 +63,7 @@ public class UserDetailsRecordsFragment extends Fragment implements IUserDetails
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(mUser));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(new UserService().get(mUser.getId())));
     }
 
     @Override
@@ -74,6 +74,7 @@ public class UserDetailsRecordsFragment extends Fragment implements IUserDetails
             if (resultCode == -1 /*RESULT_OK*/) {
                 // update the list for new record
                 setupRecyclerView((RecyclerView)mRecyclerView);
+                ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
             }
         }
     }
@@ -136,5 +137,9 @@ public class UserDetailsRecordsFragment extends Fragment implements IUserDetails
                 return super.toString() + " '" + mNameView.getText() + "'";
             }
         }
+    }
+
+    public interface OnNewReadingAdded {
+        void onNewReadingAdded();
     }
 }

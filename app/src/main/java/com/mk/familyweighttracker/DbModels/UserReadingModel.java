@@ -3,6 +3,7 @@ package com.mk.familyweighttracker.DbModels;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
@@ -43,5 +44,12 @@ public class UserReadingModel extends Model {
         readingModel.CreatedOn = new Date();
 
         readingModel.save();
+    }
+
+    public static void deleteAllFor(long userId) {
+        new Delete()
+                .from(UserReadingModel.class)
+                .where("User = ? ", userId)
+                .execute();
     }
 }
