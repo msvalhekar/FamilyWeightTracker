@@ -15,10 +15,10 @@
             android:value="MkWeighTracker.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="5" />
+            android:value="1" />
         <meta-data
             android:name="AA_MODELS"
-            android:value="com.mk.familyweighttracker.DbModels.UserModel" />
+            android:value="com.mk.familyweighttracker.DbModels.UserModel, com.mk.familyweighttracker.DbModels.UserReadingModel" />
 
         <activity
             android:name=".HomeActivity"

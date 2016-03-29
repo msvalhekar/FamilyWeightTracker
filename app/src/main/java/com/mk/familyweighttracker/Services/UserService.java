@@ -24,4 +24,8 @@ public class UserService {
     public long add(User newUser) { return userRepository.addUser(newUser); }
 
     public void remove(long userId) { userRepository.remove(userId); }
+
+    public void addReading(UserReading reading) {
+        userRepository.addReading(reading);
+    }
 }

@@ -1,8 +1,10 @@
 package com.mk.familyweighttracker.Repositories;
 
 import com.mk.familyweighttracker.DbModels.UserModel;
+import com.mk.familyweighttracker.DbModels.UserReadingModel;
 import com.mk.familyweighttracker.Models.MinimalUser;
 import com.mk.familyweighttracker.Models.User;
+import com.mk.familyweighttracker.Models.UserReading;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +27,7 @@ public class UserRepository {
     }
 
     public long addUser(User newUser) {
-        UserModel user = new UserModel();
-        user.Name = newUser.getName();
-        user.ImagePath = newUser.getImagePath();
-        user.save();
+        UserModel user = UserModel.add(newUser);
         return user.getId();
     }
 
@@ -44,5 +43,9 @@ public class UserRepository {
 
     public void remove(long userId) {
         UserModel.delete(userId);
+    }
+
+    public void addReading(UserReading reading) {
+        UserReadingModel.add(reading);
     }
 }

@@ -7,12 +7,12 @@ import java.util.Date;
  */
 public class UserReading {
     public final long UserId;
-    public final int Sequence;
+    public final long Sequence;
     public final double Weight;
     public final double Height;
     public final Date TakenOn;
 
-    public UserReading(long userId, int sequence, double weight, double height, Date takenOn)
+    public UserReading(long userId, long sequence, double weight, double height, Date takenOn)
     {
         UserId = userId;
         Sequence = sequence;

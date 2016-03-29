@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.mk.familyweighttracker.Models.User;
+import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
@@ -20,7 +21,7 @@ public class AddUserRecordActivity extends AppCompatActivity {
     User mUser;
     AddUserReadingTask mAddUserReadingTask;
 
-    EditText mPeriodView;
+    EditText mSequenceView;
     EditText mWeightView;
     EditText mHeightView;
 
@@ -33,11 +34,11 @@ public class AddUserRecordActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        mPeriodView = ((EditText) findViewById(R.id.add_reading_period));
+        mSequenceView = ((EditText) findViewById(R.id.add_reading_sequence));
         mWeightView = ((EditText) findViewById(R.id.add_reading_weight));
         mHeightView = ((EditText) findViewById(R.id.add_reading_height));
 
-        int userId = getIntent().getIntExtra(UserDetailActivity.ARG_USER_ID, 0);
+        long userId = getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
         mUser = new UserService().get(userId);
 
         findViewById(R.id.add_reading_cancel_button)
@@ -65,10 +66,10 @@ public class AddUserRecordActivity extends AppCompatActivity {
         // Reset errors.
         mHeightView.setError(null);
         mWeightView.setError(null);
-        mPeriodView.setError(null);
+        mSequenceView.setError(null);
 
         // Store values at the time of the login attempt.
-        int period = Integer.valueOf(mPeriodView.getText().toString());
+        int sequence = Integer.valueOf(mSequenceView.getText().toString());
         double weight = Double.valueOf(mWeightView.getText().toString());
         double height = Double.valueOf(mHeightView.getText().toString());
         Date takenOn = new Date(); //// TODO: 26-03-2016 take from user
@@ -76,9 +77,9 @@ public class AddUserRecordActivity extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
-        if (!isPeriodValid(period)) {
-            mWeightView.setError("Required");
-            focusView = mPeriodView;
+        if (!isSequenceValid(sequence)) {
+            mSequenceView.setError("Required");
+            focusView = mSequenceView;
             cancel = true;
         }
         else if (!isWeightValid(weight)) {
@@ -101,7 +102,7 @@ public class AddUserRecordActivity extends AppCompatActivity {
             // perform the user login attempt.
 
             // showProgress(true);
-            mAddUserReadingTask = new AddUserReadingTask(weight, height, takenOn);
+            mAddUserReadingTask = new AddUserReadingTask(sequence, weight, height, takenOn);
             mAddUserReadingTask.execute((Void) null);
         }
     }
@@ -114,17 +115,19 @@ public class AddUserRecordActivity extends AppCompatActivity {
         return 0 < weight && weight < 200;
     }
 
-    private boolean isPeriodValid(int period) {
-        return 0 < period && period < 100;
+    private boolean isSequenceValid(int sequence) {
+        return 0 < sequence && sequence < 100;
     }
 
     private class AddUserReadingTask extends AsyncTask<Void, Void, Boolean>
     {
+        private final long mSequence;
         private final double mWeight;
         private final double mHeight;
         private final Date mTakenOn;
 
-        AddUserReadingTask(double weight, double height, Date takenOn) {
+        AddUserReadingTask(int sequence, double weight, double height, Date takenOn) {
+            mSequence = sequence;
             mWeight = weight;
             mHeight = height;
             mTakenOn = takenOn;
@@ -132,7 +135,8 @@ public class AddUserRecordActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            mUser.addReading(mWeight, mHeight, mTakenOn);
+            UserReading reading = new UserReading(mUser.getId(), mSequence, mWeight, mHeight, mTakenOn);
+            new UserService().addReading(reading);
             return true;
         }
 

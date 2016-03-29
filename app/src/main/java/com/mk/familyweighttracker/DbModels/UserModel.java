@@ -26,15 +26,8 @@ public class UserModel extends Model {
     @Column(name = "ImagePath")
     public String ImagePath;
 
-
-    public User mapToUser() {
-        User user = new User(getId(), Name, ImagePath);
-        return user;
-    }
-
-    public MinimalUser mapToMinimalUser() {
-        MinimalUser user = new MinimalUser(getId(), Name, ImagePath);
-        return user;
+    public List<UserReadingModel> getReadings() {
+        return getMany(UserReadingModel.class, "User");
     }
 
     public static List<UserModel> getAll() {
@@ -42,7 +35,6 @@ public class UserModel extends Model {
                 .from(UserModel.class)
                 .execute();
     }
-
 
     public static UserModel get(long userId) {
         return new Select()
@@ -67,15 +59,29 @@ public class UserModel extends Model {
         UserModel.delete(UserModel.class, userId);
     }
 
-//    private List<UserReading> mReadings;
+    public static UserModel add(User newUser) {
+        UserModel user = mapFromUser(newUser);
+        user.save();
+        return user;
+    }
 
-//    public void addReading(double weight, double height, Date takenOn)
-//    {
-//        UserReading reading = new UserReading(Id, mReadings.size(), weight, height, takenOn);
-//        mReadings.add(reading);
-//    }
+    public User mapToUser() {
+        User user = new User(getId(), Name, ImagePath);
+        for (UserReadingModel reading: getReadings()) {
+            user.addReading(reading.Sequence, reading.Weight, reading.Height, reading.TakenOn);
+        }
+        return user;
+    }
 
-//    public List<UserReading> getReadings() {
-//        return mReadings;
-//    }
+    public MinimalUser mapToMinimalUser() {
+        MinimalUser user = new MinimalUser(getId(), Name, ImagePath);
+        return user;
+    }
+
+    private static UserModel mapFromUser(User user) {
+        UserModel userModel = new UserModel();
+        userModel.Name = user.getName();
+        userModel.ImagePath = user.getImagePath();
+        return userModel;
+    }
 }
