@@ -76,10 +76,10 @@ public class PregnancyRepository {
 
         categories = new ArrayList();
 
-        categories.add(new BmiWeightRange(BodyWeightCategory.UnderWeight, 1, 18.49));
+        categories.add(new BmiWeightRange(BodyWeightCategory.UnderWeight, Double.MIN_VALUE, 18.49));
         categories.add(new BmiWeightRange(BodyWeightCategory.Normal, 18.5, 24.99));
         categories.add(new BmiWeightRange(BodyWeightCategory.OverWeight, 25, 29.99));
-        categories.add(new BmiWeightRange(BodyWeightCategory.Obese, 30, 100));
+        categories.add(new BmiWeightRange(BodyWeightCategory.Obese, 30, Double.MAX_VALUE));
     }
 
     private List<WeekWeightGainRange> createWeightGainTableFor(BodyWeightCategory category) {
