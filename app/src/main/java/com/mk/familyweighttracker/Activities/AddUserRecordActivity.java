@@ -18,7 +18,7 @@ import java.util.Date;
 
 public class AddUserRecordActivity extends AppCompatActivity {
 
-    User mUser;
+    long mSelectedUserId;
     AddUserReadingTask mAddUserReadingTask;
 
     EditText mSequenceView;
@@ -30,17 +30,24 @@ public class AddUserRecordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_user_record);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_add_user_reading);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+        mSelectedUserId = getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
+
+        initToolbarControl();
 
         mSequenceView = ((EditText) findViewById(R.id.add_reading_sequence));
         mWeightView = ((EditText) findViewById(R.id.add_reading_weight));
         mHeightView = ((EditText) findViewById(R.id.add_reading_height));
 
-        long userId = getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
-        mUser = new UserService().get(userId);
+        initActionButtonControls();
+    }
 
+    private void initToolbarControl() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_add_user_reading);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(getTitle());
+    }
+
+    private void initActionButtonControls() {
         findViewById(R.id.add_reading_cancel_button)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -135,7 +142,7 @@ public class AddUserRecordActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            UserReading reading = new UserReading(mUser.getId(), mSequence, mWeight, mHeight, mTakenOn);
+            UserReading reading = new UserReading(mSelectedUserId, mSequence, mWeight, mHeight, mTakenOn);
             new UserService().addReading(reading);
             return true;
         }

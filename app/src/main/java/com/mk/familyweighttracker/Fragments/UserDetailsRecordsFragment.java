@@ -1,6 +1,7 @@
 package com.mk.familyweighttracker.Fragments;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,22 +13,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.mk.familyweighttracker.Activities.AddNewUserActivity;
 import com.mk.familyweighttracker.Activities.AddUserRecordActivity;
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
-import com.mk.familyweighttracker.IUserDetailsFragment;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
+import java.util.List;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserDetailsRecordsFragment extends Fragment implements IUserDetailsFragment {
+public class UserDetailsRecordsFragment extends Fragment {
 
     private static final int NEW_USER_RECORD_ADDED_REQUEST = 1;
-    private User mUser;
+    private long mSelectedUserId;
+
+    private View mFragmentView;
     private RecyclerView mRecyclerView;
 
     public UserDetailsRecordsFragment() {
@@ -35,35 +38,41 @@ public class UserDetailsRecordsFragment extends Fragment implements IUserDetails
     }
 
     @Override
-    public void setUser(User user) {
-        mUser = user;
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_user_details_records, container, false);
+        mFragmentView = inflater.inflate(R.layout.fragment_user_details_records, container, false);
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.button_user_add_record);
+        mSelectedUserId = getActivity().getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
+
+        initAddUserReadingControl();
+
+        initReadingListControl();
+
+        return mFragmentView;
+    }
+
+    private void initAddUserReadingControl() {
+        FloatingActionButton fab = (FloatingActionButton) mFragmentView.findViewById(R.id.button_user_add_record);
         fab.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), AddUserRecordActivity.class);
-                intent.putExtra(UserDetailActivity.ARG_USER_ID, mUser.getId());
+                intent.putExtra(UserDetailActivity.ARG_USER_ID, mSelectedUserId);
                 startActivityForResult(intent, NEW_USER_RECORD_ADDED_REQUEST);
             }
         });
+    }
 
-        mRecyclerView = ((RecyclerView) view.findViewById(R.id.user_record_list));
+    private void initReadingListControl() {
+        mRecyclerView = ((RecyclerView) mFragmentView.findViewById(R.id.user_record_list));
         setupRecyclerView(mRecyclerView);
-
-        return view;
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(new UserService().get(mUser.getId())));
+        User user = new UserService().get(mSelectedUserId);
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(user.getReadings()));
     }
 
     @Override
@@ -71,9 +80,9 @@ public class UserDetailsRecordsFragment extends Fragment implements IUserDetails
         // Check which request we're responding to
         if (requestCode == NEW_USER_RECORD_ADDED_REQUEST) {
             // Make sure the request was successful
-            if (resultCode == -1 /*RESULT_OK*/) {
+            if (resultCode == Activity.RESULT_OK) {
                 // update the list for new record
-                setupRecyclerView((RecyclerView)mRecyclerView);
+                setupRecyclerView(mRecyclerView);
                 ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
             }
         }
@@ -82,10 +91,10 @@ public class UserDetailsRecordsFragment extends Fragment implements IUserDetails
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final User mUser;
+        private final List<UserReading> mUserReadings;
 
-        public SimpleItemRecyclerViewAdapter(User user) {
-            mUser = user;
+        public SimpleItemRecyclerViewAdapter(List<UserReading> userReadings) {
+            mUserReadings = userReadings;
         }
 
         @Override
@@ -97,7 +106,7 @@ public class UserDetailsRecordsFragment extends Fragment implements IUserDetails
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            final UserReading reading = mUser.getReadings().get(position);
+            final UserReading reading = mUserReadings.get(position);
 
             holder.setReading(reading);
 
@@ -114,7 +123,7 @@ public class UserDetailsRecordsFragment extends Fragment implements IUserDetails
 
         @Override
         public int getItemCount() {
-            return mUser.getReadings().size();
+            return mUserReadings.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {

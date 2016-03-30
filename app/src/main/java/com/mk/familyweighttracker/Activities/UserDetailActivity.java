@@ -13,12 +13,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.mk.familyweighttracker.Fragments.UserDetailsRecordsFragment;
+import com.mk.familyweighttracker.Fragments.UserDetailsSummaryFragment;
 import com.mk.familyweighttracker.Framework.SlidingTabLayout;
 import com.mk.familyweighttracker.Framework.UserDetailsTabsFactory;
-import com.mk.familyweighttracker.IUserDetailsFragment;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
-
 import com.mk.familyweighttracker.Services.UserService;
 
 import java.util.List;
@@ -31,11 +30,13 @@ import java.util.List;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class UserDetailActivity extends AppCompatActivity implements UserDetailsRecordsFragment.OnNewReadingAdded {
+public class UserDetailActivity extends AppCompatActivity
+        implements UserDetailsRecordsFragment.OnNewReadingAdded, UserDetailsSummaryFragment.OnUserDeleted {
 
     public static final String ARG_USER_ID = "user_id";
-    private boolean mIsDataChanged = false;
     public static final String ARG_IS_DATA_CHANGED = "IsDataChanged";
+
+    private boolean mIsDataChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,30 +47,9 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetails
         User user = new UserService().get(userId);
         this.setTitle(user.getName());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_user_detail);
-        setSupportActionBar(toolbar);
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        initToolbarControl();
 
-        ViewPager viewPager = ((ViewPager) findViewById(R.id.user_detail_pager));
-        viewPager.setAdapter(new UserDetailsTabPagerAdapter(user, getSupportFragmentManager()));
-
-        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
-        slidingTabLayout.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the slidingTabLayout Space Evenly in Available width
-
-        // Setting Custom Color for the Scroll bar indicator of the Tab View
-        slidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-            return getResources().getColor(R.color.tabsScrollColor);
-            }
-        });
-
-        // Setting the ViewPager For the SlidingTabsLayout
-        slidingTabLayout.setViewPager(viewPager);
+        initDetailTabControl();
     }
 
     @Override
@@ -77,10 +57,7 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetails
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                Intent intent = new Intent();
-                intent.putExtra(ARG_IS_DATA_CHANGED, mIsDataChanged);
-                setResult(Activity.RESULT_OK, intent);
-                finish();
+                informDataChangedAndFinish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -96,6 +73,49 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetails
         }
     }
 
+    @Override
+    public void onUserDeleted() {
+        mIsDataChanged = true;
+        informDataChangedAndFinish();
+    }
+
+    private void initToolbarControl() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_user_detail);
+        setSupportActionBar(toolbar);
+        // Show the Up button in the action bar.
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    private void initDetailTabControl() {
+        ViewPager viewPager = ((ViewPager) findViewById(R.id.user_detail_pager));
+        viewPager.setAdapter(new UserDetailsTabPagerAdapter(null, getSupportFragmentManager()));
+        //viewPager.setAdapter(new UserDetailsTabPagerAdapter(user, getSupportFragmentManager()));
+
+        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
+        slidingTabLayout.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the slidingTabLayout Space Evenly in Available width
+
+        // Setting Custom Color for the Scroll bar indicator of the Tab View
+        slidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(R.color.tabsScrollColor);
+            }
+        });
+
+        // Setting the ViewPager For the SlidingTabsLayout
+        slidingTabLayout.setViewPager(viewPager);
+    }
+
+    private void informDataChangedAndFinish() {
+        Intent intent = new Intent();
+        intent.putExtra(ARG_IS_DATA_CHANGED, mIsDataChanged);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+    }
+
     public class UserDetailsTabPagerAdapter extends FragmentStatePagerAdapter
     {
         private int mTabsCount;
@@ -108,9 +128,6 @@ public class UserDetailActivity extends AppCompatActivity implements UserDetails
             mTabs = UserDetailsTabsFactory.getInstance().getTabs().toArray();
             mTitles = UserDetailsTabsFactory.getInstance().getTabTitles().toArray();
             mTabsCount = mTabs.length;
-
-            for(Object fragment: mTabs)
-                ((IUserDetailsFragment) fragment).setUser(user);
         }
 
         @Override

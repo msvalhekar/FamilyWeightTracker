@@ -57,17 +57,6 @@ public class AddNewUserActivity extends AppCompatActivity {
         initActionButtonControls();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
-        if (requestCode == 1) {
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                // update the list for new record
-            }
-        }
-    }
-
     private void initToolbarControl() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_add_new_user);
         setSupportActionBar(toolbar);

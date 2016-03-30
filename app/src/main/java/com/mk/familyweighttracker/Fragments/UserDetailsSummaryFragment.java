@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.mk.familyweighttracker.IUserDetailsFragment;
+import com.mk.familyweighttracker.Activities.UserDetailActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
@@ -16,41 +16,51 @@ import com.mk.familyweighttracker.Services.UserService;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserDetailsSummaryFragment extends Fragment implements IUserDetailsFragment, UserDetailsRecordsFragment.OnNewReadingAdded {
+public class UserDetailsSummaryFragment extends Fragment implements UserDetailsRecordsFragment.OnNewReadingAdded {
 
-    private User mUser;
+    //private User mUser;
+    private long mSelectedUserId;
+
+    private View mFragmentView;
 
     public UserDetailsSummaryFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void setUser(User user) {
-        mUser = user;
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_user_details_summary, container, false);
-        ((TextView) view.findViewById(R.id.userId)).setText("UserId: " + mUser.getName());
+        mFragmentView = inflater.inflate(R.layout.fragment_user_details_summary, container, false);
 
-        ((Button) view.findViewById(R.id.deleteUser)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new UserService().remove(mUser.getId());
-                getActivity().finish();
-                //todo: refresh users list after removing a user
-            }
-        });
-        return view;
+        mSelectedUserId = getActivity().getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
+
+        onNewReadingAdded();
+
+        initDeleteUserControl();
+
+        return mFragmentView;
     }
 
     @Override
     public void onNewReadingAdded() {
-        mUser = new UserService().get(mUser.getId());
+        User user = new UserService().get(mSelectedUserId);
 
-        ((TextView) getView().findViewById(R.id.userId)).setText("UserId: " + mUser.getName() + " Readings: " + mUser.getReadings().size());
+        ((TextView) mFragmentView.findViewById(R.id.userId))
+                .setText("UserId: " + user.getName() + " Readings: " + user.getReadings().size());
+    }
+
+    private void initDeleteUserControl() {
+        ((Button) mFragmentView.findViewById(R.id.deleteUser)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new UserService().remove(mSelectedUserId);
+                ((OnUserDeleted) getActivity()).onUserDeleted();
+            }
+        });
+    }
+
+    public interface OnUserDeleted {
+        void onUserDeleted();
     }
 }

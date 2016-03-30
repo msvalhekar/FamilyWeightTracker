@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mk.familyweighttracker.Models.MinimalUser;
 import com.mk.familyweighttracker.R;
@@ -35,10 +36,6 @@ public class UsersListActivity extends AppCompatActivity {
     private static final int NEW_USER_ADDED_REQUEST = 1;
     private static final int USER_DATA_CHANGED_REQUEST = 2;
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
     private View mRecyclerView;
 
     @Override
@@ -46,27 +43,11 @@ public class UsersListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users_item_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_users_list);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        initToolbarControl();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.button_users_list_add_user);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), AddNewUserActivity.class);
-                startActivityForResult(intent, NEW_USER_ADDED_REQUEST);
-            }
-        });
+        initAddNewUserControl();
 
-        mRecyclerView = findViewById(R.id.item_list);
-        assert mRecyclerView != null;
-        setupRecyclerView((RecyclerView) mRecyclerView);
+        initUserListControl();
     }
 
     @Override
@@ -83,12 +64,41 @@ public class UsersListActivity extends AppCompatActivity {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 // update the list for new record
-
                 boolean dataChanged = data.getBooleanExtra(UserDetailActivity.ARG_IS_DATA_CHANGED, false);
-                if(dataChanged)
-                    setupRecyclerView((RecyclerView)mRecyclerView);
+                if(dataChanged) {
+                    Toast.makeText(getApplicationContext(), "Data changed, refreshing", Toast.LENGTH_SHORT).show();
+                    setupRecyclerView((RecyclerView) mRecyclerView);
+                }
             }
         }
+    }
+
+    private void initToolbarControl() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_users_list);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(getTitle());
+        // Show the Up button in the action bar.
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    private void initAddNewUserControl() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.button_users_list_add_user);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), AddNewUserActivity.class);
+                startActivityForResult(intent, NEW_USER_ADDED_REQUEST);
+            }
+        });
+    }
+
+    private void initUserListControl() {
+        mRecyclerView = findViewById(R.id.item_list);
+        assert mRecyclerView != null;
+        setupRecyclerView((RecyclerView) mRecyclerView);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -96,7 +106,7 @@ public class UsersListActivity extends AppCompatActivity {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(users));
     }
 
-    public class SimpleItemRecyclerViewAdapter
+    private class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<MinimalUser> mUsers;
@@ -121,8 +131,7 @@ public class UsersListActivity extends AppCompatActivity {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Context context = v.getContext();
-                    Intent intent = new Intent(context, UserDetailActivity.class);
+                    Intent intent = new Intent(v.getContext(), UserDetailActivity.class);
                     intent.putExtra(UserDetailActivity.ARG_USER_ID, user.getId());
                     startActivityForResult(intent, USER_DATA_CHANGED_REQUEST);
                 }
