@@ -53,6 +53,7 @@ public class AddNewUserActivity extends AppCompatActivity {
 
     AddNewUserTask mAddNewUserTask;
     NewUserViewModel mNewUser = new NewUserViewModel();
+    Uri mPickedImageUri;
 
     private ImageButton mImageButton;
     private EditText mNameView;
@@ -83,13 +84,14 @@ public class AddNewUserActivity extends AppCompatActivity {
         // Check which request we're responding to
         if (requestCode == LOAD_IMAGE_REQUEST) {
             if (resultCode == RESULT_OK && data != null) {
-                Uri pickedImageUri = data.getData();
-                allowToCropImageBeforeSelection(pickedImageUri);
+                mPickedImageUri = data.getData();
+                allowToCropImageBeforeSelection(mPickedImageUri);
             } else {
+                mPickedImageUri = null;
                 Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
             }
         }
-        if (requestCode == CROP_IMAGE_REQUEST) {
+        else if (requestCode == CROP_IMAGE_REQUEST) {
             if (resultCode == RESULT_OK && data != null) {
                 // get the returned data
                 Bundle extras = data.getExtras();
@@ -106,6 +108,8 @@ public class AddNewUserActivity extends AppCompatActivity {
                 catch (Exception e) {
                     Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
                 }
+            } else {
+                saveUserImage(mPickedImageUri);
             }
         }
     }
