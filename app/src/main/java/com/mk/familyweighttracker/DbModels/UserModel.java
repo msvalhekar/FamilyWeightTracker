@@ -4,14 +4,9 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
-import com.mk.familyweighttracker.Enums.BodyWeightCategory;
-import com.mk.familyweighttracker.Models.MinimalUser;
+import com.mk.familyweighttracker.Models.UserHeader;
 import com.mk.familyweighttracker.Models.User;
-import com.mk.familyweighttracker.Models.UserReading;
-import com.mk.familyweighttracker.Services.PregnancyService;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,8 +18,8 @@ public class UserModel extends Model {
     @Column(name = "Name", index = true)
     public String Name;
 
-    @Column(name = "ImagePath")
-    public String ImagePath;
+    @Column(name = "ImageBytes")
+    public byte[] ImageBytes;
 
     public List<UserReadingModel> getReadings() {
         return getMany(UserReadingModel.class, "User");
@@ -67,22 +62,22 @@ public class UserModel extends Model {
     }
 
     public User mapToUser() {
-        User user = new User(getId(), Name, ImagePath);
+        User user = new User(getId(), Name, ImageBytes);
         for (UserReadingModel reading: getReadings()) {
             user.addReading(reading.Sequence, reading.Weight, reading.Height, reading.TakenOn);
         }
         return user;
     }
 
-    public MinimalUser mapToMinimalUser() {
-        MinimalUser user = new MinimalUser(getId(), Name, ImagePath);
+    public UserHeader mapToUserHeader() {
+        UserHeader user = new UserHeader(getId(), Name, ImageBytes);
         return user;
     }
 
     private static UserModel mapFromUser(User user) {
         UserModel userModel = new UserModel();
         userModel.Name = user.getName();
-        userModel.ImagePath = user.getImagePath();
+        userModel.ImageBytes = user.getImageBytes();
         return userModel;
     }
 }

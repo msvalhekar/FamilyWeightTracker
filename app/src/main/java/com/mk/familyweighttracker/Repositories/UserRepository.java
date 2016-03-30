@@ -2,7 +2,7 @@ package com.mk.familyweighttracker.Repositories;
 
 import com.mk.familyweighttracker.DbModels.UserModel;
 import com.mk.familyweighttracker.DbModels.UserReadingModel;
-import com.mk.familyweighttracker.Models.MinimalUser;
+import com.mk.familyweighttracker.Models.UserHeader;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 
@@ -31,12 +31,12 @@ public class UserRepository {
         return user.getId();
     }
 
-    public List<MinimalUser> getAll() {
+    public List<UserHeader> getAll() {
         List<UserModel> userModelList = UserModel.getAll();
 
-        List<MinimalUser> users = new ArrayList<>();
+        List<UserHeader> users = new ArrayList<>();
         for (UserModel userModel: userModelList) {
-            users.add(userModel.mapToMinimalUser());
+            users.add(userModel.mapToUserHeader());
         }
         return users;
     }

@@ -13,14 +13,14 @@ import java.util.List;
 public class User {
     private long mId;
     private String mName;
-    private String mImagePath;
+    private byte[] mImageBytes;
     private List<UserReading> mReadings;
 
-    public User(long id, String name, String imagePath)
+    public User(long id, String name, byte[] imageBytes)
     {
         mId = id;
         mName = name;
-        mImagePath = imagePath;
+        mImageBytes = imageBytes;
         mReadings = new ArrayList<>();
     }
 
@@ -32,8 +32,8 @@ public class User {
         return mName;
     }
 
-    public String getImagePath() {
-        return mImagePath;
+    public byte[] getImageBytes() {
+        return mImageBytes;
     }
 
     public double getWeight() {

@@ -1,11 +1,14 @@
 package com.mk.familyweighttracker.Fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
@@ -47,7 +50,15 @@ public class UserDetailsSummaryFragment extends Fragment implements UserDetailsR
         User user = new UserService().get(mSelectedUserId);
 
         ((TextView) mFragmentView.findViewById(R.id.userId))
-                .setText("UserId: " + user.getName() + " Readings: " + user.getReadings().size());
+                .setText("Readings: " + user.getReadings().size());
+
+        ImageView userImage = ((ImageView) mFragmentView.findViewById(R.id.userImage));
+        if( user.getImageBytes() != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(user.getImageBytes(), 0, user.getImageBytes().length);
+            userImage.setImageBitmap(bitmap);
+        } else {
+            userImage.setImageResource(R.drawable.dummy_contact);
+        }
     }
 
     private void initDeleteUserControl() {

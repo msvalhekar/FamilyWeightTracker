@@ -1,7 +1,8 @@
 package com.mk.familyweighttracker.Activities;
 
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -16,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mk.familyweighttracker.Models.MinimalUser;
+import com.mk.familyweighttracker.Models.UserHeader;
 import com.mk.familyweighttracker.R;
 
 import com.mk.familyweighttracker.Services.UserService;
@@ -66,7 +67,7 @@ public class UsersListActivity extends AppCompatActivity {
                 // update the list for new record
                 boolean dataChanged = data.getBooleanExtra(UserDetailActivity.ARG_IS_DATA_CHANGED, false);
                 if(dataChanged) {
-                    Toast.makeText(getApplicationContext(), "Data changed, refreshing", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Data changed. Refreshing...", Toast.LENGTH_SHORT).show();
                     setupRecyclerView((RecyclerView) mRecyclerView);
                 }
             }
@@ -109,9 +110,9 @@ public class UsersListActivity extends AppCompatActivity {
     private class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<MinimalUser> mUsers;
+        private final List<UserHeader> mUsers;
 
-        public SimpleItemRecyclerViewAdapter(List<MinimalUser> users) {
+        public SimpleItemRecyclerViewAdapter(List<UserHeader> users) {
             mUsers = users;
         }
 
@@ -124,7 +125,7 @@ public class UsersListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            final MinimalUser user = mUsers.get(position);
+            final UserHeader user = mUsers.get(position);
 
             holder.setUser(user);
 
@@ -147,7 +148,7 @@ public class UsersListActivity extends AppCompatActivity {
             public final View mView;
             public final ImageView mImageView;
             public final TextView mNameView;
-            public MinimalUser mUser;
+            public UserHeader mUser;
 
             public ViewHolder(View view) {
                 super(view);
@@ -156,10 +157,16 @@ public class UsersListActivity extends AppCompatActivity {
                 mNameView = (TextView) view.findViewById(R.id.list_item_name);
             }
 
-            public void setUser(MinimalUser user)
+            public void setUser(UserHeader user)
             {
                 mUser = user;
-                mImageView.setImageResource(R.drawable.dummy_contact);
+
+                if( user.getImageBytes() != null) {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(user.getImageBytes(), 0, user.getImageBytes().length);
+                    mImageView.setImageBitmap(bitmap);
+                } else {
+                    mImageView.setImageResource(R.drawable.dummy_contact);
+                }
                 mNameView.setText(user.getName());
             }
 

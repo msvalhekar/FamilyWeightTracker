@@ -29,9 +29,9 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/add_user_image"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:id="@+id/add_user_image_button"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/contact_default"
                 android:scaleType="centerCrop" >

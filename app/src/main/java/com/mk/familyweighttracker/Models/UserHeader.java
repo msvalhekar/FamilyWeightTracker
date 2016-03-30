@@ -3,15 +3,15 @@ package com.mk.familyweighttracker.Models;
 /**
  * Created by mvalhekar on 25-03-2016.
  */
-public class MinimalUser {
+public class UserHeader {
     private long mId;
     private String mName;
-    private String mImagePath;
+    private byte[] mImageBytes;
 
-    public MinimalUser(long id, String name, String imagePath) {
+    public UserHeader(long id, String name, byte[] imageBytes) {
         mId = id;
         mName = name;
-        mImagePath = imagePath;
+        mImageBytes = imageBytes;
     }
 
     public long getId() {
@@ -22,7 +22,7 @@ public class MinimalUser {
         return mName;
     }
 
-    public String getImagePath() {
-        return mImagePath;
+    public byte[] getImageBytes() {
+        return mImageBytes;
     }
 }

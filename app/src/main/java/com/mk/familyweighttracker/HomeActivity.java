@@ -44,6 +44,12 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onDestroy() {
+        ActiveAndroid.dispose();
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_home, menu);

@@ -1,6 +1,6 @@
 package com.mk.familyweighttracker.Services;
 
-import com.mk.familyweighttracker.Models.MinimalUser;
+import com.mk.familyweighttracker.Models.UserHeader;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.Repositories.UserRepository;
@@ -13,7 +13,7 @@ import java.util.List;
 public class UserService {
     private UserRepository userRepository = new UserRepository();
 
-    public List<MinimalUser> getAll() { return userRepository.getAll(); }
+    public List<UserHeader> getAll() { return userRepository.getAll(); }
 
     public User get(long userId) { return userRepository.getUser(userId); }
 
