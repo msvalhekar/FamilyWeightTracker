@@ -2,6 +2,7 @@ package com.mk.familyweighttracker.Activities;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -48,6 +49,8 @@ import java.util.List;
 public class AddNewUserActivity extends AppCompatActivity {
 
     private static final int LOAD_IMAGE_REQUEST = 1;
+    private static final int CROP_IMAGE_REQUEST = 2;
+
     AddNewUserTask mAddNewUserTask;
     NewUserViewModel mNewUser = new NewUserViewModel();
 
@@ -78,30 +81,80 @@ public class AddNewUserActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Check which request we're responding to
-        try {
-            if (requestCode == LOAD_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+        if (requestCode == LOAD_IMAGE_REQUEST) {
+            if (resultCode == RESULT_OK && data != null) {
+                Uri pickedImageUri = data.getData();
+                allowToCropImageBeforeSelection(pickedImageUri);
+            } else {
+                Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
+            }
+        }
+        if (requestCode == CROP_IMAGE_REQUEST) {
+            if (resultCode == RESULT_OK && data != null) {
+                // get the returned data
+                Bundle extras = data.getExtras();
+                // get the cropped bitmap
+                Bitmap selectedBitmap = extras.getParcelable("data");
 
-                Uri pickedImage = data.getData();
-                String[] filepath = {MediaStore.Images.Media.DATA };
-                Cursor cursor = getContentResolver().query(pickedImage, filepath, null, null, null);
-                cursor.moveToFirst();
-                String imagePath = cursor.getString(cursor.getColumnIndex(filepath[0]));
-                cursor.close();
-
-                Bitmap scaledBitmap = compressImage(imagePath);
-                mImageButton.setImageBitmap(scaledBitmap);
+                mImageButton.setImageBitmap(selectedBitmap);
 
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 try {
-                    boolean success = scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    boolean success = selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                     mNewUser.ImageBytes = stream.toByteArray();
                 }
                 catch (Exception e) {
                     Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
-            else {
-                Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void allowToCropImageBeforeSelection(Uri pickedImageUri) {
+        try {
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            // indicate image type and Uri
+            cropIntent.setDataAndType(pickedImageUri, "image/*");
+            // set crop properties
+            cropIntent.putExtra("crop", "true");
+            // indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            // indicate output X and Y
+            cropIntent.putExtra("outputX", 512);
+            cropIntent.putExtra("outputY", 512);
+            // retrieve data on return
+            cropIntent.putExtra("return-data", true);
+            // start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, CROP_IMAGE_REQUEST);
+        }
+        // respond to users whose devices do not support the crop action
+        catch (ActivityNotFoundException anfe) {
+            // display an error message
+            String errorMessage = "Device doesn't support the crop action!";
+            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    private void saveUserImage(Uri pickedImageUri) {
+        try {
+            String[] filepath = {MediaStore.Images.Media.DATA };
+            Cursor cursor = getContentResolver().query(pickedImageUri, filepath, null, null, null);
+            cursor.moveToFirst();
+            String imagePath = cursor.getString(cursor.getColumnIndex(filepath[0]));
+            cursor.close();
+
+            Bitmap scaledBitmap = compressImage(imagePath);
+            mImageButton.setImageBitmap(scaledBitmap);
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            try {
+                boolean success = scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                mNewUser.ImageBytes = stream.toByteArray();
+            }
+            catch (Exception e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
             Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
