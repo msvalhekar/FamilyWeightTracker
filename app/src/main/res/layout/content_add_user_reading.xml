@@ -22,55 +22,65 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <TableLayout
             android:id="@+id/add_reading_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
+            <TableRow>
+                <TextView
+                    android:id="@+id/add_reading_sequence_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left|center_vertical"
+                    android:textStyle="bold"
+                    android:text="Reading for"/>
+                <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/add_reading_sequence"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:hint="Sequence"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/add_reading_weight"
+                    android:layout_weight="1"
+                    android:spinnerMode="dialog">
+                </android.support.v7.widget.AppCompatSpinner>
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:id="@+id/add_reading_weight_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:text="Weight (kg)"/>
+                <NumberPicker
+                    android:id="@+id/add_reading_weight_picker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:hint="weight (kg)"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/add_reading_height"
+                    android:descendantFocusability="blocksDescendants" />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:id="@+id/add_reading_height_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:text="Height (cm)"/>
+                <NumberPicker
+                    android:id="@+id/add_reading_height_picker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="height (cm)"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
+                    android:descendantFocusability="blocksDescendants" />
+            </TableRow>
 
             <TableLayout
                 android:id="@+id/actionButtonsLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent"
+                android:gravity="bottom">
                 <TableRow>
                     <Button
                         android:id="@+id/add_reading_cancel_button"
@@ -87,6 +97,6 @@
                         android:text="@android:string/ok" />
                 </TableRow>
             </TableLayout>
-        </LinearLayout>
+        </TableLayout>
     </ScrollView>
 </LinearLayout>

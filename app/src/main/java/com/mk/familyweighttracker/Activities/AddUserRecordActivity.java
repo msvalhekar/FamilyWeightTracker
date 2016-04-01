@@ -7,23 +7,27 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.NumberPicker;
+import android.widget.Toast;
 
+import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 public class AddUserRecordActivity extends AppCompatActivity {
 
     long mSelectedUserId;
+    User mSelectedUser;
     AddUserReadingTask mAddUserReadingTask;
-
-    EditText mSequenceView;
-    EditText mWeightView;
-    EditText mHeightView;
+    UserReading mUserReading = new UserReading();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +35,123 @@ public class AddUserRecordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_user_record);
 
         mSelectedUserId = getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
+        mSelectedUser = new UserService().get(mSelectedUserId);
+        List<UserReading> readings = mSelectedUser.getReadings();
+
+        UserReading lastReading = null;
+        if(readings.size() > 0)
+            lastReading = readings.get(readings.size() - 1);
 
         initToolbarControl();
 
-        mSequenceView = ((EditText) findViewById(R.id.add_reading_sequence));
-        mWeightView = ((EditText) findViewById(R.id.add_reading_weight));
-        mHeightView = ((EditText) findViewById(R.id.add_reading_height));
+        mUserReading.UserId = mSelectedUser.getId();
+        mUserReading.TakenOn = Calendar.getInstance().getTime();
+
+        initSequenceControl(lastReading);
+        initWeightControl(lastReading);
+        initHeightControl(lastReading);
 
         initActionButtonControls();
+    }
+
+    private void initWeightControl(UserReading lastReading) {
+        NumberPicker picker = ((NumberPicker) findViewById(R.id.add_reading_weight_picker));
+
+        double startWeight = 70;
+        double endWeight = 90;
+        final double incrementFactor = 0.05;
+
+        if (lastReading != null) {
+            startWeight = lastReading.Weight -10;
+            endWeight = lastReading.Weight +10;
+        }
+
+        final List<String> items = new ArrayList<>();
+        for (double i = startWeight; i<endWeight; i+=incrementFactor)
+            items.add(String.format("%1$.2f", i));
+
+        String[] values = items.toArray(new String[items.size()]);
+        picker.setMinValue(0);
+        picker.setMaxValue(values.length - 1);
+        picker.setDisplayedValues(values);
+        picker.setWrapSelectorWheel(false);
+
+        picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                mUserReading.Weight = Double.valueOf(items.get(newVal));
+            }
+        });
+        picker.setValue(values.length / 2);
+        mUserReading.Weight = Double.valueOf(items.get(values.length / 2));
+    }
+
+    private void initHeightControl(UserReading lastReading) {
+        NumberPicker picker = ((NumberPicker) findViewById(R.id.add_reading_height_picker));
+
+        int startHeight = 140;
+        int endHeight = 170;
+        int incrementFactor = 1;
+
+        if (lastReading != null) {
+            startHeight = lastReading.Height -5;
+            endHeight = lastReading.Height +5;
+        }
+
+        final List<String> items = new ArrayList<>();
+        for (int i = startHeight; i<endHeight; i+=incrementFactor)
+            items.add(String.format("%3d", i));
+
+        String[] values = items.toArray(new String[items.size()]);
+        picker.setMinValue(0);
+        picker.setMaxValue(values.length - 1);
+        picker.setDisplayedValues(values);
+        picker.setWrapSelectorWheel(false);
+
+        picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                mUserReading.Height = Integer.valueOf(items.get(newVal));
+            }
+        });
+        picker.setValue(values.length / 2);
+        mUserReading.Height = Integer.valueOf(items.get(values.length / 2));
+    }
+
+    private void initSequenceControl(UserReading lastReading) {
+        android.support.v7.widget.AppCompatSpinner sequenceSpinner =
+                ((android.support.v7.widget.AppCompatSpinner) findViewById(R.id.add_reading_sequence));
+
+        final long nextSequenceNumber = (lastReading != null ? lastReading.Sequence : 0) +1;
+
+        List<String> items = new ArrayList<>();
+        String sequenceName = "Day";
+        if( mSelectedUser.trackingPeriod == TrackingPeriod.Weekly) {
+            sequenceName = "Week";
+        } else if( mSelectedUser.trackingPeriod == TrackingPeriod.Monthly) {
+            sequenceName = "Month";
+        } else if( mSelectedUser.trackingPeriod == TrackingPeriod.Yearly) {
+            sequenceName = "Year";
+        }
+
+        for (long i = nextSequenceNumber; i <= nextSequenceNumber +10; i++)
+            items.add(sequenceName + " " + String.valueOf(i));
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sequenceSpinner.setAdapter(adapter);
+
+        sequenceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mUserReading.Sequence = nextSequenceNumber + position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        mUserReading.Sequence = nextSequenceNumber;
     }
 
     private void initToolbarControl() {
@@ -70,80 +183,15 @@ public class AddUserRecordActivity extends AppCompatActivity {
             return;
         }
 
-        // Reset errors.
-        mHeightView.setError(null);
-        mWeightView.setError(null);
-        mSequenceView.setError(null);
-
-        // Store values at the time of the login attempt.
-        int sequence = Integer.valueOf(mSequenceView.getText().toString());
-        double weight = Double.valueOf(mWeightView.getText().toString());
-        double height = Double.valueOf(mHeightView.getText().toString());
-        Date takenOn = new Date(); //// TODO: 26-03-2016 take from user
-
-        boolean cancel = false;
-        View focusView = null;
-
-        if (!isSequenceValid(sequence)) {
-            mSequenceView.setError("Required");
-            focusView = mSequenceView;
-            cancel = true;
-        }
-        else if (!isWeightValid(weight)) {
-            mWeightView.setError("Required");
-            focusView = mWeightView;
-            cancel = true;
-        }
-        else if (!isHeightValid(height)) {
-            mHeightView.setError("Required");
-            focusView = mHeightView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-
-            // showProgress(true);
-            mAddUserReadingTask = new AddUserReadingTask(sequence, weight, height, takenOn);
-            mAddUserReadingTask.execute((Void) null);
-        }
-    }
-
-    private boolean isHeightValid(double height) {
-        return 0 < height && height < 200;
-    }
-
-    private boolean isWeightValid(double weight) {
-        return 0 < weight && weight < 200;
-    }
-
-    private boolean isSequenceValid(int sequence) {
-        return 0 < sequence && sequence < 100;
+        mAddUserReadingTask = new AddUserReadingTask();
+        mAddUserReadingTask.execute((Void) null);
     }
 
     private class AddUserReadingTask extends AsyncTask<Void, Void, Boolean>
     {
-        private final long mSequence;
-        private final double mWeight;
-        private final double mHeight;
-        private final Date mTakenOn;
-
-        AddUserReadingTask(int sequence, double weight, double height, Date takenOn) {
-            mSequence = sequence;
-            mWeight = weight;
-            mHeight = height;
-            mTakenOn = takenOn;
-        }
-
         @Override
         protected Boolean doInBackground(Void... params) {
-            UserReading reading = new UserReading(mSelectedUserId, mSequence, mWeight, mHeight, mTakenOn);
-            new UserService().addReading(reading);
+            new UserService().addReading(mUserReading);
             return true;
         }
 

@@ -27,7 +27,7 @@ public class UserReadingModel extends Model {
     public double Weight;
 
     @Column(name = "Height")
-    public double Height;
+    public int Height;
 
     @Column(name = "TakenOn")
     public Date TakenOn;
@@ -38,6 +38,7 @@ public class UserReadingModel extends Model {
     public static void add(final UserReading reading) {
         UserReadingModel readingModel = new UserReadingModel();
         readingModel.User = UserModel.get(reading.UserId);
+        readingModel.Sequence = reading.Sequence;
         readingModel.Weight = reading.Weight;
         readingModel.Height = reading.Height;
         readingModel.TakenOn = reading.TakenOn;

@@ -6,10 +6,10 @@ package com.mk.familyweighttracker.Enums;
 public enum TrackingPeriod {
     Daily(1),
     Weekly(7),
-    BiWeekly(15),
+    //BiWeekly(15),
     Monthly(30),
-    Yearly(365),
-    None(0);
+    Yearly(365);
+    //None(0);
 
     private final int value;
 

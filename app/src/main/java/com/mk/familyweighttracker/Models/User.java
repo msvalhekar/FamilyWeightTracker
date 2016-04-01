@@ -49,7 +49,7 @@ public class User {
         return getHeight() / 100.0;
     }
 
-    public void addReading(long sequence, double weight, double height, Date takenOn)
+    public void addReading(long sequence, double weight, int height, Date takenOn)
     {
         UserReading reading = new UserReading(mId, sequence, weight, height, takenOn);
         mReadings.add(reading);
