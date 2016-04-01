@@ -53,8 +53,8 @@ public class UserDetailsSummaryFragment extends Fragment implements UserDetailsR
                 .setText("Readings: " + user.getReadings().size());
 
         ImageView userImage = ((ImageView) mFragmentView.findViewById(R.id.userImage));
-        if( user.getImageBytes() != null) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(user.getImageBytes(), 0, user.getImageBytes().length);
+        if( user.imageBytes != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(user.imageBytes, 0, user.imageBytes.length);
             userImage.setImageBitmap(bitmap);
         } else {
             userImage.setImageResource(R.drawable.dummy_contact);

@@ -1,6 +1,7 @@
 package com.mk.familyweighttracker.Models;
 
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
+import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Services.PregnancyService;
 
 import java.util.ArrayList;
@@ -12,28 +13,24 @@ import java.util.List;
  */
 public class User {
     private long mId;
-    private String mName;
-    private byte[] mImageBytes;
+    public String name;
+    public byte[] imageBytes;
     private List<UserReading> mReadings;
+    public boolean isMale;
+    public TrackingPeriod trackingPeriod;
+    public boolean enableReminder;
+    public int reminderDay;
+    public int reminderHour;
+    public int reminderMinute;
 
-    public User(long id, String name, byte[] imageBytes)
+    public User(long id)
     {
         mId = id;
-        mName = name;
-        mImageBytes = imageBytes;
         mReadings = new ArrayList<>();
     }
 
     public long getId() {
         return mId;
-    }
-
-    public String getName() {
-        return mName;
-    }
-
-    public byte[] getImageBytes() {
-        return mImageBytes;
     }
 
     public double getWeight() {

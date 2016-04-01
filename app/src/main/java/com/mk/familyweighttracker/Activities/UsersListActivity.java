@@ -53,23 +53,19 @@ public class UsersListActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
+        if (resultCode != RESULT_OK) return;
+
+            // Check which request we're responding to
         if (requestCode == NEW_USER_ADDED_REQUEST) {
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                // update the list for new record
-                setupRecyclerView((RecyclerView)mRecyclerView);
-            }
+            // update the list for new record
+            setupRecyclerView((RecyclerView)mRecyclerView);
         }
         if (requestCode == USER_DATA_CHANGED_REQUEST) {
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                // update the list for new record
-                boolean dataChanged = data.getBooleanExtra(UserDetailActivity.ARG_IS_DATA_CHANGED, false);
-                if(dataChanged) {
-                    Toast.makeText(getApplicationContext(), "Data changed. Refreshing...", Toast.LENGTH_SHORT).show();
-                    setupRecyclerView((RecyclerView) mRecyclerView);
-                }
+            // update the list for new record
+            boolean dataChanged = data.getBooleanExtra(UserDetailActivity.ARG_IS_DATA_CHANGED, false);
+            if(dataChanged) {
+                Toast.makeText(getApplicationContext(), "Data changed. Refreshing...", Toast.LENGTH_SHORT).show();
+                setupRecyclerView((RecyclerView) mRecyclerView);
             }
         }
     }

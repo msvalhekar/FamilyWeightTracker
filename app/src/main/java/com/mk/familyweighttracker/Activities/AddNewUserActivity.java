@@ -2,6 +2,7 @@ package com.mk.familyweighttracker.Activities;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,10 +25,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TableRow;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
@@ -36,13 +42,12 @@ import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -57,11 +62,8 @@ public class AddNewUserActivity extends AppCompatActivity {
 
     private ImageButton mImageButton;
     private EditText mNameView;
-    private EditText mDoBView;
+    private EditText mTimeOfReminderView;
     private android.support.v7.widget.AppCompatSpinner mTrackingPeriodSpinner;
-    private android.support.v7.widget.AppCompatSpinner mTrackingPeriodOnSpinner;
-
-    DatePickerDialog mDoBDatePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +74,20 @@ public class AddNewUserActivity extends AppCompatActivity {
 
         mNameView = ((EditText) findViewById(R.id.add_user_name));
 
+        mNewUser.IsMale = false;
+        mNewUser.DateOfBirth = new Date();
+        mNewUser.TrackingPeriod = TrackingPeriod.Weekly;
+        mNewUser.EnableReminder = true;
+        mNewUser.ReminderDay = 1;
+        mNewUser.ReminderHour = 8;
+        mNewUser.ReminderMinute = 0;
+
         initImageButtonControl();
         initDateOfBirthControl();
-        initTrackingPeriodControl(TrackingPeriod.Weekly);
+        initGenderSwitchControl();
+        initTrackingPeriodControl();
+        initReminderControl();
+        initTimeOfReminderControl();
         initActionButtonControls();
     }
 
@@ -319,7 +332,36 @@ public class AddNewUserActivity extends AppCompatActivity {
         });
     }
 
-    private void initTrackingPeriodControl(TrackingPeriod defaultValue) {
+    private void initGenderSwitchControl() {
+        ((RadioButton) findViewById(R.id.add_user_gender_switch_male))
+                .setChecked(mNewUser.IsMale);
+        ((RadioButton) findViewById(R.id.add_user_gender_switch_female))
+                .setChecked(!mNewUser.IsMale);
+
+        RadioGroup radioGroup = ((RadioGroup) findViewById(R.id.add_user_gender_switch));
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                mNewUser.IsMale = (checkedId == R.id.add_user_gender_switch_male);
+            }
+        });
+    }
+
+    private void initReminderControl() {
+        CheckBox reminderCheckbox = ((CheckBox) findViewById(R.id.add_user_set_reminder));
+
+        reminderCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mNewUser.EnableReminder = isChecked;
+                int show = isChecked ? View.VISIBLE : View.GONE;
+                ((TableRow) findViewById(R.id.add_user_reminder_options)).setVisibility(show);
+            }
+        });
+        reminderCheckbox.setChecked(mNewUser.EnableReminder);
+    }
+
+    private void initTrackingPeriodControl() {
         mTrackingPeriodSpinner = ((android.support.v7.widget.AppCompatSpinner) findViewById(R.id.add_user_tracking_period));
 
         List<TrackingPeriod> trackingPeriods = Arrays.asList(TrackingPeriod.values());
@@ -332,7 +374,7 @@ public class AddNewUserActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mNewUser.TrackingPeriod = (TrackingPeriod) parent.getSelectedItem();
-                setTrackingPeriodOnControl(mNewUser.TrackingPeriod);
+                setReminderDayControlBasedOnTrackingPeriod(mNewUser.TrackingPeriod);
             }
 
             @Override
@@ -341,15 +383,16 @@ public class AddNewUserActivity extends AppCompatActivity {
         });
 
         for (int index = 0; index < trackingPeriods.size(); index++) {
-            if (trackingPeriods.get(index) == defaultValue) {
+            if (trackingPeriods.get(index) == mNewUser.TrackingPeriod) {
                 mTrackingPeriodSpinner.setSelection(index);
                 break;
             }
         }
     }
 
-    private void setTrackingPeriodOnControl(TrackingPeriod selectedPeriod) {
-        mTrackingPeriodOnSpinner = ((android.support.v7.widget.AppCompatSpinner) findViewById(R.id.add_user_tracking_period_on));
+    private void setReminderDayControlBasedOnTrackingPeriod(TrackingPeriod selectedPeriod) {
+        android.support.v7.widget.AppCompatSpinner reminderDaySpinner =
+                ((android.support.v7.widget.AppCompatSpinner) findViewById(R.id.add_user_reminder_day));
 
         List<Integer> items = new ArrayList<>();
         for(int i = 1; i <= selectedPeriod.getValue(); i++)
@@ -357,12 +400,12 @@ public class AddNewUserActivity extends AppCompatActivity {
 
         ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mTrackingPeriodOnSpinner.setAdapter(adapter);
+        reminderDaySpinner.setAdapter(adapter);
 
-        mTrackingPeriodOnSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        reminderDaySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mNewUser.TrackingPeriodOnEvery = Integer.valueOf(parent.getItemAtPosition(position).toString());
+                mNewUser.ReminderDay = Integer.valueOf(parent.getItemAtPosition(position).toString());
             }
 
             @Override
@@ -372,32 +415,62 @@ public class AddNewUserActivity extends AppCompatActivity {
     }
 
     private void initDateOfBirthControl() {
-        mDoBView = ((EditText) findViewById(R.id.add_user_dob));
-        mDoBView.setInputType(InputType.TYPE_NULL);
+        final EditText dobView = ((EditText) findViewById(R.id.add_user_dob));
+        dobView.setInputType(InputType.TYPE_NULL);
 
-        mDoBView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(mNewUser.DateOfBirth);
+
+        dobView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) return;
+            public void onClick(View v) {
+                new DatePickerDialog(v.getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
+                                Calendar newDate = Calendar.getInstance();
+                                newDate.set(year, monthOfYear, dayOfMonth);
 
-                mDoBDatePickerDialog.show();
+                                mNewUser.DateOfBirth = newDate.getTime();
+                                dobView.setText(dateFormatter.format(newDate.getTime()));
+                            }
+                        },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH))
+                        .show();
             }
         });
+    }
 
-        Calendar newCalendar = Calendar.getInstance();
+    private void initTimeOfReminderControl() {
+        mTimeOfReminderView = ((EditText) findViewById(R.id.add_user_reminder_time));
+        mTimeOfReminderView.setInputType(InputType.TYPE_NULL);
 
-        mDoBDatePickerDialog = new DatePickerDialog(this,
-                new DatePickerDialog.OnDateSetListener() {
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
-                        Calendar newDate = Calendar.getInstance();
-                        newDate.set(year, monthOfYear, dayOfMonth);
-                        mDoBView.setText(dateFormatter.format(newDate.getTime()));
-                    }
-                },
-                newCalendar.get(Calendar.YEAR),
-                newCalendar.get(Calendar.MONTH),
-                newCalendar.get(Calendar.DAY_OF_MONTH));
+        mTimeOfReminderView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new TimePickerDialog(
+                        v.getContext(),
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                setReminderTime(hourOfDay, minute);
+                            }
+                        },
+                        mNewUser.ReminderHour,
+                        mNewUser.ReminderMinute,
+                        true)
+                        .show();
+            }
+        });
+        setReminderTime(mNewUser.ReminderHour, mNewUser.ReminderMinute);
+    }
+
+    private void setReminderTime(int hourOfDay, int minute) {
+        mNewUser.ReminderHour = hourOfDay;
+        mNewUser.ReminderMinute = minute;
+        mTimeOfReminderView.setText(String.format("%02d:%02d", mNewUser.ReminderHour, mNewUser.ReminderMinute));
     }
 
     private void initActionButtonControls() {
@@ -469,11 +542,25 @@ public class AddNewUserActivity extends AppCompatActivity {
         public long Id;
         public byte[] ImageBytes;
         public String Name;
+        public boolean IsMale;
         public TrackingPeriod TrackingPeriod;
-        public int TrackingPeriodOnEvery;
+        public boolean EnableReminder;
+        public int ReminderDay;
+        public int ReminderHour;
+        public int ReminderMinute;
+        public Date DateOfBirth;
 
         public User mapToUser() {
-            return new User(0, mNewUser.Name, mNewUser.ImageBytes);
+            User user = new User(0);
+            user.name = Name;
+            user.imageBytes = ImageBytes;
+            user.isMale = IsMale;
+            user.trackingPeriod = TrackingPeriod;
+            user.enableReminder = EnableReminder;
+            user.reminderDay = ReminderDay;
+            user.reminderHour = ReminderHour;
+            user.reminderMinute = ReminderMinute;
+            return user;
         }
     }
 

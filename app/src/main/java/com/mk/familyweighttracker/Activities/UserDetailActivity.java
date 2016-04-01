@@ -45,7 +45,7 @@ public class UserDetailActivity extends AppCompatActivity
 
         long userId = getIntent().getLongExtra(ARG_USER_ID, 0);
         User user = new UserService().get(userId);
-        this.setTitle(user.getName());
+        this.setTitle(user.name);
 
         initToolbarControl();
 
