@@ -4,7 +4,9 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
+import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Models.UserHeader;
 import com.mk.familyweighttracker.Models.User;
 
@@ -27,6 +29,12 @@ public class UserModel extends Model {
 
     @Column(name = "TrackingPeriod")
     private TrackingPeriod trackingPeriod;
+
+    @Column(name = "WeightUnit")
+    private WeightUnit weightUnit;
+
+    @Column(name = "HeightUnit")
+    private HeightUnit heightUnit;
 
     @Column(name = "EnableReminder")
     private boolean enableReminder;
@@ -86,6 +94,8 @@ public class UserModel extends Model {
         user.imageBytes = this.imageBytes;
         user.isMale = this.isMale;
         user.trackingPeriod = this.trackingPeriod;
+        user.weightUnit = this.weightUnit;
+        user.heightUnit = this.heightUnit;
         user.enableReminder = this.enableReminder;
         user.reminderDay = this.reminderDay;
         user.reminderHour = this.reminderHour;
@@ -108,10 +118,19 @@ public class UserModel extends Model {
         userModel.imageBytes = user.imageBytes;
         userModel.isMale = user.isMale;
         userModel.trackingPeriod = user.trackingPeriod;
+        userModel.weightUnit = user.weightUnit;
+        userModel.heightUnit = user.heightUnit;
         userModel.enableReminder = user.enableReminder;
         userModel.reminderDay = user.reminderDay;
         userModel.reminderHour = user.reminderHour;
         userModel.reminderMinute = user.reminderMinute;
         return userModel;
+    }
+
+    public static void update(long userId, WeightUnit weightUnit, HeightUnit heightUnit) {
+        UserModel userModel = UserModel.get(userId);
+        userModel.weightUnit = weightUnit;
+        userModel.heightUnit = heightUnit;
+        userModel.save();
     }
 }

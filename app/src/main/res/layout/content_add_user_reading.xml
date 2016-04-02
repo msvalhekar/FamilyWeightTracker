@@ -28,7 +28,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TableRow>
+            <TableRow
+                android:background="#00ff00">
                 <TextView
                     android:id="@+id/add_reading_sequence_label"
                     android:layout_width="wrap_content"
@@ -45,7 +46,9 @@
                     android:spinnerMode="dialog">
                 </android.support.v7.widget.AppCompatSpinner>
             </TableRow>
-            <TableRow>
+            <TableRow
+                android:background="#00ff00"
+                android:layout_marginTop="5dp">
                 <TextView
                     android:id="@+id/add_reading_weight_label"
                     android:layout_width="wrap_content"
@@ -53,14 +56,23 @@
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
                     android:textStyle="bold"
-                    android:text="Weight (kg)"/>
+                    android:text="Weight"/>
                 <NumberPicker
                     android:id="@+id/add_reading_weight_picker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:descendantFocusability="blocksDescendants" />
+                <TextView
+                    android:id="@+id/add_reading_weight_unit_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:textStyle="bold"/>
             </TableRow>
-            <TableRow>
+            <TableRow
+                android:background="#00ff00"
+                android:layout_marginTop="5dp">
                 <TextView
                     android:id="@+id/add_reading_height_label"
                     android:layout_width="wrap_content"
@@ -68,12 +80,19 @@
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
                     android:textStyle="bold"
-                    android:text="Height (cm)"/>
+                    android:text="Height"/>
                 <NumberPicker
                     android:id="@+id/add_reading_height_picker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:descendantFocusability="blocksDescendants" />
+                <TextView
+                    android:id="@+id/add_reading_height_unit_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:textStyle="bold"/>
             </TableRow>
 
             <TableLayout

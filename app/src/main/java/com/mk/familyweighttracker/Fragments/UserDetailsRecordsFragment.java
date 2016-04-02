@@ -11,16 +11,22 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Activities.AddUserRecordActivity;
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
+import com.mk.familyweighttracker.Enums.HeightUnit;
+import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
@@ -82,6 +88,9 @@ public class UserDetailsRecordsFragment extends Fragment {
             return;
         };
 
+        final WeightUnit[] userWeightUnit = {WeightUnit.kg};
+        final HeightUnit[] userHeightUnit = {HeightUnit.cm};
+
         final UserReading userReading = new UserReading();
         userReading.UserId = mSelectedUserId;
         userReading.Sequence = 0;
@@ -89,64 +98,80 @@ public class UserDetailsRecordsFragment extends Fragment {
 
         View dialogView = LayoutInflater.from(context).inflate(R.layout.add_user_first_reading, null);
 
-        final NumberPicker weightPicker = ((NumberPicker) dialogView.findViewById(R.id.add_first_reading_weight_picker));
-        double startWeight = 30;
-        double endWeight = 150;
-        double weightIncrementFactor = 0.05;
+        ((RadioGroup) dialogView.findViewById(R.id.add_first_reading_weight_unit_switch))
+                .setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                     boolean isWeightUnitKg = (checkedId == R.id.add_first_reading_weight_unit_kg);
+                     userWeightUnit[0] = isWeightUnitKg ? WeightUnit.kg : WeightUnit.lb;
+                    }
+                });
+        ((RadioButton) dialogView.findViewById(R.id.add_first_reading_weight_unit_kg)).setChecked(true);
 
-        final List<String> weightItems = new ArrayList<>();
-        for (double i = startWeight; i<endWeight; i+=weightIncrementFactor)
-            weightItems.add(String.format("%1$.2f", i));
+        ((RadioGroup) dialogView.findViewById(R.id.add_first_reading_height_unit_switch))
+                .setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                     boolean isHeightUnitCm = (checkedId == R.id.add_first_reading_height_unit_cm);
+                     userHeightUnit[0] = isHeightUnitCm ? HeightUnit.cm : HeightUnit.inch;
+                    }
+                });
+        ((RadioButton) dialogView.findViewById(R.id.add_first_reading_height_unit_cm)).setChecked(true);
 
-        String[] weightValues = weightItems.toArray(new String[weightItems.size()]);
-        weightPicker.setMinValue(0);
-        weightPicker.setMaxValue(weightValues.length - 1);
-        weightPicker.setDisplayedValues(weightValues);
-        weightPicker.setWrapSelectorWheel(false);
-        weightPicker.setValue(weightValues.length / 2);
+        final EditText weightView = ((EditText) dialogView.findViewById(R.id.add_first_reading_weight));
+        weightView.setText("60.00");
 
-        final NumberPicker heightPicker = ((NumberPicker) dialogView.findViewById(R.id.add_first_reading_height_picker));
-        int startHeight = 140;
-        int endHeight = 210;
-        int heightIncrementFactor = 1;
-        final List<String> heightItems = new ArrayList<>();
-        for (int i = startHeight; i<endHeight; i+=heightIncrementFactor)
-            heightItems.add(String.format("%3d", i));
+        final EditText heightView = ((EditText) dialogView.findViewById(R.id.add_first_reading_height));
+        heightView.setText("160");
 
-        String[] heightValues = heightItems.toArray(new String[heightItems.size()]);
-        heightPicker.setMinValue(0);
-        heightPicker.setMaxValue(heightValues.length - 1);
-        heightPicker.setDisplayedValues(heightValues);
-        heightPicker.setWrapSelectorWheel(false);
-        heightPicker.setValue(heightValues.length / 2);
-
-        new AlertDialog.Builder(context)
+        final android.support.v7.app.AlertDialog alertDialog = new AlertDialog.Builder(context)
                 .setView(dialogView)
                 .setCancelable(false)
-                .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-                                userReading.Weight = Double.valueOf(weightItems.get(weightPicker.getValue()));
-                                userReading.Height = Integer.valueOf(heightItems.get(heightPicker.getValue()));
-
-                                new UserService().addReading(userReading);
-
-                                setupRecyclerView(mRecyclerView);
-                                ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
-                            }
-                        })
+                .setPositiveButton("OK", null)
                 .setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                                 Toast.makeText(context,
                                         "Pre-preganancy reading is must for accuracy of calculations.",
                                         Toast.LENGTH_SHORT)
-                                    .show();
+                                        .show();
                             }
                         })
-                .create()
-                .show();
+                .create();
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String weightString = weightView.getText().toString();
+                            if(TextUtils.isEmpty(weightString)) {
+                                weightView.setError("Value required");
+                                return;
+                            }
+                            String heightString = heightView.getText().toString();
+                            if(TextUtils.isEmpty(heightString)) {
+                                heightView.setError("Value required");
+                                return;
+                            }
+
+                            userReading.Weight = Double.valueOf(weightString);
+                            userReading.Height = Integer.valueOf(heightString);
+
+                            new UserService().addReading(userReading);
+                            new UserService().update(mSelectedUserId, userWeightUnit[0], userHeightUnit[0]);
+
+                            setupRecyclerView(mRecyclerView);
+                            ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
+                            alertDialog.dismiss();
+                        }
+                    });
+            }
+        });
+        alertDialog.show();
     }
 
     private void initReadingListControl() {
@@ -156,7 +181,7 @@ public class UserDetailsRecordsFragment extends Fragment {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         User user = new UserService().get(mSelectedUserId);
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(user.getReadings()));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(user));
     }
 
     @Override
@@ -175,10 +200,10 @@ public class UserDetailsRecordsFragment extends Fragment {
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<UserReading> mUserReadings;
+        private final User mUser;
 
-        public SimpleItemRecyclerViewAdapter(List<UserReading> userReadings) {
-            mUserReadings = userReadings;
+        public SimpleItemRecyclerViewAdapter(User user) {
+            mUser = user;
         }
 
         @Override
@@ -190,9 +215,9 @@ public class UserDetailsRecordsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            final UserReading reading = mUserReadings.get(position);
+            final UserReading reading = mUser.getReadings().get(position);
 
-            holder.setReading(reading);
+            holder.setReading(mUser, reading);
 
 //            holder.mView.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -207,7 +232,7 @@ public class UserDetailsRecordsFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return mUserReadings.size();
+            return mUser.getReadings().size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -220,9 +245,10 @@ public class UserDetailsRecordsFragment extends Fragment {
                 mNameView = (TextView) view.findViewById(R.id.user_item_name);
             }
 
-            public void setReading(UserReading reading)
+            public void setReading(User user, UserReading reading)
             {
-                mNameView.setText(String.valueOf(reading.Weight));
+                mNameView.setText(String.valueOf(reading.Weight) + " " + user.weightUnit + ", "
+                                + String.valueOf(reading.Height) + " " + user.heightUnit);
             }
 
             @Override

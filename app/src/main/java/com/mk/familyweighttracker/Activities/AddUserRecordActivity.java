@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
@@ -84,6 +85,9 @@ public class AddUserRecordActivity extends AppCompatActivity {
         });
         picker.setValue(values.length / 2);
         mUserReading.Weight = Double.valueOf(items.get(values.length / 2));
+
+        ((TextView) findViewById(R.id.add_reading_weight_unit_label))
+            .setText(String.valueOf(mSelectedUser.weightUnit));
     }
 
     private void initHeightControl(UserReading lastReading) {
@@ -116,6 +120,9 @@ public class AddUserRecordActivity extends AppCompatActivity {
         });
         picker.setValue(values.length / 2);
         mUserReading.Height = Integer.valueOf(items.get(values.length / 2));
+
+        ((TextView) findViewById(R.id.add_reading_height_unit_label))
+            .setText(String.valueOf(mSelectedUser.heightUnit));
     }
 
     private void initSequenceControl(UserReading lastReading) {

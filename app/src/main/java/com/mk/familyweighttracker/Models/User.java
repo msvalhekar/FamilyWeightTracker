@@ -1,7 +1,9 @@
 package com.mk.familyweighttracker.Models;
 
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
+import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
+import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Services.PregnancyService;
 
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ public class User {
     private List<UserReading> mReadings;
     public boolean isMale;
     public TrackingPeriod trackingPeriod;
+    public WeightUnit weightUnit;
+    public HeightUnit heightUnit;
     public boolean enableReminder;
     public int reminderDay;
     public int reminderHour;
@@ -45,8 +49,20 @@ public class User {
         return 0;
     }
 
+    private double getWeightInKg() {
+        double divideBy = 1;
+        if(weightUnit == WeightUnit.lb)
+            divideBy = 2.20462;
+        return getWeight() / divideBy;
+    }
+
     private double getHeightInMeter() {
-        return getHeight() / 100.0;
+        double divideBy = 1;
+        if( heightUnit == HeightUnit.cm)
+            divideBy = 100;
+        else if( heightUnit == HeightUnit.inch)
+            divideBy = 39.3701;
+        return getHeight() / divideBy;
     }
 
     public void addReading(long sequence, double weight, int height, Date takenOn)
@@ -60,7 +76,7 @@ public class User {
     }
 
     public double getBmi() {
-        return new PregnancyService().calculateBmi(getHeightInMeter(), getWeight());
+        return new PregnancyService().calculateBmi(getHeightInMeter(), getWeightInKg());
     }
 
     public BodyWeightCategory getWeightCategory() {

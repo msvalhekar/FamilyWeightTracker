@@ -4,12 +4,9 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Delete;
-import com.activeandroid.query.Select;
-import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by mvalhekar on 26-03-2016.
