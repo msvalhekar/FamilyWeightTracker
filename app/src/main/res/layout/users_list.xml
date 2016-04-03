@@ -6,8 +6,8 @@
     android:name="com.mk.familyweighttracker.Activities.ItemListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:layout_marginLeft="3dp"
+    android:layout_marginRight="3dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".Activities.UsersListActivity"
-    tools:listitem="@layout/user_content" />
+    tools:listitem="@layout/users_list_user_content" />

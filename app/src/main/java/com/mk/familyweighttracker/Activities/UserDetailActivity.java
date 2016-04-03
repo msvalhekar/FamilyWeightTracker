@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import com.mk.familyweighttracker.Fragments.UserDetailsRecordsFragment;
@@ -79,6 +80,15 @@ public class UserDetailActivity extends AppCompatActivity
         informDataChangedAndFinish();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            informDataChangedAndFinish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     private void initToolbarControl() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_user_detail);
         setSupportActionBar(toolbar);
@@ -91,8 +101,7 @@ public class UserDetailActivity extends AppCompatActivity
 
     private void initDetailTabControl() {
         ViewPager viewPager = ((ViewPager) findViewById(R.id.user_detail_pager));
-        viewPager.setAdapter(new UserDetailsTabPagerAdapter(null, getSupportFragmentManager()));
-        //viewPager.setAdapter(new UserDetailsTabPagerAdapter(user, getSupportFragmentManager()));
+        viewPager.setAdapter(new UserDetailsTabPagerAdapter(getSupportFragmentManager()));
 
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
         slidingTabLayout.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the slidingTabLayout Space Evenly in Available width
@@ -122,7 +131,7 @@ public class UserDetailActivity extends AppCompatActivity
         private Object[] mTabs;
         private Object[] mTitles;
 
-        public UserDetailsTabPagerAdapter(User user, FragmentManager fm) {
+        public UserDetailsTabPagerAdapter(FragmentManager fm) {
             super(fm);
 
             mTabs = UserDetailsTabsFactory.getInstance().getTabs().toArray();

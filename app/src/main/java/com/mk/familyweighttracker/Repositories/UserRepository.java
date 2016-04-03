@@ -4,7 +4,6 @@ import com.mk.familyweighttracker.DbModels.UserModel;
 import com.mk.familyweighttracker.DbModels.UserReadingModel;
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.WeightUnit;
-import com.mk.familyweighttracker.Models.UserHeader;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 
@@ -33,12 +32,12 @@ public class UserRepository {
         return user.getId();
     }
 
-    public List<UserHeader> getAll() {
+    public List<User> getAll() {
         List<UserModel> userModelList = UserModel.getAll();
 
-        List<UserHeader> users = new ArrayList<>();
+        List<User> users = new ArrayList<>();
         for (UserModel userModel: userModelList) {
-            users.add(userModel.mapToUserHeader());
+            users.add(userModel.mapToUser());
         }
         return users;
     }

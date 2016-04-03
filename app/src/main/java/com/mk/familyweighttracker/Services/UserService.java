@@ -2,7 +2,6 @@ package com.mk.familyweighttracker.Services;
 
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.WeightUnit;
-import com.mk.familyweighttracker.Models.UserHeader;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.Repositories.UserRepository;
@@ -15,7 +14,7 @@ import java.util.List;
 public class UserService {
     private UserRepository userRepository = new UserRepository();
 
-    public List<UserHeader> getAll() {
+    public List<User> getAll() {
         return userRepository.getAll();
     }
 

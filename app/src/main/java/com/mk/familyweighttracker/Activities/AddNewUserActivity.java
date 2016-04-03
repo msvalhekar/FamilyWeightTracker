@@ -554,6 +554,7 @@ public class AddNewUserActivity extends AppCompatActivity {
             User user = new User(0);
             user.name = Name;
             user.imageBytes = ImageBytes;
+            user.dateOfBirth = DateOfBirth;
             user.isMale = IsMale;
             user.trackingPeriod = TrackingPeriod;
             user.enableReminder = EnableReminder;

@@ -7,9 +7,9 @@ import com.activeandroid.query.Select;
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Enums.WeightUnit;
-import com.mk.familyweighttracker.Models.UserHeader;
 import com.mk.familyweighttracker.Models.User;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +23,9 @@ public class UserModel extends Model {
 
     @Column(name = "ImageBytes")
     private byte[] imageBytes;
+
+    @Column(name = "DateOfBirth")
+    private Date dateOfBirth;
 
     @Column(name = "IsMale")
     private boolean isMale;
@@ -92,6 +95,7 @@ public class UserModel extends Model {
         User user = new User(getId());
         user.name = this.name;
         user.imageBytes = this.imageBytes;
+        user.dateOfBirth = this.dateOfBirth;
         user.isMale = this.isMale;
         user.trackingPeriod = this.trackingPeriod;
         user.weightUnit = this.weightUnit;
@@ -107,15 +111,11 @@ public class UserModel extends Model {
         return user;
     }
 
-    public UserHeader mapToUserHeader() {
-        UserHeader user = new UserHeader(getId(), name, imageBytes);
-        return user;
-    }
-
     private static UserModel mapFromUser(User user) {
         UserModel userModel = new UserModel();
         userModel.name = user.name;
         userModel.imageBytes = user.imageBytes;
+        userModel.dateOfBirth = user.dateOfBirth;
         userModel.isMale = user.isMale;
         userModel.trackingPeriod = user.trackingPeriod;
         userModel.weightUnit = user.weightUnit;
