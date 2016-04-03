@@ -1,10 +1,12 @@
 package com.mk.familyweighttracker.Fragments;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -15,9 +17,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -25,14 +26,17 @@ import android.widget.Toast;
 
 import com.mk.familyweighttracker.Activities.AddUserRecordActivity;
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
+import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
+import com.mk.familyweighttracker.Models.WeekWeightGainRange;
 import com.mk.familyweighttracker.R;
+import com.mk.familyweighttracker.Services.PregnancyService;
 import com.mk.familyweighttracker.Services.UserService;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +47,8 @@ public class UserDetailsRecordsFragment extends Fragment {
 
     private static final int NEW_USER_RECORD_ADDED_REQUEST = 1;
     private long mSelectedUserId;
+
+    List<WeekWeightGainRange> mWeekWeightGainRangeList;
 
     private View mFragmentView;
     private RecyclerView mRecyclerView;
@@ -179,8 +185,27 @@ public class UserDetailsRecordsFragment extends Fragment {
         setupRecyclerView(mRecyclerView);
     }
 
+    private void setWeightGainRangeFor(User user) {
+        double baseWeight = user.getWeight();
+        if(baseWeight == 0) return;
+
+        mWeekWeightGainRangeList = new PregnancyService()
+                .getWeightGainTableFor(baseWeight, user.getWeightCategory());
+    }
+
+    private WeekWeightGainRange getWeightGainTableFor(long weekNumber) {
+        if(mWeekWeightGainRangeList == null) return null;
+
+        for (WeekWeightGainRange record: mWeekWeightGainRangeList) {
+            if(record.WeekNumber == weekNumber)
+                return new WeekWeightGainRange( record.WeekNumber, record.MinimumWeight, record.MaximumWeight);
+        }
+        return null;
+    }
+
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         User user = new UserService().get(mSelectedUserId);
+        setWeightGainRangeFor(user);
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(user));
     }
 
@@ -209,7 +234,7 @@ public class UserDetailsRecordsFragment extends Fragment {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.user_record_content, parent, false);
+                    .inflate(R.layout.user_records_list_record_content, parent, false);
             return new ViewHolder(view);
         }
 
@@ -217,7 +242,9 @@ public class UserDetailsRecordsFragment extends Fragment {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             final UserReading reading = mUser.getReadings().get(position);
 
-            holder.setReading(mUser, reading);
+            boolean highlightView = mUser.getReadings().size() -1 == position;
+
+            holder.setReading(mUser, reading, highlightView);
 
 //            holder.mView.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -237,23 +264,103 @@ public class UserDetailsRecordsFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            public final TextView mNameView;
+            public User mUser;
+            public UserReading mUserReading;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mNameView = (TextView) view.findViewById(R.id.user_item_name);
             }
 
-            public void setReading(User user, UserReading reading)
+            public void setReading(User user, UserReading reading, boolean highlightView)
             {
-                mNameView.setText(String.valueOf(reading.Weight) + " " + user.weightUnit + ", "
-                                + String.valueOf(reading.Height) + " " + user.heightUnit);
+                mUser = user;
+                mUserReading = reading;
+
+                setPeriodControl();
+                setActualWeightControl();
+                setExpectedWeightControl();
+
+                if(highlightView) mView.setBackgroundColor(Color.CYAN);
             }
 
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mNameView.getText() + "'";
+            private void setExpectedWeightControl() {
+                WeekWeightGainRange weekWeightGainRange = getWeightGainTableFor(mUserReading.Sequence);
+
+                if(weekWeightGainRange == null) return;
+
+                ((TextView) mView.findViewById(R.id.record_item_weight_exp_min))
+                        .setText(String.format("%.2f", weekWeightGainRange.MinimumWeight));
+
+                double diff = mUserReading.Weight - weekWeightGainRange.MinimumWeight;
+                String diffSign = "";
+                int diffColor = 1;
+                if(diff < 0) {
+                    diffColor = Color.RED;
+                } else if(diff > 0) {
+                    diffSign = "+";
+                    diffColor = Color.BLUE;
+                }
+                TextView weightDiffView = ((TextView) mView.findViewById(R.id.record_item_weight_exp_min_diff));
+                weightDiffView.setText(String.format("(%s%.2f)", diffSign, diff));
+                if(diff != 0)
+                    weightDiffView.setTextColor(diffColor);
+
+                ((TextView) mView.findViewById(R.id.record_item_weight_exp_max))
+                        .setText(String.format("%.2f", weekWeightGainRange.MaximumWeight));
+
+                double maxExpWtdiff = mUserReading.Weight - weekWeightGainRange.MaximumWeight;
+                String maxExpWtDiffSign = "";
+                int maxExpWtDiffColor = 1;
+                if(maxExpWtdiff < 0) {
+                    maxExpWtDiffColor = Color.RED;
+                } else if(maxExpWtdiff > 0){
+                    maxExpWtDiffSign = "+";
+                    maxExpWtDiffColor = Color.BLUE;
+                }
+                TextView maxExpWeightDiffView = ((TextView) mView.findViewById(R.id.record_item_weight_exp_max_diff));
+                maxExpWeightDiffView.setText(String.format("(%s%.2f)", maxExpWtDiffSign, maxExpWtdiff));
+                if(maxExpWtdiff != 0)
+                    maxExpWeightDiffView.setTextColor(maxExpWtDiffColor);
+            }
+
+            private void setActualWeightControl() {
+                ((TextView) mView.findViewById(R.id.record_item_weight))
+                        .setText(String.format("%.2f", mUserReading.Weight));
+
+                int userReadingsCount = mUser.getReadings().size();
+                if(userReadingsCount > 1) {
+                    UserReading previousReading = null;
+                    for(UserReading reading: mUser.getReadings()) {
+                        if(mUserReading.Sequence == reading.Sequence)
+                            break;
+                        previousReading = reading;
+                    }
+                    if(previousReading != null) {
+                        double diff = mUserReading.Weight - previousReading.Weight;
+                        String diffSign = "";
+                        int diffColor = 1;
+                        if (diff < 0) {
+                            diffColor = Color.RED;
+                        } else if (diff > 0) {
+                            diffSign = "+";
+                            diffColor = Color.BLUE;
+                        }
+                        TextView weightDiffView = ((TextView) mView.findViewById(R.id.record_item_weight_diff));
+                        weightDiffView.setText(String.format("(%s%.2f)", diffSign, diff));
+                        if (diff != 0)
+                            weightDiffView.setTextColor(diffColor);
+                    }
+                }
+            }
+
+            private void setPeriodControl() {
+                ((TextView) mView.findViewById(R.id.record_item_period_no))
+                        .setText(String.format("%s %02d", mUser.trackingPeriod, mUserReading.Sequence));
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                ((TextView) mView.findViewById(R.id.record_item_taken_on))
+                        .setText(dateFormat.format(mUserReading.TakenOn));
             }
         }
     }

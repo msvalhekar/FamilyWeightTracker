@@ -174,19 +174,19 @@ public class UsersListActivity extends AppCompatActivity {
                         ((TextView) mView.findViewById(R.id.list_item_weight)).setWidth(nameViewWidth);
                         ((TextView) mView.findViewById(R.id.list_item_height)).setWidth(nameViewWidth);
 
-                        setUserImageControl();
-                        setNameControl();
-                        setAgeControl();
-                        setWeightControl();
-                        setHeightControl();
-                        setBmiControl();
-
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
                             mView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         else
                             mView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                     }
                 });
+
+                setUserImageControl();
+                setNameControl();
+                setAgeControl();
+                setWeightControl();
+                setHeightControl();
+                setBmiControl();
             }
 
             private void setBmiControl() {
@@ -310,7 +310,7 @@ public class UsersListActivity extends AppCompatActivity {
                 if(mUser.getReadings().size() > 1) {
                     UserReading secondLastReading = mUser.getReadings().get(mUser.getReadings().size() -2);
                     double diff = currentWeight - secondLastReading.Weight;
-                    weightDiffValue = String.format("(%s%.2f)", (diff < 0) ? "-" : (diff == 0) ? "" : "+", diff);
+                    weightDiffValue = String.format("(%s%.2f)", (diff > 0) ? "+" : "", diff);
                 }
                 ((TextView) mView.findViewById(R.id.list_item_weight_diff)).setText(weightDiffValue);
             }

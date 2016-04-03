@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:orientation="horizontal">
+    <!-- week no + taken on -->
+    <!-- actual wt + (diff with previous reading) -->
+    <!-- exp min wt + (diff with actual reading) -->
+    <!-- exp max wt + (diff with actual reading) -->
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        card_view:cardCornerRadius="3dp"
+        card_view:contentPadding="5dp">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:columnCount="4"
+            android:rowCount="1"
+            android:stretchColumns="*">
+
+            <TableRow>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_row="0"
+                android:layout_column="0"
+                >
+                <TextView
+                    android:id="@+id/record_item_period_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"/>
+                <TextView
+                    android:id="@+id/record_item_taken_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_row="0"
+                android:layout_column="1"
+                >
+                <TextView
+                    android:id="@+id/record_item_weight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"/>
+                <TextView
+                    android:id="@+id/record_item_weight_diff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_row="0"
+                android:layout_column="2"
+                >
+                <TextView
+                    android:id="@+id/record_item_weight_exp_min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"/>
+                <TextView
+                    android:id="@+id/record_item_weight_exp_min_diff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_row="0"
+                android:layout_column="3"
+                >
+                <TextView
+                    android:id="@+id/record_item_weight_exp_max"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"/>
+                <TextView
+                    android:id="@+id/record_item_weight_exp_max_diff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"/>
+            </LinearLayout>
+
+            </TableRow>
+        </TableLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

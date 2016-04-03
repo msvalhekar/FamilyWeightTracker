@@ -76,7 +76,7 @@ public class AddNewUserActivity extends AppCompatActivity {
 
         mNewUser.IsMale = false;
         mNewUser.DateOfBirth = new Date();
-        mNewUser.TrackingPeriod = TrackingPeriod.Weekly;
+        mNewUser.TrackingPeriod = TrackingPeriod.Week;
         mNewUser.EnableReminder = true;
         mNewUser.ReminderDay = 1;
         mNewUser.ReminderHour = 8;

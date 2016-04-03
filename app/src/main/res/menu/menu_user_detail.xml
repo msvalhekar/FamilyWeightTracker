@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.mk.familyweighttracker.Activities.UserDetailActivity">
+    <item
+        android:id="@+id/user_detail_help"
+        android:icon="@android:drawable/ic_dialog_info"
+        android:title="Help"
+        app:showAsAction="ifRoom"/>
+</menu>

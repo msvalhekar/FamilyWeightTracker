@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:id="@+id/user_detail_readings_help_popup"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="4"
+        android:rowCount="1"
+        android:stretchColumns="*">
+
+        <TableRow>
+            <TextView
+                android:id="@+id/help_record_item_period_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="help_record_item_period_no"/>
+            <TextView
+                android:id="@+id/help_record_item_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="help_record_item_weight"/>
+            <TextView
+                android:id="@+id/help_record_item_weight_exp_min"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="help_record_item_weight_exp_min"/>
+            <TextView
+                android:id="@+id/help_record_item_weight_exp_max"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="help_record_item_weight_exp_max"/>
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>

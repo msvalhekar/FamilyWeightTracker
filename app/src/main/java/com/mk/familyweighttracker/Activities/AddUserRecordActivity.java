@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Models.User;
@@ -133,11 +132,11 @@ public class AddUserRecordActivity extends AppCompatActivity {
 
         List<String> items = new ArrayList<>();
         String sequenceName = "Day";
-        if( mSelectedUser.trackingPeriod == TrackingPeriod.Weekly) {
+        if( mSelectedUser.trackingPeriod == TrackingPeriod.Week) {
             sequenceName = "Week";
-        } else if( mSelectedUser.trackingPeriod == TrackingPeriod.Monthly) {
+        } else if( mSelectedUser.trackingPeriod == TrackingPeriod.Month) {
             sequenceName = "Month";
-        } else if( mSelectedUser.trackingPeriod == TrackingPeriod.Yearly) {
+        } else if( mSelectedUser.trackingPeriod == TrackingPeriod.Year) {
             sequenceName = "Year";
         }
 
