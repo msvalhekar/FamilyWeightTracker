@@ -36,7 +36,7 @@ public class AddUserRecordActivity extends AppCompatActivity {
 
         mSelectedUserId = getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
         mSelectedUser = new UserService().get(mSelectedUserId);
-        List<UserReading> readings = mSelectedUser.getReadings();
+        List<UserReading> readings = mSelectedUser.getReadings(true);
 
         UserReading lastReading = null;
         if(readings.size() > 0)

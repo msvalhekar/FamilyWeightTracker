@@ -7,6 +7,8 @@ import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Services.PregnancyService;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -43,13 +45,13 @@ public class User {
 
     public double getWeight() {
         if(mReadings.size() > 0)
-            return mReadings.get(0).Weight;
+            return getReadings(true).get(0).Weight;
         return 0;
     }
 
     public double getHeight() {
         if(mReadings.size() > 0)
-            return mReadings.get(0).Height;
+            return getReadings(true).get(0).Height;
         return 0;
     }
 
@@ -75,8 +77,33 @@ public class User {
         mReadings.add(reading);
     }
 
-    public List<UserReading> getReadings() {
+    public List<UserReading> getReadings(final boolean ascending) {
+        Collections.sort(mReadings, new Comparator<UserReading>() {
+            @Override
+            public int compare(UserReading lhs, UserReading rhs) {
+                return (int) (lhs.Sequence - rhs.Sequence) * (ascending ? 1 : -1);
+            }
+        });
         return mReadings;
+    }
+
+    public UserReading getLatestReading() {
+        if(mReadings != null && mReadings.size() > 0)
+            return getReadings(false).get(0);
+        return null;
+    }
+
+    public UserReading findReadingBefore(long sequence) {
+        if(mReadings != null && mReadings.size() > 1) {
+            List<UserReading> readings = getReadings(true);
+            for(int i=0; i<readings.size(); i++) {
+                if(readings.get(i).Sequence == sequence) {
+                    if(i == 0) return null;
+                    return readings.get(i-1);
+                }
+            }
+        }
+        return null;
     }
 
     public double getBmi() {

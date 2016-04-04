@@ -91,18 +91,17 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
     {
         User user = new UserService().get(mSelectedUserId);
 
-        if(user.getReadings().size() == 0) return;
+        if(user.getReadings(true).size() == 0) return;
 
         mLineChart.resetTracking();
 
         BodyWeightCategory weightCategory = user.getWeightCategory();
-        List<WeekWeightGainRange> weightRangeList = new PregnancyService()
-                .getWeightGainTableFor(user.getWeight(), weightCategory);
+        List<WeekWeightGainRange> weightRangeList = mPregnancyService.getWeightGainTableFor(user.getWeight(), weightCategory);
 
         List<String> xVals = getXaxisValues(weightRangeList.size());
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-        dataSets.add(getUserWeightValues(user.getReadings()));
+        dataSets.add(getUserWeightValues(user.getReadings(true)));
         dataSets.add(getWeightRangeValues(weightRangeList, true));
         dataSets.add(getWeightRangeValues(weightRangeList, false));
 

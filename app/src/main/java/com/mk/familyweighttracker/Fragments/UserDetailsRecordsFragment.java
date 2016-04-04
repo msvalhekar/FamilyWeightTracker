@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ import com.mk.familyweighttracker.Services.PregnancyService;
 import com.mk.familyweighttracker.Services.UserService;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -47,11 +49,14 @@ public class UserDetailsRecordsFragment extends Fragment {
 
     private static final int NEW_USER_RECORD_ADDED_REQUEST = 1;
     private long mSelectedUserId;
+    private User mSelectedUser;
 
+    private List<UserReading> userReadingList = new ArrayList<>();
     List<WeekWeightGainRange> mWeekWeightGainRangeList;
 
     private View mFragmentView;
     private RecyclerView mRecyclerView;
+    private SimpleItemRecyclerViewAdapter mRecyclerViewAdapter;
 
     public UserDetailsRecordsFragment() {
         // Required empty public constructor
@@ -64,10 +69,16 @@ public class UserDetailsRecordsFragment extends Fragment {
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_records, container, false);
 
         mSelectedUserId = getActivity().getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
+        mSelectedUser = new UserService().get(mSelectedUserId);
+
+        userReadingList.clear();
+        for (UserReading reading: mSelectedUser.getReadings(false))
+            userReadingList.add(reading);
 
         initAddUserReadingControl();
 
         initReadingListControl();
+        setWeightGainRangeFor();
 
         return mFragmentView;
     }
@@ -78,9 +89,7 @@ public class UserDetailsRecordsFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                List<UserReading> readings = new UserService().get(mSelectedUserId).getReadings();
-
-                handleIfNoReadingsForPregnancy(getContext(), readings.size());
+                handleIfNoReadingsForPregnancy(getContext(), userReadingList.size());
             }
         });
     }
@@ -170,8 +179,8 @@ public class UserDetailsRecordsFragment extends Fragment {
                             new UserService().addReading(userReading);
                             new UserService().update(mSelectedUserId, userWeightUnit[0], userHeightUnit[0]);
 
-                            setupRecyclerView(mRecyclerView);
-                            ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
+                            onNewReadingAdded();
+
                             alertDialog.dismiss();
                         }
                     });
@@ -180,21 +189,53 @@ public class UserDetailsRecordsFragment extends Fragment {
         alertDialog.show();
     }
 
-    private void initReadingListControl() {
-        mRecyclerView = ((RecyclerView) mFragmentView.findViewById(R.id.user_record_list));
-        setupRecyclerView(mRecyclerView);
+    private void onNewReadingAdded() {
+        mSelectedUser = new UserService().get(mSelectedUserId);
+
+        List<UserReading> latestReadings = mSelectedUser.getReadings(false);
+        for (int i=0; i< latestReadings.size(); i++) {
+            if( userReadingList.size() > i) {
+                if (userReadingList.get(i).Sequence != latestReadings.get(i).Sequence) {
+                    userReadingList.add(i, latestReadings.get(i));
+                    mRecyclerViewAdapter.notifyItemInserted(i);
+                    break;
+                }
+            } else {
+                userReadingList.add(i, latestReadings.get(i));
+                mRecyclerViewAdapter.notifyItemInserted(i);
+                break;
+            }
+        }
+
+        mRecyclerView.scrollToPosition(0);
+        ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
     }
 
-    private void setWeightGainRangeFor(User user) {
-        double baseWeight = user.getWeight();
+    private void initReadingListControl() {
+        mRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter(userReadingList);
+
+        mRecyclerView = ((RecyclerView) mFragmentView.findViewById(R.id.user_record_list));
+        //mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+
+        mRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
+    private void setWeightGainRangeFor() {
+        if (mWeekWeightGainRangeList != null)
+            return;
+
+        double baseWeight = mSelectedUser.getWeight();
         if(baseWeight == 0) return;
 
         mWeekWeightGainRangeList = new PregnancyService()
-                .getWeightGainTableFor(baseWeight, user.getWeightCategory());
+                .getWeightGainTableFor(baseWeight, mSelectedUser.getWeightCategory());
     }
 
     private WeekWeightGainRange getWeightGainTableFor(long weekNumber) {
-        if(mWeekWeightGainRangeList == null) return null;
+        setWeightGainRangeFor();
+        if(mWeekWeightGainRangeList == null)
+            return null;
 
         for (WeekWeightGainRange record: mWeekWeightGainRangeList) {
             if(record.WeekNumber == weekNumber)
@@ -203,32 +244,37 @@ public class UserDetailsRecordsFragment extends Fragment {
         return null;
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        User user = new UserService().get(mSelectedUserId);
-        setWeightGainRangeFor(user);
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(user));
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
+        // Make sure the request was successful
+        if (resultCode != Activity.RESULT_OK)
+            return;
+
         if (requestCode == NEW_USER_RECORD_ADDED_REQUEST) {
-            // Make sure the request was successful
-            if (resultCode == Activity.RESULT_OK) {
-                // update the list for new record
-                setupRecyclerView(mRecyclerView);
-                ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
-            }
+            // update the list for new record
+            //mSelectedUser = new UserService().get(mSelectedUserId);
+            onNewReadingAdded();
+//            List<UserReading> latestReadings = mSelectedUser.getReadings(false);
+//            for (int i=0; i< latestReadings.size(); i++) {
+//                if (userReadingList.get(i).Sequence != latestReadings.get(i).Sequence) {
+//                    userReadingList.add(i, latestReadings.get(i));
+//                    mRecyclerViewAdapter.notifyItemInserted(i);
+//                    break;
+//                }
+//            }
+
+            //((OnNewReadingAdded) getActivity()).onNewReadingAdded();
         }
     }
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final User mUser;
+        //private final User mUser;
+        private List<UserReading> userReadingList;
 
-        public SimpleItemRecyclerViewAdapter(User user) {
-            mUser = user;
+        public SimpleItemRecyclerViewAdapter(List<UserReading> userReadingList) {
+            this.userReadingList = userReadingList;
         }
 
         @Override
@@ -240,11 +286,12 @@ public class UserDetailsRecordsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            final UserReading reading = mUser.getReadings().get(position);
+            //final UserReading reading = mUser.getReadings().get(position);
+            final UserReading reading = userReadingList.get(position);
 
-            boolean highlightView = mUser.getReadings().size() -1 == position;
+            boolean highlightView = userReadingList.size() -1 == position;
 
-            holder.setReading(mUser, reading, highlightView);
+            holder.setReading(reading, highlightView);
 
 //            holder.mView.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -259,12 +306,11 @@ public class UserDetailsRecordsFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return mUser.getReadings().size();
+            return userReadingList.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            public User mUser;
             public UserReading mUserReading;
 
             public ViewHolder(View view) {
@@ -272,16 +318,13 @@ public class UserDetailsRecordsFragment extends Fragment {
                 mView = view;
             }
 
-            public void setReading(User user, UserReading reading, boolean highlightView)
+            public void setReading(UserReading reading, boolean highlightView)
             {
-                mUser = user;
                 mUserReading = reading;
 
                 setPeriodControl();
                 setActualWeightControl();
                 setExpectedWeightControl();
-
-                if(highlightView) mView.setBackgroundColor(Color.CYAN);
             }
 
             private void setExpectedWeightControl() {
@@ -313,10 +356,10 @@ public class UserDetailsRecordsFragment extends Fragment {
                 String maxExpWtDiffSign = "";
                 int maxExpWtDiffColor = 1;
                 if(maxExpWtdiff < 0) {
-                    maxExpWtDiffColor = Color.RED;
+                    maxExpWtDiffColor = Color.BLUE;
                 } else if(maxExpWtdiff > 0){
                     maxExpWtDiffSign = "+";
-                    maxExpWtDiffColor = Color.BLUE;
+                    maxExpWtDiffColor = Color.RED;
                 }
                 TextView maxExpWeightDiffView = ((TextView) mView.findViewById(R.id.record_item_weight_exp_max_diff));
                 maxExpWeightDiffView.setText(String.format("(%s%.2f)", maxExpWtDiffSign, maxExpWtdiff));
@@ -328,35 +371,27 @@ public class UserDetailsRecordsFragment extends Fragment {
                 ((TextView) mView.findViewById(R.id.record_item_weight))
                         .setText(String.format("%.2f", mUserReading.Weight));
 
-                int userReadingsCount = mUser.getReadings().size();
-                if(userReadingsCount > 1) {
-                    UserReading previousReading = null;
-                    for(UserReading reading: mUser.getReadings()) {
-                        if(mUserReading.Sequence == reading.Sequence)
-                            break;
-                        previousReading = reading;
+                UserReading previousReading = mSelectedUser.findReadingBefore(mUserReading.Sequence);
+                if(previousReading != null) {
+                    double diff = mUserReading.Weight - previousReading.Weight;
+                    String diffSign = "";
+                    int diffColor = 1;
+                    if (diff < 0) {
+                        diffColor = Color.RED;
+                    } else if (diff > 0) {
+                        diffSign = "+";
+                        diffColor = Color.BLUE;
                     }
-                    if(previousReading != null) {
-                        double diff = mUserReading.Weight - previousReading.Weight;
-                        String diffSign = "";
-                        int diffColor = 1;
-                        if (diff < 0) {
-                            diffColor = Color.RED;
-                        } else if (diff > 0) {
-                            diffSign = "+";
-                            diffColor = Color.BLUE;
-                        }
-                        TextView weightDiffView = ((TextView) mView.findViewById(R.id.record_item_weight_diff));
-                        weightDiffView.setText(String.format("(%s%.2f)", diffSign, diff));
-                        if (diff != 0)
-                            weightDiffView.setTextColor(diffColor);
-                    }
+                    TextView weightDiffView = ((TextView) mView.findViewById(R.id.record_item_weight_diff));
+                    weightDiffView.setText(String.format("(%s%.2f)", diffSign, diff));
+                    if (diff != 0)
+                        weightDiffView.setTextColor(diffColor);
                 }
             }
 
             private void setPeriodControl() {
                 ((TextView) mView.findViewById(R.id.record_item_period_no))
-                        .setText(String.format("%s %02d", mUser.trackingPeriod, mUserReading.Sequence));
+                        .setText(String.format("%s %02d", mSelectedUser.trackingPeriod, mUserReading.Sequence));
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 ((TextView) mView.findViewById(R.id.record_item_taken_on))

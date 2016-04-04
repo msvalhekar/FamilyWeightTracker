@@ -50,7 +50,7 @@ public class UserDetailsSummaryFragment extends Fragment implements UserDetailsR
         User user = new UserService().get(mSelectedUserId);
 
         ((TextView) mFragmentView.findViewById(R.id.userId))
-                .setText("Readings: " + user.getReadings().size());
+                .setText("Readings: " + user.getReadings(true).size());
 
         ImageView userImage = ((ImageView) mFragmentView.findViewById(R.id.userImage));
         if( user.imageBytes != null) {

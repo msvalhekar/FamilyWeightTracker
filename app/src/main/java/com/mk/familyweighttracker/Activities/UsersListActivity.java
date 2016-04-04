@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
@@ -277,42 +276,56 @@ public class UsersListActivity extends AppCompatActivity {
 
             private void setHeightControl() {
                 int currentHeight = 0;
-                if(mUser.getReadings().size() > 0) {
-                    UserReading lastReading = mUser.getReadings().get(mUser.getReadings().size() -1);
-                    currentHeight = lastReading.Height;
-                }
                 String heightValue = "Ht: NA";
-                if(mUser.getReadings().size() > 0)
+                UserReading latestReading = mUser.getLatestReading();
+                if(latestReading != null) {
+                    currentHeight = latestReading.Height;
                     heightValue = String.valueOf(currentHeight) + " " + mUser.heightUnit;
+                }
                 ((TextView) mView.findViewById(R.id.list_item_height)).setText(heightValue);
 
+                if(latestReading == null)
+                    return;
+
                 String heightDiffValue = "";
-                if(mUser.getReadings().size() > 1) {
-                    UserReading secondLastReading = mUser.getReadings().get(mUser.getReadings().size() -2);
-                    int diff = currentHeight - secondLastReading.Height;
-                    heightDiffValue = String.format("(%s%d)", (diff < 0) ? "-" : (diff == 0) ? "" : "+", diff);
+                UserReading previosReading = mUser.findReadingBefore(latestReading.Sequence);
+                if(previosReading != null) {
+                    int diff = currentHeight - previosReading.Height;
+                    heightDiffValue = String.format("(%s%d)", (diff > 0) ? "+" : "", diff);
+                    TextView heightDiffView = (TextView) mView.findViewById(R.id.list_item_height_diff);
+                    heightDiffView.setText(heightDiffValue);
+                    if(diff < 0)
+                        heightDiffView.setTextColor(Color.RED);
+                    else
+                        heightDiffView.setTextColor(Color.BLUE);
                 }
-                ((TextView) mView.findViewById(R.id.list_item_height_diff)).setText(heightDiffValue);
             }
 
             private void setWeightControl() {
                 double currentWeight = 0;
-                if(mUser.getReadings().size() > 0) {
-                    UserReading lastReading = mUser.getReadings().get(mUser.getReadings().size() -1);
-                    currentWeight = lastReading.Weight;
-                }
                 String weightValue = "Wt: NA";
-                if(mUser.getReadings().size() > 0)
+                UserReading latestReading = mUser.getLatestReading();
+                if(latestReading != null) {
+                    currentWeight = latestReading.Weight;
                     weightValue = String.valueOf(currentWeight) + " " + mUser.weightUnit;
+                }
                 ((TextView) mView.findViewById(R.id.list_item_weight)).setText(weightValue);
 
+                if(latestReading == null)
+                    return;
+
                 String weightDiffValue = "";
-                if(mUser.getReadings().size() > 1) {
-                    UserReading secondLastReading = mUser.getReadings().get(mUser.getReadings().size() -2);
-                    double diff = currentWeight - secondLastReading.Weight;
+                UserReading previousReading = mUser.findReadingBefore(latestReading.Sequence);
+                if(previousReading != null) {
+                    double diff = currentWeight - previousReading.Weight;
                     weightDiffValue = String.format("(%s%.2f)", (diff > 0) ? "+" : "", diff);
+                    TextView weightDiffView = (TextView) mView.findViewById(R.id.list_item_weight_diff);
+                    weightDiffView.setText(weightDiffValue);
+                    if(diff < 0)
+                        weightDiffView.setTextColor(Color.RED);
+                    else
+                        weightDiffView.setTextColor(Color.BLUE);
                 }
-                ((TextView) mView.findViewById(R.id.list_item_weight_diff)).setText(weightDiffValue);
             }
 
             private void setUserImageControl() {
