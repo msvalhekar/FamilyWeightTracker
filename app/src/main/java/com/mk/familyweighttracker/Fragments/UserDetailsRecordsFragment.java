@@ -1,33 +1,30 @@
 package com.mk.familyweighttracker.Fragments;
 
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Activities.AddUserRecordActivity;
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
-import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Models.User;
@@ -78,6 +75,7 @@ public class UserDetailsRecordsFragment extends Fragment {
         initAddUserReadingControl();
 
         initReadingListControl();
+
         setWeightGainRangeFor();
 
         return mFragmentView;
@@ -212,13 +210,15 @@ public class UserDetailsRecordsFragment extends Fragment {
     }
 
     private void initReadingListControl() {
-        mRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter(userReadingList);
+        mRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter();
 
         mRecyclerView = ((RecyclerView) mFragmentView.findViewById(R.id.user_record_list));
         //mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
         mRecyclerViewAdapter.notifyDataSetChanged();
+
+
     }
 
     private void setWeightGainRangeFor() {
@@ -270,15 +270,40 @@ public class UserDetailsRecordsFragment extends Fragment {
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        //private final User mUser;
-        private List<UserReading> userReadingList;
+        private static final int EMPTY_VIEW = 1;
+        private static final int HELP_VIEW = 2;
 
-        public SimpleItemRecyclerViewAdapter(List<UserReading> userReadingList) {
-            this.userReadingList = userReadingList;
+        //private final User mUser;
+        //private List<UserReading> userReadingList;
+
+        public SimpleItemRecyclerViewAdapter() {
+            //this.userReadingList = userReadingList;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (userReadingList.size() == 0) {
+                return EMPTY_VIEW;
+            }
+            if (position == 0) {
+                return HELP_VIEW;
+            }
+            return super.getItemViewType(position);
         }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            if (viewType == HELP_VIEW) {
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_records_list_record_content_help, parent, false);
+                return new HelpViewHolder(v);
+            } else if (viewType == EMPTY_VIEW) {
+                RelativeLayout layout = (RelativeLayout)LayoutInflater.from(parent.getContext()).inflate(R.layout.empty_view, parent, false);
+                ((TextView) layout.findViewById(R.id.empty_mesage_title)).setText("\nNo data found.");
+                ((TextView) layout.findViewById(R.id.empty_mesage_description)).setText("\n\n\nUse below button to Add reading(s).");
+
+                return new EmptyViewHolder(layout);
+            }
+
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.user_records_list_record_content, parent, false);
             return new ViewHolder(view);
@@ -286,12 +311,11 @@ public class UserDetailsRecordsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            //final UserReading reading = mUser.getReadings().get(position);
-            final UserReading reading = userReadingList.get(position);
+            if (position == 0) return;
 
-            boolean highlightView = userReadingList.size() -1 == position;
+            final UserReading reading = userReadingList.get(position -1);
 
-            holder.setReading(reading, highlightView);
+            holder.setReading(reading);
 
 //            holder.mView.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -306,7 +330,19 @@ public class UserDetailsRecordsFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return userReadingList.size();
+            return userReadingList.size() + 1;
+        }
+
+        public class EmptyViewHolder extends ViewHolder {
+            public EmptyViewHolder(View itemView) {
+                super(itemView);
+            }
+        }
+
+        public class HelpViewHolder extends ViewHolder {
+            public HelpViewHolder(View itemView) {
+                super(itemView);
+            }
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -318,7 +354,7 @@ public class UserDetailsRecordsFragment extends Fragment {
                 mView = view;
             }
 
-            public void setReading(UserReading reading, boolean highlightView)
+            public void setReading(UserReading reading)
             {
                 mUserReading = reading;
 

@@ -37,12 +37,12 @@
                     android:id="@+id/record_item_period_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="13dp"/>
+                    android:textSize="15dp"/>
                 <TextView
                     android:id="@+id/record_item_taken_on"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="10dp"/>
+                    android:textSize="12dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -61,7 +61,7 @@
                     android:id="@+id/record_item_weight_diff"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="13dp"/>
+                    android:textSize="12dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -80,7 +80,7 @@
                     android:id="@+id/record_item_weight_exp_min_diff"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="13dp"/>
+                    android:textSize="12dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -99,7 +99,7 @@
                     android:id="@+id/record_item_weight_exp_max_diff"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="13dp"/>
+                    android:textSize="12dp"/>
             </LinearLayout>
 
             </TableRow>
