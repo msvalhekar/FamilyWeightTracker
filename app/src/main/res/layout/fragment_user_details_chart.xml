@@ -1,13 +1,40 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mk.familyweighttracker.Fragments.UserDetailsChartFragment">
+    tools:context="com.mk.familyweighttracker.Fragments.UserDetailsChartFragment"
+    android:orientation="vertical">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        android:layout_margin="5dp">
+        <TableRow>
+            <TextView
+                android:id="@+id/user_detail_chart_description_week_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/user_detail_chart_description_weight_max_exp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:id="@+id/user_detail_chart_description_weight_actual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/user_detail_chart_description_weight_min_exp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </TableRow>
+    </TableLayout>
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/user_detail_chart_linechart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-
-</FrameLayout>
+</LinearLayout>

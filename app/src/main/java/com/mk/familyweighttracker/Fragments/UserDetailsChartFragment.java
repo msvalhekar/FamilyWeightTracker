@@ -1,20 +1,24 @@
 package com.mk.familyweighttracker.Fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Models.User;
@@ -38,6 +42,8 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
     private LineChart mLineChart;
     private PregnancyService mPregnancyService = new PregnancyService();
 
+    private List<WeekWeightGainRange> mWeightRangeList;
+
     public UserDetailsChartFragment() {
         // Required empty public constructor
     }
@@ -52,9 +58,28 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
 
         initChartControl();
 
-        loadChartDataForPregnancy();
+        onNewReadingAdded();
 
         return mFragmentView;
+    }
+
+    private void setChartDescriptionControl(User user) {
+        UserReading latestReading = user.getReadings(false).get(0);
+        ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_week_no))
+                .setText(Html.fromHtml("Week " + latestReading.Sequence));
+        ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_actual))
+                .setText(Html.fromHtml(String.format("Weight: %.2f kg", latestReading.Weight)));
+
+        WeekWeightGainRange latestWeekRange = null;
+        for(WeekWeightGainRange range: mWeightRangeList) {
+            if(range.WeekNumber == latestReading.Sequence)
+                latestWeekRange = range;
+        }
+
+        ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_min_exp))
+                .setText(Html.fromHtml(String.format("Exp Min Wt: %.2f", latestWeekRange.MinimumWeight)));
+        ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_max_exp))
+                .setText(Html.fromHtml(String.format("Exp Max Wt: %.2f", latestWeekRange.MaximumWeight)));
     }
 
     private void initChartControl()
@@ -63,12 +88,18 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
         mLineChart.setOnChartValueSelectedListener(this);
 
         mLineChart.setDrawGridBackground(false);
-        //mLineChart.setDescription("MK");
+        mLineChart.setDescription("");
         mLineChart.setDrawBorders(false);
 
-        mLineChart.getAxisLeft().setDrawAxisLine(false);
-        mLineChart.getAxisLeft().setDrawGridLines(false);
-        mLineChart.getAxisRight().setDrawAxisLine(false);
+        mLineChart.getAxisLeft().setDrawAxisLine(true);
+        mLineChart.getAxisLeft().setValueFormatter(new YAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, YAxis yAxis) {
+                return String.format("%.2f", value);
+            }
+        });
+        mLineChart.getAxisLeft().setDrawGridLines(true);
+        mLineChart.getAxisRight().setDrawAxisLine(true);
         mLineChart.getAxisRight().setDrawGridLines(false);
         mLineChart.getXAxis().setDrawAxisLine(true);
         mLineChart.getXAxis().setDrawGridLines(true);
@@ -84,26 +115,20 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
         mLineChart.setPinchZoom(false);
 
         Legend legend = mLineChart.getLegend();
-        legend.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
+        legend.setPosition(Legend.LegendPosition.LEFT_OF_CHART_INSIDE);
+        legend.setFormSize(15);
     }
 
-    private void loadChartDataForPregnancy()
+    private void loadChartDataForPregnancy(User user)
     {
-        User user = new UserService().get(mSelectedUserId);
-
-        if(user.getReadings(true).size() == 0) return;
-
         mLineChart.resetTracking();
 
-        BodyWeightCategory weightCategory = user.getWeightCategory();
-        List<WeekWeightGainRange> weightRangeList = mPregnancyService.getWeightGainTableFor(user.getWeight(), weightCategory);
-
-        List<String> xVals = getXaxisValues(weightRangeList.size());
+        List<String> xVals = getXaxisValues(mWeightRangeList.size());
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
         dataSets.add(getUserWeightValues(user.getReadings(true)));
-        dataSets.add(getWeightRangeValues(weightRangeList, true));
-        dataSets.add(getWeightRangeValues(weightRangeList, false));
+        dataSets.add(getWeightRangeValues(mWeightRangeList, true));
+        dataSets.add(getWeightRangeValues(mWeightRangeList, false));
 
         // make the first DataSet dashed
         //((LineDataSet) dataSets.get(0)).enableDashedLine(10, 10, 0);
@@ -123,14 +148,12 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
             double value = isMinimum ? weightRange.MinimumWeight : weightRange.MaximumWeight;
             values.add(new Entry((float) value, index++));
         }
-        String label = isMinimum ? "minimum" : "maximum";
+        String label = isMinimum ? "exp min" : "exp max";
         LineDataSet lineDataSet = new LineDataSet(values, label);
-        lineDataSet.setLineWidth(0.5f);
-        lineDataSet.setCircleRadius(1f);
+        lineDataSet.setLineWidth(2f);
+        lineDataSet.setDrawValues(false);
 
-        int colorIndex = isMinimum ? 1 : 2;
-
-        int color = ColorTemplate.COLORFUL_COLORS[colorIndex];
+        int color = isMinimum ? Color.parseColor("#009999") : Color.parseColor("#FF66B2");
         lineDataSet.setColor(color);
         return lineDataSet;
     }
@@ -143,12 +166,11 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
             values.add(new Entry((float) reading.Weight, index++));
         }
 
-        LineDataSet lineDataSet = new LineDataSet(values, "actual");
-        lineDataSet.setLineWidth(2.5f);
-        lineDataSet.setCircleRadius(4f);
+        LineDataSet lineDataSet = new LineDataSet(values, "actual wt");
+        lineDataSet.setLineWidth(5f);
+        lineDataSet.setCircleRadius(2f);
 
-        int color = ColorTemplate.COLORFUL_COLORS[0];
-        lineDataSet.setColor(color);
+        lineDataSet.setColor(Color.BLUE);
         return lineDataSet;
     }
 
@@ -171,6 +193,13 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
 
     @Override
     public void onNewReadingAdded() {
-        loadChartDataForPregnancy();
+        User user = new UserService().get(mSelectedUserId);
+        if(user.getReadings(true).size() == 0) return;
+
+        BodyWeightCategory weightCategory = user.getWeightCategory();
+        mWeightRangeList = mPregnancyService.getWeightGainTableFor(user.getWeight(), weightCategory);
+
+        loadChartDataForPregnancy(user);
+        setChartDescriptionControl(user);
     }
 }
