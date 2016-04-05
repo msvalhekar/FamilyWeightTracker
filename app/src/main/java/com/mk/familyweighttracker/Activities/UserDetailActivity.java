@@ -1,7 +1,6 @@
 package com.mk.familyweighttracker.Activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,17 +16,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import com.mk.familyweighttracker.Fragments.UserDetailsRecordsFragment;
-import com.mk.familyweighttracker.Fragments.UserDetailsSummaryFragment;
+import com.mk.familyweighttracker.Fragments.UserDetailsProfileFragment;
 import com.mk.familyweighttracker.Framework.SlidingTabLayout;
 import com.mk.familyweighttracker.Framework.UserDetailsTabsFactory;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,7 +36,7 @@ import java.util.List;
  * item details side-by-side using two vertical panes.
  */
 public class UserDetailActivity extends AppCompatActivity
-        implements UserDetailsRecordsFragment.OnNewReadingAdded, UserDetailsSummaryFragment.OnUserDeleted {
+        implements UserDetailsRecordsFragment.OnNewReadingAdded, UserDetailsProfileFragment.OnUserDeleted {
 
     public static final String ARG_USER_ID = "user_id";
     public static final String ARG_IS_DATA_CHANGED = "IsDataChanged";

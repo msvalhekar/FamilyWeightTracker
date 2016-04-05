@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import com.mk.familyweighttracker.Fragments.*;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by mvalhekar on 16-03-2016.
@@ -15,34 +15,30 @@ public class UserDetailsTabsFactory {
 
     private UserDetailsTabsFactory() {}
 
-    public static UserDetailsTabsFactory getInstance()
-    {
+    public static UserDetailsTabsFactory getInstance() {
         if(userDetailsTabsFactory == null)
             userDetailsTabsFactory = new UserDetailsTabsFactory();
         return userDetailsTabsFactory;
     }
 
-    private HashMap<String, Fragment> _homeTabs;
+    private LinkedHashMap<String, Fragment> _homeTabs;
 
-    private HashMap<String, Fragment> getTabsCollection()
-    {
+    private LinkedHashMap<String, Fragment> getTabsCollection() {
         if(_homeTabs == null) {
-            _homeTabs = new HashMap<>();
+            _homeTabs = new LinkedHashMap<>();
 
-            _homeTabs.put("Summary", new UserDetailsSummaryFragment());
-            _homeTabs.put("Records", new UserDetailsRecordsFragment());
-            _homeTabs.put("Chart", new UserDetailsChartFragment());
+            _homeTabs.put("Profile", new UserDetailsProfileFragment());
+            _homeTabs.put("Readings", new UserDetailsRecordsFragment());
+            _homeTabs.put("Trend", new UserDetailsChartFragment());
         }
         return _homeTabs;
     }
 
-    public Collection<Fragment> getTabs()
-    {
+    public Collection<Fragment> getTabs() {
         return getTabsCollection().values();
     }
 
-    public Collection<String> getTabTitles()
-    {
+    public Collection<String> getTabTitles() {
         return getTabsCollection().keySet();
     }
 }

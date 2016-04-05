@@ -19,14 +19,14 @@ import com.mk.familyweighttracker.Services.UserService;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserDetailsSummaryFragment extends Fragment implements UserDetailsRecordsFragment.OnNewReadingAdded {
+public class UserDetailsProfileFragment extends Fragment implements UserDetailsRecordsFragment.OnNewReadingAdded {
 
     //private User mUser;
     private long mSelectedUserId;
 
     private View mFragmentView;
 
-    public UserDetailsSummaryFragment() {
+    public UserDetailsProfileFragment() {
         // Required empty public constructor
     }
 
@@ -34,7 +34,7 @@ public class UserDetailsSummaryFragment extends Fragment implements UserDetailsR
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mFragmentView = inflater.inflate(R.layout.fragment_user_details_summary, container, false);
+        mFragmentView = inflater.inflate(R.layout.fragment_user_details_profile, container, false);
 
         mSelectedUserId = getActivity().getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
 
