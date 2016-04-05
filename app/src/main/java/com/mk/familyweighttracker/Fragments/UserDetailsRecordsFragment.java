@@ -1,6 +1,7 @@
 package com.mk.familyweighttracker.Fragments;
 
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,12 +12,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -294,9 +300,23 @@ public class UserDetailsRecordsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            if (position == 0) return;
+            if (position == 0) {
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-            final UserReading reading = userReadingList.get(position -1);
+                        new AlertDialog.Builder(getContext())
+                                .setMessage(Html.fromHtml(getLegendMessage()))
+                                .setPositiveButton("Got it", null)
+                                .create()
+                                .show();
+                    }
+                });
+
+                return;
+            }
+
+            final UserReading reading = userReadingList.get(position - 1);
 
             holder.setReading(reading);
 
@@ -309,6 +329,36 @@ public class UserDetailsRecordsFragment extends Fragment {
 //                    context.startActivity(intent);
 //                }
 //            });
+        }
+
+        private String getLegendMessage() {
+            StringBuilder builder = new StringBuilder();
+            builder.append("<small>");
+            builder.append("<b>" + "Period" + "</b>");
+            builder.append("<br />" + "Week number, for which the reading was taken.");
+            builder.append("<br /><b>" + "Date" + "</b>");
+            builder.append("<br />" + "The date when the reading was recorded.");
+            builder.append("<br />");
+            builder.append("<br /><b>" + "Actual Wt" + "</b>");
+            builder.append("<br />" + "The actual weight recorded for this week.");
+            builder.append("<br /><b>" + "(wt gain)" + "</b>");
+            builder.append("<br />" + "The difference between actual weight recorded for this week and previous week.");
+            builder.append("<br />");
+            builder.append("<br /><b>" + "Exp Min" + "</b>");
+            builder.append("<br />" + "The minimum weight expected for this week, as per Pregnancy Weight Gain chart.");
+            builder.append("<br /><b>" + "(v/s actual)" + "</b>");
+            builder.append("<br />" + "The difference between actual weight recorded and minimum expected weight for this week.");
+            builder.append("<br /><font color=\"#ff0000\">RED</font>: indicates that the actual weight is lower than minimum expected, may need to gain more weight.");
+            builder.append("<br /><font color=\"#0000ff\">BLUE</font>: indicates that the actual weight is more than minimum expected, good.");
+            builder.append("<br />");
+            builder.append("<br /><b>" + "Exp Max" + "</b>");
+            builder.append("<br />" + "The maximum weight expected for this week, as per Pregnancy Weight Gain chart.");
+            builder.append("<br /><b>" + "(v/s actual)" + "</b>");
+            builder.append("<br />" + "The difference between actual weight recorded and maximum expected weight for this week.");
+            builder.append("<br /><font color=\"#0000ff\">BLUE</font>: indicates that the actual weight is lower than minimum expected, good.");
+            builder.append("<br /><font color=\"#ff0000\">RED</font>: indicates that the actual weight is more than maximum expected, may need to loose weight.");
+            builder.append("</small>");
+            return builder.toString();
         }
 
         @Override
