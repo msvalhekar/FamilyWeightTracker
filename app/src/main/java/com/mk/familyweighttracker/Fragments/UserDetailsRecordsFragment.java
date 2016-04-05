@@ -217,8 +217,6 @@ public class UserDetailsRecordsFragment extends Fragment {
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
         mRecyclerViewAdapter.notifyDataSetChanged();
-
-
     }
 
     private void setWeightGainRangeFor() {
@@ -252,18 +250,7 @@ public class UserDetailsRecordsFragment extends Fragment {
 
         if (requestCode == NEW_USER_RECORD_ADDED_REQUEST) {
             // update the list for new record
-            //mSelectedUser = new UserService().get(mSelectedUserId);
             onNewReadingAdded();
-//            List<UserReading> latestReadings = mSelectedUser.getReadings(false);
-//            for (int i=0; i< latestReadings.size(); i++) {
-//                if (userReadingList.get(i).Sequence != latestReadings.get(i).Sequence) {
-//                    userReadingList.add(i, latestReadings.get(i));
-//                    mRecyclerViewAdapter.notifyItemInserted(i);
-//                    break;
-//                }
-//            }
-
-            //((OnNewReadingAdded) getActivity()).onNewReadingAdded();
         }
     }
 
@@ -273,11 +260,7 @@ public class UserDetailsRecordsFragment extends Fragment {
         private static final int EMPTY_VIEW = 1;
         private static final int HELP_VIEW = 2;
 
-        //private final User mUser;
-        //private List<UserReading> userReadingList;
-
         public SimpleItemRecyclerViewAdapter() {
-            //this.userReadingList = userReadingList;
         }
 
         @Override
