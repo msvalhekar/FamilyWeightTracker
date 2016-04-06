@@ -4,9 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -49,7 +54,8 @@ public class UsersListActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private SimpleItemRecyclerViewAdapter mRecyclerViewAdapter;
-    private List<User> userList = new ArrayList<>();
+    private List<User> mUserList = new ArrayList<>();
+    private Bitmap mContactDefaultBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +66,9 @@ public class UsersListActivity extends AppCompatActivity {
 
         initAddNewUserControl();
 
-        userList.clear();
+        mUserList.clear();
         for (User user: new UserService().getAll())
-            userList.add(user);
+            mUserList.add(user);
 
         initUserListControl();
     }
@@ -121,13 +127,13 @@ public class UsersListActivity extends AppCompatActivity {
     private void onRefreshList() {
         List<User> latestUsers = new UserService().getAll();
 
-        userList.clear();
+        mUserList.clear();
         for (User user: latestUsers)
-            userList.add(user);
+            mUserList.add(user);
 
         mRecyclerViewAdapter.notifyDataSetChanged();
 
-        int userCount = userList.size();
+        int userCount = mUserList.size();
         if(userCount > 0)
             mRecyclerView.scrollToPosition(userCount -1);
     }
@@ -142,7 +148,7 @@ public class UsersListActivity extends AppCompatActivity {
 
         @Override
         public int getItemViewType(int position) {
-            if (userList.size() == 0) {
+            if (mUserList.size() == 0) {
                 return EMPTY_VIEW;
             }
             return super.getItemViewType(position);
@@ -165,9 +171,9 @@ public class UsersListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            if (userList.size() == 0) return;
+            if (mUserList.size() == 0) return;
 
-            final User user = userList.get(position);
+            final User user = mUserList.get(position);
 
             holder.setUser(user);
 
@@ -183,7 +189,7 @@ public class UsersListActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return userList.size() == 0 ? 1 : userList.size();
+            return mUserList.size() == 0 ? 1 : mUserList.size();
         }
 
         public class EmptyViewHolder extends ViewHolder {
@@ -376,10 +382,37 @@ public class UsersListActivity extends AppCompatActivity {
                 ImageView imageView = (ImageView) mView.findViewById(R.id.list_item_image);
                 if( mUser.imageBytes != null) {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(mUser.imageBytes, 0, mUser.imageBytes.length);
-                    imageView.setImageBitmap(bitmap);
+                    imageView.setImageBitmap(getCircularBitmap(bitmap));
                 } else {
-                    imageView.setImageResource(R.drawable.dummy_contact);
+                    if(mContactDefaultBitmap == null) {
+                        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.contact_default);
+                        mContactDefaultBitmap = getCircularBitmap(bitmap);
+                    }
+                    imageView.setImageBitmap(mContactDefaultBitmap);
                 }
+            }
+
+            private Bitmap getCircularBitmap(Bitmap bitmap) {
+                final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                        bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+                final Canvas canvas = new Canvas(output);
+
+                final int color = Color.RED;
+                final Paint paint = new Paint();
+                final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+                final RectF rectF = new RectF(rect);
+
+                paint.setAntiAlias(true);
+                canvas.drawARGB(0, 0, 0, 0);
+                paint.setColor(color);
+                canvas.drawOval(rectF, paint);
+
+                paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+                canvas.drawBitmap(bitmap, rect, rect, paint);
+
+                bitmap.recycle();
+
+                return output;
             }
         }
     }

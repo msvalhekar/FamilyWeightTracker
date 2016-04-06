@@ -57,7 +57,7 @@ public class UserDetailsProfileFragment extends Fragment implements UserDetailsR
             Bitmap bitmap = BitmapFactory.decodeByteArray(user.imageBytes, 0, user.imageBytes.length);
             userImage.setImageBitmap(bitmap);
         } else {
-            userImage.setImageResource(R.drawable.dummy_contact);
+            userImage.setImageResource(R.drawable.contact_default);
         }
     }
 

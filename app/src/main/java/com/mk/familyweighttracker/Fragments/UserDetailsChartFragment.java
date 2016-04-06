@@ -174,8 +174,7 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
         return lineDataSet;
     }
 
-    private List<String> getXaxisValues(int xValueCount)
-    {
+    private List<String> getXaxisValues(int xValueCount) {
         ArrayList<String> dataVals = new ArrayList<String>();
         for (int i = 0; i < xValueCount; i++) {
             dataVals.add((i) + "");
