@@ -1,7 +1,6 @@
 package com.mk.familyweighttracker.Fragments;
 
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,16 +12,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -390,6 +384,11 @@ public class UserDetailsRecordsFragment extends Fragment {
             public void setReading(UserReading reading)
             {
                 mUserReading = reading;
+
+                if(mUserReading.Sequence == 0) {
+                    mView.findViewById(R.id.record_item_pregnancy_message).setVisibility(View.VISIBLE);
+                    mView.findViewById(R.id.record_item_pregnancy_divider).setVisibility(View.VISIBLE);
+                }
 
                 setPeriodControl();
                 setActualWeightControl();

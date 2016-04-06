@@ -26,6 +26,23 @@
             android:stretchColumns="*">
 
             <TableRow>
+                <TextView
+                    android:id="@+id/record_item_pregnancy_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:visibility="gone"
+                    android:textColor="@android:color/holo_purple"
+                    android:text="Pre-pregnancy"/>
+            </TableRow>
+            <TableRow>
+                <View
+                    android:id="@+id/record_item_pregnancy_divider"
+                    style="@style/Divider"
+                    android:visibility="gone"/>
+            </TableRow>
+
+            <TableRow>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
