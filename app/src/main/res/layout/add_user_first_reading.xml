@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:gravity="center_horizontal"
-        android:text="Pre-pregnancy reading"/>
+        android:text="Week 0 : Pre-Pregnancy"/>
 
     <View style="@style/Divider"/>
 
@@ -29,12 +29,19 @@
                 android:textStyle="bold"
                 android:text="Weight"/>
 
+            <EditText
+                android:id="@+id/add_first_reading_weight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="numberDecimal"/>
+
             <RadioGroup
                 android:id="@+id/add_first_reading_weight_unit_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
+                android:orientation="vertical"
+                android:gravity="left"
                 android:layout_weight="1">
                 <RadioButton
                     android:id="@+id/add_first_reading_weight_unit_kg"
@@ -48,14 +55,8 @@
                     android:layout_height="wrap_content"
                     android:text="lbs" />
             </RadioGroup>
-
-            <EditText
-                android:id="@+id/add_first_reading_weight"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="numberDecimal"/>
         </TableRow>
+
         <TableRow>
             <TextView
                 android:id="@+id/add_first_reading_height_label"
@@ -65,12 +66,18 @@
                 android:layout_gravity="center_vertical"
                 android:textStyle="bold"
                 android:text="Height"/>
+            <EditText
+                android:id="@+id/add_first_reading_height"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="number"/>
             <RadioGroup
                 android:id="@+id/add_first_reading_height_unit_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
+                android:orientation="vertical"
+                android:gravity="left"
                 android:layout_weight="1">
                 <RadioButton
                     android:id="@+id/add_first_reading_height_unit_cm"
@@ -84,12 +91,6 @@
                     android:layout_height="wrap_content"
                     android:text="inches" />
             </RadioGroup>
-            <EditText
-                android:id="@+id/add_first_reading_height"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="number"/>
         </TableRow>
     </TableLayout>
 </LinearLayout>

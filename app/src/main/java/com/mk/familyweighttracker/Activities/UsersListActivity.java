@@ -107,7 +107,7 @@ public class UsersListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), AddNewUserActivity.class);
+                Intent intent = new Intent(getApplicationContext(), AddNewPregnantUserActivity.class);
                 startActivityForResult(intent, NEW_USER_ADDED_REQUEST);
             }
         });
