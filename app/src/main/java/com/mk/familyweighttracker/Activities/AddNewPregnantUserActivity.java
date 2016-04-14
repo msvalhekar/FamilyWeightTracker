@@ -73,8 +73,12 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
 
         mNameView = ((EditText) findViewById(R.id.add_user_name));
 
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(calendar.get(Calendar.YEAR) - 18, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
         mNewUser.IsMale = false;
-        mNewUser.DateOfBirth = new Date();
+        mNewUser.DateOfBirth = calendar.getTime();
         mNewUser.TrackingPeriod = TrackingPeriod.Week;
         mNewUser.EnableReminder = true;
         mNewUser.ReminderDay = 1;
@@ -346,6 +350,8 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
 
     private void initDateOfBirthControl() {
         final Button dobView = ((Button) findViewById(R.id.add_user_dob));
+        final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
+        dobView.setText(dateFormatter.format(mNewUser.DateOfBirth));
 
         dobView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -356,12 +362,11 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
                 new DatePickerDialog(v.getContext(),
                         new DatePickerDialog.OnDateSetListener() {
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
                                 Calendar newDate = Calendar.getInstance();
                                 newDate.set(year, monthOfYear, dayOfMonth);
 
                                 mNewUser.DateOfBirth = newDate.getTime();
-                                dobView.setText(dateFormatter.format(newDate.getTime()));
+                                dobView.setText(dateFormatter.format(mNewUser.DateOfBirth));
                             }
                         },
                         calendar.get(Calendar.YEAR),
@@ -401,7 +406,6 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void initTimeOfReminderControl() {
         final Button timeOfReminderView = ((Button) findViewById(R.id.add_user_reminder_time));

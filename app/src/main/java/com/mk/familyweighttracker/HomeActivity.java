@@ -45,10 +45,10 @@ public class HomeActivity extends AppCompatActivity {
         initToolbarControl();
 
         List<DashboardItem> items = new ArrayList<>();
-        items.add(new DashboardItem("Calculate BMI", ""));
-        items.add(new DashboardItem("Track BMI", ""));
-        items.add(new DashboardItem("Calculate Pregnancy Weight", ""));
-        items.add(new DashboardItem("Track Pregnancy Weight", UsersListActivity.class.getName()));
+        //items.add(new DashboardItem("Calculate BMI", ""));
+        items.add(new DashboardItem("Calculate Pregnancy Weight Gain", ""));
+        //items.add(new DashboardItem("Track BMI", ""));
+        items.add(new DashboardItem("Track Pregnancy Weight Gain", UsersListActivity.class.getName()));
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         DashboardItemRecyclerViewAdapter adapter = new DashboardItemRecyclerViewAdapter(this, items);

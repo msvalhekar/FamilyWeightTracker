@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <TextView
+        android:id="@+id/add_user_reading_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="(E, dd-MM-yyyy)"/>
+    <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+
+    <View style="@style/Divider"/>
+
+    <ScrollView
+        android:id="@+id/add_user_reading_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:rowCount="4"
+            android:columnCount="3"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:textStyle="bold"
+                android:text="Measured on"/>
+            <Button
+                android:id="@+id/add_reading_taken_on_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:text="(measured on)" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:textStyle="bold"
+                android:text="Week"/>
+            <Button
+                android:id="@+id/add_reading_sequence_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:text="(week number)" />
+            <TextView
+                android:id="@+id/add_reading_week_pending"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_row="1"
+                android:layout_column="2"
+                android:textStyle="bold"
+                android:text="(pending weeks)"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_row="2"
+                android:layout_column="0"
+                android:textStyle="bold"
+                android:text="Weight"/>
+            <Button
+                android:id="@+id/add_reading_weight_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_row="2"
+                android:layout_column="1"
+                android:text="(weight)" />
+            <TextView
+                android:id="@+id/add_reading_weight_unit_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_row="2"
+                android:layout_column="2"
+                android:textStyle="bold"
+                android:text="(kg)"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_row="3"
+                android:layout_column="0"
+                android:textStyle="bold"
+                android:text="Height"/>
+            <Button
+                android:id="@+id/add_reading_height_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_row="3"
+                android:layout_column="1"
+                android:text="(height)" />
+            <TextView
+                android:id="@+id/add_reading_height_unit_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_row="3"
+                android:layout_column="2"
+                android:textStyle="bold"
+                android:text="(cm)"/>
+
+        </GridLayout>
+    </ScrollView>
+</LinearLayout>
