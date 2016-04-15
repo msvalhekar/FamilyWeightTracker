@@ -19,7 +19,9 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.InputType;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -34,10 +36,12 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
+import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
@@ -350,8 +354,8 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
 
     private void initDateOfBirthControl() {
         final Button dobView = ((Button) findViewById(R.id.add_user_dob));
-        final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
-        dobView.setText(dateFormatter.format(mNewUser.DateOfBirth));
+
+        dobView.setText(getDateOfBirthMessage(), TextView.BufferType.SPANNABLE);
 
         dobView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -366,7 +370,7 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
                                 newDate.set(year, monthOfYear, dayOfMonth);
 
                                 mNewUser.DateOfBirth = newDate.getTime();
-                                dobView.setText(dateFormatter.format(mNewUser.DateOfBirth));
+                                dobView.setText(getDateOfBirthMessage(), TextView.BufferType.SPANNABLE);
                             }
                         },
                         calendar.get(Calendar.YEAR),
@@ -375,6 +379,12 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
                         .show();
             }
         });
+    }
+
+    private Spanned getDateOfBirthMessage() {
+        final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
+        String ageString = String.format("<small>(%s)</small>", Utility.calculateAge(mNewUser.DateOfBirth));
+        return Html.fromHtml(String.format("%s    %s", dateFormatter.format(mNewUser.DateOfBirth), ageString));
     }
 
     private void initDayOfReminderControl() {

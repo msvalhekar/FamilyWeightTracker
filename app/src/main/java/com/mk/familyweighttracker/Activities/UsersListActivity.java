@@ -26,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
+import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
@@ -272,56 +273,10 @@ public class UsersListActivity extends AppCompatActivity {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
                     dateOfBirthValue = dateFormat.format(mUser.dateOfBirth);
-                    ageValue = getAge(mUser.dateOfBirth);
+                    ageValue = Utility.calculateAge(mUser.dateOfBirth);
                 }
                 ((TextView) mView.findViewById(R.id.list_item_age)).setText(ageValue);
                 ((TextView) mView.findViewById(R.id.list_item_dob)).setText(dateOfBirthValue);
-            }
-
-            private String getAge(Date dateOfBirth) {
-                Calendar dob = Calendar.getInstance();
-                dob.setTime(dateOfBirth);
-
-                Calendar now = Calendar.getInstance();
-                now.setTime(new java.util.Date());
-
-                if(dob.after(now)) return "Invalid DoB";
-
-                //calculate age .
-                int ageYear = (now.get(Calendar.YEAR) - dob.get(Calendar.YEAR));
-                int ageMonth = (now.get(Calendar.MONTH) - dob.get(Calendar.MONTH));
-                int ageDays = (now.get(Calendar.DAY_OF_MONTH) - dob.get(Calendar.DAY_OF_MONTH));
-
-                if(ageYear == 0) {
-                    if(ageMonth == 0) {
-                        return String.format("%d days", ageDays);
-                    } else {
-                        if (ageDays < 0) {
-                            GregorianCalendar gregCal = new GregorianCalendar(
-                                    now.get(Calendar.YEAR),
-                                    now.get(Calendar.MONTH)-1,
-                                    now.get(Calendar.DAY_OF_MONTH));
-                            ageDays += gregCal.getActualMaximum(Calendar.DAY_OF_MONTH);
-                            ageMonth --;
-                        }
-                        if(ageMonth == 0)
-                            return String.format("%d days", ageDays);
-                        else
-                            return String.format("%d(%dd) months", ageMonth, ageDays);
-                    }
-                } else {
-                    if(ageMonth == 0)
-                        return String.format("%d yrs", ageYear);
-                    else if(ageMonth < 0){
-                        ageMonth += 12;
-                        ageYear--;
-                        if(ageYear == 0)
-                            return String.format("%d months", ageMonth);
-                    } else {
-                        return String.format("%d(%dm) yrs", ageYear, ageMonth);
-                    }
-                }
-                return "";
             }
 
             private void setHeightControl() {
