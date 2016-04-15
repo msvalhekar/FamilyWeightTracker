@@ -270,9 +270,7 @@ public class UsersListActivity extends AppCompatActivity {
                 String dateOfBirthValue = "";
                 String ageValue = "";
                 if(mUser.dateOfBirth != null) {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-
-                    dateOfBirthValue = dateFormat.format(mUser.dateOfBirth);
+                    dateOfBirthValue = mUser.getDateOfBirthStr();
                     ageValue = Utility.calculateAge(mUser.dateOfBirth);
                 }
                 ((TextView) mView.findViewById(R.id.list_item_age)).setText(ageValue);

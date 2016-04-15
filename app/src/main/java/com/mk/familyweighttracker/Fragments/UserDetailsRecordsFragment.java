@@ -576,7 +576,7 @@ public class UserDetailsRecordsFragment extends Fragment {
         if (mWeekWeightGainRangeList != null)
             return;
 
-        double baseWeight = mSelectedUser.getWeight();
+        double baseWeight = mSelectedUser.getStartingWeight();
         if(baseWeight == 0) return;
 
         mWeekWeightGainRangeList = new PregnancyService()

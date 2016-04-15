@@ -161,7 +161,7 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
             double value = isMinimum ? weightRange.MinimumWeight : weightRange.MaximumWeight;
             values.add(new Entry((float) value, index++));
         }
-        String label = isMinimum ? "exp min" : "exp max";
+        String label = isMinimum ? "expected minimum" : "expected maximum";
         LineDataSet lineDataSet = new LineDataSet(values, label);
         lineDataSet.setLineWidth(2f);
         lineDataSet.setDrawValues(false);
@@ -179,7 +179,7 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
             values.add(new Entry((float) reading.Weight, index++));
         }
 
-        LineDataSet lineDataSet = new LineDataSet(values, "actual wt");
+        LineDataSet lineDataSet = new LineDataSet(values, "actual weight");
         lineDataSet.setLineWidth(5f);
         lineDataSet.setCircleRadius(2f);
 
@@ -209,7 +209,7 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
         if(user.getReadings(true).size() == 0) return;
 
         BodyWeightCategory weightCategory = user.getWeightCategory();
-        mWeightRangeList = mPregnancyService.getWeightGainTableFor(user.getWeight(), weightCategory);
+        mWeightRangeList = mPregnancyService.getWeightGainTableFor(user.getStartingWeight(), weightCategory);
 
         loadChartDataForPregnancy(user);
         setChartDescriptionControl(user);

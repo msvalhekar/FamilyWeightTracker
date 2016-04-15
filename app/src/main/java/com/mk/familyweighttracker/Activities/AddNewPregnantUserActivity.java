@@ -40,7 +40,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
+import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
@@ -534,6 +536,8 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
             user.reminderDay = ReminderDay;
             user.reminderHour = ReminderHour;
             user.reminderMinute = ReminderMinute;
+            user.weightUnit = WeightUnit.kg;
+            user.heightUnit = HeightUnit.cm;
             return user;
         }
     }

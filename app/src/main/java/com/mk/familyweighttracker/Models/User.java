@@ -6,6 +6,7 @@ import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Services.PregnancyService;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -43,13 +44,18 @@ public class User {
         return mId;
     }
 
-    public double getWeight() {
+    public String getDateOfBirthStr() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        return dateFormat.format(dateOfBirth);
+    }
+
+    public double getStartingWeight() {
         if(mReadings.size() > 0)
             return getReadings(true).get(0).Weight;
         return 0;
     }
 
-    public double getHeight() {
+    public double getStartingHeight() {
         if(mReadings.size() > 0)
             return getReadings(true).get(0).Height;
         return 0;
@@ -59,7 +65,7 @@ public class User {
         double divideBy = 1;
         if(weightUnit == WeightUnit.lb)
             divideBy = POUNDS_PER_KILOGRAM;
-        return getWeight() / divideBy;
+        return getStartingWeight() / divideBy;
     }
 
     private double getHeightInMeter() {
@@ -68,7 +74,7 @@ public class User {
             divideBy = CENTIMETERS_PER_METER;
         else if( heightUnit == HeightUnit.inch)
             divideBy = INCHES_PER_METER;
-        return getHeight() / divideBy;
+        return getStartingHeight() / divideBy;
     }
 
     public void addReading(long sequence, double weight, int height, Date takenOn)
