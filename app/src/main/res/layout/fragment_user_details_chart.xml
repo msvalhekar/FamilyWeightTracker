@@ -5,7 +5,7 @@
     tools:context="com.mk.familyweighttracker.Fragments.UserDetailsChartFragment"
     android:orientation="vertical">
 
-    <TableLayout
+     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:stretchColumns="*"
@@ -14,21 +14,58 @@
             <TextView
                 android:id="@+id/user_detail_chart_description_week_no"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:text="(week no)"/>
             <TextView
-                android:id="@+id/user_detail_chart_description_weight_max_exp"
+                android:id="@+id/user_detail_chart_description_exp_this_week"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:textStyle="bold"
+                android:text="(exp this week)"/>
+            <TextView
+                android:id="@+id/user_detail_chart_description_exp_40th_week"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:textStyle="bold"
+                android:text="(exp 40th week)"/>
         </TableRow>
         <TableRow>
             <TextView
                 android:id="@+id/user_detail_chart_description_weight_actual"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:textStyle="bold"
+                android:text="(act wt)"/>
             <TextView
-                android:id="@+id/user_detail_chart_description_weight_min_exp"
+                android:id="@+id/user_detail_chart_description_weight_max_exp_this_week"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:text="(max exp n)"/>
+            <TextView
+                android:id="@+id/user_detail_chart_description_weight_max_exp_40th_week"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:text="(max exp 40)"/>
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:id="@+id/user_detail_chart_description_weight_min_exp_this_week"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:text="(min exp n)"/>
+            <TextView
+                android:id="@+id/user_detail_chart_description_weight_min_exp_40th_week"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:text="(min exp 40)"/>
         </TableRow>
     </TableLayout>
 
