@@ -37,7 +37,7 @@ import java.util.List;
 public class UserDetailsChartFragment extends Fragment implements OnChartValueSelectedListener, UserDetailsRecordsFragment.OnNewReadingAdded {
 
     private long mSelectedUserId;
-    //private User mUser;
+    private User mUser;
     private View mFragmentView;
     private LineChart mLineChart;
     private PregnancyService mPregnancyService = new PregnancyService();
@@ -63,8 +63,10 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
         return mFragmentView;
     }
 
-    private void setChartDescriptionControl(User user) {
-        UserReading latestReading = user.getReadings(false).get(0);
+    private void setChartDescriptionControl() {
+        mFragmentView.findViewById(R.id.user_detail_chart_description_section).setVisibility(View.VISIBLE);
+
+        UserReading latestReading = mUser.getReadings(false).get(0);
 
         ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_week_no))
                 .setText(String.format("Week: %d", latestReading.Sequence));
@@ -132,14 +134,13 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
         legend.setFormSize(15);
     }
 
-    private void loadChartDataForPregnancy(User user)
-    {
+    private void loadChartDataForPregnancy() {
         mLineChart.resetTracking();
 
         List<String> xVals = getXaxisValues(mWeightRangeList.size());
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-        dataSets.add(getUserWeightValues(user.getReadings(true)));
+        dataSets.add(getUserWeightValues(mUser.getReadings(true)));
         dataSets.add(getWeightRangeValues(mWeightRangeList, true));
         dataSets.add(getWeightRangeValues(mWeightRangeList, false));
 
@@ -205,13 +206,13 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
 
     @Override
     public void onNewReadingAdded() {
-        User user = new UserService().get(mSelectedUserId);
-        if(user.getReadings(true).size() == 0) return;
+        mUser = new UserService().get(mSelectedUserId);
+        if(mUser.getReadings(true).size() == 0) return;
 
-        BodyWeightCategory weightCategory = user.getWeightCategory();
-        mWeightRangeList = mPregnancyService.getWeightGainTableFor(user.getStartingWeight(), weightCategory);
+        BodyWeightCategory weightCategory = mUser.getWeightCategory();
+        mWeightRangeList = mPregnancyService.getWeightGainTableFor(mUser.getStartingWeight(), weightCategory);
 
-        loadChartDataForPregnancy(user);
-        setChartDescriptionControl(user);
+        loadChartDataForPregnancy();
+        setChartDescriptionControl();
     }
 }
