@@ -19,6 +19,7 @@ import android.widget.PopupWindow;
 
 import com.mk.familyweighttracker.Fragments.UserDetailsRecordsFragment;
 import com.mk.familyweighttracker.Fragments.UserDetailsProfileFragment;
+import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.SlidingTabLayout;
 import com.mk.familyweighttracker.Framework.UserDetailsTabsFactory;
 import com.mk.familyweighttracker.Models.User;
@@ -36,7 +37,7 @@ import java.util.List;
  * item details side-by-side using two vertical panes.
  */
 public class UserDetailActivity extends AppCompatActivity
-        implements UserDetailsRecordsFragment.OnNewReadingAdded, UserDetailsProfileFragment.OnUserDeleted {
+        implements OnNewReadingAdded, UserDetailsProfileFragment.OnUserDeleted {
 
     public static final String ARG_USER_ID = "user_id";
     public static final String ARG_IS_DATA_CHANGED = "IsDataChanged";
@@ -87,13 +88,21 @@ public class UserDetailActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    private boolean mIsOriginator = false;
+    @Override
+    public boolean isOriginator() {
+        return mIsOriginator;
+    }
+
     @Override
     public void onNewReadingAdded() {
         mIsDataChanged = true;
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
         for (Fragment fragment: fragments) {
-            if(fragment instanceof UserDetailsRecordsFragment.OnNewReadingAdded)
-                ((UserDetailsRecordsFragment.OnNewReadingAdded) fragment).onNewReadingAdded();
+            if(fragment instanceof OnNewReadingAdded &&
+                ((OnNewReadingAdded) fragment).isOriginator() == false) {
+                    ((OnNewReadingAdded) fragment).onNewReadingAdded();
+            }
         }
     }
 

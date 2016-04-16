@@ -20,18 +20,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
-import com.mk.familyweighttracker.Enums.HeightUnit;
-import com.mk.familyweighttracker.Enums.WeightUnit;
+import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.Models.WeekWeightGainRange;
@@ -49,9 +45,9 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserDetailsRecordsFragment extends Fragment {
+public class UserDetailsRecordsFragment extends Fragment implements OnNewReadingAdded {
 
-    private static final int NEW_USER_RECORD_ADDED_REQUEST = 1;
+    //private static final int NEW_USER_RECORD_ADDED_REQUEST = 1;
     private long mSelectedUserId;
     private User mSelectedUser;
     private UserReading mNewUserReading = new UserReading();
@@ -95,109 +91,16 @@ public class UserDetailsRecordsFragment extends Fragment {
     private void initAddUserReadingControl() {
         FloatingActionButton fab = (FloatingActionButton) mFragmentView.findViewById(R.id.button_user_add_record);
         fab.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
-                if (userReadingList.size() > 0) {
-//                    Intent intent = new Intent(getContext(), AddUserRecordActivity.class);
-//                    intent.putExtra(UserDetailActivity.ARG_USER_ID, mSelectedUserId);
-//                    startActivityForResult(intent, NEW_USER_RECORD_ADDED_REQUEST);
-                    acceptReading(getContext());
-                } else {
-                    acceptFirstReadingForPregnancy(getContext());
+                if(userReadingList.size() == 0) {
+                    Toast.makeText(view.getContext(), "Add Pre-Pregnancy weight and height from Profile tab", Toast.LENGTH_LONG)
+                        .show();
+                    return;
                 }
+                acceptReading(getContext());
             }
         });
-    }
-
-    private void acceptFirstReadingForPregnancy(final Context context) {
-
-        final WeightUnit[] userWeightUnit = {WeightUnit.kg};
-        final HeightUnit[] userHeightUnit = {HeightUnit.cm};
-
-        final UserReading userReading = new UserReading();
-        userReading.UserId = mSelectedUserId;
-        userReading.Sequence = 0;
-        userReading.TakenOn = new Date();
-        userReading.Weight = 60.0;
-        userReading.Height = 160;
-
-        View dialogView = LayoutInflater.from(context).inflate(R.layout.add_user_first_reading, null);
-
-        ((RadioGroup) dialogView.findViewById(R.id.add_first_reading_weight_unit_switch))
-                .setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(RadioGroup group, int checkedId) {
-                     boolean isWeightUnitKg = (checkedId == R.id.add_first_reading_weight_unit_kg);
-                     userWeightUnit[0] = isWeightUnitKg ? WeightUnit.kg : WeightUnit.lb;
-                    }
-                });
-        ((RadioButton) dialogView.findViewById(R.id.add_first_reading_weight_unit_kg)).setChecked(true);
-
-        ((RadioGroup) dialogView.findViewById(R.id.add_first_reading_height_unit_switch))
-                .setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        boolean isHeightUnitCm = (checkedId == R.id.add_first_reading_height_unit_cm);
-                        userHeightUnit[0] = isHeightUnitCm ? HeightUnit.cm : HeightUnit.inch;
-                    }
-                });
-        ((RadioButton) dialogView.findViewById(R.id.add_first_reading_height_unit_cm)).setChecked(true);
-
-        final EditText weightView = ((EditText) dialogView.findViewById(R.id.add_first_reading_weight));
-        weightView.setText(String.valueOf(userReading.Weight));
-
-        final EditText heightView = ((EditText) dialogView.findViewById(R.id.add_first_reading_height));
-        heightView.setText(String.valueOf(userReading.Height));
-
-        final android.support.v7.app.AlertDialog alertDialog = new AlertDialog.Builder(context)
-                .setView(dialogView)
-                .setCancelable(false)
-                .setPositiveButton("OK", null)
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                                Toast.makeText(context,
-                                        "Pre-preganancy reading is must for accuracy of calculations.",
-                                        Toast.LENGTH_LONG)
-                                        .show();
-                            }
-                        })
-                .create();
-
-        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String weightString = weightView.getText().toString();
-                        if (TextUtils.isEmpty(weightString)) {
-                            weightView.setError("Value required");
-                            return;
-                        }
-                        String heightString = heightView.getText().toString();
-                        if (TextUtils.isEmpty(heightString)) {
-                            heightView.setError("Value required");
-                            return;
-                        }
-
-                        userReading.Weight = Double.valueOf(weightString);
-                        userReading.Height = Integer.valueOf(heightString);
-
-                        new UserService().addReading(userReading);
-                        new UserService().update(mSelectedUserId, userWeightUnit[0], userHeightUnit[0]);
-
-                        onNewReadingAdded();
-
-                        alertDialog.dismiss();
-                    }
-                });
-            }
-        });
-        alertDialog.show();
     }
 
     private void acceptReading(final Context context) {
@@ -244,6 +147,10 @@ public class UserDetailsRecordsFragment extends Fragment {
                                 new UserService().addReading(mNewUserReading);
 
                                 onNewReadingAdded();
+
+                                mIsOriginator = true;
+                                ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
+                                mIsOriginator = false;
 
                                 alertDialog.dismiss();
                             }
@@ -540,7 +447,14 @@ public class UserDetailsRecordsFragment extends Fragment {
         return picker;
     }
 
-    private void onNewReadingAdded() {
+    private boolean mIsOriginator = false;
+    @Override
+    public boolean isOriginator() {
+        return mIsOriginator;
+    }
+
+    @Override
+    public void onNewReadingAdded() {
         mSelectedUser = new UserService().get(mSelectedUserId);
 
         List<UserReading> latestReadings = mSelectedUser.getReadings(false);
@@ -559,7 +473,6 @@ public class UserDetailsRecordsFragment extends Fragment {
         }
 
         mRecyclerView.scrollToPosition(0);
-        ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
     }
 
     private void initReadingListControl() {
@@ -600,11 +513,6 @@ public class UserDetailsRecordsFragment extends Fragment {
         // Make sure the request was successful
         if (resultCode != Activity.RESULT_OK)
             return;
-
-        if (requestCode == NEW_USER_RECORD_ADDED_REQUEST) {
-            // update the list for new record
-            onNewReadingAdded();
-        }
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -819,9 +727,5 @@ public class UserDetailsRecordsFragment extends Fragment {
                         .setText(dateFormat.format(mUserReading.TakenOn));
             }
         }
-    }
-
-    public interface OnNewReadingAdded {
-        void onNewReadingAdded();
     }
 }

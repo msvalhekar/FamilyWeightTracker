@@ -21,6 +21,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
+import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.Models.WeekWeightGainRange;
@@ -34,7 +35,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserDetailsChartFragment extends Fragment implements OnChartValueSelectedListener, UserDetailsRecordsFragment.OnNewReadingAdded {
+public class UserDetailsChartFragment extends Fragment implements OnChartValueSelectedListener, OnNewReadingAdded {
 
     private long mSelectedUserId;
     private User mUser;
@@ -202,6 +203,12 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
 
     @Override
     public void onNothingSelected() {
+    }
+
+    private boolean mIsOriginator = false;
+    @Override
+    public boolean isOriginator() {
+        return mIsOriginator;
     }
 
     @Override

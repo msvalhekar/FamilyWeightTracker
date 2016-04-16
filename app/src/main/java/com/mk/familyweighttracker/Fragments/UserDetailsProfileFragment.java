@@ -1,29 +1,40 @@
 package com.mk.familyweighttracker.Fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
+import com.mk.familyweighttracker.Enums.HeightUnit;
+import com.mk.familyweighttracker.Enums.WeightUnit;
+import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
+import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
+
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserDetailsProfileFragment extends Fragment implements UserDetailsRecordsFragment.OnNewReadingAdded {
+public class UserDetailsProfileFragment extends Fragment implements OnNewReadingAdded {
 
     private User mUser;
     private long mSelectedUserId;
@@ -41,19 +52,27 @@ public class UserDetailsProfileFragment extends Fragment implements UserDetailsR
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_profile, container, false);
 
         mSelectedUserId = getActivity().getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
+        mUser = new UserService().get(mSelectedUserId);
 
-        onNewReadingAdded();
+        initControls();
+
+        initPrePregnancyControls();
 
         initDeleteUserControl();
 
         return mFragmentView;
     }
 
+    boolean mIsOriginator = false;
+    @Override
+    public boolean isOriginator() {
+        return mIsOriginator;
+    }
+
     @Override
     public void onNewReadingAdded() {
-        mUser = new UserService().get(mSelectedUserId);
-
-        initControls();
+//        mUser = new UserService().get(mSelectedUserId);
+//        initPregnancyControls();
     }
 
     private void initControls() {
@@ -73,33 +92,137 @@ public class UserDetailsProfileFragment extends Fragment implements UserDetailsR
 
         ((TextView) mFragmentView.findViewById(R.id.show_user_age))
             .setText(Utility.calculateAge(mUser.dateOfBirth));
+    }
 
-        ((TextView) mFragmentView.findViewById(R.id.show_user_weight_unit))
-            .setText(mUser.weightUnit.toString());
+    private void initPrePregnancyControls() {
 
-        ((TextView) mFragmentView.findViewById(R.id.show_user_height_unit))
-            .setText(mUser.heightUnit.toString());
+        Button button = ((Button) mFragmentView.findViewById(R.id.show_user_first_reading_button));
+        button.setVisibility(View.GONE);
+        mFragmentView.findViewById(R.id.show_user_pregnancy_section)
+                .setVisibility(View.GONE);
 
-        // todo: set below section only for pregnant member
-        {
-            ((GridLayout) mFragmentView.findViewById(R.id.show_user_pregnancy_section))
+        if(mUser.getReadings(true).size() == 0) {
+            button.setVisibility(View.VISIBLE);
+            button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            acceptFirstReadingForPregnancy(v.getContext());
+                        }
+                    });
+        } else {
+            mFragmentView.findViewById(R.id.show_user_pregnancy_section)
                     .setVisibility(View.VISIBLE);
 
             ((TextView) mFragmentView.findViewById(R.id.show_user_pregnancy_label))
                     .setText("Pre-pregnancy details");
 
             ((TextView) mFragmentView.findViewById(R.id.show_user_pre_pregnancy_weight))
-                    .setText(String.format("%.2f", mUser.getStartingWeight()));
+                    .setText(mUser.getStartingWeightStr());
 
             ((TextView) mFragmentView.findViewById(R.id.show_user_pre_pregnancy_height))
-                    .setText(String.valueOf(mUser.getStartingHeight()));
+                    .setText(mUser.getStartingHeightStr());
 
             ((TextView) mFragmentView.findViewById(R.id.show_user_pre_pregnancy_bmi))
-                    .setText(String.format("%.2f", mUser.getBmi()));
+                    .setText(mUser.getBmiStr());
 
             ((TextView) mFragmentView.findViewById(R.id.show_user_pre_pregnancy_weight_category))
                     .setText(mUser.getWeightCategory().toString());
         }
+    }
+
+    private void acceptFirstReadingForPregnancy(final Context context) {
+
+        final WeightUnit[] userWeightUnit = {WeightUnit.kg};
+        final HeightUnit[] userHeightUnit = {HeightUnit.cm};
+
+        final UserReading userReading = new UserReading();
+        userReading.UserId = mSelectedUserId;
+        userReading.Sequence = 0;
+        userReading.TakenOn = new Date();
+        userReading.Weight = 60.0;
+        userReading.Height = 160;
+
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.add_user_first_reading, null);
+
+        ((RadioGroup) dialogView.findViewById(R.id.add_first_reading_weight_unit_switch))
+                .setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        boolean isWeightUnitKg = (checkedId == R.id.add_first_reading_weight_unit_kg);
+                        userWeightUnit[0] = isWeightUnitKg ? WeightUnit.kg : WeightUnit.lb;
+                    }
+                });
+        ((RadioButton) dialogView.findViewById(R.id.add_first_reading_weight_unit_kg)).setChecked(true);
+
+        ((RadioGroup) dialogView.findViewById(R.id.add_first_reading_height_unit_switch))
+                .setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        boolean isHeightUnitCm = (checkedId == R.id.add_first_reading_height_unit_cm);
+                        userHeightUnit[0] = isHeightUnitCm ? HeightUnit.cm : HeightUnit.inch;
+                    }
+                });
+        ((RadioButton) dialogView.findViewById(R.id.add_first_reading_height_unit_cm)).setChecked(true);
+
+        final EditText weightView = ((EditText) dialogView.findViewById(R.id.add_first_reading_weight));
+        weightView.setText(String.valueOf(userReading.Weight));
+
+        final EditText heightView = ((EditText) dialogView.findViewById(R.id.add_first_reading_height));
+        heightView.setText(String.valueOf(userReading.Height));
+
+        final android.support.v7.app.AlertDialog alertDialog = new AlertDialog.Builder(context)
+                .setView(dialogView)
+                .setCancelable(false)
+                .setPositiveButton("OK", null)
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                Toast.makeText(context,
+                                        "Pre-preganancy reading is must for accuracy of calculations.",
+                                        Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                        })
+                .create();
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String weightString = weightView.getText().toString();
+                                if (TextUtils.isEmpty(weightString)) {
+                                    weightView.setError("Value required");
+                                    return;
+                                }
+                                String heightString = heightView.getText().toString();
+                                if (TextUtils.isEmpty(heightString)) {
+                                    heightView.setError("Value required");
+                                    return;
+                                }
+
+                                userReading.Weight = Double.valueOf(weightString);
+                                userReading.Height = Integer.valueOf(heightString);
+
+                                new UserService().addReading(userReading);
+                                new UserService().update(mSelectedUserId, userWeightUnit[0], userHeightUnit[0]);
+
+                                mUser = new UserService().get(mSelectedUserId);
+                                initPrePregnancyControls();
+
+                                mIsOriginator = true;
+                                ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
+                                mIsOriginator = false;
+
+                                alertDialog.dismiss();
+                            }
+                        });
+            }
+        });
+        alertDialog.show();
     }
 
     private void initDeleteUserControl() {

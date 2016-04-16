@@ -242,7 +242,7 @@ public class UsersListActivity extends AppCompatActivity {
 
             private void setBmiControl() {
                 TextView bmiView = ((TextView) mView.findViewById(R.id.list_item_bmi));
-                bmiView.setText(String.format("BMI: %.2f", mUser.getBmi()));
+                bmiView.setText("BMI: " + mUser.getBmiStr());
 
                 TextView bmiCategoryView = ((TextView) mView.findViewById(R.id.list_item_bmi_category));
                 BodyWeightCategory weightCategory = mUser.getWeightCategory();

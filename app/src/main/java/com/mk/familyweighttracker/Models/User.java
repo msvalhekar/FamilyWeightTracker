@@ -49,13 +49,25 @@ public class User {
         return dateFormat.format(dateOfBirth);
     }
 
+    public String getStartingWeightStr() {
+        return String.format("%.2f %s", getStartingWeight(), weightUnit.toString());
+    }
+
+    public String getStartingHeightStr() {
+        return String.format("%d %s", getStartingHeight(), heightUnit.toString());
+    }
+
+    public String getBmiStr() {
+        return String.format("%.2f", getBmi());
+    }
+
     public double getStartingWeight() {
         if(mReadings.size() > 0)
             return getReadings(true).get(0).Weight;
         return 0;
     }
 
-    public double getStartingHeight() {
+    public int getStartingHeight() {
         if(mReadings.size() > 0)
             return getReadings(true).get(0).Height;
         return 0;

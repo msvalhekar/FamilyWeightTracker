@@ -18,8 +18,8 @@
             android:layout_gravity="center_horizontal">
             <ImageButton
                 android:id="@+id/show_user_image"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:src="@drawable/contact_default"
                 android:scaleType="centerCrop"
                 android:layout_row="0"
@@ -92,45 +92,23 @@
                 android:layout_gravity="start"
                 android:text="(age)"/>
 
-            <TextView
+            <Button
+                android:id="@+id/show_user_first_reading_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_row="5"
                 android:layout_column="0"
-                android:layout_gravity="end"
-                android:text="Weight Unit : "/>
-            <TextView
-                android:id="@+id/show_user_weight_unit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_row="5"
-                android:layout_column="1"
-                android:layout_gravity="start"
-                android:text="(wt unit)"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_row="6"
-                android:layout_column="0"
-                android:layout_gravity="end"
-                android:text="Height Unit : "/>
-            <TextView
-                android:id="@+id/show_user_height_unit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_row="6"
-                android:layout_column="1"
-                android:layout_gravity="start"
-                android:text="(ht unit)"/>
-
+                android:layout_columnSpan="2"
+                android:visibility="gone"
+                android:text="Add Pre-Pregnancy Data"/>
             <GridLayout
                 android:id="@+id/show_user_pregnancy_section"
                 android:rowCount="5"
                 android:columnCount="2"
-                android:layout_row="7"
+                android:layout_row="5"
                 android:layout_column="0"
                 android:layout_columnSpan="2"
+                android:visibility="gone"
                 >
                 <TextView
                     android:id="@+id/show_user_pregnancy_label"
