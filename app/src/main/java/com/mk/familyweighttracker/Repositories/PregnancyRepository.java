@@ -1,6 +1,8 @@
 package com.mk.familyweighttracker.Repositories;
 
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
+import com.mk.familyweighttracker.Enums.WeightUnit;
+import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.WeekWeightGainRange;
 
 import java.util.ArrayList;
@@ -16,6 +18,10 @@ public class PregnancyRepository {
     static List<WeekWeightGainRange> weightGainTableForNormal;
     static List<WeekWeightGainRange> weightGainTableForOverWeight;
     static List<WeekWeightGainRange> weightGainTableForObese;
+    static List<WeekWeightGainRange> weightGainTableForUnderWeightInPounds;
+    static List<WeekWeightGainRange> weightGainTableForNormalInPounds;
+    static List<WeekWeightGainRange> weightGainTableForOverWeightInPounds;
+    static List<WeekWeightGainRange> weightGainTableForObeseInPounds;
 
     public PregnancyRepository()
     {
@@ -82,34 +88,57 @@ public class PregnancyRepository {
         categories.add(new BmiWeightRange(BodyWeightCategory.Obese, 30, Double.MAX_VALUE));
     }
 
-    private List<WeekWeightGainRange> createWeightGainTableFor(BodyWeightCategory category) {
+    private List<WeekWeightGainRange> createWeightGainTableFor(BodyWeightCategory category, WeightUnit weightUnit) {
         List<WeekWeightGainRange> result = new ArrayList<>();
         for (WeekWeightGain weekWeightGain : records) {
-            result.add(weekWeightGain.getWeekWeightGainRangeFor(category));
+            result.add(weekWeightGain.getWeekWeightGainRangeFor(category, weightUnit));
         }
         return result;
     }
 
-    public List<WeekWeightGainRange> getWeightGainTableFor(BodyWeightCategory category) {
-        if(category == BodyWeightCategory.UnderWeight){
-            if(weightGainTableForUnderWeight == null)
-                weightGainTableForUnderWeight = createWeightGainTableFor(BodyWeightCategory.UnderWeight);
-            return weightGainTableForUnderWeight;
-        }
-        if(category == BodyWeightCategory.Normal){
-            if(weightGainTableForNormal == null)
-                weightGainTableForNormal = createWeightGainTableFor(BodyWeightCategory.Normal);
-            return weightGainTableForNormal;
-        }
-        if(category == BodyWeightCategory.OverWeight){
-            if(weightGainTableForOverWeight == null)
-                weightGainTableForOverWeight = createWeightGainTableFor(BodyWeightCategory.OverWeight);
-            return weightGainTableForOverWeight;
-        }
-        if(category == BodyWeightCategory.Obese){
-            if(weightGainTableForObese == null)
-                weightGainTableForObese = createWeightGainTableFor(BodyWeightCategory.Obese);
-            return weightGainTableForObese;
+    public List<WeekWeightGainRange> getWeightGainTableFor(BodyWeightCategory category, WeightUnit weightUnit) {
+        if(weightUnit == WeightUnit.kg) {
+            if (category == BodyWeightCategory.UnderWeight) {
+                if (weightGainTableForUnderWeight == null)
+                    weightGainTableForUnderWeight = createWeightGainTableFor(BodyWeightCategory.UnderWeight, weightUnit);
+                return weightGainTableForUnderWeight;
+            }
+            if (category == BodyWeightCategory.Normal) {
+                if (weightGainTableForNormal == null)
+                    weightGainTableForNormal = createWeightGainTableFor(BodyWeightCategory.Normal, weightUnit);
+                return weightGainTableForNormal;
+            }
+            if (category == BodyWeightCategory.OverWeight) {
+                if (weightGainTableForOverWeight == null)
+                    weightGainTableForOverWeight = createWeightGainTableFor(BodyWeightCategory.OverWeight, weightUnit);
+                return weightGainTableForOverWeight;
+            }
+            if (category == BodyWeightCategory.Obese) {
+                if (weightGainTableForObese == null)
+                    weightGainTableForObese = createWeightGainTableFor(BodyWeightCategory.Obese, weightUnit);
+                return weightGainTableForObese;
+            }
+        } else {
+            if (category == BodyWeightCategory.UnderWeight) {
+                if (weightGainTableForUnderWeightInPounds == null)
+                    weightGainTableForUnderWeightInPounds = createWeightGainTableFor(BodyWeightCategory.UnderWeight, weightUnit);
+                return weightGainTableForUnderWeightInPounds;
+            }
+            if (category == BodyWeightCategory.Normal) {
+                if (weightGainTableForNormalInPounds == null)
+                    weightGainTableForNormalInPounds = createWeightGainTableFor(BodyWeightCategory.Normal, weightUnit);
+                return weightGainTableForNormalInPounds;
+            }
+            if (category == BodyWeightCategory.OverWeight) {
+                if (weightGainTableForOverWeightInPounds == null)
+                    weightGainTableForOverWeightInPounds = createWeightGainTableFor(BodyWeightCategory.OverWeight, weightUnit);
+                return weightGainTableForOverWeightInPounds;
+            }
+            if (category == BodyWeightCategory.Obese) {
+                if (weightGainTableForObeseInPounds == null)
+                    weightGainTableForObeseInPounds = createWeightGainTableFor(BodyWeightCategory.Obese, weightUnit);
+                return weightGainTableForObeseInPounds;
+            }
         }
         return null;
     }
@@ -169,12 +198,17 @@ public class PregnancyRepository {
             ObeseMinimum = obeseMinimum;
         }
 
-        public WeekWeightGainRange getWeekWeightGainRangeFor(BodyWeightCategory category) {
+        public WeekWeightGainRange getWeekWeightGainRangeFor(BodyWeightCategory category, WeightUnit weightUnit) {
+            double multiplyBy = (weightUnit == WeightUnit.lb) ? User.POUNDS_PER_KILOGRAM : 1;
             switch (category){
-                case UnderWeight: return new WeekWeightGainRange(WeekNumber, UnderWeightMinimum, UnderWeightMaximum);
-                case Normal: return new WeekWeightGainRange(WeekNumber, NormalMinimum, NormalMaximum);
-                case OverWeight: return new WeekWeightGainRange(WeekNumber, OverWeightMinimum, OverWeightMaximum);
-                case Obese: return new WeekWeightGainRange(WeekNumber, ObeseMinimum, ObeseMaximum);
+                case UnderWeight:
+                    return new WeekWeightGainRange(WeekNumber, UnderWeightMinimum * multiplyBy, UnderWeightMaximum * multiplyBy);
+                case Normal:
+                    return new WeekWeightGainRange(WeekNumber, NormalMinimum * multiplyBy, NormalMaximum * multiplyBy);
+                case OverWeight:
+                    return new WeekWeightGainRange(WeekNumber, OverWeightMinimum * multiplyBy, OverWeightMaximum * multiplyBy);
+                case Obese:
+                    return new WeekWeightGainRange(WeekNumber, ObeseMinimum * multiplyBy, ObeseMaximum * multiplyBy);
             }
             return null;
         }

@@ -47,7 +47,6 @@ import java.util.List;
  */
 public class UserDetailsRecordsFragment extends Fragment implements OnNewReadingAdded {
 
-    //private static final int NEW_USER_RECORD_ADDED_REQUEST = 1;
     private long mSelectedUserId;
     private User mSelectedUser;
     private UserReading mNewUserReading = new UserReading();
@@ -72,6 +71,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         // Inflate the layout for this fragment
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_records, container, false);
 
+        mWeekWeightGainRangeList = null;
         mSelectedUserId = getActivity().getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
         mSelectedUser = new UserService().get(mSelectedUserId);
 
@@ -82,8 +82,6 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         initAddUserReadingControl();
 
         initReadingListControl();
-
-        setWeightGainRangeFor();
 
         return mFragmentView;
     }
@@ -493,11 +491,12 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         if(baseWeight == 0) return;
 
         mWeekWeightGainRangeList = new PregnancyService()
-                .getWeightGainTableFor(baseWeight, mSelectedUser.getWeightCategory());
+            .getWeightGainTableFor(baseWeight, mSelectedUser.getWeightCategory(), mSelectedUser.weightUnit);
     }
 
     private WeekWeightGainRange getWeightGainTableFor(long weekNumber) {
         setWeightGainRangeFor();
+
         if(mWeekWeightGainRangeList == null)
             return null;
 

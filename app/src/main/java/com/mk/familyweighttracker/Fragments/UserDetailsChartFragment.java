@@ -86,7 +86,7 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
         }
 
         ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_actual))
-                .setText(Html.fromHtml(String.format("Weight: %.2f kg", latestReading.Weight)));
+                .setText(Html.fromHtml(String.format("Weight: %.2f %s", latestReading.Weight, mUser.weightUnit)));
         ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_min_exp_this_week))
                 .setText(Html.fromHtml(String.format("Min: %.2f", latestWeekRange.MinimumWeight)));
         ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_min_exp_40th_week))
@@ -217,7 +217,7 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
         if(mUser.getReadings(true).size() == 0) return;
 
         BodyWeightCategory weightCategory = mUser.getWeightCategory();
-        mWeightRangeList = mPregnancyService.getWeightGainTableFor(mUser.getStartingWeight(), weightCategory);
+        mWeightRangeList = mPregnancyService.getWeightGainTableFor(mUser.getStartingWeight(), weightCategory, mUser.weightUnit);
 
         loadChartDataForPregnancy();
         setChartDescriptionControl();

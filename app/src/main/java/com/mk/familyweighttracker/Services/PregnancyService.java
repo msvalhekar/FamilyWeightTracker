@@ -1,6 +1,7 @@
 package com.mk.familyweighttracker.Services;
 
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
+import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Models.WeekWeightGainRange;
 import com.mk.familyweighttracker.Repositories.PregnancyRepository;
 
@@ -17,12 +18,8 @@ public class PregnancyService {
     public PregnancyService() {
     }
 
-    public List<WeekWeightGainRange> getWeightGainTableFor(BodyWeightCategory category) {
-        return repository.getWeightGainTableFor(category);
-    }
-
-    public List<WeekWeightGainRange> getWeightGainTableFor(double baseWeight, BodyWeightCategory category) {
-        List<WeekWeightGainRange> records = repository.getWeightGainTableFor(category);
+    public List<WeekWeightGainRange> getWeightGainTableFor(double baseWeight, BodyWeightCategory category, WeightUnit weightUnit) {
+        List<WeekWeightGainRange> records = repository.getWeightGainTableFor(category, weightUnit);
 
         List<WeekWeightGainRange> recordsToReturn = new ArrayList<>();
         for (WeekWeightGainRange record: records) {
