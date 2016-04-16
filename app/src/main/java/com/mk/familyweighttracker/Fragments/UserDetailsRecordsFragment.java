@@ -456,21 +456,16 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         mSelectedUser = new UserService().get(mSelectedUserId);
 
         List<UserReading> latestReadings = mSelectedUser.getReadings(false);
-        for (int i=0; i< latestReadings.size(); i++) {
-            if( userReadingList.size() > i) {
-                if (userReadingList.get(i).Sequence != latestReadings.get(i).Sequence) {
-                    userReadingList.add(i, latestReadings.get(i));
-                    mRecyclerViewAdapter.notifyItemInserted(i);
-                    break;
-                }
-            } else {
-                userReadingList.add(i, latestReadings.get(i));
-                mRecyclerViewAdapter.notifyItemInserted(i);
+        int i=0;
+        for (; i< userReadingList.size(); i++) {
+            if (userReadingList.get(i).Sequence != latestReadings.get(i).Sequence) {
                 break;
             }
         }
-
-        mRecyclerView.scrollToPosition(0);
+        userReadingList.add(i, latestReadings.get(i));
+        mRecyclerViewAdapter.notifyDataSetChanged();
+        //mRecyclerViewAdapter.notifyItemInserted(i);
+        //mRecyclerView.scrollToPosition(0);
     }
 
     private void initReadingListControl() {

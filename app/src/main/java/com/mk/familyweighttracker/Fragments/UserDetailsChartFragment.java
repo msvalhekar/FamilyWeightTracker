@@ -178,7 +178,7 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
 
         int index = 0;
         for (UserReading reading: userReadings) {
-            values.add(new Entry((float) reading.Weight, index++));
+            values.add(new Entry((float) reading.Weight, (int) reading.Sequence));
         }
 
         LineDataSet lineDataSet = new LineDataSet(values, "actual weight");
