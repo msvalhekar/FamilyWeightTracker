@@ -65,11 +65,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.UsersListActivity" />
         </activity>
-        <activity
-            android:name=".Activities.AddUserRecordActivity"
-            android:label="@string/title_activity_add_user_reading"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
     </application>
 
 </manifest>
