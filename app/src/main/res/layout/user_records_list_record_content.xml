@@ -22,19 +22,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/record_item_pregnancy_message"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/user_record_for_pregnancy_section"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:textSize="12dp"
-                android:visibility="gone"
-                android:textColor="@android:color/holo_purple"
-                android:text="Pre-pregnancy"/>
-            <View
-                android:id="@+id/record_item_pregnancy_divider"
-                style="@style/Divider"
-                android:visibility="gone"/>
+                android:orientation="vertical"
+                android:visibility="gone">
+                <TextView
+                    android:id="@+id/record_item_pregnancy_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="12dp"
+                    android:textColor="@android:color/holo_purple"
+                    android:text="Pre-pregnancy"/>
+                <View
+                    android:id="@+id/record_item_pregnancy_divider"
+                    style="@style/Divider"
+                    android:visibility="gone"/>
+            </LinearLayout>
 
             <TableLayout
                 android:layout_width="match_parent"

@@ -469,6 +469,27 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
     }
 
     private void initReadingListControl() {
+        mFragmentView.findViewById(R.id.empty_view).setVisibility(View.GONE);
+
+        if(userReadingList.size() == 0) {
+            mFragmentView.findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
+            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_title)).setText("No data found.");
+            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_description)).setText("Use below button to Add reading(s).");
+            return;
+        }
+
+        mFragmentView.findViewById(R.id.user_records_list_record_content_help)
+             .setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+                        new AlertDialog.Builder(getContext())
+                                .setMessage(Html.fromHtml(getLegendMessage()))
+                                .setPositiveButton("Got it", null)
+                                .create()
+                                .show();
+                 }
+            });
+
         mRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter();
 
         mRecyclerView = ((RecyclerView) mFragmentView.findViewById(R.id.user_record_list));
@@ -476,6 +497,36 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
         mRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
+    private String getLegendMessage() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("<small>");
+        builder.append("<b>" + "Period" + "</b>");
+        builder.append("<br />" + "Week number, for which the reading was taken.");
+        builder.append("<br /><b>" + "Date" + "</b>");
+        builder.append("<br />" + "The date when the reading was recorded.");
+        builder.append("<br />");
+        builder.append("<br /><b>" + "Actual Wt" + "</b>");
+        builder.append("<br />" + "The actual weight recorded for this week.");
+        builder.append("<br /><b>" + "(wt gain)" + "</b>");
+        builder.append("<br />" + "The difference between actual weight recorded for this week and previous week.");
+        builder.append("<br />");
+        builder.append("<br /><b>" + "Exp Min" + "</b>");
+        builder.append("<br />" + "The minimum weight expected for this week, as per Pregnancy Weight Gain chart.");
+        builder.append("<br /><b>" + "(v/s actual)" + "</b>");
+        builder.append("<br />" + "The difference between actual weight recorded and minimum expected weight for this week.");
+        builder.append("<br /><font color=\"#ff0000\">RED</font>: indicates that the actual weight is lower than minimum expected, may need to gain more weight.");
+        builder.append("<br /><font color=\"#0000ff\">BLUE</font>: indicates that the actual weight is more than minimum expected, good.");
+        builder.append("<br />");
+        builder.append("<br /><b>" + "Exp Max" + "</b>");
+        builder.append("<br />" + "The maximum weight expected for this week, as per Pregnancy Weight Gain chart.");
+        builder.append("<br /><b>" + "(v/s actual)" + "</b>");
+        builder.append("<br />" + "The difference between actual weight recorded and maximum expected weight for this week.");
+        builder.append("<br /><font color=\"#0000ff\">BLUE</font>: indicates that the actual weight is lower than minimum expected, good.");
+        builder.append("<br /><font color=\"#ff0000\">RED</font>: indicates that the actual weight is more than maximum expected, may need to loose weight.");
+        builder.append("</small>");
+        return builder.toString();
     }
 
     private void setWeightGainRangeFor() {
@@ -512,36 +563,11 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private static final int EMPTY_VIEW = 1;
-        private static final int HELP_VIEW = 2;
-
         public SimpleItemRecyclerViewAdapter() {
         }
 
         @Override
-        public int getItemViewType(int position) {
-            if (userReadingList.size() == 0) {
-                return EMPTY_VIEW;
-            }
-            if (position == 0) {
-                return HELP_VIEW;
-            }
-            return super.getItemViewType(position);
-        }
-
-        @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            if (viewType == HELP_VIEW) {
-                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_records_list_record_content_help, parent, false);
-                return new HelpViewHolder(v);
-            } else if (viewType == EMPTY_VIEW) {
-                RelativeLayout layout = (RelativeLayout)LayoutInflater.from(parent.getContext()).inflate(R.layout.empty_view, parent, false);
-                ((TextView) layout.findViewById(R.id.empty_mesage_title)).setText("\nNo data found.");
-                ((TextView) layout.findViewById(R.id.empty_mesage_description)).setText("\n\n\nUse below button to Add reading(s).");
-
-                return new EmptyViewHolder(layout);
-            }
-
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.user_records_list_record_content, parent, false);
             return new ViewHolder(view);
@@ -549,23 +575,8 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            if (position == 0) {
-                holder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
 
-                        new AlertDialog.Builder(getContext())
-                                .setMessage(Html.fromHtml(getLegendMessage()))
-                                .setPositiveButton("Got it", null)
-                                .create()
-                                .show();
-                    }
-                });
-
-                return;
-            }
-
-            final UserReading reading = userReadingList.get(position - 1);
+            final UserReading reading = userReadingList.get(position);
 
             holder.setReading(reading);
 
@@ -580,51 +591,9 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
 //            });
         }
 
-        private String getLegendMessage() {
-            StringBuilder builder = new StringBuilder();
-            builder.append("<small>");
-            builder.append("<b>" + "Period" + "</b>");
-            builder.append("<br />" + "Week number, for which the reading was taken.");
-            builder.append("<br /><b>" + "Date" + "</b>");
-            builder.append("<br />" + "The date when the reading was recorded.");
-            builder.append("<br />");
-            builder.append("<br /><b>" + "Actual Wt" + "</b>");
-            builder.append("<br />" + "The actual weight recorded for this week.");
-            builder.append("<br /><b>" + "(wt gain)" + "</b>");
-            builder.append("<br />" + "The difference between actual weight recorded for this week and previous week.");
-            builder.append("<br />");
-            builder.append("<br /><b>" + "Exp Min" + "</b>");
-            builder.append("<br />" + "The minimum weight expected for this week, as per Pregnancy Weight Gain chart.");
-            builder.append("<br /><b>" + "(v/s actual)" + "</b>");
-            builder.append("<br />" + "The difference between actual weight recorded and minimum expected weight for this week.");
-            builder.append("<br /><font color=\"#ff0000\">RED</font>: indicates that the actual weight is lower than minimum expected, may need to gain more weight.");
-            builder.append("<br /><font color=\"#0000ff\">BLUE</font>: indicates that the actual weight is more than minimum expected, good.");
-            builder.append("<br />");
-            builder.append("<br /><b>" + "Exp Max" + "</b>");
-            builder.append("<br />" + "The maximum weight expected for this week, as per Pregnancy Weight Gain chart.");
-            builder.append("<br /><b>" + "(v/s actual)" + "</b>");
-            builder.append("<br />" + "The difference between actual weight recorded and maximum expected weight for this week.");
-            builder.append("<br /><font color=\"#0000ff\">BLUE</font>: indicates that the actual weight is lower than minimum expected, good.");
-            builder.append("<br /><font color=\"#ff0000\">RED</font>: indicates that the actual weight is more than maximum expected, may need to loose weight.");
-            builder.append("</small>");
-            return builder.toString();
-        }
-
         @Override
         public int getItemCount() {
-            return userReadingList.size() + 1;
-        }
-
-        public class EmptyViewHolder extends ViewHolder {
-            public EmptyViewHolder(View itemView) {
-                super(itemView);
-            }
-        }
-
-        public class HelpViewHolder extends ViewHolder {
-            public HelpViewHolder(View itemView) {
-                super(itemView);
-            }
+            return userReadingList.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -640,10 +609,14 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
             {
                 mUserReading = reading;
 
-                if(mUserReading.Sequence == 0) {
-                    mView.findViewById(R.id.record_item_pregnancy_message).setVisibility(View.VISIBLE);
-                    mView.findViewById(R.id.record_item_pregnancy_divider).setVisibility(View.VISIBLE);
-                }
+                mView.findViewById(R.id.user_record_for_pregnancy_section)
+                        .setVisibility(mUserReading.Sequence == 0 ? View.VISIBLE : View.GONE);
+
+//                if(mUserReading.Sequence == 0) {
+//                    mView.findViewById(R.id.user_record_for_pregnancy_section).setVisibility(View.VISIBLE);
+//                } else {
+//                    mView.findViewById(R.id.user_record_for_pregnancy_section).setVisibility(View.GONE);
+//                }
 
                 setPeriodControl();
                 setActualWeightControl();
