@@ -115,6 +115,15 @@ public class UsersListActivity extends AppCompatActivity {
     }
 
     private void initUserListControl() {
+        findViewById(R.id.empty_view).setVisibility(View.GONE);
+
+        if(mUserList.size() == 0) {
+            findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
+            ((TextView) findViewById(R.id.empty_mesage_title)).setText("No data found.");
+            ((TextView) findViewById(R.id.empty_mesage_description)).setText("Use below button to Add member(s).");
+            return;
+        }
+
         mRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter();
 
         mRecyclerView = ((RecyclerView) findViewById(R.id.item_list));
@@ -142,29 +151,13 @@ public class UsersListActivity extends AppCompatActivity {
     private class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private static final int EMPTY_VIEW = 1;
+        //private static final int EMPTY_VIEW = 1;
 
         public SimpleItemRecyclerViewAdapter() {
         }
 
         @Override
-        public int getItemViewType(int position) {
-            if (mUserList.size() == 0) {
-                return EMPTY_VIEW;
-            }
-            return super.getItemViewType(position);
-        }
-
-        @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            if (viewType == EMPTY_VIEW) {
-                RelativeLayout layout = (RelativeLayout)LayoutInflater.from(parent.getContext()).inflate(R.layout.empty_view, parent, false);
-                ((TextView) layout.findViewById(R.id.empty_mesage_title)).setText("\nNo data found.");
-                ((TextView) layout.findViewById(R.id.empty_mesage_description)).setText("\n\n\nUse below button to Add User(s).");
-
-                return new EmptyViewHolder(layout);
-            }
-
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.users_list_user_content, parent, false);
             return new ViewHolder(view);
@@ -172,8 +165,6 @@ public class UsersListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            if (mUserList.size() == 0) return;
-
             final User user = mUserList.get(position);
 
             holder.setUser(user);
@@ -190,13 +181,7 @@ public class UsersListActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return mUserList.size() == 0 ? 1 : mUserList.size();
-        }
-
-        public class EmptyViewHolder extends ViewHolder {
-            public EmptyViewHolder(View itemView) {
-                super(itemView);
-            }
+            return mUserList.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
