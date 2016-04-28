@@ -466,37 +466,41 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         mRecyclerViewAdapter.notifyDataSetChanged();
         //mRecyclerViewAdapter.notifyItemInserted(i);
         //mRecyclerView.scrollToPosition(0);
+        mFragmentView.findViewById(R.id.empty_view).setVisibility(View.GONE);
+        mFragmentView.findViewById(R.id.user_records_list_record_content_help).setVisibility(View.VISIBLE);
+        mFragmentView.findViewById(R.id.button_user_add_record).setVisibility(View.VISIBLE);
     }
 
     private void initReadingListControl() {
-        mFragmentView.findViewById(R.id.empty_view).setVisibility(View.GONE);
 
-        if(userReadingList.size() == 0) {
-            mFragmentView.findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
-            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_title)).setText("No data found.");
-            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_description)).setText("Use below button to Add reading(s).");
-            return;
-        }
+        mRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter();
+        mRecyclerView = ((RecyclerView) mFragmentView.findViewById(R.id.user_record_list));
+        //mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+        mRecyclerViewAdapter.notifyDataSetChanged();
+
 
         mFragmentView.findViewById(R.id.user_records_list_record_content_help)
-             .setOnClickListener(new View.OnClickListener() {
-                 @Override
-                 public void onClick(View v) {
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         new AlertDialog.Builder(getContext())
                                 .setMessage(Html.fromHtml(getLegendMessage()))
                                 .setPositiveButton("Got it", null)
                                 .create()
                                 .show();
-                 }
-            });
+                    }
+                });
 
-        mRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter();
+        mFragmentView.findViewById(R.id.empty_view).setVisibility(View.GONE);
+        if(userReadingList.size() == 0) {
+            mFragmentView.findViewById(R.id.user_records_list_record_content_help).setVisibility(View.GONE);
+            mFragmentView.findViewById(R.id.button_user_add_record).setVisibility(View.GONE);
 
-        mRecyclerView = ((RecyclerView) mFragmentView.findViewById(R.id.user_record_list));
-        //mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setAdapter(mRecyclerViewAdapter);
-
-        mRecyclerViewAdapter.notifyDataSetChanged();
+            mFragmentView.findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
+            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_title)).setText("No data found.");
+            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_description)).setText("Add initial reading from 'Profile' tab.");
+        }
     }
 
     private String getLegendMessage() {
