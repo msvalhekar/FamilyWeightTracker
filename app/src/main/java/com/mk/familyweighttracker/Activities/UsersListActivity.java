@@ -115,14 +115,7 @@ public class UsersListActivity extends AppCompatActivity {
     }
 
     private void initUserListControl() {
-        findViewById(R.id.empty_view).setVisibility(View.GONE);
-
-        if(mUserList.size() == 0) {
-            findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
-            ((TextView) findViewById(R.id.empty_mesage_title)).setText("No data found.");
-            ((TextView) findViewById(R.id.empty_mesage_description)).setText("Use below button to Add member(s).");
-            return;
-        }
+        showEmptyListControl();
 
         mRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter();
 
@@ -134,12 +127,25 @@ public class UsersListActivity extends AppCompatActivity {
         mRecyclerViewAdapter.notifyDataSetChanged();
     }
 
+    private boolean showEmptyListControl() {
+        findViewById(R.id.empty_view).setVisibility(View.GONE);
+
+        if(mUserList.size() == 0) {
+            findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
+            ((TextView) findViewById(R.id.empty_mesage_title)).setText("No data found.");
+            ((TextView) findViewById(R.id.empty_mesage_description)).setText("Use below button to Add member(s).");
+            return true;
+        }
+        return false;
+    }
     private void onRefreshList() {
         List<User> latestUsers = new UserService().getAll();
 
         mUserList.clear();
         for (User user: latestUsers)
             mUserList.add(user);
+
+        showEmptyListControl();
 
         mRecyclerViewAdapter.notifyDataSetChanged();
 
