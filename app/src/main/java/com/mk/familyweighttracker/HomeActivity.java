@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +20,6 @@ import com.activeandroid.ActiveAndroid;
 import com.mk.familyweighttracker.Activities.UsersListActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
@@ -32,13 +30,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //    https://github.com/pardom/ActiveAndroid/wiki/Getting-started
-        //ActiveAndroid.dispose();
-        //getApplicationContext().deleteDatabase(DATABASE_NAME);
         ActiveAndroid.initialize(getApplicationContext());
-        //Configuration.Builder configurationBuilder = new Configuration.Builder(this);
-        //configurationBuilder.addModelClass(UserModel.class);
-        //ActiveAndroid.initialize(configurationBuilder.create());
 
         setContentView(R.layout.activity_home);
 
@@ -46,14 +38,14 @@ public class HomeActivity extends AppCompatActivity {
 
         List<DashboardItem> items = new ArrayList<>();
         //items.add(new DashboardItem("Calculate BMI", ""));
-        items.add(new DashboardItem("Calculate Pregnancy Weight Gain", ""));
+        //items.add(new DashboardItem("Calculate Pregnancy Weight Gain", R.mipmap.app_ic_launcher, ""));
         //items.add(new DashboardItem("Track BMI", ""));
-        items.add(new DashboardItem("Track Pregnancy Weight Gain", UsersListActivity.class.getName()));
+        items.add(new DashboardItem("Track Pregnancy Weight Gain", R.mipmap.ic_launcher, UsersListActivity.class.getName()));
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-        DashboardItemRecyclerViewAdapter adapter = new DashboardItemRecyclerViewAdapter(this, items);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
+        DashboardItemRecyclerViewAdapter adapter = new DashboardItemRecyclerViewAdapter(items);
 
-        RecyclerView recyclerView = ((RecyclerView) findViewById(R.id.dashboard_item_grid));
+        RecyclerView recyclerView = ((RecyclerView) findViewById(R.id.dashboard_grid));
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapter);
@@ -85,19 +77,14 @@ public class HomeActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
 
         return super.onOptionsItemSelected(item);
     }
 
     private class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<DashboardItemRecyclerViewAdapter.DashboardItemViewHolder> {
-        private Context mContext;
         private List<DashboardItem> mItems;
 
-        public DashboardItemRecyclerViewAdapter(Context context, List<DashboardItem> items) {
-            mContext = context;
+        public DashboardItemRecyclerViewAdapter(List<DashboardItem> items) {
             mItems = items;
         }
 
@@ -121,6 +108,7 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         public class DashboardItemViewHolder extends RecyclerView.ViewHolder {
+            private ImageView imageView;
             private TextView textView;
             private DashboardItem mItem;
 
@@ -134,28 +122,32 @@ public class HomeActivity extends AppCompatActivity {
                             Class className = Class.forName(mItem.ActivityClassName);
                             Intent intent = new Intent(getApplicationContext(), className);
                             startActivity(intent);
-                        } catch(Exception e) {
+                        } catch (Exception e) {
                             Toast.makeText(v.getContext(), "Work In Progress", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
 
-                textView = ((TextView) itemView.findViewById(R.id.grid_item_name));
+                textView = ((TextView) itemView.findViewById(R.id.dashboard_gird_item_title));
+                imageView = ((ImageView) itemView.findViewById(R.id.dashboard_gird_item_image));
             }
 
             public void setItem(DashboardItem item) {
                 mItem = item;
-                textView.setText(mItem.DisplayName);
+                textView.setText(mItem.Title);
+                imageView.setImageResource(mItem.ImageResourceId);
             }
         }
     }
 
     private class DashboardItem {
-        public String DisplayName;
+        public String Title;
+        public int ImageResourceId;
         public String ActivityClassName;
 
-        public DashboardItem(String displayName, String activityClassName) {
-            this.DisplayName = displayName;
+        public DashboardItem(String displayName, int imageResourceId, String activityClassName) {
+            this.Title = displayName;
+            this.ImageResourceId = imageResourceId;
             this.ActivityClassName = activityClassName;
         }
     }
