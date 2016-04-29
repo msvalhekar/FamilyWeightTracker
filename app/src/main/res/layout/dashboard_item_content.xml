@@ -8,23 +8,37 @@
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_gravity="center"
-        android:layout_width="fill_parent"
-        android:layout_height="100dp"
-        android:layout_margin="5dp"
-        card_view:cardCornerRadius="2dp"
-        card_view:contentPadding="10dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        card_view:cardCornerRadius="2dp">
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:id="@+id/dashboard_gird_item_image"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:src="@drawable/contact_default"/>
 
             <TextView
-                android:id="@+id/grid_item_name"
-                android:layout_width="wrap_content"
+                android:id="@+id/dashboard_gird_item_title"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:layout_alignParentTop="true"/>
+                android:textSize="20dp"
+                android:layout_margin="10dp"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="Item Title"/>
 
-        </RelativeLayout>
+        </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>
