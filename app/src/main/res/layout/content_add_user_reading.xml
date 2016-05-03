@@ -37,7 +37,7 @@
                     android:layout_weight="1"
                     android:gravity="left|center_vertical"
                     android:textStyle="bold"
-                    android:text="Reading for"/>
+                    android:text="@string/add_user_reading_sequence_label"/>
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/add_reading_sequence"
                     android:layout_width="match_parent"
@@ -56,7 +56,7 @@
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
                     android:textStyle="bold"
-                    android:text="Weight"/>
+                    android:text="@string/add_user_reading_weight_label"/>
                 <NumberPicker
                     android:id="@+id/add_reading_weight_picker"
                     android:layout_width="match_parent"
@@ -80,7 +80,7 @@
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
                     android:textStyle="bold"
-                    android:text="Height"/>
+                    android:text="@string/add_user_reading_height_label"/>
                 <NumberPicker
                     android:id="@+id/add_reading_height_picker"
                     android:layout_width="match_parent"

@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:maxLength="8"
                 android:layout_gravity="center_vertical"
-                android:hint="(nick name)"
+                android:hint="@string/add_preg_user_name_hint"
                 android:inputType="textPersonName"
                 android:layout_row="0"
                 android:layout_column="1"/>
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_row="1"
                 android:layout_column="0"
-                android:text="Date Of Birth"/>
+                android:text="@string/add_preg_user_dob_label"/>
 
             <Button
                 android:id="@+id/add_user_dob"
@@ -86,7 +86,7 @@
                 android:layout_row="1"
                 android:layout_column="1"
                 android:textAllCaps="false"
-                android:text="(dd-MM-yyyy [age])" />
+                android:text="@string/add_preg_user_dob_default_value" />
 
             <CheckBox
                 android:id="@+id/add_user_set_reminder"
@@ -97,7 +97,7 @@
                 android:layout_columnSpan="2"
                 android:layout_gravity="start"
                 android:textAlignment="viewStart"
-                android:text="Enable reminder">
+                android:text="@string/add_preg_user_reminder_label">
             </CheckBox>
 
             <GridLayout
@@ -111,7 +111,7 @@
                     android:layout_height="match_parent"
                     android:layout_row="3"
                     android:layout_column="0"
-                    android:text="Remind on every"/>
+                    android:text="@string/add_preg_user_reminder_period_label"/>
 
                 <Button
                     android:id="@+id/add_user_reminder_day"
@@ -120,7 +120,7 @@
                     android:gravity="left|center"
                     android:layout_row="3"
                     android:layout_column="1"
-                    android:text="(dayOfWeek)" />
+                    android:text="@string/add_preg_user_reminder_period_default_value" />
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/add_user_reminder_day_spinner"
@@ -134,7 +134,7 @@
                     android:layout_height="match_parent"
                     android:layout_row="4"
                     android:layout_column="0"
-                    android:text="Remind at"/>
+                    android:text="@string/add_preg_user_reminder_time_label"/>
 
                 <Button
                     android:id="@+id/add_user_reminder_time"
@@ -143,7 +143,7 @@
                     android:gravity="left|center"
                     android:layout_row="4"
                     android:layout_column="1"
-                    android:text="(timeOfDay)" />
+                    android:text="@string/add_preg_user_reminder_time_default_value" />
             </GridLayout>
         </GridLayout>
     </ScrollView>

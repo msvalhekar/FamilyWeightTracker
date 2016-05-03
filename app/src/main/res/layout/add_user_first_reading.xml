@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:gravity="center_horizontal"
-        android:text="Week 0 : Pre-Pregnancy"/>
+        android:text="@string/add_user_first_reading_label"/>
 
     <View style="@style/Divider"/>
 
@@ -27,7 +27,7 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
                 android:textStyle="bold"
-                android:text="Weight"/>
+                android:text="@string/add_user_first_reading_weight_label"/>
 
             <EditText
                 android:id="@+id/add_first_reading_weight"
@@ -48,12 +48,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="kgs" />
+                    android:text="@string/add_user_first_reading_weight_unit_kg" />
                 <RadioButton
                     android:id="@+id/add_first_reading_weight_unit_lb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="lbs" />
+                    android:text="@string/add_user_first_reading_weight_unit_lbs" />
             </RadioGroup>
         </TableRow>
 
@@ -65,7 +65,7 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
                 android:textStyle="bold"
-                android:text="Height"/>
+                android:text="@string/add_user_first_reading_height_label"/>
             <EditText
                 android:id="@+id/add_first_reading_height"
                 android:layout_width="match_parent"
@@ -84,12 +84,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="cms" />
+                    android:text="@string/add_user_first_reading_height_unit_cms" />
                 <RadioButton
                     android:id="@+id/add_first_reading_weight_unit_inch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="inches" />
+                    android:text="@string/add_user_first_reading_height_unit_inches" />
             </RadioGroup>
         </TableRow>
     </TableLayout>
