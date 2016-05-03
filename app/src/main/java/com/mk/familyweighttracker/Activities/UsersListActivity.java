@@ -232,6 +232,8 @@ public class UsersListActivity extends AppCompatActivity {
             }
 
             private void setBmiControl() {
+                if(Double.isNaN(mUser.getBmi())) return;
+
                 TextView bmiView = ((TextView) mView.findViewById(R.id.list_item_bmi));
                 bmiView.setText("BMI: " + mUser.getBmiStr());
 
@@ -240,14 +242,11 @@ public class UsersListActivity extends AppCompatActivity {
                 bmiCategoryView.setText(weightCategory.toString());
                 if(weightCategory == BodyWeightCategory.UnderWeight) {
                     bmiCategoryView.setBackgroundColor(Color.rgb(255,255,153));
-                } else
-                if(weightCategory == BodyWeightCategory.Normal) {
+                } else if(weightCategory == BodyWeightCategory.Normal) {
                     bmiCategoryView.setBackgroundColor(Color.rgb(153,255,153));
-                } else
-                if(weightCategory == BodyWeightCategory.OverWeight) {
+                } else if(weightCategory == BodyWeightCategory.OverWeight) {
                     bmiCategoryView.setBackgroundColor(Color.rgb(255,255,153));
-                } else
-                if(weightCategory == BodyWeightCategory.Obese) {
+                } else if(weightCategory == BodyWeightCategory.Obese) {
                     bmiCategoryView.setBackgroundColor(Color.rgb(255,102,102));
                 }
             }
@@ -258,19 +257,16 @@ public class UsersListActivity extends AppCompatActivity {
             }
 
             private void setAgeControl() {
-                String dateOfBirthValue = "";
                 String ageValue = "";
                 if(mUser.dateOfBirth != null) {
-                    dateOfBirthValue = mUser.getDateOfBirthStr();
                     ageValue = Utility.calculateAge(mUser.dateOfBirth);
                 }
                 ((TextView) mView.findViewById(R.id.list_item_age)).setText(ageValue);
-                ((TextView) mView.findViewById(R.id.list_item_dob)).setText(dateOfBirthValue);
             }
 
             private void setHeightControl() {
                 int currentHeight = 0;
-                String heightValue = "Ht: NA";
+                String heightValue = "";
                 UserReading latestReading = mUser.getLatestReading();
                 if(latestReading != null) {
                     currentHeight = latestReading.Height;
@@ -297,7 +293,7 @@ public class UsersListActivity extends AppCompatActivity {
 
             private void setWeightControl() {
                 double currentWeight = 0;
-                String weightValue = "Wt: NA";
+                String weightValue = "";
                 UserReading latestReading = mUser.getLatestReading();
                 if(latestReading != null) {
                     currentWeight = latestReading.Weight;
