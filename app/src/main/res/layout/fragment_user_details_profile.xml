@@ -5,7 +5,7 @@
     android:layout_height="match_parent" >
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:context=".Fragments.UserDetailsProfileFragment">
 
@@ -189,7 +189,7 @@
             android:id="@+id/remove_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="end|bottom"
             app:backgroundTint="@color/colorPrimaryDark"
             android:src="@android:drawable/ic_menu_delete"/>
     </LinearLayout>

@@ -126,6 +126,7 @@
                     android:id="@+id/add_user_reminder_day_spinner"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
+                    android:spinnerMode="dialog"
                     />
 
                 <TextView
