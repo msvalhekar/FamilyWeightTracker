@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -44,6 +45,7 @@ import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.Utility;
+import com.mk.familyweighttracker.Models.NewUserViewModel;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
@@ -509,36 +511,7 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
 
             // showProgress(true);
             mAddNewUserTask = new AddNewUserTask();
-            mAddNewUserTask.execute((Void) null);
-        }
-    }
-
-    public class NewUserViewModel {
-        public long Id;
-        public byte[] ImageBytes;
-        public String Name;
-        public boolean IsMale;
-        public TrackingPeriod TrackingPeriod;
-        public boolean EnableReminder;
-        public int ReminderDay;
-        public int ReminderHour;
-        public int ReminderMinute;
-        public Date DateOfBirth;
-
-        public User mapToUser() {
-            User user = new User(0);
-            user.name = Name;
-            user.imageBytes = ImageBytes;
-            user.dateOfBirth = DateOfBirth;
-            user.isMale = IsMale;
-            user.trackingPeriod = TrackingPeriod;
-            user.enableReminder = EnableReminder;
-            user.reminderDay = ReminderDay;
-            user.reminderHour = ReminderHour;
-            user.reminderMinute = ReminderMinute;
-            user.weightUnit = WeightUnit.kg;
-            user.heightUnit = HeightUnit.cm;
-            return user;
+            mAddNewUserTask.execute();
         }
     }
 
@@ -556,8 +529,9 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
             //showProgress(false);
 
             if (success) {
+
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("newUserId", mNewUser.Id);
+                returnIntent.putExtra(UsersListActivity.NEW_USER_ID_KEY, mNewUser.Id);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             } else {

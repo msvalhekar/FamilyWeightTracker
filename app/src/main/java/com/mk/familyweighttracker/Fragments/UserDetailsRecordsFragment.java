@@ -22,10 +22,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mk.familyweighttracker.Activities.AddReadingActivity;
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Models.User;
@@ -47,12 +47,10 @@ import java.util.List;
  */
 public class UserDetailsRecordsFragment extends Fragment implements OnNewReadingAdded {
 
+    private static final int NEW_READING_ADDED_REQUEST = 1;
+
     private long mSelectedUserId;
     private User mSelectedUser;
-    private UserReading mNewUserReading = new UserReading();
-    private long mNewSequenceValue;
-    private double mNewWeightValue;
-    private int mNewHeightValue;
 
     private List<UserReading> userReadingList = new ArrayList<>();
     List<WeekWeightGainRange> mWeekWeightGainRangeList;
@@ -96,353 +94,11 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
                         .show();
                     return;
                 }
-                acceptReading(getContext());
+                Intent intent = new Intent(getContext(), AddReadingActivity.class);
+                intent.putExtra(UserDetailActivity.ARG_USER_ID, mSelectedUserId);
+                startActivityForResult(intent, NEW_READING_ADDED_REQUEST);
             }
         });
-    }
-
-    private void acceptReading(final Context context) {
-        UserReading lastReading = userReadingList.get(0);
-
-        mNewUserReading.UserId = mSelectedUserId;
-        mNewUserReading.Sequence = lastReading.Sequence +1;
-        mNewUserReading.TakenOn = new Date();
-        mNewUserReading.Weight = lastReading.Weight;
-        mNewUserReading.Height = lastReading.Height;
-
-        final View dialogView = LayoutInflater.from(context).inflate(R.layout.add_user_reading, null);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("E dd-MMM-yyyy");
-
-        initMeasuredOnDateControl(dialogView);
-
-        initWeekSequenceControl(dialogView, lastReading);
-
-        initWeightSequenceControl(dialogView, lastReading);
-
-        initHeightSequenceControl(dialogView, lastReading);
-
-        final android.support.v7.app.AlertDialog alertDialog = new AlertDialog.Builder(context)
-                .setView(dialogView)
-                .setCancelable(false)
-                .setTitle(dateFormat.format(mNewUserReading.TakenOn))
-                .setPositiveButton("ADD", null)
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        })
-                .create();
-
-        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                        .setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                new UserService().addReading(mNewUserReading);
-
-                                onNewReadingAdded();
-
-                                mIsOriginator = true;
-                                ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
-                                mIsOriginator = false;
-
-                                alertDialog.dismiss();
-                            }
-                        });
-            }
-        });
-        alertDialog.show();
-    }
-
-    private void initMeasuredOnDateControl(View view) {
-        final Button dobView = ((Button) view.findViewById(R.id.add_reading_taken_on_btn));
-        final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
-        dobView.setText(dateFormatter.format(mNewUserReading.TakenOn));
-
-        dobView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar calendar = Calendar.getInstance();
-                calendar.setTime(mNewUserReading.TakenOn);
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(v.getContext(),
-                        new DatePickerDialog.OnDateSetListener() {
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                Calendar newDate = Calendar.getInstance();
-                                newDate.set(year, monthOfYear, dayOfMonth);
-
-                                mNewUserReading.TakenOn = newDate.getTime();
-                                dobView.setText(dateFormatter.format(mNewUserReading.TakenOn));
-                            }
-                        },
-                        calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH));
-                datePickerDialog.getDatePicker().setMinDate(mSelectedUser.dateOfBirth.getTime());
-                datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
-                datePickerDialog.show();
-            }
-        });
-    }
-
-    private void initWeekSequenceControl(final View view, UserReading lastReading) {
-        final NumberPicker sequencePicker = getWeekSequenceControl(view, lastReading);
-
-        final Button seqButton = ((Button) view.findViewById(R.id.add_reading_sequence_btn));
-        seqButton.setText(String.valueOf(mNewUserReading.Sequence));
-        seqButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int indexOfNextSequence = Arrays.asList(sequencePicker.getDisplayedValues()).indexOf(String.valueOf(mNewUserReading.Sequence));
-                sequencePicker.setValue(indexOfNextSequence);
-
-                LinearLayout layout = new LinearLayout(v.getContext());
-                layout.setOrientation(LinearLayout.VERTICAL);
-
-                if (sequencePicker.getParent() != null)
-                    ((ViewGroup) sequencePicker.getParent()).removeView(sequencePicker);
-                layout.addView(sequencePicker);
-
-                ViewGroup.LayoutParams params = sequencePicker.getLayoutParams();
-                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                sequencePicker.setLayoutParams(params);
-                layout.setHorizontalGravity(Gravity.CENTER);
-
-                AlertDialog alertDialog = new AlertDialog.Builder(view.getContext())
-                        .setView(layout)
-                        .setCancelable(false)
-                        .setMessage("Week Number")
-                        .setPositiveButton("SET", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mNewUserReading.Sequence = mNewSequenceValue;
-                                ((Button) view.findViewById(R.id.add_reading_sequence_btn))
-                                        .setText(String.valueOf(mNewUserReading.Sequence));
-                            }
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .create();
-                alertDialog.show();
-
-                TextView messageView = (TextView)alertDialog.findViewById(android.R.id.message);
-                if(messageView != null)
-                    messageView.setGravity(Gravity.CENTER);
-            }
-        });
-    }
-
-    private NumberPicker getWeekSequenceControl(final View view, UserReading lastReading) {
-        NumberPicker picker = new NumberPicker(view.getContext());
-        picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-
-        long startFrom = 1;
-        long endAt = 40;
-        final long incrementFactor = 1;
-
-        final List<String> itemsToDisplay = new ArrayList<>();
-        final List<String> pendingItems = new ArrayList<>();
-        for (long seqValue = startFrom; seqValue <= endAt; seqValue += incrementFactor) {
-            boolean found = false;
-            for (UserReading reading : userReadingList) {
-                if (reading.Sequence == seqValue) {
-                    found = true;
-                }
-            }
-            if(!found) {
-                itemsToDisplay.add(String.valueOf(seqValue));
-                if(seqValue < lastReading.Sequence)
-                    pendingItems.add(String.valueOf(seqValue));
-            }
-        }
-
-        String[] values = itemsToDisplay.toArray(new String[itemsToDisplay.size()]);
-        picker.setMinValue(0);
-        picker.setMaxValue(values.length - 1);
-        picker.setDisplayedValues(values);
-        picker.setWrapSelectorWheel(false);
-
-        picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                mNewSequenceValue = Long.valueOf(itemsToDisplay.get(newVal));
-            }
-        });
-
-        String pendingLabel = pendingItems.size() > 0 ? "Pending week(s): " : "";
-        ((TextView)view.findViewById(R.id.add_reading_week_pending))
-                .setText(pendingLabel + TextUtils.join(", ", pendingItems));
-
-        return picker;
-    }
-
-    private void initWeightSequenceControl(final View view, UserReading lastReading) {
-        final NumberPicker valuePicker = getWeightSequenceControl(view, lastReading);
-
-        ((TextView) view.findViewById(R.id.add_reading_weight_unit_label)).setText(mSelectedUser.weightUnit.toString());
-
-        final Button buttonView = ((Button) view.findViewById(R.id.add_reading_weight_btn));
-        buttonView.setText(String.valueOf(mNewUserReading.Weight));
-
-        buttonView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int indexOfNextValue = Arrays.asList(valuePicker.getDisplayedValues()).indexOf(String.format("%.2f", mNewUserReading.Weight));
-                valuePicker.setValue(indexOfNextValue);
-
-                LinearLayout layout = new LinearLayout(v.getContext());
-                layout.setOrientation(LinearLayout.VERTICAL);
-
-                if (valuePicker.getParent() != null)
-                    ((ViewGroup) valuePicker.getParent()).removeView(valuePicker);
-                layout.addView(valuePicker);
-
-                ViewGroup.LayoutParams params = valuePicker.getLayoutParams();
-                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                valuePicker.setLayoutParams(params);
-                layout.setHorizontalGravity(Gravity.CENTER);
-
-                AlertDialog alertDialog = new AlertDialog.Builder(view.getContext())
-                        .setView(layout)
-                        .setCancelable(false)
-                        .setMessage("Weight")
-                        .setPositiveButton("SET", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mNewUserReading.Weight = mNewWeightValue;
-                                ((Button) view.findViewById(R.id.add_reading_weight_btn))
-                                        .setText(String.valueOf(mNewUserReading.Weight));
-                            }
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .create();
-                alertDialog.show();
-
-                TextView messageView = (TextView) alertDialog.findViewById(android.R.id.message);
-                if (messageView != null)
-                    messageView.setGravity(Gravity.CENTER);
-            }
-        });
-    }
-
-    private NumberPicker getWeightSequenceControl(final View view, UserReading lastReading) {
-        NumberPicker picker = new NumberPicker(view.getContext());
-        picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-
-        double distance = 5; //mSelectedUser.weightUnit == WeightUnit.lb ? 10 : 5;
-        double startFrom = lastReading.Weight - distance;
-        double endAt = lastReading.Weight + distance;
-        final double incrementFactor = 0.05; // 50 grams
-
-        final List<String> itemsToDisplay = new ArrayList<>();
-        for (double seqValue = lastReading.Weight; seqValue >= startFrom; seqValue -= incrementFactor) {
-            itemsToDisplay.add(0, String.format("%1$.2f", seqValue));
-        }
-        for (double seqValue = lastReading.Weight + incrementFactor; seqValue <= endAt; seqValue += incrementFactor) {
-            itemsToDisplay.add(String.format("%1$.2f", seqValue));
-        }
-
-        String[] values = itemsToDisplay.toArray(new String[itemsToDisplay.size()]);
-        picker.setMinValue(0);
-        picker.setMaxValue(values.length - 1);
-        picker.setDisplayedValues(values);
-        picker.setWrapSelectorWheel(false);
-
-        picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                mNewWeightValue = Double.valueOf(itemsToDisplay.get(newVal));
-            }
-        });
-
-        return picker;
-    }
-
-    private void initHeightSequenceControl(final View view, UserReading lastReading) {
-        final NumberPicker valuePicker = getHeightSequenceControl(view, lastReading);
-
-        ((TextView) view.findViewById(R.id.add_reading_height_unit_label)).setText(mSelectedUser.heightUnit.toString());
-
-        final Button buttonView = ((Button) view.findViewById(R.id.add_reading_height_btn));
-        buttonView.setText(String.valueOf(mNewUserReading.Height));
-
-        buttonView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int indexOfNextValue = Arrays.asList(valuePicker.getDisplayedValues()).indexOf(String.valueOf(mNewUserReading.Height));
-                valuePicker.setValue(indexOfNextValue);
-
-                LinearLayout layout = new LinearLayout(v.getContext());
-                layout.setOrientation(LinearLayout.VERTICAL);
-
-                if (valuePicker.getParent() != null)
-                    ((ViewGroup) valuePicker.getParent()).removeView(valuePicker);
-                layout.addView(valuePicker);
-
-                ViewGroup.LayoutParams params = valuePicker.getLayoutParams();
-                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                valuePicker.setLayoutParams(params);
-                layout.setHorizontalGravity(Gravity.CENTER);
-
-                AlertDialog alertDialog = new AlertDialog.Builder(view.getContext())
-                        .setView(layout)
-                        .setCancelable(false)
-                        .setMessage("Weight")
-                        .setPositiveButton("SET", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mNewUserReading.Height = mNewHeightValue;
-                                ((Button) view.findViewById(R.id.add_reading_height_btn))
-                                        .setText(String.valueOf(mNewUserReading.Height));
-                            }
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .create();
-                alertDialog.show();
-
-                TextView messageView = (TextView) alertDialog.findViewById(android.R.id.message);
-                if (messageView != null)
-                    messageView.setGravity(Gravity.CENTER);
-            }
-        });
-    }
-
-    private NumberPicker getHeightSequenceControl(final View view, UserReading lastReading) {
-        NumberPicker picker = new NumberPicker(view.getContext());
-        picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-
-        double startFrom = lastReading.Height - 5;
-        double endAt = lastReading.Height + 5;
-        final double incrementFactor = 1;
-
-        final List<String> itemsToDisplay = new ArrayList<>();
-        for (double seqValue = lastReading.Height; seqValue >= startFrom; seqValue -= incrementFactor) {
-            itemsToDisplay.add(0, String.format("%.0f", seqValue));
-        }
-        for (double seqValue = lastReading.Height + incrementFactor; seqValue <= endAt; seqValue += incrementFactor) {
-            itemsToDisplay.add(String.format("%.0f", seqValue));
-        }
-
-        String[] values = itemsToDisplay.toArray(new String[itemsToDisplay.size()]);
-        picker.setMinValue(0);
-        picker.setMaxValue(values.length - 1);
-        picker.setDisplayedValues(values);
-        picker.setWrapSelectorWheel(false);
-
-        picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                mNewHeightValue = Integer.valueOf(itemsToDisplay.get(newVal));
-            }
-        });
-
-        return picker;
     }
 
     private boolean mIsOriginator = false;
@@ -562,6 +218,14 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         // Make sure the request was successful
         if (resultCode != Activity.RESULT_OK)
             return;
+
+        if(requestCode == NEW_READING_ADDED_REQUEST) {
+            onNewReadingAdded();
+
+            mIsOriginator = true;
+            ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
+            mIsOriginator = false;
+        }
     }
 
     public class SimpleItemRecyclerViewAdapter
