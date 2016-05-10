@@ -45,9 +45,9 @@
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="4"
+                android:columnCount="5"
                 android:rowCount="1"
-                android:stretchColumns="*">
+                android:stretchColumns="0,1,2,3">
 
                 <TableRow>
                     <LinearLayout
@@ -124,6 +124,23 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12dp"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_row="0"
+                        android:layout_column="4"
+                        >
+                        <ImageButton
+                            android:id="@+id/user_record_edit_button"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="right|center_vertical"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/edit_icon"
+                            android:background="#80FFFFFF"
+                            />
                     </LinearLayout>
                 </TableRow>
             </TableLayout>

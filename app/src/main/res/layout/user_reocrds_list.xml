@@ -15,8 +15,8 @@
         android:id="@+id/user_record_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
         app:layoutManager="LinearLayoutManager"
         tools:context=".Activities.UsersListActivity"
         tools:listitem="@layout/user_records_list_record_content" />

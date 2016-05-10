@@ -136,7 +136,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         mRecyclerViewAdapter.notifyDataSetChanged();
 
 
-        mFragmentView.findViewById(R.id.user_records_list_record_content_help)
+        mFragmentView.findViewById(R.id.help_record_information)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
