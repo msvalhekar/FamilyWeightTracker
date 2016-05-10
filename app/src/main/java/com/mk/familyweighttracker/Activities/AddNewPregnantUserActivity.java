@@ -2,6 +2,9 @@ package com.mk.familyweighttracker.Activities;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -19,9 +22,9 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
@@ -34,16 +37,11 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
-import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.NewUserViewModel;
 import com.mk.familyweighttracker.Models.User;
@@ -498,45 +496,71 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
         HashMap<String, ArrayList<String>> errors = validateInput();
 
         if (errors.size() > 0) {
-            for (String key: errors.keySet()) {
-                if(key == "Name") {
+            for (String key : errors.keySet()) {
+                if (key == "Name") {
                     mNameView.setError(((ArrayList<String>) errors.get(key)).get(0));
                     mNameView.requestFocus();
                     break;
                 }
             }
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-
-            // showProgress(true);
             mAddNewUserTask = new AddNewUserTask();
-            mAddNewUserTask.execute();
+            mAddNewUserTask.execute(this);
         }
     }
 
-    public class AddNewUserTask extends AsyncTask<Void, Void, Boolean>
+    public void AddNewUser() {
+        mNewUser.Id = new UserService().add(mNewUser.mapToUser());
+
+        //setReminderNotification(mNewUser.Id);
+
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(UsersListActivity.NEW_USER_ID_KEY, mNewUser.Id);
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
+    }
+
+    private void setReminderNotification(long userId) {
+        User user = new UserService().get(userId);
+        if(user == null || !user.enableReminder) return;
+
+        String titleMessage = user.name + " - Week " + 0 + " - Record Weight";
+        String textMessage = "";
+        android.support.v7.app.NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                .setContentTitle(titleMessage)
+                .setSmallIcon(R.drawable.notification_icon)
+                .setContentText(textMessage)
+                .setAutoCancel(true);
+
+        Intent intent = new Intent(this, AddReadingActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(AddReadingActivity.class);
+        stackBuilder.addNextIntent(intent);
+
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+
+        NotificationManager manager = ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE));
+        manager.notify(111, builder.build());
+    }
+
+    public class AddNewUserTask extends AsyncTask<AddNewPregnantUserActivity, Void, Boolean>
     {
+        AddNewPregnantUserActivity activity;
+
         @Override
-        protected Boolean doInBackground(Void... params) {
-            mNewUser.Id = new UserService().add(mNewUser.mapToUser());
+        protected Boolean doInBackground(AddNewPregnantUserActivity... params) {
+            activity = params[0];
             return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             mAddNewUserTask = null;
-            //showProgress(false);
 
             if (success) {
-
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra(UsersListActivity.NEW_USER_ID_KEY, mNewUser.Id);
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
+                activity.AddNewUser();
             } else {
-//                HeightView.setError("error_incorrect_password");
-//                HeightView.requestFocus();
             }
         }
     }

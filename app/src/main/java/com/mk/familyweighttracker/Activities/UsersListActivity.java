@@ -12,6 +12,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -52,6 +53,7 @@ public class UsersListActivity extends AppCompatActivity {
 
     private static final int NEW_USER_ADDED_REQUEST = 1;
     private static final int USER_DATA_CHANGED_REQUEST = 2;
+    public static final String NEW_USER_ID_KEY = "newUserId";
 
     private RecyclerView mRecyclerView;
     private SimpleItemRecyclerViewAdapter mRecyclerViewAdapter;
@@ -80,8 +82,13 @@ public class UsersListActivity extends AppCompatActivity {
 
             // Check which request we're responding to
         if (requestCode == NEW_USER_ADDED_REQUEST) {
-            // update the list for new record
+            // update the list for new user
             onRefreshList();
+
+            long newUserId = data.getLongExtra(NEW_USER_ID_KEY, 0);
+            if(newUserId != 0) {
+                setReminderNotification(newUserId);
+            }
         }
         if (requestCode == USER_DATA_CHANGED_REQUEST) {
             // update the list for new record
@@ -90,6 +97,12 @@ public class UsersListActivity extends AppCompatActivity {
                 onRefreshList();
             }
         }
+    }
+
+    private void setReminderNotification(long userId) {
+        User user = new UserService().get(userId);
+        if(user == null || !user.enableReminder)
+            return;
     }
 
     private void initToolbarControl() {
@@ -148,16 +161,10 @@ public class UsersListActivity extends AppCompatActivity {
         showEmptyListControl();
 
         mRecyclerViewAdapter.notifyDataSetChanged();
-
-        int userCount = mUserList.size();
-        if(userCount > 0)
-            mRecyclerView.scrollToPosition(userCount -1);
     }
 
     private class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-
-        //private static final int EMPTY_VIEW = 1;
 
         public SimpleItemRecyclerViewAdapter() {
         }
