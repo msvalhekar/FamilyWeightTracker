@@ -106,7 +106,7 @@ public class UserModel extends Model {
         user.reminderMinute = this.reminderMinute;
 
         for (UserReadingModel reading: getReadings()) {
-            user.addReading(reading.Sequence, reading.Weight, reading.Height, reading.TakenOn);
+            user.addReading(reading.getId(), reading.Sequence, reading.Weight, reading.Height, reading.TakenOn);
         }
         return user;
     }
@@ -127,7 +127,7 @@ public class UserModel extends Model {
         return userModel;
     }
 
-    public static void update(long userId, WeightUnit weightUnit, HeightUnit heightUnit) {
+    public static void updateUnits(long userId, WeightUnit weightUnit, HeightUnit heightUnit) {
         UserModel userModel = UserModel.get(userId);
         userModel.weightUnit = weightUnit;
         userModel.heightUnit = heightUnit;

@@ -50,7 +50,11 @@ public class UserRepository {
         UserReadingModel.add(reading);
     }
 
-    public void update(long userId, WeightUnit weightUnit, HeightUnit heightUnit) {
-        UserModel.update(userId, weightUnit, heightUnit);
+    public void deleteReading(long readingId) {
+        UserReadingModel.delete(readingId);
+    }
+
+    public void updateUnits(long userId, WeightUnit weightUnit, HeightUnit heightUnit) {
+        UserModel.updateUnits(userId, weightUnit, heightUnit);
     }
 }

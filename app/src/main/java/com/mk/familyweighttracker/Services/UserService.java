@@ -38,7 +38,11 @@ public class UserService {
         userRepository.addReading(reading);
     }
 
-    public void update(long userId, WeightUnit weightUnit, HeightUnit heightUnit) {
-        userRepository.update(userId, weightUnit, heightUnit);
+    public void deleteReading(long readingId) {
+        userRepository.deleteReading(readingId);
+    }
+
+    public void updateUnits(long userId, WeightUnit weightUnit, HeightUnit heightUnit) {
+        userRepository.updateUnits(userId, weightUnit, heightUnit);
     }
 }

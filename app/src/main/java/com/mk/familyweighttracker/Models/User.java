@@ -89,9 +89,9 @@ public class User {
         return getStartingHeight() / divideBy;
     }
 
-    public void addReading(long sequence, double weight, int height, Date takenOn)
+    public void addReading(long id, long sequence, double weight, int height, Date takenOn)
     {
-        UserReading reading = new UserReading(mId, sequence, weight, height, takenOn);
+        UserReading reading = new UserReading(id, mId, sequence, weight, height, takenOn);
         mReadings.add(reading);
     }
 
@@ -103,6 +103,14 @@ public class User {
             }
         });
         return mReadings;
+    }
+
+    public UserReading getReadingById(long id) {
+        List<UserReading> readings = getReadings(true);
+        for (int i = 0; i < readings.size(); i++) {
+            if(readings.get(i).Id == id) return readings.get(i);
+        }
+        return null;
     }
 
     public UserReading getLatestReading() {

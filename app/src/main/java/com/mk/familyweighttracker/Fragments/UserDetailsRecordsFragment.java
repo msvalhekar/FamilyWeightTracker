@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -48,6 +49,8 @@ import java.util.List;
 public class UserDetailsRecordsFragment extends Fragment implements OnNewReadingAdded {
 
     private static final int NEW_READING_ADDED_REQUEST = 1;
+    private static final int READING_EDIT_REQUEST = 2;
+    public static final String ARG_EDIT_READING_ID = "EditReadingId";
 
     private long mSelectedUserId;
     private User mSelectedUser;
@@ -226,6 +229,20 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
             ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
             mIsOriginator = false;
         }
+        else if(requestCode == READING_EDIT_REQUEST) {
+            mSelectedUser = new UserService().get(mSelectedUserId);
+
+            userReadingList.clear();
+            List<UserReading> latestReadings = mSelectedUser.getReadings(false);
+            for (int i=0; i< latestReadings.size(); i++) {
+                userReadingList.add(latestReadings.get(i));
+            }
+            mRecyclerViewAdapter.notifyDataSetChanged();
+
+            mIsOriginator = true;
+            ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
+            mIsOriginator = false;
+        }
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -289,6 +306,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
                 setPeriodControl();
                 setActualWeightControl();
                 setExpectedWeightControl();
+                setEditControl();
             }
 
             private void setExpectedWeightControl() {
@@ -360,6 +378,19 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 ((TextView) mView.findViewById(R.id.record_item_taken_on))
                         .setText(dateFormat.format(mUserReading.TakenOn));
+            }
+
+            private void setEditControl() {
+                ImageButton button = ((ImageButton) mView.findViewById(R.id.user_record_edit_button));
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(), AddReadingActivity.class);
+                        intent.putExtra(UserDetailActivity.ARG_USER_ID, mSelectedUserId);
+                        intent.putExtra(ARG_EDIT_READING_ID, mUserReading.Id);
+                        startActivityForResult(intent, READING_EDIT_REQUEST);
+                    }
+                });
             }
         }
     }

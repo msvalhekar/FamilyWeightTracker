@@ -44,11 +44,11 @@
     <ScrollView
         android:id="@+id/add_user_reading_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:rowCount="4"
             android:columnCount="3"
             android:orientation="horizontal">
@@ -147,7 +147,16 @@
                 android:layout_column="2"
                 android:textStyle="bold"
                 android:text="@string/add_user_reading_height_unit_label"/>
-
         </GridLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/add_reading_delete_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete"/>
+    </LinearLayout>
 </LinearLayout>

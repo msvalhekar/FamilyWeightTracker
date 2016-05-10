@@ -4,6 +4,7 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Delete;
+import com.activeandroid.query.Select;
 import com.mk.familyweighttracker.Models.UserReading;
 
 import java.util.Date;
@@ -32,8 +33,20 @@ public class UserReadingModel extends Model {
     @Column(name = "CreatedOn")
     public Date CreatedOn;
 
+    public static UserReadingModel get(long id) {
+        return new Select()
+                .from(UserReadingModel.class)
+                .where("Id = ?", id)
+                .executeSingle();
+    }
+
     public static void add(final UserReading reading) {
         UserReadingModel readingModel = new UserReadingModel();
+
+        UserReadingModel model = UserReadingModel.get(reading.Id);
+        if(model != null)
+            readingModel = model;
+
         readingModel.User = UserModel.get(reading.UserId);
         readingModel.Sequence = reading.Sequence;
         readingModel.Weight = reading.Weight;
@@ -42,6 +55,13 @@ public class UserReadingModel extends Model {
         readingModel.CreatedOn = new Date();
 
         readingModel.save();
+    }
+
+    public static void delete(long readingId) {
+        new Delete()
+                .from(UserReadingModel.class)
+                .where("Id = ? ", readingId)
+                .execute();
     }
 
     public static void deleteAllFor(long userId) {

@@ -208,7 +208,7 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
                                 userReading.Height = Integer.valueOf(heightString);
 
                                 new UserService().addReading(userReading);
-                                new UserService().update(mSelectedUserId, userWeightUnit[0], userHeightUnit[0]);
+                                new UserService().updateUnits(mSelectedUserId, userWeightUnit[0], userHeightUnit[0]);
 
                                 mUser = new UserService().get(mSelectedUserId);
                                 initPrePregnancyControls();

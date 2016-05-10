@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -19,7 +18,9 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.mk.familyweighttracker.Fragments.UserDetailsRecordsFragment;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
@@ -30,13 +31,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 public class AddReadingActivity extends AppCompatActivity {
 
+    private boolean bEditMode;
     private User mSelectedUser;
-    private UserReading mNewUserReading = new UserReading();
+    private UserReading mNewUserReading;
     private int mNewHeightValue;
     private double mNewWeightValue;
     private Long mNewSequenceValue;
@@ -45,26 +46,57 @@ public class AddReadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_user_reading);
+        setContentView(R.layout.activity_add_user_reading);
 
         initToolbarControl();
         activityView = findViewById(R.id.add_user_reading_layout);
 
         long userId = getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
         mSelectedUser = new UserService().get(userId);
-        UserReading lastReading = mSelectedUser.getLatestReading();
 
-        mNewUserReading.UserId = userId;
-        mNewUserReading.Sequence = lastReading.Sequence +1;
-        mNewUserReading.TakenOn = new Date();
-        mNewUserReading.Weight = lastReading.Weight;
-        mNewUserReading.Height = lastReading.Height;
+        long readingId = getIntent().getLongExtra(UserDetailsRecordsFragment.ARG_EDIT_READING_ID, 0);
+        mNewUserReading = mSelectedUser.getReadingById(readingId);
+
+        long previousSequence;
+        double previousWeight;
+        int previousHeight;
+        UserReading previousReading;
+
+        if(mNewUserReading == null) {
+            bEditMode = false;
+            previousReading = mSelectedUser.getLatestReading();
+
+            mNewUserReading = new UserReading();
+            mNewUserReading.UserId = userId;
+            mNewUserReading.Sequence = previousReading.Sequence + 1;
+            mNewUserReading.TakenOn = new Date();
+            mNewUserReading.Weight = previousReading.Weight;
+            mNewUserReading.Height = previousReading.Height;
+        } else {
+            bEditMode = true;
+            if(mNewUserReading.Sequence == 0) {
+                findViewById(R.id.add_reading_delete_button).setVisibility(View.GONE);
+
+                Toast.makeText(this, "Cannot change Pre-pregnancy reading", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            } else {
+                findViewById(R.id.add_reading_delete_button).setVisibility(View.VISIBLE);
+                previousReading = mSelectedUser.findReadingBefore(mNewUserReading.Sequence);
+            }
+        }
+
+        previousSequence = previousReading.Sequence;
+        previousWeight = previousReading.Weight;
+        previousHeight = previousReading.Height;
 
         initMeasuredOnDateControl();
-        initWeekSequenceControl(lastReading);
-        initWeightSequenceControl(lastReading);
-        initHeightSequenceControl(lastReading);
+        initWeekSequenceControl(previousSequence);
+        initWeightSequenceControl(previousWeight);
+        initHeightSequenceControl(previousHeight);
         initActionButtonControls();
+
+        setTitle(bEditMode ? "Edit Reading" : "Add Reading");
     }
 
     @Override
@@ -100,6 +132,25 @@ public class AddReadingActivity extends AppCompatActivity {
                         onAddReading();
                     }
                 });
+
+        findViewById(R.id.add_reading_delete_button)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new AlertDialog.Builder(v.getContext())
+                                .setTitle("Confirm delete")
+                                .setMessage("Are you sure you want to delete this reading?")
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        onDeleteReading();
+                                    }
+                                })
+                                .setNegativeButton("No", null)
+                                .create()
+                                .show();
+                    }
+                });
     }
 
     private void initMeasuredOnDateControl() {
@@ -133,7 +184,7 @@ public class AddReadingActivity extends AppCompatActivity {
         });
     }
 
-    private void initWeekSequenceControl(UserReading lastReading) {
+    private void initWeekSequenceControl(long lastReading) {
         final NumberPicker sequencePicker = getWeekSequenceControl(lastReading);
 
         final Button seqButton = ((Button) findViewById(R.id.add_reading_sequence_btn));
@@ -180,7 +231,7 @@ public class AddReadingActivity extends AppCompatActivity {
         });
     }
 
-    private NumberPicker getWeekSequenceControl(UserReading lastReading) {
+    private NumberPicker getWeekSequenceControl(long lastReading) {
         NumberPicker picker = new NumberPicker(activityView.getContext());
         picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
@@ -199,7 +250,7 @@ public class AddReadingActivity extends AppCompatActivity {
             }
             if(!found) {
                 itemsToDisplay.add(String.valueOf(seqValue));
-                if(seqValue < lastReading.Sequence)
+                if(seqValue < lastReading)
                     pendingItems.add(String.valueOf(seqValue));
             }
         }
@@ -224,7 +275,7 @@ public class AddReadingActivity extends AppCompatActivity {
         return picker;
     }
 
-    private void initWeightSequenceControl(UserReading lastReading) {
+    private void initWeightSequenceControl(double lastReading) {
         final NumberPicker valuePicker = getWeightSequenceControl(lastReading);
 
         ((TextView) findViewById(R.id.add_reading_weight_unit_label)).setText(mSelectedUser.weightUnit.toString());
@@ -274,20 +325,20 @@ public class AddReadingActivity extends AppCompatActivity {
         });
     }
 
-    private NumberPicker getWeightSequenceControl(UserReading lastReading) {
+    private NumberPicker getWeightSequenceControl(double lastReading) {
         NumberPicker picker = new NumberPicker(activityView.getContext());
         picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         double distance = 5; //mSelectedUser.weightUnit == WeightUnit.lb ? 10 : 5;
-        double startFrom = lastReading.Weight - distance;
-        double endAt = lastReading.Weight + distance;
+        double startFrom = lastReading - distance;
+        double endAt = lastReading + distance;
         final double incrementFactor = 0.05; // 50 grams
 
         final List<String> itemsToDisplay = new ArrayList<>();
-        for (double seqValue = lastReading.Weight; seqValue >= startFrom; seqValue -= incrementFactor) {
+        for (double seqValue = lastReading; seqValue >= startFrom; seqValue -= incrementFactor) {
             itemsToDisplay.add(0, String.format("%1$.2f", seqValue));
         }
-        for (double seqValue = lastReading.Weight + incrementFactor; seqValue <= endAt; seqValue += incrementFactor) {
+        for (double seqValue = lastReading + incrementFactor; seqValue <= endAt; seqValue += incrementFactor) {
             itemsToDisplay.add(String.format("%1$.2f", seqValue));
         }
 
@@ -307,7 +358,7 @@ public class AddReadingActivity extends AppCompatActivity {
         return picker;
     }
 
-    private void initHeightSequenceControl(UserReading lastReading) {
+    private void initHeightSequenceControl(int lastReading) {
         final NumberPicker valuePicker = getHeightSequenceControl(lastReading);
 
         ((TextView) findViewById(R.id.add_reading_height_unit_label)).setText(mSelectedUser.heightUnit.toString());
@@ -357,19 +408,19 @@ public class AddReadingActivity extends AppCompatActivity {
         });
     }
 
-    private NumberPicker getHeightSequenceControl(UserReading lastReading) {
+    private NumberPicker getHeightSequenceControl(int lastReading) {
         NumberPicker picker = new NumberPicker(activityView.getContext());
         picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
-        double startFrom = lastReading.Height - 5;
-        double endAt = lastReading.Height + 5;
+        double startFrom = lastReading - 5;
+        double endAt = lastReading + 5;
         final double incrementFactor = 1;
 
         final List<String> itemsToDisplay = new ArrayList<>();
-        for (double seqValue = lastReading.Height; seqValue >= startFrom; seqValue -= incrementFactor) {
+        for (double seqValue = lastReading; seqValue >= startFrom; seqValue -= incrementFactor) {
             itemsToDisplay.add(0, String.format("%.0f", seqValue));
         }
-        for (double seqValue = lastReading.Height + incrementFactor; seqValue <= endAt; seqValue += incrementFactor) {
+        for (double seqValue = lastReading + incrementFactor; seqValue <= endAt; seqValue += incrementFactor) {
             itemsToDisplay.add(String.format("%.0f", seqValue));
         }
 
@@ -391,6 +442,14 @@ public class AddReadingActivity extends AppCompatActivity {
 
     private void onAddReading() {
         new UserService().addReading(mNewUserReading);
+
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
+    }
+
+    private void onDeleteReading() {
+        new UserService().deleteReading(mNewUserReading.Id);
 
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);

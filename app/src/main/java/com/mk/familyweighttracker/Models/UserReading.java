@@ -16,8 +16,9 @@ public class UserReading {
     public UserReading () {
     }
 
-    public UserReading(long userId, long sequence, double weight, int height, Date takenOn)
+    public UserReading(long id, long userId, long sequence, double weight, int height, Date takenOn)
     {
+        Id = id;
         UserId = userId;
         Sequence = sequence;
         Weight = weight;
