@@ -26,6 +26,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mk.familyweighttracker.Activities.AddFirstReadingActivity;
 import com.mk.familyweighttracker.Activities.AddReadingActivity;
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
@@ -48,10 +49,6 @@ import java.util.List;
  */
 public class UserDetailsRecordsFragment extends Fragment implements OnNewReadingAdded {
 
-    private static final int NEW_READING_ADDED_REQUEST = 1;
-    private static final int READING_EDIT_REQUEST = 2;
-    public static final String ARG_EDIT_READING_ID = "EditReadingId";
-
     private long mSelectedUserId;
     private User mSelectedUser;
 
@@ -61,6 +58,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
     private View mFragmentView;
     private RecyclerView mRecyclerView;
     private SimpleItemRecyclerViewAdapter mRecyclerViewAdapter;
+    private boolean bFirstReadingChanged;
 
     public UserDetailsRecordsFragment() {
         // Required empty public constructor
@@ -93,13 +91,14 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
             @Override
             public void onClick(View view) {
                 if(userReadingList.size() == 0) {
-                    Toast.makeText(view.getContext(), "Add Pre-Pregnancy weight and height from Profile tab", Toast.LENGTH_LONG)
-                        .show();
-                    return;
+                    Intent intent = new Intent(getContext(), AddFirstReadingActivity.class);
+                    intent.putExtra(UserDetailActivity.ARG_USER_ID, mSelectedUserId);
+                    startActivityForResult(intent, UserDetailActivity.READING_ADD_REQUEST);
+                } else {
+                    Intent intent = new Intent(getContext(), AddReadingActivity.class);
+                    intent.putExtra(UserDetailActivity.ARG_USER_ID, mSelectedUserId);
+                    startActivityForResult(intent, UserDetailActivity.READING_ADD_REQUEST);
                 }
-                Intent intent = new Intent(getContext(), AddReadingActivity.class);
-                intent.putExtra(UserDetailActivity.ARG_USER_ID, mSelectedUserId);
-                startActivityForResult(intent, NEW_READING_ADDED_REQUEST);
             }
         });
     }
@@ -158,7 +157,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
 
             mFragmentView.findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
             ((TextView) mFragmentView.findViewById(R.id.empty_mesage_title)).setText("No data found.");
-            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_description)).setText("Add initial reading from 'Profile' tab.");
+            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_description)).setText("Add pre-pregnancy reading from 'Profile' tab.");
         }
     }
 
@@ -222,14 +221,19 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         if (resultCode != Activity.RESULT_OK)
             return;
 
-        if(requestCode == NEW_READING_ADDED_REQUEST) {
+        if(requestCode == UserDetailActivity.READING_ADD_REQUEST) {
             onNewReadingAdded();
 
             mIsOriginator = true;
             ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
             mIsOriginator = false;
         }
-        else if(requestCode == READING_EDIT_REQUEST) {
+        else if(requestCode == UserDetailActivity.READING_EDIT_REQUEST) {
+            if(bFirstReadingChanged) {
+                mWeekWeightGainRangeList = null;
+                bFirstReadingChanged = false;
+            }
+
             mSelectedUser = new UserService().get(mSelectedUserId);
 
             userReadingList.clear();
@@ -385,10 +389,18 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getContext(), AddReadingActivity.class);
-                        intent.putExtra(UserDetailActivity.ARG_USER_ID, mSelectedUserId);
-                        intent.putExtra(ARG_EDIT_READING_ID, mUserReading.Id);
-                        startActivityForResult(intent, READING_EDIT_REQUEST);
+                        if(mUserReading.Sequence == 0) {
+                            bFirstReadingChanged = true;
+                            Intent intent = new Intent(getContext(), AddFirstReadingActivity.class);
+                            intent.putExtra(UserDetailActivity.ARG_USER_ID, mSelectedUserId);
+                            intent.putExtra(UserDetailActivity.ARG_EDIT_READING_ID, mUserReading.Id);
+                            startActivityForResult(intent, UserDetailActivity.READING_EDIT_REQUEST);
+                        } else {
+                            Intent intent = new Intent(getContext(), AddReadingActivity.class);
+                            intent.putExtra(UserDetailActivity.ARG_USER_ID, mSelectedUserId);
+                            intent.putExtra(UserDetailActivity.ARG_EDIT_READING_ID, mUserReading.Id);
+                            startActivityForResult(intent, UserDetailActivity.READING_EDIT_REQUEST);
+                        }
                     }
                 });
             }

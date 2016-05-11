@@ -1,0 +1,166 @@
+package com.mk.familyweighttracker.Activities;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
+import com.mk.familyweighttracker.Enums.HeightUnit;
+import com.mk.familyweighttracker.Enums.WeightUnit;
+import com.mk.familyweighttracker.Models.User;
+import com.mk.familyweighttracker.Models.UserReading;
+import com.mk.familyweighttracker.R;
+import com.mk.familyweighttracker.Services.UserService;
+
+import java.util.Date;
+
+public class AddFirstReadingActivity extends AppCompatActivity {
+
+    private boolean bEditMode;
+    private User mSelectedUser;
+    private UserReading mUserReadingToProcess;
+    private WeightUnit mNewWeightUnit = WeightUnit.kg;
+    private HeightUnit mNewHeightUnit = HeightUnit.cm;
+
+    private View activityView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_user_first_reading);
+
+        initToolbarControl();
+        activityView = findViewById(R.id.add_user_first_reading_layout);
+
+        long userId = getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
+        mSelectedUser = new UserService().get(userId);
+
+        long readingId = getIntent().getLongExtra(UserDetailActivity.ARG_EDIT_READING_ID, 0);
+        mUserReadingToProcess = mSelectedUser.getReadingById(readingId);
+
+        bEditMode = true;
+        if(mUserReadingToProcess == null) {
+            bEditMode = false;
+
+            mUserReadingToProcess = new UserReading();
+            mUserReadingToProcess.UserId = userId;
+            mUserReadingToProcess.Sequence = 0;
+            mUserReadingToProcess.TakenOn = new Date();
+            mUserReadingToProcess.Weight = 60.0;
+            mUserReadingToProcess.Height = 160;
+        }
+
+        initWeightTextControl();
+        initHeightTextControl();
+        initWeightUnitControls();
+        initHeightUnitControls();
+        initActionButtonControls();
+
+        setTitle(bEditMode ? "Edit Pre-pregnancy Reading" : "Add Pre-pregnancy Reading");
+    }
+
+    private void initWeightTextControl() {
+        final EditText heightView = ((EditText) activityView.findViewById(R.id.add_first_reading_height));
+        heightView.setText(String.valueOf(mUserReadingToProcess.Height));
+    }
+
+    private void initHeightTextControl() {
+        final EditText weightView = ((EditText) activityView.findViewById(R.id.add_first_reading_weight));
+        weightView.setText(String.valueOf(mUserReadingToProcess.Weight));
+    }
+
+    private void initWeightUnitControls() {
+        ((RadioGroup) activityView.findViewById(R.id.add_first_reading_weight_unit_switch))
+                .setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        boolean isWeightUnitKg = (checkedId == R.id.add_first_reading_weight_unit_kg);
+                        mNewWeightUnit = isWeightUnitKg ? WeightUnit.kg : WeightUnit.lb;
+                    }
+                });
+        ((RadioButton) activityView.findViewById(R.id.add_first_reading_weight_unit_kg)).setChecked(true);
+    }
+
+    private void initHeightUnitControls() {
+        ((RadioGroup) activityView.findViewById(R.id.add_first_reading_height_unit_switch))
+                .setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        boolean isHeightUnitCm = (checkedId == R.id.add_first_reading_height_unit_cm);
+                        mNewHeightUnit = isHeightUnitCm ? HeightUnit.cm : HeightUnit.inch;
+                    }
+                });
+        ((RadioButton) activityView.findViewById(R.id.add_first_reading_height_unit_cm)).setChecked(true);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Check which request we're responding to
+    }
+
+    private void initToolbarControl() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_add_first_reading);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(getTitle());
+        // Show the Up button in the action bar.
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    private void initActionButtonControls() {
+        findViewById(R.id.add_first_reading_cancel_button)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
+
+        findViewById(R.id.add_first_reading_save_button)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EditText weightView = ((EditText) activityView.findViewById(R.id.add_first_reading_weight));
+                        String weightString = weightView.getText().toString();
+                        if (TextUtils.isEmpty(weightString)) {
+                            weightView.setError("Value required");
+                            return;
+                        }
+
+                        EditText heightView = ((EditText) activityView.findViewById(R.id.add_first_reading_height));
+                        String heightString = heightView.getText().toString();
+                        if (TextUtils.isEmpty(heightString)) {
+                            heightView.setError("Value required");
+                            return;
+                        }
+
+                        mUserReadingToProcess.Weight = Double.valueOf(weightString);
+                        mUserReadingToProcess.Height = Integer.valueOf(heightString);
+
+                        onAddReading();
+                    }
+                });
+    }
+
+    private void onAddReading() {
+        new UserService().addReading(mUserReadingToProcess);
+        //todo: dont allow to edit units if more than one reading exists
+        // or confirm from user, to change all existing data as per new unit
+        // and on confirmation change existing readings
+        new UserService().updateUnits(mSelectedUser.getId(), mNewWeightUnit, mNewHeightUnit);
+
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
+    }
+}

@@ -5,7 +5,8 @@
     <string name="title_item_detail">Member Detail</string>
     <string name="button_home_start_text">Start</string>
     <string name="title_activity_add_new_user">Add New Member</string>
-    <string name="title_activity_add_user_reading">Add Reading</string>
+    <string name="title_activity_add_user_reading">Add/Edit Reading</string>
+    <string name="title_activity_add_user_first_reading">Add/Edit First Reading</string>
     <string name="add_user_first_reading_label">Week 0 : Pre-Pregnancy</string>
     <string name="add_user_first_reading_weight_label">Weight</string>
     <string name="add_user_first_reading_weight_unit_kg">kgs</string>

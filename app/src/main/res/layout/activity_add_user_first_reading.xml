@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_root"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/add_user_first_reading_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:padding="10dp" >
+    android:padding="10dp">
 
-    <TextView
-        android:id="@+id/add_first_reading_label"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:gravity="center_horizontal"
-        android:text="@string/add_user_first_reading_label"/>
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-    <View style="@style/Divider"/>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tool_bar_add_first_reading"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </android.support.design.widget.AppBarLayout>
+    <!--<TextView-->
+        <!--android:id="@+id/add_first_reading_label"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:text="@string/add_user_first_reading_label"/>-->
+
+    <!--<View style="@style/Divider"/>-->
 
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
         <TableRow>
             <TextView
                 android:id="@+id/add_first_reading_weight_label"
@@ -93,4 +106,23 @@
             </RadioGroup>
         </TableRow>
     </TableLayout>
+    <View style="@style/Divider"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/add_first_reading_cancel_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@android:string/cancel"/>
+
+        <Button
+            android:id="@+id/add_first_reading_save_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@android:string/ok"/>
+    </LinearLayout>
 </LinearLayout>

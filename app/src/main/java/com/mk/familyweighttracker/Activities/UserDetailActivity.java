@@ -41,6 +41,9 @@ public class UserDetailActivity extends AppCompatActivity
 
     public static final String ARG_USER_ID = "user_id";
     public static final String ARG_IS_DATA_CHANGED = "IsDataChanged";
+    public static final String ARG_EDIT_READING_ID = "EditReadingId";
+    public static final int READING_ADD_REQUEST = 1;
+    public static final int READING_EDIT_REQUEST = 2;
 
     private boolean mIsDataChanged = false;
 
