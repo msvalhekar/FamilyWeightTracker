@@ -35,9 +35,8 @@ import java.util.List;
 
 public class AddReadingActivity extends AppCompatActivity {
 
-    private boolean bEditMode;
     private User mSelectedUser;
-    private UserReading mNewUserReading;
+    private UserReading mUserReadingToProcess;
     private int mNewHeightValue;
     private double mNewWeightValue;
     private Long mNewSequenceValue;
@@ -54,36 +53,29 @@ public class AddReadingActivity extends AppCompatActivity {
         long userId = getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
         mSelectedUser = new UserService().get(userId);
 
-        long readingId = getIntent().getLongExtra(UserDetailsRecordsFragment.ARG_EDIT_READING_ID, 0);
-        mNewUserReading = mSelectedUser.getReadingById(readingId);
+        long readingId = getIntent().getLongExtra(UserDetailActivity.ARG_EDIT_READING_ID, 0);
+        mUserReadingToProcess = mSelectedUser.getReadingById(readingId);
 
         long previousSequence;
         double previousWeight;
         int previousHeight;
         UserReading previousReading;
 
-        if(mNewUserReading == null) {
-            bEditMode = false;
+        if(mUserReadingToProcess != null) {
+            setTitle("Edit Reading");
+            findViewById(R.id.add_reading_delete_button).setVisibility(View.VISIBLE);
+            previousReading = mSelectedUser.findReadingBefore(mUserReadingToProcess.Sequence);
+        } else {
+            setTitle("Add Reading");
+            findViewById(R.id.add_reading_delete_button).setVisibility(View.GONE);
             previousReading = mSelectedUser.getLatestReading();
 
-            mNewUserReading = new UserReading();
-            mNewUserReading.UserId = userId;
-            mNewUserReading.Sequence = previousReading.Sequence + 1;
-            mNewUserReading.TakenOn = new Date();
-            mNewUserReading.Weight = previousReading.Weight;
-            mNewUserReading.Height = previousReading.Height;
-        } else {
-            bEditMode = true;
-            if(mNewUserReading.Sequence == 0) {
-                findViewById(R.id.add_reading_delete_button).setVisibility(View.GONE);
-
-                Toast.makeText(this, "Cannot change Pre-pregnancy reading", Toast.LENGTH_SHORT).show();
-                finish();
-                return;
-            } else {
-                findViewById(R.id.add_reading_delete_button).setVisibility(View.VISIBLE);
-                previousReading = mSelectedUser.findReadingBefore(mNewUserReading.Sequence);
-            }
+            mUserReadingToProcess = new UserReading();
+            mUserReadingToProcess.UserId = userId;
+            mUserReadingToProcess.Sequence = previousReading.Sequence + 1;
+            mUserReadingToProcess.TakenOn = new Date();
+            mUserReadingToProcess.Weight = previousReading.Weight;
+            mUserReadingToProcess.Height = previousReading.Height;
         }
 
         previousSequence = previousReading.Sequence;
@@ -95,8 +87,6 @@ public class AddReadingActivity extends AppCompatActivity {
         initWeightSequenceControl(previousWeight);
         initHeightSequenceControl(previousHeight);
         initActionButtonControls();
-
-        setTitle(bEditMode ? "Edit Reading" : "Add Reading");
     }
 
     @Override
@@ -156,13 +146,13 @@ public class AddReadingActivity extends AppCompatActivity {
     private void initMeasuredOnDateControl() {
         final Button dobView = ((Button) findViewById(R.id.add_reading_taken_on_btn));
         final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
-        dobView.setText(dateFormatter.format(mNewUserReading.TakenOn));
+        dobView.setText(dateFormatter.format(mUserReadingToProcess.TakenOn));
 
         dobView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Calendar calendar = Calendar.getInstance();
-                calendar.setTime(mNewUserReading.TakenOn);
+                calendar.setTime(mUserReadingToProcess.TakenOn);
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(v.getContext(),
                         new DatePickerDialog.OnDateSetListener() {
@@ -170,8 +160,8 @@ public class AddReadingActivity extends AppCompatActivity {
                                 Calendar newDate = Calendar.getInstance();
                                 newDate.set(year, monthOfYear, dayOfMonth);
 
-                                mNewUserReading.TakenOn = newDate.getTime();
-                                dobView.setText(dateFormatter.format(mNewUserReading.TakenOn));
+                                mUserReadingToProcess.TakenOn = newDate.getTime();
+                                dobView.setText(dateFormatter.format(mUserReadingToProcess.TakenOn));
                             }
                         },
                         calendar.get(Calendar.YEAR),
@@ -188,11 +178,11 @@ public class AddReadingActivity extends AppCompatActivity {
         final NumberPicker sequencePicker = getWeekSequenceControl(lastReading);
 
         final Button seqButton = ((Button) findViewById(R.id.add_reading_sequence_btn));
-        seqButton.setText(String.valueOf(mNewUserReading.Sequence));
+        seqButton.setText(String.valueOf(mUserReadingToProcess.Sequence));
         seqButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int indexOfNextSequence = Arrays.asList(sequencePicker.getDisplayedValues()).indexOf(String.valueOf(mNewUserReading.Sequence));
+                int indexOfNextSequence = Arrays.asList(sequencePicker.getDisplayedValues()).indexOf(String.valueOf(mUserReadingToProcess.Sequence));
                 sequencePicker.setValue(indexOfNextSequence);
 
                 LinearLayout layout = new LinearLayout(v.getContext());
@@ -215,9 +205,9 @@ public class AddReadingActivity extends AppCompatActivity {
                         .setPositiveButton("SET", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mNewUserReading.Sequence = mNewSequenceValue;
+                                mUserReadingToProcess.Sequence = mNewSequenceValue;
                                 ((Button)findViewById(R.id.add_reading_sequence_btn))
-                                        .setText(String.valueOf(mNewUserReading.Sequence));
+                                        .setText(String.valueOf(mUserReadingToProcess.Sequence));
                             }
                         })
                         .setNegativeButton("Cancel", null)
@@ -281,12 +271,12 @@ public class AddReadingActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.add_reading_weight_unit_label)).setText(mSelectedUser.weightUnit.toString());
 
         final Button buttonView = ((Button) findViewById(R.id.add_reading_weight_btn));
-        buttonView.setText(String.valueOf(mNewUserReading.Weight));
+        buttonView.setText(String.valueOf(mUserReadingToProcess.Weight));
 
         buttonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int indexOfNextValue = Arrays.asList(valuePicker.getDisplayedValues()).indexOf(String.format("%.2f", mNewUserReading.Weight));
+                int indexOfNextValue = Arrays.asList(valuePicker.getDisplayedValues()).indexOf(String.format("%.2f", mUserReadingToProcess.Weight));
                 valuePicker.setValue(indexOfNextValue);
 
                 LinearLayout layout = new LinearLayout(v.getContext());
@@ -309,9 +299,9 @@ public class AddReadingActivity extends AppCompatActivity {
                         .setPositiveButton("SET", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mNewUserReading.Weight = mNewWeightValue;
+                                mUserReadingToProcess.Weight = mNewWeightValue;
                                 ((Button) findViewById(R.id.add_reading_weight_btn))
-                                        .setText(String.valueOf(mNewUserReading.Weight));
+                                        .setText(String.valueOf(mUserReadingToProcess.Weight));
                             }
                         })
                         .setNegativeButton("Cancel", null)
@@ -364,12 +354,12 @@ public class AddReadingActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.add_reading_height_unit_label)).setText(mSelectedUser.heightUnit.toString());
 
         final Button buttonView = ((Button) findViewById(R.id.add_reading_height_btn));
-        buttonView.setText(String.valueOf(mNewUserReading.Height));
+        buttonView.setText(String.valueOf(mUserReadingToProcess.Height));
 
         buttonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int indexOfNextValue = Arrays.asList(valuePicker.getDisplayedValues()).indexOf(String.valueOf(mNewUserReading.Height));
+                int indexOfNextValue = Arrays.asList(valuePicker.getDisplayedValues()).indexOf(String.valueOf(mUserReadingToProcess.Height));
                 valuePicker.setValue(indexOfNextValue);
 
                 LinearLayout layout = new LinearLayout(v.getContext());
@@ -392,9 +382,9 @@ public class AddReadingActivity extends AppCompatActivity {
                         .setPositiveButton("SET", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mNewUserReading.Height = mNewHeightValue;
+                                mUserReadingToProcess.Height = mNewHeightValue;
                                 ((Button) findViewById(R.id.add_reading_height_btn))
-                                        .setText(String.valueOf(mNewUserReading.Height));
+                                        .setText(String.valueOf(mUserReadingToProcess.Height));
                             }
                         })
                         .setNegativeButton("Cancel", null)
@@ -441,7 +431,7 @@ public class AddReadingActivity extends AppCompatActivity {
     }
 
     private void onAddReading() {
-        new UserService().addReading(mNewUserReading);
+        new UserService().addReading(mUserReadingToProcess);
 
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
@@ -449,7 +439,7 @@ public class AddReadingActivity extends AppCompatActivity {
     }
 
     private void onDeleteReading() {
-        new UserService().deleteReading(mNewUserReading.Id);
+        new UserService().deleteReading(mUserReadingToProcess.Id);
 
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
