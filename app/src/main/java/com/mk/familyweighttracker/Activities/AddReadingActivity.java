@@ -63,11 +63,11 @@ public class AddReadingActivity extends AppCompatActivity {
 
         if(mUserReadingToProcess != null) {
             setTitle("Edit Reading");
-            findViewById(R.id.add_reading_delete_button).setVisibility(View.VISIBLE);
+            findViewById(R.id.add_user_reading_delete_section).setVisibility(View.VISIBLE);
             previousReading = mSelectedUser.findReadingBefore(mUserReadingToProcess.Sequence);
         } else {
             setTitle("Add Reading");
-            findViewById(R.id.add_reading_delete_button).setVisibility(View.GONE);
+            findViewById(R.id.add_user_reading_delete_section).setVisibility(View.GONE);
             previousReading = mSelectedUser.getLatestReading();
 
             mUserReadingToProcess = new UserReading();
@@ -258,9 +258,13 @@ public class AddReadingActivity extends AppCompatActivity {
             }
         });
 
-        String pendingLabel = pendingItems.size() > 0 ? "Pending week(s): " : "";
-        ((TextView)findViewById(R.id.add_reading_week_pending))
-                .setText(pendingLabel + TextUtils.join(", ", pendingItems));
+        findViewById(R.id.add_user_pending_readings_section).setVisibility(View.GONE);
+        if(pendingItems.size() > 0) {
+            findViewById(R.id.add_user_pending_readings_section).setVisibility(View.VISIBLE);
+
+            ((TextView) findViewById(R.id.add_reading_week_pending))
+                    .setText(TextUtils.join(", ", pendingItems));
+        }
 
         return picker;
     }
