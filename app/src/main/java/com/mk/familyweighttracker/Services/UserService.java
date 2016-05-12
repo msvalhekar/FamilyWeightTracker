@@ -2,6 +2,7 @@ package com.mk.familyweighttracker.Services;
 
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.WeightUnit;
+import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.Repositories.UserRepository;
@@ -43,6 +44,18 @@ public class UserService {
     }
 
     public void updateUnits(long userId, WeightUnit weightUnit, HeightUnit heightUnit) {
+        User user = userRepository.getUser(userId);
+        boolean convertWeight = user.weightUnit != weightUnit;
+        boolean convertHeight = user.heightUnit != heightUnit;
+        for (UserReading reading : user.getReadings(true)) {
+            if(reading.Sequence == 0) continue;
+
+            if(convertWeight) reading.Weight = Utility.convertWeightTo(reading.Weight, weightUnit);
+
+            if(convertHeight) reading.Height = Utility.convertHeightTo(reading.Height, heightUnit);
+
+            userRepository.addReading(reading);
+        }
         userRepository.updateUnits(userId, weightUnit, heightUnit);
     }
 }

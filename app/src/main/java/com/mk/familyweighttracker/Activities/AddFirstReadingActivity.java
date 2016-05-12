@@ -162,10 +162,6 @@ public class AddFirstReadingActivity extends AppCompatActivity {
 
     private void onAddReading() {
         new UserService().addReading(mUserReadingToProcess);
-        //todo: dont allow to edit units if more than one reading exists
-        // or confirm from user, to change all existing data as per new unit
-        // and on confirmation change existing readings
-
         new UserService().updateUnits(mSelectedUser.getId(), mNewWeightUnit, mNewHeightUnit);
 
         Intent returnIntent = new Intent();
