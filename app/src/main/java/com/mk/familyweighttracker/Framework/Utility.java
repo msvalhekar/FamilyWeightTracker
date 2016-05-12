@@ -1,5 +1,8 @@
 package com.mk.familyweighttracker.Framework;
 
+import com.mk.familyweighttracker.Enums.HeightUnit;
+import com.mk.familyweighttracker.Enums.WeightUnit;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -8,6 +11,22 @@ import java.util.GregorianCalendar;
  * Created by mvalhekar on 15-04-2016.
  */
 public class Utility {
+    public static final double POUNDS_PER_KILOGRAM = 2.20462;
+    public static final double INCHES_PER_METER = 39.3701;
+    public static final double CENTIMETERS_PER_METER = 100;
+    public static final double CENTIMETERS_PER_INCH = 2.54;
+
+    public static double convertWeightTo(double weight, WeightUnit toUnit) {
+        if(toUnit == WeightUnit.kg)
+            return weight / POUNDS_PER_KILOGRAM;
+        return weight * POUNDS_PER_KILOGRAM;
+    }
+
+    public static double convertHeightTo(double height, HeightUnit toUnit) {
+        if(toUnit == HeightUnit.cm)
+            return height * CENTIMETERS_PER_INCH;
+        return height / CENTIMETERS_PER_INCH;
+    }
 
     public static String calculateAge(Date dateOfBirth) {
         Calendar dob = Calendar.getInstance();

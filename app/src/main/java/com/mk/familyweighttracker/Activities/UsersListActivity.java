@@ -151,6 +151,7 @@ public class UsersListActivity extends AppCompatActivity {
         }
         return false;
     }
+
     private void onRefreshList() {
         List<User> latestUsers = new UserService().getAll();
 
@@ -272,12 +273,12 @@ public class UsersListActivity extends AppCompatActivity {
             }
 
             private void setHeightControl() {
-                int currentHeight = 0;
+                double currentHeight = 0;
                 String heightValue = "";
                 UserReading latestReading = mUser.getLatestReading();
                 if(latestReading != null) {
                     currentHeight = latestReading.Height;
-                    heightValue = String.valueOf(currentHeight) + " " + mUser.heightUnit;
+                    heightValue = String.format("%.1f", currentHeight) + " " + mUser.heightUnit;
                 }
                 ((TextView) mView.findViewById(R.id.list_item_height)).setText(heightValue);
 
@@ -287,8 +288,8 @@ public class UsersListActivity extends AppCompatActivity {
                 String heightDiffValue = "";
                 UserReading previosReading = mUser.findReadingBefore(latestReading.Sequence);
                 if(previosReading != null) {
-                    int diff = currentHeight - previosReading.Height;
-                    heightDiffValue = String.format("(%s%d)", (diff > 0) ? "+" : "", diff);
+                    double diff = currentHeight - previosReading.Height;
+                    heightDiffValue = String.format("(%s%.1f)", (diff > 0) ? "+" : "", diff);
                     TextView heightDiffView = (TextView) mView.findViewById(R.id.list_item_height_diff);
                     heightDiffView.setText(heightDiffValue);
                     if(diff < 0)
@@ -304,7 +305,7 @@ public class UsersListActivity extends AppCompatActivity {
                 UserReading latestReading = mUser.getLatestReading();
                 if(latestReading != null) {
                     currentWeight = latestReading.Weight;
-                    weightValue = String.valueOf(currentWeight) + " " + mUser.weightUnit;
+                    weightValue = String.format("%.2f", currentWeight) + " " + mUser.weightUnit;
                 }
                 ((TextView) mView.findViewById(R.id.list_item_weight)).setText(weightValue);
 

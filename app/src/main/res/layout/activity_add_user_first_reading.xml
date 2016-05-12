@@ -60,6 +60,7 @@
                     android:id="@+id/add_first_reading_weight_unit_lb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="false"
                     android:text="@string/add_user_first_reading_weight_unit_lbs" />
             </RadioGroup>
         </TableRow>
@@ -93,9 +94,10 @@
                     android:checked="true"
                     android:text="@string/add_user_first_reading_height_unit_cms" />
                 <RadioButton
-                    android:id="@+id/add_first_reading_weight_unit_inch"
+                    android:id="@+id/add_first_reading_height_unit_inch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="false"
                     android:text="@string/add_user_first_reading_height_unit_inches" />
             </RadioGroup>
         </TableRow>

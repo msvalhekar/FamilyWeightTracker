@@ -37,7 +37,7 @@ public class AddReadingActivity extends AppCompatActivity {
 
     private User mSelectedUser;
     private UserReading mUserReadingToProcess;
-    private int mNewHeightValue;
+    private double mNewHeightValue;
     private double mNewWeightValue;
     private Long mNewSequenceValue;
     private View activityView;
@@ -56,19 +56,13 @@ public class AddReadingActivity extends AppCompatActivity {
         long readingId = getIntent().getLongExtra(UserDetailActivity.ARG_EDIT_READING_ID, 0);
         mUserReadingToProcess = mSelectedUser.getReadingById(readingId);
 
-        long previousSequence;
-        double previousWeight;
-        int previousHeight;
-        UserReading previousReading;
-
         if(mUserReadingToProcess != null) {
             setTitle("Edit Reading");
             findViewById(R.id.add_user_reading_delete_section).setVisibility(View.VISIBLE);
-            previousReading = mSelectedUser.findReadingBefore(mUserReadingToProcess.Sequence);
         } else {
             setTitle("Add Reading");
             findViewById(R.id.add_user_reading_delete_section).setVisibility(View.GONE);
-            previousReading = mSelectedUser.getLatestReading();
+            UserReading previousReading = mSelectedUser.getLatestReading();
 
             mUserReadingToProcess = new UserReading();
             mUserReadingToProcess.UserId = userId;
@@ -78,14 +72,10 @@ public class AddReadingActivity extends AppCompatActivity {
             mUserReadingToProcess.Height = previousReading.Height;
         }
 
-        previousSequence = previousReading.Sequence;
-        previousWeight = previousReading.Weight;
-        previousHeight = previousReading.Height;
-
         initMeasuredOnDateControl();
-        initWeekSequenceControl(previousSequence);
-        initWeightSequenceControl(previousWeight);
-        initHeightSequenceControl(previousHeight);
+        initWeekSequenceControl(mUserReadingToProcess.Sequence);
+        initWeightSequenceControl(mUserReadingToProcess.Weight);
+        initHeightSequenceControl(mUserReadingToProcess.Height);
         initActionButtonControls();
     }
 
@@ -275,7 +265,7 @@ public class AddReadingActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.add_reading_weight_unit_label)).setText(mSelectedUser.weightUnit.toString());
 
         final Button buttonView = ((Button) findViewById(R.id.add_reading_weight_btn));
-        buttonView.setText(String.valueOf(mUserReadingToProcess.Weight));
+        buttonView.setText(String.format("%.2f", mUserReadingToProcess.Weight));
 
         buttonView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -299,13 +289,13 @@ public class AddReadingActivity extends AppCompatActivity {
                 AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
                         .setView(layout)
                         .setCancelable(false)
-                        .setMessage("Weight")
+                        .setMessage("Weight (" + mSelectedUser.weightUnit.toString() + ")")
                         .setPositiveButton("SET", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mUserReadingToProcess.Weight = mNewWeightValue;
                                 ((Button) findViewById(R.id.add_reading_weight_btn))
-                                        .setText(String.valueOf(mUserReadingToProcess.Weight));
+                                        .setText(String.format("%.2f", mUserReadingToProcess.Weight));
                             }
                         })
                         .setNegativeButton("Cancel", null)
@@ -352,18 +342,18 @@ public class AddReadingActivity extends AppCompatActivity {
         return picker;
     }
 
-    private void initHeightSequenceControl(int lastReading) {
+    private void initHeightSequenceControl(double lastReading) {
         final NumberPicker valuePicker = getHeightSequenceControl(lastReading);
 
         ((TextView) findViewById(R.id.add_reading_height_unit_label)).setText(mSelectedUser.heightUnit.toString());
 
         final Button buttonView = ((Button) findViewById(R.id.add_reading_height_btn));
-        buttonView.setText(String.valueOf(mUserReadingToProcess.Height));
+        buttonView.setText(String.format("%.1f", mUserReadingToProcess.Height));
 
         buttonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int indexOfNextValue = Arrays.asList(valuePicker.getDisplayedValues()).indexOf(String.valueOf(mUserReadingToProcess.Height));
+                int indexOfNextValue = Arrays.asList(valuePicker.getDisplayedValues()).indexOf(String.format("%.1f", mUserReadingToProcess.Height));
                 valuePicker.setValue(indexOfNextValue);
 
                 LinearLayout layout = new LinearLayout(v.getContext());
@@ -382,13 +372,13 @@ public class AddReadingActivity extends AppCompatActivity {
                 AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
                         .setView(layout)
                         .setCancelable(false)
-                        .setMessage("Weight")
+                        .setMessage("Height (" + mSelectedUser.heightUnit.toString() + ")")
                         .setPositiveButton("SET", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mUserReadingToProcess.Height = mNewHeightValue;
                                 ((Button) findViewById(R.id.add_reading_height_btn))
-                                        .setText(String.valueOf(mUserReadingToProcess.Height));
+                                        .setText(String.format("%.1f", mUserReadingToProcess.Height));
                             }
                         })
                         .setNegativeButton("Cancel", null)
@@ -402,20 +392,20 @@ public class AddReadingActivity extends AppCompatActivity {
         });
     }
 
-    private NumberPicker getHeightSequenceControl(int lastReading) {
+    private NumberPicker getHeightSequenceControl(double lastReading) {
         NumberPicker picker = new NumberPicker(activityView.getContext());
         picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         double startFrom = lastReading - 5;
         double endAt = lastReading + 5;
-        final double incrementFactor = 1;
+        final double incrementFactor = 0.5;
 
         final List<String> itemsToDisplay = new ArrayList<>();
         for (double seqValue = lastReading; seqValue >= startFrom; seqValue -= incrementFactor) {
-            itemsToDisplay.add(0, String.format("%.0f", seqValue));
+            itemsToDisplay.add(0, String.format("%.1f", seqValue));
         }
         for (double seqValue = lastReading + incrementFactor; seqValue <= endAt; seqValue += incrementFactor) {
-            itemsToDisplay.add(String.format("%.0f", seqValue));
+            itemsToDisplay.add(String.format("%.1f", seqValue));
         }
 
         String[] values = itemsToDisplay.toArray(new String[itemsToDisplay.size()]);
@@ -427,7 +417,7 @@ public class AddReadingActivity extends AppCompatActivity {
         picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                mNewHeightValue = Integer.valueOf(itemsToDisplay.get(newVal));
+                mNewHeightValue = Double.valueOf(itemsToDisplay.get(newVal));
             }
         });
 

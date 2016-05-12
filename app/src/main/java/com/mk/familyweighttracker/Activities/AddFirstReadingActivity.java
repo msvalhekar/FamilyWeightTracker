@@ -14,6 +14,7 @@ import android.widget.RadioGroup;
 
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.WeightUnit;
+import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
@@ -66,12 +67,12 @@ public class AddFirstReadingActivity extends AppCompatActivity {
         setTitle(bEditMode ? "Edit Pre-pregnancy Reading" : "Add Pre-pregnancy Reading");
     }
 
-    private void initWeightTextControl() {
+    private void initHeightTextControl() {
         final EditText heightView = ((EditText) activityView.findViewById(R.id.add_first_reading_height));
         heightView.setText(String.valueOf(mUserReadingToProcess.Height));
     }
 
-    private void initHeightTextControl() {
+    private void initWeightTextControl() {
         final EditText weightView = ((EditText) activityView.findViewById(R.id.add_first_reading_weight));
         weightView.setText(String.valueOf(mUserReadingToProcess.Weight));
     }
@@ -85,7 +86,11 @@ public class AddFirstReadingActivity extends AppCompatActivity {
                         mNewWeightUnit = isWeightUnitKg ? WeightUnit.kg : WeightUnit.lb;
                     }
                 });
-        ((RadioButton) activityView.findViewById(R.id.add_first_reading_weight_unit_kg)).setChecked(true);
+
+        if(mSelectedUser.weightUnit == WeightUnit.kg)
+            ((RadioButton) activityView.findViewById(R.id.add_first_reading_weight_unit_kg)).setChecked(true);
+        else
+            ((RadioButton) activityView.findViewById(R.id.add_first_reading_weight_unit_lb)).setChecked(true);
     }
 
     private void initHeightUnitControls() {
@@ -97,7 +102,10 @@ public class AddFirstReadingActivity extends AppCompatActivity {
                         mNewHeightUnit = isHeightUnitCm ? HeightUnit.cm : HeightUnit.inch;
                     }
                 });
-        ((RadioButton) activityView.findViewById(R.id.add_first_reading_height_unit_cm)).setChecked(true);
+        if(mSelectedUser.heightUnit == HeightUnit.cm)
+            ((RadioButton) activityView.findViewById(R.id.add_first_reading_height_unit_cm)).setChecked(true);
+        else
+            ((RadioButton) activityView.findViewById(R.id.add_first_reading_height_unit_inch)).setChecked(true);
     }
 
     @Override
@@ -145,7 +153,7 @@ public class AddFirstReadingActivity extends AppCompatActivity {
                         }
 
                         mUserReadingToProcess.Weight = Double.valueOf(weightString);
-                        mUserReadingToProcess.Height = Integer.valueOf(heightString);
+                        mUserReadingToProcess.Height = Double.valueOf(heightString);
 
                         onAddReading();
                     }
@@ -157,6 +165,7 @@ public class AddFirstReadingActivity extends AppCompatActivity {
         //todo: dont allow to edit units if more than one reading exists
         // or confirm from user, to change all existing data as per new unit
         // and on confirmation change existing readings
+
         new UserService().updateUnits(mSelectedUser.getId(), mNewWeightUnit, mNewHeightUnit);
 
         Intent returnIntent = new Intent();

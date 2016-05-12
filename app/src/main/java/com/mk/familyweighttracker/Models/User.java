@@ -4,6 +4,7 @@ import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Enums.WeightUnit;
+import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Services.PregnancyService;
 
 import java.text.SimpleDateFormat;
@@ -17,9 +18,6 @@ import java.util.List;
  * Created by mvalhekar on 25-03-2016.
  */
 public class User {
-    public static final double POUNDS_PER_KILOGRAM = 2.20462;
-    public static final double INCHES_PER_METER = 39.3701;
-    public static final int CENTIMETERS_PER_METER = 100;
 
     private long mId;
     public String name;
@@ -54,7 +52,7 @@ public class User {
     }
 
     public String getStartingHeightStr() {
-        return String.format("%d %s", getStartingHeight(), heightUnit.toString());
+        return String.format("%.1f %s", getStartingHeight(), heightUnit.toString());
     }
 
     public String getBmiStr() {
@@ -67,7 +65,7 @@ public class User {
         return 0;
     }
 
-    public int getStartingHeight() {
+    public double getStartingHeight() {
         if(mReadings.size() > 0)
             return getReadings(true).get(0).Height;
         return 0;
@@ -76,20 +74,20 @@ public class User {
     private double getWeightInKg() {
         double divideBy = 1;
         if(weightUnit == WeightUnit.lb)
-            divideBy = POUNDS_PER_KILOGRAM;
+            divideBy = Utility.POUNDS_PER_KILOGRAM;
         return getStartingWeight() / divideBy;
     }
 
     private double getHeightInMeter() {
         double divideBy = 1;
         if( heightUnit == HeightUnit.cm)
-            divideBy = CENTIMETERS_PER_METER;
+            divideBy = Utility.CENTIMETERS_PER_METER;
         else if( heightUnit == HeightUnit.inch)
-            divideBy = INCHES_PER_METER;
+            divideBy = Utility.INCHES_PER_METER;
         return getStartingHeight() / divideBy;
     }
 
-    public void addReading(long id, long sequence, double weight, int height, Date takenOn)
+    public void addReading(long id, long sequence, double weight, double height, Date takenOn)
     {
         UserReading reading = new UserReading(id, mId, sequence, weight, height, takenOn);
         mReadings.add(reading);

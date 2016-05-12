@@ -25,7 +25,7 @@ public class UserReadingModel extends Model {
     public double Weight;
 
     @Column(name = "Height")
-    public int Height;
+    public double Height;
 
     @Column(name = "TakenOn")
     public Date TakenOn;

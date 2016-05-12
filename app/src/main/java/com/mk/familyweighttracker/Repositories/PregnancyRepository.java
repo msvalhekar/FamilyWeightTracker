@@ -2,6 +2,7 @@ package com.mk.familyweighttracker.Repositories;
 
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Enums.WeightUnit;
+import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.WeekWeightGainRange;
 
@@ -199,7 +200,7 @@ public class PregnancyRepository {
         }
 
         public WeekWeightGainRange getWeekWeightGainRangeFor(BodyWeightCategory category, WeightUnit weightUnit) {
-            double multiplyBy = (weightUnit == WeightUnit.lb) ? User.POUNDS_PER_KILOGRAM : 1;
+            double multiplyBy = (weightUnit == WeightUnit.lb) ? Utility.POUNDS_PER_KILOGRAM : 1;
             switch (category){
                 case UnderWeight:
                     return new WeekWeightGainRange(WeekNumber, UnderWeightMinimum * multiplyBy, UnderWeightMaximum * multiplyBy);

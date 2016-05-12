@@ -10,13 +10,13 @@ public class UserReading {
     public long UserId;
     public long Sequence;
     public double Weight;
-    public int Height;
+    public double Height;
     public Date TakenOn;
 
     public UserReading () {
     }
 
-    public UserReading(long id, long userId, long sequence, double weight, int height, Date takenOn)
+    public UserReading(long id, long userId, long sequence, double weight, double height, Date takenOn)
     {
         Id = id;
         UserId = userId;
