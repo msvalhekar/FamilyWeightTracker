@@ -71,4 +71,6 @@
     <string name="help_record_exp_min_wt_message">Exp Min</string>
     <string name="help_record_wt_diff_against_actual_message">(v/s actual)</string>
     <string name="help_record_exp_max_wt_message">Exp Max</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="add_member">Add Member</string>
 </resources>
