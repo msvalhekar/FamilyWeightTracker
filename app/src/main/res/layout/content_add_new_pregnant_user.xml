@@ -58,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:maxLength="8"
+                android:singleLine="true"
                 android:text="(nick name)" />
         </TableRow>
         <TableRow

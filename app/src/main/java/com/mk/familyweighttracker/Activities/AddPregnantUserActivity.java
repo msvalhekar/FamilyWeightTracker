@@ -66,7 +66,7 @@ public class AddPregnantUserActivity extends AppCompatActivity {
     AddUserAsyncTask mAddUserAsyncTask;
     private User mUser;
     private long mSelectedUserId;
-    NewUserViewModel mNewUser = new NewUserViewModel();
+//    NewUserViewModel mNewUser = new NewUserViewModel();
 
     private View mOkCancelActionsSectionView;
     private Button mCancelButton;
@@ -194,7 +194,7 @@ public class AddPregnantUserActivity extends AppCompatActivity {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 try {
                     boolean success = selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    mNewUser.ImageBytes = stream.toByteArray();
+                    mUser.imageBytes = stream.toByteArray();
                 }
                 catch (Exception e) {
                     Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -271,7 +271,7 @@ public class AddPregnantUserActivity extends AppCompatActivity {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             try {
                 boolean success = scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                mNewUser.ImageBytes = stream.toByteArray();
+                mUser.imageBytes = stream.toByteArray();
             }
             catch (Exception e) {
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -601,7 +601,7 @@ public class AddPregnantUserActivity extends AppCompatActivity {
         String textMessage = "";
         android.support.v7.app.NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                 .setContentTitle(titleMessage)
-                .setSmallIcon(R.drawable.notification_icon)
+                .setSmallIcon(R.drawable.edit_icon)
                 .setContentText(textMessage)
                 .setAutoCancel(true);
 
