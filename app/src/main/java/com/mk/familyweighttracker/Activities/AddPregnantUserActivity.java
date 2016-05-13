@@ -23,34 +23,34 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
+import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
-import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.NewUserViewModel;
 import com.mk.familyweighttracker.Models.User;
+import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -58,17 +58,34 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class AddNewPregnantUserActivity extends AppCompatActivity {
+public class AddPregnantUserActivity extends AppCompatActivity {
 
     private static final int LOAD_IMAGE_REQUEST = 1;
     private static final int CROP_IMAGE_REQUEST = 2;
 
-    AddNewUserTask mAddNewUserTask;
+    AddUserAsyncTask mAddUserAsyncTask;
+    private User mUser;
+    private long mSelectedUserId;
     NewUserViewModel mNewUser = new NewUserViewModel();
-    Uri mPickedImageUri;
 
+    private View mOkCancelActionsSectionView;
+    private Button mCancelButton;
+    private Button mSaveButton;
     private ImageButton mImageButton;
-    private EditText mNameView;
+    private EditText mNameText;
+    private Button mDobButton;
+    private RadioGroup mGenderRadioGroup;
+    private RadioButton mGenderMaleRdButton;
+    private RadioButton mGenderFemaleRdButton;
+    private android.support.v7.widget.SwitchCompat mEnableReminderCkBox;
+    private Button mReminderMessageButton;
+    private View mReminderDaySectionView;
+    private android.support.v7.widget.AppCompatSpinner mReminderDaySpinner;
+    private Button mReminderDayButton;
+    private View mReminderTimeSectionView;
+    private Button mReminderTimeButton;
+
+    Uri mPickedImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,26 +94,79 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
 
         initToolbarControl();
 
-        mNameView = ((EditText) findViewById(R.id.add_user_name));
+        findAllControls();
 
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.set(calendar.get(Calendar.YEAR) - 18, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        //mIsEditMode = true;
+        mSelectedUserId = getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
+        mUser = new UserService().get(mSelectedUserId);
 
-        mNewUser.IsMale = false;
-        mNewUser.DateOfBirth = calendar.getTime();
-        mNewUser.TrackingPeriod = TrackingPeriod.Week;
-        mNewUser.EnableReminder = true;
-        mNewUser.ReminderDay = 1;
-        mNewUser.ReminderHour = 8;
-        mNewUser.ReminderMinute = 0;
+        if(mUser == null) {
+            //mIsEditMode = false;
+            final Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.set(calendar.get(Calendar.YEAR) - 18, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
+            mUser = new User(0);
+            mUser.isMale = false;
+            mUser.dateOfBirth = calendar.getTime();
+            mUser.trackingPeriod = TrackingPeriod.Week;
+            mUser.enableReminder = true;
+            mUser.reminderDay = 1;
+            mUser.reminderHour = 8;
+            mUser.reminderMinute = 0;
+        }
+
+        //setControlsMode();
 
         initImageButtonControl();
+        initNameControl();
         initDateOfBirthControl();
         initReminderControl();
-        initDayOfReminderControl();
-        initTimeOfReminderControl();
+        //initPrepregnancyControl();
+        //initSummaryControl();
         initActionButtonControls();
+    }
+
+    private void findAllControls() {
+        mOkCancelActionsSectionView = findViewById(R.id.add_user_ok_cancel_actions_section);
+        mCancelButton = ((Button) findViewById(R.id.add_user_cancel_button));
+        mSaveButton = ((Button) findViewById(R.id.add_user_save_button));
+
+        mImageButton = ((ImageButton) findViewById(R.id.add_user_image_button));
+        mNameText = ((EditText) findViewById(R.id.add_user_name_edit_text));
+        mDobButton = ((Button) findViewById(R.id.add_user_dob_button));
+
+        mGenderRadioGroup = ((RadioGroup) findViewById(R.id.add_user_gender_switch));
+        mGenderMaleRdButton = ((RadioButton) findViewById(R.id.add_user_gender_male));
+        mGenderFemaleRdButton = ((RadioButton) findViewById(R.id.add_user_gender_female));
+
+        mEnableReminderCkBox = ((SwitchCompat) findViewById(R.id.add_user_remind_checkbox));
+        mReminderMessageButton = ((Button) findViewById(R.id.add_user_remind_message_button));
+        mReminderDaySectionView = findViewById(R.id.add_user_reminder_day_section);
+        mReminderDaySpinner = ((AppCompatSpinner) findViewById(R.id.add_user_reminder_day_spinner));
+        mReminderDayButton = ((Button) findViewById(R.id.add_user_reminder_day_button));
+        mReminderTimeSectionView = findViewById(R.id.add_user_reminder_time_section);
+        mReminderTimeButton = ((Button) findViewById(R.id.add_user_reminder_time_button));
+    }
+
+    private void setControlsMode() {
+        mOkCancelActionsSectionView.setVisibility(View.VISIBLE);
+        //mCancelButton.setVisibility(View.VISIBLE);
+        //mSaveButton.setVisibility(View.VISIBLE);
+
+        mImageButton.setVisibility(View.VISIBLE);
+        mNameText.setVisibility(View.VISIBLE);
+        mDobButton.setVisibility(View.VISIBLE);
+        mGenderRadioGroup.setVisibility(View.VISIBLE);
+        //mGenderMaleRdButton.setVisibility(View.VISIBLE);
+        //mGenderFemaleRdButton.setVisibility(View.VISIBLE);
+
+        mEnableReminderCkBox.setVisibility(View.VISIBLE);
+        mReminderMessageButton.setVisibility(View.VISIBLE);
+        mReminderDaySectionView.setVisibility(View.VISIBLE);
+        //mReminderDaySpinner.setVisibility(View.VISIBLE);
+        mReminderTimeSectionView.setVisibility(View.VISIBLE);
+        //mReminderTimeButton.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -147,12 +217,14 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
     }
 
     private void initImageButtonControl() {
-        mImageButton = ((ImageButton) findViewById(R.id.add_user_image_button));
+        if(mUser.imageBytes != null) {
+            mImageButton.setImageBitmap(BitmapFactory.decodeByteArray(mUser.imageBytes, 0, mUser.imageBytes.length));
+        }
+
         mImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(
-                        Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(i, LOAD_IMAGE_REQUEST);
             }
         });
@@ -340,30 +412,18 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
         return inSampleSize;
     }
 
-    private void initReminderControl() {
-        CheckBox reminderCheckbox = ((CheckBox) findViewById(R.id.add_user_set_reminder));
-
-        reminderCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mNewUser.EnableReminder = isChecked;
-                int show = isChecked ? View.VISIBLE : View.GONE;
-                findViewById(R.id.add_user_reminder_group).setVisibility(show);
-            }
-        });
-        reminderCheckbox.setChecked(mNewUser.EnableReminder);
+    private void initNameControl() {
+        mNameText.setText(mUser.name);
     }
 
     private void initDateOfBirthControl() {
-        final Button dobView = ((Button) findViewById(R.id.add_user_dob));
+        mDobButton.setText(mUser.getDateOfBirthStr(), TextView.BufferType.SPANNABLE);
 
-        dobView.setText(getDateOfBirthMessage(), TextView.BufferType.SPANNABLE);
-
-        dobView.setOnClickListener(new View.OnClickListener() {
+        mDobButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Calendar calendar = Calendar.getInstance();
-                calendar.setTime(mNewUser.DateOfBirth);
+                calendar.setTime(mUser.dateOfBirth);
 
                 new DatePickerDialog(v.getContext(),
                         new DatePickerDialog.OnDateSetListener() {
@@ -371,8 +431,8 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
                                 Calendar newDate = Calendar.getInstance();
                                 newDate.set(year, monthOfYear, dayOfMonth);
 
-                                mNewUser.DateOfBirth = newDate.getTime();
-                                dobView.setText(getDateOfBirthMessage(), TextView.BufferType.SPANNABLE);
+                                mUser.dateOfBirth = newDate.getTime();
+                                mDobButton.setText(mUser.getDateOfBirthStr(), TextView.BufferType.SPANNABLE);
                             }
                         },
                         calendar.get(Calendar.YEAR),
@@ -383,27 +443,42 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
         });
     }
 
-    private Spanned getDateOfBirthMessage() {
-        final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
-        String ageString = String.format("<small>(%s)</small>", Utility.calculateAge(mNewUser.DateOfBirth));
-        return Html.fromHtml(String.format("%s    %s", dateFormatter.format(mNewUser.DateOfBirth), ageString));
+    private void initReminderControl() {
+        mEnableReminderCkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mUser.enableReminder = isChecked;
+
+                int show = View.GONE;
+                String message = "No";
+                if(isChecked) {
+                    show = View.VISIBLE;
+                    message = "Yes";
+                }
+
+                mReminderDaySectionView.setVisibility(show);
+                mReminderTimeSectionView.setVisibility(show);
+                mReminderMessageButton.setText(message);
+            }
+        });
+
+        mEnableReminderCkBox.setChecked(mUser.enableReminder);
+        initDayOfReminderControl();
+        initTimeOfReminderControl();
     }
 
     private void initDayOfReminderControl() {
-        final Button dayOfReminderView = ((Button) findViewById(R.id.add_user_reminder_day));
-        final android.support.v7.widget.AppCompatSpinner daysSpinner = ((android.support.v7.widget.AppCompatSpinner)findViewById(R.id.add_user_reminder_day_spinner));
-
         final List<String> days = Arrays.asList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, days);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, days);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        daysSpinner.setAdapter(adapter);
+        mReminderDaySpinner.setAdapter(adapter);
 
-        daysSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mReminderDaySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mNewUser.ReminderDay = position;
-                dayOfReminderView.setText(days.get(position));
+                mUser.reminderDay = position;
+                mReminderDayButton.setText(days.get(position));
             }
 
             @Override
@@ -411,18 +486,17 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
             }
         });
 
-        dayOfReminderView.setOnClickListener(new View.OnClickListener() {
+        mReminderDaySpinner.setSelection(mUser.reminderDay);
+        mReminderDayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                daysSpinner.performClick();
+                mReminderDaySpinner.performClick();
             }
         });
     }
 
     private void initTimeOfReminderControl() {
-        final Button timeOfReminderView = ((Button) findViewById(R.id.add_user_reminder_time));
-
-        timeOfReminderView.setOnClickListener(new View.OnClickListener() {
+        mReminderTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 new TimePickerDialog(
@@ -430,45 +504,63 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                setReminderTime(((Button) v), hourOfDay, minute);
+                                setReminderTime(hourOfDay, minute);
                             }
                         },
-                        mNewUser.ReminderHour,
-                        mNewUser.ReminderMinute,
+                        mUser.reminderHour,
+                        mUser.reminderMinute,
                         true)
                         .show();
             }
         });
-        setReminderTime(timeOfReminderView, mNewUser.ReminderHour, mNewUser.ReminderMinute);
+        setReminderTime(mUser.reminderHour, mUser.reminderMinute);
     }
 
-    private void setReminderTime(Button view, int hourOfDay, int minute) {
-        mNewUser.ReminderHour = hourOfDay;
-        mNewUser.ReminderMinute = minute;
-        view.setText(String.format("%02d:%02d", mNewUser.ReminderHour, mNewUser.ReminderMinute));
+    private void setReminderTime(int hourOfDay, int minute) {
+        mUser.reminderHour = hourOfDay;
+        mUser.reminderMinute = minute;
+        mReminderTimeButton.setText(String.format("%02d:%02d", mUser.reminderHour, mUser.reminderMinute));
     }
 
     private void initActionButtonControls() {
-        findViewById(R.id.add_user_cancel_button)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                });
+        mCancelButton.requestFocus();
+        mCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
-        findViewById(R.id.add_user_save_button)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onAddNewUser();
-                    }
-                });
+        mSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onAddNewUser();
+            }
+        });
+    }
+
+    private void onAddNewUser() {
+        if (mAddUserAsyncTask != null) return;
+
+        HashMap<String, ArrayList<String>> errors = validateInput();
+
+        if (errors.size() > 0) {
+            for (String key : errors.keySet()) {
+                if (key == "Name") {
+                    mNameText.setError(((ArrayList<String>) errors.get(key)).get(0));
+                    mNameText.requestFocus();
+                    break;
+                }
+            }
+        } else {
+            mAddUserAsyncTask = new AddUserAsyncTask();
+            mAddUserAsyncTask.execute(this);
+        }
     }
 
     private void resetErrors() {
         // Reset errors.
-        mNameView.setError(null);
+        mNameText.setError(null);
     }
 
     private HashMap<String, ArrayList<String>> validateInput() {
@@ -476,13 +568,13 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
 
         HashMap<String, ArrayList<String>> errors = new HashMap();
 
-        mNewUser.Name = mNameView.getText().toString();
+        mUser.name = mNameText.getText().toString();
         ArrayList<String> nameErrors = new ArrayList<>();
-        if (TextUtils.isEmpty(mNewUser.Name)) {
+        if (TextUtils.isEmpty(mUser.name)) {
             nameErrors.add("Required");
         }
-        else if (new UserService().isAlreadyAdded(mNewUser.Name)) {
-            nameErrors.add("Already used, try different");
+        else if (new UserService().isAlreadyAdded(mUser.name)) {
+            nameErrors.add("This name is already used, try different");
         }
         if(nameErrors.size() > 0)
             errors.put("Name", nameErrors);
@@ -490,32 +582,13 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
         return errors;
     }
 
-    private void onAddNewUser() {
-        if (mAddNewUserTask != null) return;
-
-        HashMap<String, ArrayList<String>> errors = validateInput();
-
-        if (errors.size() > 0) {
-            for (String key : errors.keySet()) {
-                if (key == "Name") {
-                    mNameView.setError(((ArrayList<String>) errors.get(key)).get(0));
-                    mNameView.requestFocus();
-                    break;
-                }
-            }
-        } else {
-            mAddNewUserTask = new AddNewUserTask();
-            mAddNewUserTask.execute(this);
-        }
-    }
-
-    public void AddNewUser() {
-        mNewUser.Id = new UserService().add(mNewUser.mapToUser());
+    public void SaveUser() {
+        long userId = new UserService().add(mUser);
 
         //setReminderNotification(mNewUser.Id);
 
         Intent returnIntent = new Intent();
-        returnIntent.putExtra(UsersListActivity.NEW_USER_ID_KEY, mNewUser.Id);
+        returnIntent.putExtra(UsersListActivity.NEW_USER_ID_KEY, userId);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }
@@ -544,22 +617,22 @@ public class AddNewPregnantUserActivity extends AppCompatActivity {
         manager.notify(111, builder.build());
     }
 
-    public class AddNewUserTask extends AsyncTask<AddNewPregnantUserActivity, Void, Boolean>
+    public class AddUserAsyncTask extends AsyncTask<AddPregnantUserActivity, Void, Boolean>
     {
-        AddNewPregnantUserActivity activity;
+        AddPregnantUserActivity activity;
 
         @Override
-        protected Boolean doInBackground(AddNewPregnantUserActivity... params) {
+        protected Boolean doInBackground(AddPregnantUserActivity... params) {
             activity = params[0];
             return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mAddNewUserTask = null;
+            mAddUserAsyncTask = null;
 
             if (success) {
-                activity.AddNewUser();
+                activity.SaveUser();
             } else {
             }
         }

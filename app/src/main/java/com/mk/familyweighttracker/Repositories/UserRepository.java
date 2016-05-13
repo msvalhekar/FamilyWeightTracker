@@ -16,11 +16,9 @@ import java.util.List;
 public class UserRepository {
 
     public User getUser(long userId) {
-        return UserModel.get(userId).mapToUser();
-    }
-
-    public User getUser(String name) {
-        return UserModel.get(name.toLowerCase().trim()).mapToUser();
+        UserModel userModel = UserModel.get(userId);
+        if(userModel == null) return null;
+        return userModel.mapToUser();
     }
 
     public Boolean isAlreadyAdded(String name) {

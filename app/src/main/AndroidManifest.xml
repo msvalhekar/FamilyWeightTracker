@@ -50,7 +50,7 @@
                 android:value=".Activities.UsersListActivity" />
         </activity>
         <activity
-            android:name=".Activities.AddNewPregnantUserActivity"
+            android:name=".Activities.AddPregnantUserActivity"
             android:label="@string/title_activity_add_new_user"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

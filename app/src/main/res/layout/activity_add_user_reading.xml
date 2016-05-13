@@ -68,6 +68,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="left|center"
                     android:text="@string/add_user_reading_date_default_value" />
             </TableRow>
             <TableRow
@@ -83,6 +84,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="left|center"
                     android:text="@string/add_user_reading_period_default_value" />
             </TableRow>
             <TableRow
@@ -99,8 +101,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:enabled="false"
-                    android:textStyle="bold"
+                    android:gravity="left|center"
+                    android:clickable="false"
+                    android:background="@android:color/transparent"
                     android:text="@string/add_user_reading_pending_weeks_default_value"/>
             </TableRow>
             <TableRow
@@ -116,6 +119,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.75"
+                    android:gravity="left|center"
                     android:text="@string/add_user_reading_weight_default_value" />
                 <TextView
                     android:id="@+id/add_reading_weight_unit_label"
@@ -138,6 +142,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.75"
+                    android:gravity="left|center"
                     android:text="@string/add_user_reading_height_default_value" />
                 <TextView
                     android:id="@+id/add_reading_height_unit_label"

@@ -12,7 +12,6 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
@@ -34,11 +32,7 @@ import com.mk.familyweighttracker.R;
 
 import com.mk.familyweighttracker.Services.UserService;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -121,7 +115,7 @@ public class UsersListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), AddNewPregnantUserActivity.class);
+                Intent intent = new Intent(getApplicationContext(), AddPregnantUserActivity.class);
                 startActivityForResult(intent, NEW_USER_ADDED_REQUEST);
             }
         });
