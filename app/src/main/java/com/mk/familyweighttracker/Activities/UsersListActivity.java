@@ -4,13 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -234,9 +228,12 @@ public class UsersListActivity extends AppCompatActivity {
             }
 
             private void setBmiControl() {
-                if(Double.isNaN(mUser.getBmi())) return;
-
                 TextView bmiView = ((TextView) mView.findViewById(R.id.list_item_bmi));
+                if(Double.isNaN(mUser.getBmi())){
+                    bmiView.setText("");
+                    return;
+                }
+
                 bmiView.setText("BMI: " + mUser.getBmiStr());
 
                 TextView bmiCategoryView = ((TextView) mView.findViewById(R.id.list_item_bmi_category));
@@ -276,21 +273,21 @@ public class UsersListActivity extends AppCompatActivity {
                 }
                 ((TextView) mView.findViewById(R.id.list_item_height)).setText(heightValue);
 
-                if(latestReading == null)
-                    return;
-
                 String heightDiffValue = "";
-                UserReading previosReading = mUser.findReadingBefore(latestReading.Sequence);
-                if(previosReading != null) {
-                    double diff = currentHeight - previosReading.Height;
-                    heightDiffValue = String.format("(%s%.1f)", (diff > 0) ? "+" : "", diff);
-                    TextView heightDiffView = (TextView) mView.findViewById(R.id.list_item_height_diff);
-                    heightDiffView.setText(heightDiffValue);
-                    if(diff < 0)
-                        heightDiffView.setTextColor(Color.RED);
-                    else
-                        heightDiffView.setTextColor(Color.BLUE);
+                TextView heightDiffView = (TextView) mView.findViewById(R.id.list_item_height_diff);
+                if(latestReading != null){
+                    UserReading previosReading = mUser.findReadingBefore(latestReading.Sequence);
+                    if(previosReading != null) {
+                        double diff = currentHeight - previosReading.Height;
+                        heightDiffValue = String.format("(%s%.1f)", (diff > 0) ? "+" : "", diff);
+
+                        if(diff < 0)
+                            heightDiffView.setTextColor(Color.RED);
+                        else
+                            heightDiffView.setTextColor(Color.BLUE);
+                    }
                 }
+                heightDiffView.setText(heightDiffValue);
             }
 
             private void setWeightControl() {
@@ -303,58 +300,36 @@ public class UsersListActivity extends AppCompatActivity {
                 }
                 ((TextView) mView.findViewById(R.id.list_item_weight)).setText(weightValue);
 
-                if(latestReading == null)
-                    return;
-
                 String weightDiffValue = "";
-                UserReading previousReading = mUser.findReadingBefore(latestReading.Sequence);
-                if(previousReading != null) {
-                    double diff = currentWeight - previousReading.Weight;
-                    weightDiffValue = String.format("(%s%.2f)", (diff > 0) ? "+" : "", diff);
-                    TextView weightDiffView = (TextView) mView.findViewById(R.id.list_item_weight_diff);
-                    weightDiffView.setText(weightDiffValue);
-                    if(diff < 0)
-                        weightDiffView.setTextColor(Color.RED);
-                    else
-                        weightDiffView.setTextColor(Color.BLUE);
+                TextView weightDiffView = (TextView) mView.findViewById(R.id.list_item_weight_diff);
+                if(latestReading != null){
+                    UserReading previousReading = mUser.findReadingBefore(latestReading.Sequence);
+                    if(previousReading != null) {
+                        double diff = currentWeight - previousReading.Weight;
+                        weightDiffValue = String.format("(%s%.2f)", (diff > 0) ? "+" : "", diff);
+
+
+                        if(diff < 0)
+                            weightDiffView.setTextColor(Color.RED);
+                        else
+                            weightDiffView.setTextColor(Color.BLUE);
+                    }
                 }
+                weightDiffView.setText(weightDiffValue);
             }
 
             private void setUserImageControl() {
                 ImageView imageView = (ImageView) mView.findViewById(R.id.list_item_image);
-                if( mUser.imageBytes != null) {
+                if (mUser.imageBytes != null) {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(mUser.imageBytes, 0, mUser.imageBytes.length);
-                    imageView.setImageBitmap(getCircularBitmap(bitmap));
+                    imageView.setImageBitmap(Utility.getCircularBitmap(bitmap));
                 } else {
-                    if(mContactDefaultBitmap == null) {
+                    if (mContactDefaultBitmap == null) {
                         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.contact_default);
-                        mContactDefaultBitmap = getCircularBitmap(bitmap);
+                        mContactDefaultBitmap = Utility.getCircularBitmap(bitmap);
                     }
                     imageView.setImageBitmap(mContactDefaultBitmap);
                 }
-            }
-
-            private Bitmap getCircularBitmap(Bitmap bitmap) {
-                final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-                        bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-                final Canvas canvas = new Canvas(output);
-
-                final int color = Color.RED;
-                final Paint paint = new Paint();
-                final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-                final RectF rectF = new RectF(rect);
-
-                paint.setAntiAlias(true);
-                canvas.drawARGB(0, 0, 0, 0);
-                paint.setColor(color);
-                canvas.drawOval(rectF, paint);
-
-                paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-                canvas.drawBitmap(bitmap, rect, rect, paint);
-
-                bitmap.recycle();
-
-                return output;
             }
         }
     }

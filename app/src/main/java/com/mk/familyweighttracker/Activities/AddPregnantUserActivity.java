@@ -43,9 +43,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
-import com.mk.familyweighttracker.Models.NewUserViewModel;
 import com.mk.familyweighttracker.Models.User;
-import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
@@ -66,7 +64,7 @@ public class AddPregnantUserActivity extends AppCompatActivity {
     AddUserAsyncTask mAddUserAsyncTask;
     private User mUser;
     private long mSelectedUserId;
-    NewUserViewModel mNewUser = new NewUserViewModel();
+//    NewUserViewModel mNewUser = new NewUserViewModel();
 
     private View mOkCancelActionsSectionView;
     private Button mCancelButton;
@@ -128,8 +126,7 @@ public class AddPregnantUserActivity extends AppCompatActivity {
     }
 
     private void findAllControls() {
-        mOkCancelActionsSectionView = findViewById(R.id.add_user_ok_cancel_actions_section);
-        mCancelButton = ((Button) findViewById(R.id.add_user_cancel_button));
+        mOkCancelActionsSectionView = findViewById(R.id.add_user_ok_action_section);
         mSaveButton = ((Button) findViewById(R.id.add_user_save_button));
 
         mImageButton = ((ImageButton) findViewById(R.id.add_user_image_button));
@@ -194,7 +191,7 @@ public class AddPregnantUserActivity extends AppCompatActivity {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 try {
                     boolean success = selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    mNewUser.ImageBytes = stream.toByteArray();
+                    mUser.imageBytes = stream.toByteArray();
                 }
                 catch (Exception e) {
                     Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -271,7 +268,7 @@ public class AddPregnantUserActivity extends AppCompatActivity {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             try {
                 boolean success = scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                mNewUser.ImageBytes = stream.toByteArray();
+                mUser.imageBytes = stream.toByteArray();
             }
             catch (Exception e) {
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -523,14 +520,6 @@ public class AddPregnantUserActivity extends AppCompatActivity {
     }
 
     private void initActionButtonControls() {
-        mCancelButton.requestFocus();
-        mCancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -601,7 +590,7 @@ public class AddPregnantUserActivity extends AppCompatActivity {
         String textMessage = "";
         android.support.v7.app.NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
                 .setContentTitle(titleMessage)
-                .setSmallIcon(R.drawable.notification_icon)
+                .setSmallIcon(R.drawable.edit_icon)
                 .setContentText(textMessage)
                 .setAutoCancel(true);
 
