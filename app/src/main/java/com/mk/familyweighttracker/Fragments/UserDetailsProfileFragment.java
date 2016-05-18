@@ -131,13 +131,12 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
             public void onClick(View v) {
 
                 new AlertDialog.Builder(v.getContext())
-                        .setTitle("Warning: Delete User")
-                        .setMessage(Html.fromHtml("Deleting user will remove user data permanently.<br/>Do you want to continue?"))
+                        .setTitle("Warning: Remove member")
+                        .setMessage(Html.fromHtml("Removing member will clear member data permanently. Do you want to continue?"))
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                new UserService().remove(mSelectedUserId);
                                 ((OnUserDeleted) getActivity()).onUserDeleted();
                             }
                         })

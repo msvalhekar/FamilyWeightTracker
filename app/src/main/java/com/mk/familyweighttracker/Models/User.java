@@ -1,14 +1,23 @@
 package com.mk.familyweighttracker.Models;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+
+import com.mk.familyweighttracker.Activities.UserDetailActivity;
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Enums.WeightUnit;
+import com.mk.familyweighttracker.Framework.AlarmReceiver;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Services.PregnancyService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -136,5 +145,38 @@ public class User {
 
     public BodyWeightCategory getWeightCategory() {
         return new PregnancyService().getWeightCategory(getBmi());
+    }
+
+    public void resetReminder(Context context) {
+        if(enableReminder == false) {
+            removeReminder(context);
+            return;
+        }
+
+        Date nextAlarmDate = Utility.getInitialDateOfReminder(reminderDay + 1, reminderHour, reminderMinute);
+
+        Calendar nextAlarmDateTime = Calendar.getInstance();
+        nextAlarmDateTime.setTime(nextAlarmDate);
+
+        Intent alarmReceiverIntent = new Intent(context, AlarmReceiver.class);
+        alarmReceiverIntent.setData(Uri.parse("pwt://" + getId()));
+
+        alarmReceiverIntent.putExtra(UserDetailActivity.ARG_USER_ID, getId());
+        alarmReceiverIntent.putExtra(UserDetailActivity.ARG_USER_NAME, name);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)getId(), alarmReceiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, nextAlarmDateTime.getTimeInMillis(), Utility.WEEK_INTERVAL_MILLIS, pendingIntent);
+    }
+
+    public void removeReminder(Context context) {
+        Intent alarmReceiverIntent = new Intent(context, AlarmReceiver.class);
+        alarmReceiverIntent.setData(Uri.parse("pwt://" + getId()));
+
+        alarmReceiverIntent.putExtra(UserDetailActivity.ARG_USER_ID, getId());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)getId(), alarmReceiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
     }
 }

@@ -39,11 +39,14 @@ public class UserDetailActivity extends AppCompatActivity
         implements OnNewReadingAdded, UserDetailsProfileFragment.OnUserDeleted {
 
     public static final String ARG_USER_ID = "user_id";
+    public static final String ARG_USER_NAME = "user_name";
     public static final String ARG_IS_DATA_CHANGED = "IsDataChanged";
     public static final String ARG_EDIT_READING_ID = "EditReadingId";
     public static final int READING_ADD_REQUEST = 1;
     public static final int READING_EDIT_REQUEST = 2;
 
+    private long mUserId;
+    private User mUser;
     private boolean mIsDataChanged = false;
 
     @Override
@@ -51,9 +54,9 @@ public class UserDetailActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
 
-        long userId = getIntent().getLongExtra(ARG_USER_ID, 0);
-        User user = new UserService().get(userId);
-        this.setTitle(user.name);
+        mUserId = getIntent().getLongExtra(ARG_USER_ID, 0);
+        mUser = new UserService().get(mUserId);
+        this.setTitle(mUser.name);
 
         initToolbarControl();
 
@@ -111,6 +114,10 @@ public class UserDetailActivity extends AppCompatActivity
     @Override
     public void onUserDeleted() {
         mIsDataChanged = true;
+
+        mUser.removeReminder(getApplicationContext());
+        new UserService().remove(mUserId);
+
         informDataChangedAndFinish();
     }
 

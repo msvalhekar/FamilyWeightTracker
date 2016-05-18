@@ -2,12 +2,8 @@ package com.mk.familyweighttracker.Activities;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -22,7 +18,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
@@ -574,36 +569,13 @@ public class AddPregnantUserActivity extends AppCompatActivity {
     public void SaveUser() {
         long userId = new UserService().add(mUser);
 
-        //setReminderNotification(mNewUser.Id);
+        mUser = new UserService().get(userId);
+        mUser.resetReminder(getApplicationContext());
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra(UsersListActivity.NEW_USER_ID_KEY, userId);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
-    }
-
-    private void setReminderNotification(long userId) {
-        User user = new UserService().get(userId);
-        if(user == null || !user.enableReminder) return;
-
-        String titleMessage = user.name + " - Week " + 0 + " - Record Weight";
-        String textMessage = "";
-        android.support.v7.app.NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                .setContentTitle(titleMessage)
-                .setSmallIcon(R.drawable.edit_icon)
-                .setContentText(textMessage)
-                .setAutoCancel(true);
-
-        Intent intent = new Intent(this, AddReadingActivity.class);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(AddReadingActivity.class);
-        stackBuilder.addNextIntent(intent);
-
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-
-        NotificationManager manager = ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE));
-        manager.notify(111, builder.build());
     }
 
     public class AddUserAsyncTask extends AsyncTask<AddPregnantUserActivity, Void, Boolean>

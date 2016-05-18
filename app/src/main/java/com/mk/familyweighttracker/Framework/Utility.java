@@ -24,6 +24,7 @@ public class Utility {
     public static final double INCHES_PER_METER = 39.3701;
     public static final double CENTIMETERS_PER_METER = 100;
     public static final double CENTIMETERS_PER_INCH = 2.54;
+    public static final long WEEK_INTERVAL_MILLIS = 7 * 24 * 60 * 60 * 1000;
 
     public static double convertWeightTo(double weight, WeightUnit toUnit) {
         if(toUnit == WeightUnit.kg)
@@ -42,7 +43,6 @@ public class Utility {
         dob.setTime(dateOfBirth);
 
         Calendar now = Calendar.getInstance();
-        now.setTime(new java.util.Date());
 
         if(dob.after(now)) {
             int ageYear = (dob.get(Calendar.YEAR) - now.get(Calendar.YEAR));
@@ -110,5 +110,22 @@ public class Utility {
         bitmap.recycle();
 
         return output;
+    }
+
+    public static Date getInitialDateOfReminder(int reminderDay, int reminderHour, int reminderMinute) {
+        Calendar now = Calendar.getInstance();
+
+        Calendar reminder = Calendar.getInstance();
+        reminder.set(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH),
+                    reminderHour, reminderMinute, 0);
+
+        while(reminder.before(now) || reminderDay != reminder.get(Calendar.DAY_OF_WEEK) ) {
+            reminder.set(reminder.get(Calendar.YEAR),
+                    reminder.get(Calendar.MONTH),
+                    reminder.get(Calendar.DAY_OF_MONTH)+1,
+                    reminderHour, reminderMinute, 0);
+        }
+
+        return reminder.getTime();
     }
 }

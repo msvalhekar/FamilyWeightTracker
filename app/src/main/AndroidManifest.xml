@@ -67,6 +67,7 @@
             android:label="@string/title_activity_add_user_first_reading"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-    </application>
 
+        <receiver android:name=".Framework.AlarmReceiver" />
+    </application>
 </manifest>
