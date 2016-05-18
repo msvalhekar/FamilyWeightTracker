@@ -18,7 +18,7 @@
     <string name="add_user_reading_date_default_value">(measured on)</string>
     <string name="add_user_reading_period_label">Week</string>
     <string name="add_user_reading_period_default_value">(week number)</string>
-    <string name="add_user_reading_pending_weeks_label">No record for week(s)</string>
+    <string name="add_user_reading_pending_weeks_label">Missing readings for week(s)</string>
     <string name="add_user_reading_pending_weeks_default_value">(pending weeks)</string>
     <string name="add_user_reading_weight_label">Weight</string>
     <string name="add_user_reading_weight_default_value">(weight)</string>
