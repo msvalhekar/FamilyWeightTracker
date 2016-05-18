@@ -87,10 +87,10 @@ public class AddFirstReadingActivity extends AppCompatActivity {
                     }
                 });
 
-        if(mSelectedUser.weightUnit == WeightUnit.kg)
-            ((RadioButton) activityView.findViewById(R.id.add_first_reading_weight_unit_kg)).setChecked(true);
-        else
+        if(mSelectedUser.weightUnit == WeightUnit.lb)
             ((RadioButton) activityView.findViewById(R.id.add_first_reading_weight_unit_lb)).setChecked(true);
+        else
+            ((RadioButton) activityView.findViewById(R.id.add_first_reading_weight_unit_kg)).setChecked(true);
     }
 
     private void initHeightUnitControls() {
@@ -102,10 +102,10 @@ public class AddFirstReadingActivity extends AppCompatActivity {
                         mNewHeightUnit = isHeightUnitCm ? HeightUnit.cm : HeightUnit.inch;
                     }
                 });
-        if(mSelectedUser.heightUnit == HeightUnit.cm)
-            ((RadioButton) activityView.findViewById(R.id.add_first_reading_height_unit_cm)).setChecked(true);
-        else
+        if(mSelectedUser.heightUnit == HeightUnit.inch)
             ((RadioButton) activityView.findViewById(R.id.add_first_reading_height_unit_inch)).setChecked(true);
+        else
+            ((RadioButton) activityView.findViewById(R.id.add_first_reading_height_unit_cm)).setChecked(true);
     }
 
     @Override
