@@ -158,25 +158,24 @@ public class User {
         Calendar nextAlarmDateTime = Calendar.getInstance();
         nextAlarmDateTime.setTime(nextAlarmDate);
 
-        Intent alarmReceiverIntent = new Intent(context, AlarmReceiver.class);
-        alarmReceiverIntent.setData(Uri.parse("pwt://" + getId()));
-
-        alarmReceiverIntent.putExtra(UserDetailActivity.ARG_USER_ID, getId());
-        alarmReceiverIntent.putExtra(UserDetailActivity.ARG_USER_NAME, name);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)getId(), alarmReceiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = getPendingIntent(context);
 
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, nextAlarmDateTime.getTimeInMillis(), Utility.WEEK_INTERVAL_MILLIS, pendingIntent);
     }
 
     public void removeReminder(Context context) {
+        PendingIntent pendingIntent = getPendingIntent(context);
+
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+    }
+
+    private PendingIntent getPendingIntent(Context context) {
         Intent alarmReceiverIntent = new Intent(context, AlarmReceiver.class);
         alarmReceiverIntent.setData(Uri.parse("pwt://" + getId()));
 
         alarmReceiverIntent.putExtra(UserDetailActivity.ARG_USER_ID, getId());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)getId(), alarmReceiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
+        return PendingIntent.getBroadcast(context, (int)getId(), alarmReceiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

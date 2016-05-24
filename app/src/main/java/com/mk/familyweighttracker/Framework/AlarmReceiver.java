@@ -13,6 +13,7 @@ import com.mk.familyweighttracker.Activities.AddReadingActivity;
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
 import com.mk.familyweighttracker.HomeActivity;
 import com.mk.familyweighttracker.Models.User;
+import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
@@ -27,35 +28,35 @@ public class AlarmReceiver extends BroadcastReceiver {
         _context = context;
 
         long userId = intent.getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
-        String userName = intent.getStringExtra(UserDetailActivity.ARG_USER_NAME);
-        //Toast.makeText(context, userName, Toast.LENGTH_LONG).show();
-        sendReminderNotification(userId, userName);
+
+        sendReminderNotification(userId);
     }
 
-    private void sendReminderNotification(long userId, String userName) {
+    private void sendReminderNotification(long userId) {
+        User user = new UserService().get(userId);
+        if(user == null || !user.enableReminder) return;
 
-        //User user = new UserService().get(userId);
-        //if(user == null || !user.enableReminder) return;
-
-        String titleMessage = userName + " - Record Weight";
-        String textMessage = "";
+        UserReading latestReading = user.getLatestReading();
+        long nextSequence = latestReading != null ? latestReading.Sequence +1 : 0;
+        String titleMessage = String.format("%s - Week (%d) Reading", user.name, nextSequence);
+        String textMessage = "Touch to record pregnancy weight for current week.";
         android.support.v7.app.NotificationCompat.Builder builder =
                 (android.support.v7.app.NotificationCompat.Builder) new android.support.v7.app.NotificationCompat.Builder(_context)
                 .setContentTitle(titleMessage)
-                .setSmallIcon(R.drawable.edit_icon)
+                .setSmallIcon(R.mipmap.ic_notification)
                 .setContentText(textMessage)
                 .setAutoCancel(true);
 
-        Intent intent = new Intent(_context, HomeActivity.class);
+        Intent intent = new Intent(_context, UserDetailActivity.class);
+        intent.putExtra(UserDetailActivity.ARG_USER_ID, user.getId());
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(_context);
         stackBuilder.addParentStack(HomeActivity.class);
         stackBuilder.addNextIntent(intent);
 
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent((int)userId, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent((int)user.getId(), PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
 
         NotificationManager manager = ((NotificationManager) _context.getSystemService(Context.NOTIFICATION_SERVICE));
-        manager.notify((int)userId, builder.build());
+        manager.notify((int)user.getId(), builder.build());
     }
-
 }

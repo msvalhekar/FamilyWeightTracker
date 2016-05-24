@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.activeandroid.ActiveAndroid;
 import com.mk.familyweighttracker.Fragments.UserDetailsProfileFragment;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.SlidingTabLayout;
@@ -54,6 +55,8 @@ public class UserDetailActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
+
+        ActiveAndroid.initialize(getApplicationContext());
 
         mUserId = getIntent().getLongExtra(ARG_USER_ID, 0);
         mUser = new UserService().get(mUserId);
