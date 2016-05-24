@@ -28,8 +28,6 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActiveAndroid.initialize(getApplicationContext());
-
         setContentView(R.layout.activity_home);
 
         initToolbarControl();
