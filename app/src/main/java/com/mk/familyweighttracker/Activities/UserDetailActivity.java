@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import com.mk.familyweighttracker.Fragments.UserDetailsProfileFragment;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
@@ -119,6 +120,9 @@ public class UserDetailActivity extends AppCompatActivity
         new UserService().remove(mUserId);
 
         informDataChangedAndFinish();
+
+        String message = String.format("Memeber '%s' is removed successfully.", mUser.name);
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

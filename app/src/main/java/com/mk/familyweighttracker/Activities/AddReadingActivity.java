@@ -35,6 +35,7 @@ import java.util.List;
 
 public class AddReadingActivity extends AppCompatActivity {
 
+    private boolean bEditMode;
     private User mSelectedUser;
     private UserReading mUserReadingToProcess;
     private double mNewHeightValue;
@@ -57,9 +58,11 @@ public class AddReadingActivity extends AppCompatActivity {
         mUserReadingToProcess = mSelectedUser.getReadingById(readingId);
 
         if(mUserReadingToProcess != null) {
+            bEditMode = true;
             setTitle("Edit Reading");
             findViewById(R.id.add_user_reading_delete_section).setVisibility(View.VISIBLE);
         } else {
+            bEditMode = false;
             setTitle("Add Reading");
             findViewById(R.id.add_user_reading_delete_section).setVisibility(View.GONE);
             UserReading previousReading = mSelectedUser.getLatestReading();
@@ -430,6 +433,11 @@ public class AddReadingActivity extends AppCompatActivity {
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
+
+        String message = String.format("Weight reading for week %d %s successfully.",
+                mUserReadingToProcess.Sequence,
+                bEditMode ? "updated" : "added");
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     private void onDeleteReading() {
@@ -438,5 +446,8 @@ public class AddReadingActivity extends AppCompatActivity {
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
+
+        String message = String.format("Reading for week %d removed successfully.", mUserReadingToProcess.Sequence);
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

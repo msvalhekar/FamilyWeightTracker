@@ -576,6 +576,9 @@ public class AddPregnantUserActivity extends AppCompatActivity {
         returnIntent.putExtra(UsersListActivity.NEW_USER_ID_KEY, userId);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
+
+        String message = String.format("New member '%s' is added successfully.", mUser.name);
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     public class AddUserAsyncTask extends AsyncTask<AddPregnantUserActivity, Void, Boolean>
