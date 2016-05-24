@@ -24,8 +24,6 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private static final String DATABASE_NAME = "MkWeighTracker.db";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,9 +36,9 @@ public class HomeActivity extends AppCompatActivity {
 
         List<DashboardItem> items = new ArrayList<>();
         //items.add(new DashboardItem("Calculate BMI", ""));
-        //items.add(new DashboardItem("Calculate Pregnancy Weight Gain", R.mipmap.app_ic_launcher, ""));
+        //items.add(new DashboardItem("Calculate Pregnancy Weight Gain", ""));
         //items.add(new DashboardItem("Track BMI", ""));
-        items.add(new DashboardItem("Track Pregnancy Weight Gain", R.mipmap.ic_launcher, UsersListActivity.class.getName()));
+        items.add(new DashboardItem("Track Pregnancy Weight Gain", UsersListActivity.class.getName()));
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
         DashboardItemRecyclerViewAdapter adapter = new DashboardItemRecyclerViewAdapter(items);
@@ -108,7 +106,6 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         public class DashboardItemViewHolder extends RecyclerView.ViewHolder {
-            private ImageView imageView;
             private TextView textView;
             private DashboardItem mItem;
 
@@ -129,25 +126,21 @@ public class HomeActivity extends AppCompatActivity {
                 });
 
                 textView = ((TextView) itemView.findViewById(R.id.dashboard_gird_item_title));
-                imageView = ((ImageView) itemView.findViewById(R.id.dashboard_gird_item_image));
             }
 
             public void setItem(DashboardItem item) {
                 mItem = item;
                 textView.setText(mItem.Title);
-                imageView.setImageResource(mItem.ImageResourceId);
             }
         }
     }
 
     private class DashboardItem {
         public String Title;
-        public int ImageResourceId;
         public String ActivityClassName;
 
-        public DashboardItem(String displayName, int imageResourceId, String activityClassName) {
+        public DashboardItem(String displayName, String activityClassName) {
             this.Title = displayName;
-            this.ImageResourceId = imageResourceId;
             this.ActivityClassName = activityClassName;
         }
     }
