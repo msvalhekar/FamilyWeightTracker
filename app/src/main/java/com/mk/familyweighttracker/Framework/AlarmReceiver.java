@@ -28,7 +28,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         long userId = intent.getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
         String userName = intent.getStringExtra(UserDetailActivity.ARG_USER_NAME);
-        Toast.makeText(context, userName, Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, userName, Toast.LENGTH_LONG).show();
         sendReminderNotification(userId, userName);
     }
 
