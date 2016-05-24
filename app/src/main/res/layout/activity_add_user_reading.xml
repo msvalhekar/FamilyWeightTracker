@@ -165,7 +165,7 @@
             android:id="@+id/add_reading_delete_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_shape_button"
+            android:background="@drawable/round_shape_red_button"
             android:layout_margin="2dp"
             android:text="Delete"/>
     </LinearLayout>

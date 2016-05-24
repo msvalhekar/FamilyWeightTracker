@@ -163,7 +163,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
 
     private String getLegendMessage() {
         StringBuilder builder = new StringBuilder();
-        builder.append("<small>");
+        builder.append("<big>");
         builder.append("<b>" + "Period" + "</b>");
         builder.append("<br />" + "Week number, for which the reading was taken.");
         builder.append("<br /><b>" + "Date" + "</b>");
@@ -187,7 +187,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         builder.append("<br />" + "The difference between actual weight recorded and maximum expected weight for this week.");
         builder.append("<br /><font color=\"#0000ff\">BLUE</font>: indicates that the actual weight is lower than minimum expected, good.");
         builder.append("<br /><font color=\"#ff0000\">RED</font>: indicates that the actual weight is more than maximum expected, may need to loose weight.");
-        builder.append("</small>");
+        builder.append("</big>");
         return builder.toString();
     }
 
