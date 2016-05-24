@@ -3,7 +3,6 @@
     package="com.mk.familyweighttracker">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--<uses-permission android:name="android.permission.INTERNET" />-->
 
     <application
         android:name=".Framework.TrackerApplication"
@@ -32,9 +31,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--<activity-->
+            <!--android:name=".Framework.SendLog"-->
+            <!--android:theme="@android:style/Theme.Dialog"-->
+            <!--android:textAppearance="@android:style/TextAppearance.Large"-->
+            <!--android:windowSoftInputMode="stateHidden">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.mk.familyweighttracker.SEND_LOG" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
         <activity
             android:name=".Activities.UsersListActivity"
             android:label="@string/title_item_list"
+            android:parentActivityName=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -52,6 +62,7 @@
         <activity
             android:name=".Activities.AddPregnantUserActivity"
             android:label="@string/title_activity_add_new_user"
+            android:parentActivityName=".Activities.UsersListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

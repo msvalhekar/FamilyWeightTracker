@@ -20,7 +20,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mk.familyweighttracker.Fragments.UserDetailsRecordsFragment;
+import com.activeandroid.ActiveAndroid;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
@@ -50,6 +50,8 @@ public class AddReadingActivity extends AppCompatActivity {
 
         initToolbarControl();
         activityView = findViewById(R.id.add_user_reading_layout);
+
+        ActiveAndroid.initialize(getApplicationContext());
 
         long userId = getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
         mSelectedUser = new UserService().get(userId);
