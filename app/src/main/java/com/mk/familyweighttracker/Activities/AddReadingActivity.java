@@ -59,11 +59,11 @@ public class AddReadingActivity extends TrackerBaseActivity {
         if(mUserReadingToProcess != null) {
             bEditMode = true;
             setTitle("Edit Reading");
-            findViewById(R.id.add_user_reading_delete_section).setVisibility(View.VISIBLE);
+            findViewById(R.id.add_reading_delete_button).setVisibility(View.VISIBLE);
         } else {
             bEditMode = false;
             setTitle("Add Reading");
-            findViewById(R.id.add_user_reading_delete_section).setVisibility(View.GONE);
+            findViewById(R.id.add_reading_delete_button).setVisibility(View.GONE);
             UserReading previousReading = mSelectedUser.getLatestReading();
 
             mUserReadingToProcess = new UserReading();
@@ -99,14 +99,6 @@ public class AddReadingActivity extends TrackerBaseActivity {
     }
 
     private void initActionButtonControls() {
-        findViewById(R.id.add_reading_cancel_button)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                });
-
         findViewById(R.id.add_reading_save_button)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override

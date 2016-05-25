@@ -126,7 +126,6 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         //mRecyclerView.scrollToPosition(0);
         mFragmentView.findViewById(R.id.empty_view).setVisibility(View.GONE);
         mFragmentView.findViewById(R.id.user_records_list_record_content_help).setVisibility(View.VISIBLE);
-        mFragmentView.findViewById(R.id.button_user_add_record).setVisibility(View.VISIBLE);
     }
 
     private void initReadingListControl() {
@@ -153,11 +152,10 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         mFragmentView.findViewById(R.id.empty_view).setVisibility(View.GONE);
         if(userReadingList.size() == 0) {
             mFragmentView.findViewById(R.id.user_records_list_record_content_help).setVisibility(View.GONE);
-            mFragmentView.findViewById(R.id.button_user_add_record).setVisibility(View.GONE);
 
             mFragmentView.findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
             ((TextView) mFragmentView.findViewById(R.id.empty_mesage_title)).setText("No data found.");
-            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_description)).setText("Add pre-pregnancy reading from 'Profile' tab.");
+            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_description)).setText("Add reading(s) using '+' button below.");
         }
     }
 

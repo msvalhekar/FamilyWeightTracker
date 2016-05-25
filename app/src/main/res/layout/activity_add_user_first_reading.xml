@@ -123,6 +123,6 @@
             android:layout_weight="1"
             android:background="@drawable/round_shape_button"
             android:layout_margin="2dp"
-            android:text="@android:string/ok"/>
+            android:text="Save"/>
     </LinearLayout>
 </LinearLayout>

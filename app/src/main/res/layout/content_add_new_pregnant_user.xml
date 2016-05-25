@@ -23,6 +23,7 @@
                 android:gravity="center"
                 android:src="@drawable/contact_default"
                 android:contentDescription="@string/add_photo"
+                android:background="@android:color/transparent"
                 android:layout_span="3">
             </ImageButton>
         </TableRow>
