@@ -279,12 +279,13 @@ public class UsersListActivity extends TrackerBaseActivity {
                 String heightDiffValue = "";
                 TextView heightDiffView = (TextView) mView.findViewById(R.id.list_item_height_diff);
                 if(latestReading != null){
-                    UserReading previosReading = mUser.findReadingBefore(latestReading.Sequence);
-                    if(previosReading != null) {
-                        double diff = currentHeight - previosReading.Height;
+                    List<UserReading> readings = mUser.getReadings(true);
+                    if(readings.size() > 0) {
+                        UserReading previousReading = readings.get(0);
+                        double diff = currentHeight - previousReading.Height;
                         heightDiffValue = String.format("(%s%.1f)", (diff > 0) ? "+" : "", diff);
 
-                        if(diff < 0)
+                        if (diff < 0)
                             heightDiffView.setTextColor(Color.RED);
                         else
                             heightDiffView.setTextColor(Color.BLUE);
@@ -306,11 +307,11 @@ public class UsersListActivity extends TrackerBaseActivity {
                 String weightDiffValue = "";
                 TextView weightDiffView = (TextView) mView.findViewById(R.id.list_item_weight_diff);
                 if(latestReading != null){
-                    UserReading previousReading = mUser.findReadingBefore(latestReading.Sequence);
-                    if(previousReading != null) {
+                    List<UserReading> readings = mUser.getReadings(true);
+                    if(readings.size() > 0) {
+                        UserReading previousReading = readings.get(0);
                         double diff = currentWeight - previousReading.Weight;
                         weightDiffValue = String.format("(%s%.2f)", (diff > 0) ? "+" : "", diff);
-
 
                         if(diff < 0)
                             weightDiffView.setTextColor(Color.RED);
