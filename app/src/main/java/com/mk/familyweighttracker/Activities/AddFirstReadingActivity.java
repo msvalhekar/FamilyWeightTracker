@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.activeandroid.ActiveAndroid;
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.WeightUnit;
+import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
@@ -24,7 +25,7 @@ import com.mk.familyweighttracker.Services.UserService;
 
 import java.util.Date;
 
-public class AddFirstReadingActivity extends AppCompatActivity {
+public class AddFirstReadingActivity extends TrackerBaseActivity {
 
     private boolean bEditMode;
     private User mSelectedUser;
@@ -41,8 +42,6 @@ public class AddFirstReadingActivity extends AppCompatActivity {
 
         initToolbarControl();
         activityView = findViewById(R.id.add_user_first_reading_layout);
-
-        ActiveAndroid.initialize(getApplicationContext());
 
         long userId = getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
         mSelectedUser = new UserService().get(userId);

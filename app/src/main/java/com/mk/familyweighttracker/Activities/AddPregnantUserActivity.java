@@ -17,7 +17,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
@@ -38,6 +37,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
+import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
@@ -51,7 +51,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class AddPregnantUserActivity extends AppCompatActivity {
+public class AddPregnantUserActivity extends TrackerBaseActivity {
 
     private static final int LOAD_IMAGE_REQUEST = 1;
     private static final int CROP_IMAGE_REQUEST = 2;
@@ -59,7 +59,6 @@ public class AddPregnantUserActivity extends AppCompatActivity {
     AddUserAsyncTask mAddUserAsyncTask;
     private User mUser;
     private long mSelectedUserId;
-//    NewUserViewModel mNewUser = new NewUserViewModel();
 
     private View mOkCancelActionsSectionView;
     private Button mCancelButton;

@@ -54,7 +54,6 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
-        ActiveAndroid.dispose();
         super.onDestroy();
     }
 

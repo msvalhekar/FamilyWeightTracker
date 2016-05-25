@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -18,10 +17,10 @@ import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
-import com.activeandroid.ActiveAndroid;
 import com.mk.familyweighttracker.Fragments.UserDetailsProfileFragment;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.SlidingTabLayout;
+import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Framework.UserDetailsTabsFactory;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
@@ -37,7 +36,7 @@ import java.util.List;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class UserDetailActivity extends AppCompatActivity
+public class UserDetailActivity extends TrackerBaseActivity
         implements OnNewReadingAdded, UserDetailsProfileFragment.OnUserDeleted {
 
     public static final String ARG_USER_ID = "user_id";
@@ -55,8 +54,6 @@ public class UserDetailActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
-
-        ActiveAndroid.initialize(getApplicationContext());
 
         mUserId = getIntent().getLongExtra(ARG_USER_ID, 0);
         mUser = new UserService().get(mUserId);

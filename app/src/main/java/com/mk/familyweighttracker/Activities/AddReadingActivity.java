@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -20,7 +19,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.activeandroid.ActiveAndroid;
+import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
@@ -33,7 +32,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class AddReadingActivity extends AppCompatActivity {
+public class AddReadingActivity extends TrackerBaseActivity {
 
     private boolean bEditMode;
     private User mSelectedUser;
@@ -50,8 +49,6 @@ public class AddReadingActivity extends AppCompatActivity {
 
         initToolbarControl();
         activityView = findViewById(R.id.add_user_reading_layout);
-
-        ActiveAndroid.initialize(getApplicationContext());
 
         long userId = getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
         mSelectedUser = new UserService().get(userId);
