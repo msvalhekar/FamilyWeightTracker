@@ -15,7 +15,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.mk.familyweighttracker.Activities.UserDetailActivity;
+import com.mk.familyweighttracker.Activities.AddPregnantUserActivity;
+import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
@@ -44,10 +45,10 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
         // Inflate the layout for this fragment
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_profile, container, false);
 
-        mSelectedUserId = getActivity().getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
+        mSelectedUserId = getActivity().getIntent().getLongExtra(Constants.ARG_USER_ID, 0);
         mUser = new UserService().get(mSelectedUserId);
 
-        initControls();
+        initUserDetailsControls();
 
         initPrePregnancyControls();
 
@@ -70,7 +71,7 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
         initPrePregnancyControls();
     }
 
-    private void initControls() {
+    private void initUserDetailsControls() {
         if(mUser.imageBytes != null) {
             ((ImageButton) mFragmentView.findViewById(R.id.view_user_image_button))
                 .setImageBitmap(BitmapFactory.decodeByteArray(mUser.imageBytes, 0, mUser.imageBytes.length));
@@ -79,7 +80,7 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
         ((TextView) mFragmentView.findViewById(R.id.view_user_name))
             .setText(mUser.name);
 
-        ((TextView) mFragmentView.findViewById(R.id.view_user_dob_button))
+        ((TextView) mFragmentView.findViewById(R.id.view_user_dob))
             .setText(mUser.getDateOfBirthStr());
     }
 
@@ -101,16 +102,16 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
             mFragmentView.findViewById(R.id.view_user_pre_pregnancy_bmi_section).setVisibility(View.VISIBLE);
             mFragmentView.findViewById(R.id.view_user_pre_pregnancy_wt_category_section).setVisibility(View.VISIBLE);
 
-            ((Button) mFragmentView.findViewById(R.id.view_user_prepreg_weight_button))
+            ((TextView) mFragmentView.findViewById(R.id.view_user_prepreg_weight))
                     .setText(mUser.getStartingWeightStr());
 
-            ((Button) mFragmentView.findViewById(R.id.view_user_prepreg_height_button))
+            ((TextView) mFragmentView.findViewById(R.id.view_user_prepreg_height))
                     .setText(mUser.getStartingHeightStr());
 
-            ((Button) mFragmentView.findViewById(R.id.view_user_prepreg_bmi_button))
+            ((TextView) mFragmentView.findViewById(R.id.view_user_prepreg_bmi))
                     .setText(mUser.getBmiStr());
 
-            ((Button) mFragmentView.findViewById(R.id.view_user_prepreg_wt_category_button))
+            ((TextView) mFragmentView.findViewById(R.id.view_user_prepreg_wt_category))
                     .setText(mUser.getWeightCategory().toString());
         }
     }
@@ -126,15 +127,15 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
             mFragmentView.findViewById(R.id.view_user_reminder_day_section).setVisibility(View.VISIBLE);
             mFragmentView.findViewById(R.id.view_user_reminder_time_section).setVisibility(View.VISIBLE);
 
-            ((Button) mFragmentView.findViewById(R.id.view_user_remind_button))
+            ((TextView) mFragmentView.findViewById(R.id.view_user_remind))
                     .setText("Enabled");
 
             final List<String> days = Arrays.asList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
 
-            ((Button) mFragmentView.findViewById(R.id.view_user_reminder_day_button))
+            ((TextView) mFragmentView.findViewById(R.id.view_user_reminder_day))
                     .setText(days.get(mUser.reminderDay));
 
-            ((Button) mFragmentView.findViewById(R.id.view_user_reminder_time_button))
+            ((TextView) mFragmentView.findViewById(R.id.view_user_reminder_time))
                     .setText(String.format("%02d:%02d", mUser.reminderHour, mUser.reminderMinute));
         }
     }
@@ -162,7 +163,9 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
         mFragmentView.findViewById(R.id.view_user_edit_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo: navigate to user edit activity
+                Intent intent = new Intent(v.getContext(), AddPregnantUserActivity.class);
+                intent.putExtra(Constants.ARG_USER_ID, mSelectedUserId);
+                startActivityForResult(intent, Constants.REQUEST_CODE_FOR_EDIT_USER);
             }
         });
     }
@@ -173,13 +176,21 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
         // Check which request we're responding to
         if(resultCode != Activity.RESULT_OK) return;
 
-        if(requestCode == UserDetailActivity.READING_ADD_REQUEST) {
+        if(requestCode == Constants.REQUEST_CODE_FOR_ADD_READING) {
             mUser = new UserService().get(mSelectedUserId);
             initPrePregnancyControls();
 
             mIsOriginator = true;
             ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
             mIsOriginator = false;
+        }
+
+        if(requestCode == Constants.REQUEST_CODE_FOR_EDIT_USER) {
+            // todo: refresh usersList
+            mUser = new UserService().get(mSelectedUserId);
+            initUserDetailsControls();
+            initPrePregnancyControls();
+            initReminderControls();
         }
     }
 

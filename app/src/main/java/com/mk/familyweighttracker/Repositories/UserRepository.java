@@ -21,6 +21,12 @@ public class UserRepository {
         return userModel.mapToUser();
     }
 
+    public User getUser(String userName) {
+        UserModel userModel = UserModel.get(userName);
+        if(userModel == null) return null;
+        return userModel.mapToUser();
+    }
+
     public Boolean isAlreadyAdded(String name) {
         return UserModel.exists(name.toLowerCase().trim());
     }

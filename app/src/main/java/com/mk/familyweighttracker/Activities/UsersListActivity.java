@@ -7,11 +7,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
-import android.text.AndroidCharacter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +17,8 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.activeandroid.ActiveAndroid;
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
+import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
@@ -42,8 +40,6 @@ import java.util.List;
  */
 public class UsersListActivity extends TrackerBaseActivity {
 
-    private static final int NEW_USER_ADDED_REQUEST = 1;
-    private static final int USER_DATA_CHANGED_REQUEST = 2;
     public static final String NEW_USER_ID_KEY = "newUserId";
 
     private RecyclerView mRecyclerView;
@@ -72,7 +68,7 @@ public class UsersListActivity extends TrackerBaseActivity {
         if (resultCode != RESULT_OK) return;
 
             // Check which request we're responding to
-        if (requestCode == NEW_USER_ADDED_REQUEST) {
+        if (requestCode == Constants.REQUEST_CODE_FOR_ADD_USER) {
             // update the list for new user
             onRefreshList();
 
@@ -81,9 +77,9 @@ public class UsersListActivity extends TrackerBaseActivity {
                 setReminderNotification(newUserId);
             }
         }
-        if (requestCode == USER_DATA_CHANGED_REQUEST) {
+        if (requestCode == Constants.REQUEST_CODE_FOR_USER_DATA_CHANGED) {
             // update the list for new record
-            boolean dataChanged = data.getBooleanExtra(UserDetailActivity.ARG_IS_DATA_CHANGED, false);
+            boolean dataChanged = data.getBooleanExtra(Constants.ARG_IS_DATA_CHANGED, false);
             if(dataChanged) {
                 onRefreshList();
             }
@@ -113,7 +109,7 @@ public class UsersListActivity extends TrackerBaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddPregnantUserActivity.class);
-                startActivityForResult(intent, NEW_USER_ADDED_REQUEST);
+                startActivityForResult(intent, Constants.REQUEST_CODE_FOR_ADD_USER);
             }
         });
     }
@@ -178,8 +174,8 @@ public class UsersListActivity extends TrackerBaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), UserDetailActivity.class);
-                    intent.putExtra(UserDetailActivity.ARG_USER_ID, user.getId());
-                    startActivityForResult(intent, USER_DATA_CHANGED_REQUEST);
+                    intent.putExtra(Constants.ARG_USER_ID, user.getId());
+                    startActivityForResult(intent, Constants.REQUEST_CODE_FOR_USER_DATA_CHANGED);
                 }
             });
         }

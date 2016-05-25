@@ -13,6 +13,7 @@
 
         <TableRow
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:layout_gravity="center">
             <ImageButton
                 android:id="@+id/view_user_image_button"
@@ -25,19 +26,19 @@
                 android:background="@android:color/transparent"
                 android:clickable="false" >
             </ImageButton>
-            <Button
+            <TextView
                 android:id="@+id/view_user_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left|center"
-                android:clickable="false"
-                android:background="@android:color/transparent"
                 android:textStyle="bold"
+                android:textSize="25dp"
                 android:text="{name}"/>
         </TableRow>
         <TableRow
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_margin="5dp">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -45,21 +46,20 @@
                 android:textStyle="bold"
                 android:gravity="left|center"
                 android:text="Date Of Birth"/>
-            <Button
-                android:id="@+id/view_user_dob_button"
+            <TextView
+                android:id="@+id/view_user_dob"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left|center"
-                android:clickable="false"
-                android:background="@android:color/transparent"
                 android:text="{dd/mm/yyyy}" />
         </TableRow>
         <View
             android:id="@+id/view_user_reminder_divider"
             style="@style/Divider"/>
         <TableRow
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_margin="5dp">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -67,18 +67,17 @@
                 android:textStyle="bold"
                 android:gravity="left|center"
                 android:text="Weekly Reminder"/>
-            <Button
-                android:id="@+id/view_user_remind_button"
+            <TextView
+                android:id="@+id/view_user_remind"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left|center"
-                android:clickable="false"
-                android:background="@android:color/transparent"
                 android:text="Disabled" />
         </TableRow>
         <TableRow
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:id="@+id/view_user_reminder_day_section"
             >
             <TextView
@@ -88,18 +87,17 @@
                 android:textStyle="bold"
                 android:gravity="left|center"
                 android:text="Day of Reminder"/>
-            <Button
-                android:id="@+id/view_user_reminder_day_button"
+            <TextView
+                android:id="@+id/view_user_reminder_day"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left|center"
-                android:clickable="false"
-                android:background="@android:color/transparent"
                 android:text="{dayOfWeek}" />
         </TableRow>
         <TableRow
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:id="@+id/view_user_reminder_time_section"
             >
             <TextView
@@ -109,14 +107,12 @@
                 android:textStyle="bold"
                 android:gravity="left|center"
                 android:text="Time of Reminder"/>
-            <Button
-                android:id="@+id/view_user_reminder_time_button"
+            <TextView
+                android:id="@+id/view_user_reminder_time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left|center"
-                android:clickable="false"
-                android:background="@android:color/transparent"
                 android:text="{hh:mm}" />
         </TableRow>
         <View
@@ -124,19 +120,19 @@
             style="@style/Divider"/>
         <TableRow
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:id="@+id/view_user_pre_pregnancy_section"
             >
-            <Button
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:clickable="false"
-                android:background="@android:color/transparent"
                 android:gravity="center"
                 android:text="Pre Pregnancy Summary"/>
         </TableRow>
         <TableRow
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:id="@+id/view_user_pre_pregnancy_weight_section"
             >
             <TextView
@@ -146,18 +142,17 @@
                 android:textStyle="bold"
                 android:gravity="left|center"
                 android:text="Weight"/>
-            <Button
-                android:id="@+id/view_user_prepreg_weight_button"
+            <TextView
+                android:id="@+id/view_user_prepreg_weight"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left|center"
-                android:clickable="false"
-                android:background="@android:color/transparent"
                 android:text="{nn kg}" />
         </TableRow>
         <TableRow
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:id="@+id/view_user_pre_pregnancy_height_section"
             >
             <TextView
@@ -167,18 +162,17 @@
                 android:textStyle="bold"
                 android:gravity="left|center"
                 android:text="Height"/>
-            <Button
-                android:id="@+id/view_user_prepreg_height_button"
+            <TextView
+                android:id="@+id/view_user_prepreg_height"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left|center"
-                android:clickable="false"
-                android:background="@android:color/transparent"
                 android:text="{nn cm}" />
         </TableRow>
         <TableRow
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:id="@+id/view_user_pre_pregnancy_bmi_section"
             >
             <TextView
@@ -188,18 +182,17 @@
                 android:textStyle="bold"
                 android:gravity="left|center"
                 android:text="Body-Mass-Index"/>
-            <Button
-                android:id="@+id/view_user_prepreg_bmi_button"
+            <TextView
+                android:id="@+id/view_user_prepreg_bmi"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left|center"
-                android:clickable="false"
-                android:background="@android:color/transparent"
                 android:text="{bmi}" />
         </TableRow>
         <TableRow
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:id="@+id/view_user_pre_pregnancy_wt_category_section"
             >
             <TextView
@@ -209,14 +202,12 @@
                 android:textStyle="bold"
                 android:gravity="left|center"
                 android:text="Body-Mass-Index"/>
-            <Button
-                android:id="@+id/view_user_prepreg_wt_category_button"
+            <TextView
+                android:id="@+id/view_user_prepreg_wt_category"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left|center"
-                android:clickable="false"
-                android:background="@android:color/transparent"
                 android:text="{wt category}" />
         </TableRow>
         <View style="@style/Divider"/>

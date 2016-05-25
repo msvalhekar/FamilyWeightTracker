@@ -21,6 +21,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
+import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
@@ -55,7 +56,7 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
         // Inflate the layout for this fragment
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_chart, container, false);
 
-        mSelectedUserId = getActivity().getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
+        mSelectedUserId = getActivity().getIntent().getLongExtra(Constants.ARG_USER_ID, 0);
 
         initChartControl();
 

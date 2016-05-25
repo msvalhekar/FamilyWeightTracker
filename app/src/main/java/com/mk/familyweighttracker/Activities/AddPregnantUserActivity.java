@@ -37,6 +37,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
+import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
@@ -53,12 +54,10 @@ import java.util.List;
 
 public class AddPregnantUserActivity extends TrackerBaseActivity {
 
-    private static final int LOAD_IMAGE_REQUEST = 1;
-    private static final int CROP_IMAGE_REQUEST = 2;
-
     AddUserAsyncTask mAddUserAsyncTask;
     private User mUser;
     private long mSelectedUserId;
+    boolean mIsEditMode;
 
     private View mOkCancelActionsSectionView;
     private Button mCancelButton;
@@ -88,12 +87,12 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
 
         findAllControls();
 
-        //mIsEditMode = true;
-        mSelectedUserId = getIntent().getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
+        mIsEditMode = true;
+        mSelectedUserId = getIntent().getLongExtra(Constants.ARG_USER_ID, 0);
         mUser = new UserService().get(mSelectedUserId);
 
         if(mUser == null) {
-            //mIsEditMode = false;
+            mIsEditMode = false;
             final Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             calendar.set(calendar.get(Calendar.YEAR) - 18, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
@@ -108,15 +107,13 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             mUser.reminderMinute = 0;
         }
 
-        //setControlsMode();
-
         initImageButtonControl();
         initNameControl();
         initDateOfBirthControl();
         initReminderControl();
-        //initPrepregnancyControl();
-        //initSummaryControl();
         initActionButtonControls();
+
+        setTitle(mIsEditMode ? R.string.title_activity_edit_user : R.string.title_activity_add_new_user);
     }
 
     private void findAllControls() {
@@ -140,31 +137,11 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         mReminderTimeButton = ((Button) findViewById(R.id.add_user_reminder_time_button));
     }
 
-    private void setControlsMode() {
-        mOkCancelActionsSectionView.setVisibility(View.VISIBLE);
-        //mCancelButton.setVisibility(View.VISIBLE);
-        //mSaveButton.setVisibility(View.VISIBLE);
-
-        mImageButton.setVisibility(View.VISIBLE);
-        mNameText.setVisibility(View.VISIBLE);
-        mDobButton.setVisibility(View.VISIBLE);
-        mGenderRadioGroup.setVisibility(View.VISIBLE);
-        //mGenderMaleRdButton.setVisibility(View.VISIBLE);
-        //mGenderFemaleRdButton.setVisibility(View.VISIBLE);
-
-        mEnableReminderCkBox.setVisibility(View.VISIBLE);
-        mReminderMessageButton.setVisibility(View.VISIBLE);
-        mReminderDaySectionView.setVisibility(View.VISIBLE);
-        //mReminderDaySpinner.setVisibility(View.VISIBLE);
-        mReminderTimeSectionView.setVisibility(View.VISIBLE);
-        //mReminderTimeButton.setVisibility(View.VISIBLE);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Check which request we're responding to
-        if (requestCode == LOAD_IMAGE_REQUEST) {
+        if (requestCode == Constants.REQUEST_CODE_FOR_IMAGE_LOAD) {
             if (resultCode == RESULT_OK && data != null) {
                 mPickedImageUri = data.getData();
                 allowToCropImageBeforeSelection(mPickedImageUri);
@@ -173,7 +150,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                 Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
             }
         }
-        else if (requestCode == CROP_IMAGE_REQUEST) {
+        else if (requestCode == Constants.REQUEST_CODE_FOR_IMAGE_CROP) {
             if (resultCode == RESULT_OK && data != null) {
                 // get the returned data
                 Bundle extras = data.getExtras();
@@ -216,7 +193,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, LOAD_IMAGE_REQUEST);
+                startActivityForResult(i, Constants.REQUEST_CODE_FOR_IMAGE_LOAD);
             }
         });
     }
@@ -237,7 +214,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             // retrieve data on return
             cropIntent.putExtra("return-data", true);
             // start the activity - we handle returning in onActivityResult
-            startActivityForResult(cropIntent, CROP_IMAGE_REQUEST);
+            startActivityForResult(cropIntent, Constants.REQUEST_CODE_FOR_IMAGE_CROP);
         }
         // respond to users whose devices do not support the crop action
         catch (ActivityNotFoundException anfe) {
@@ -442,7 +419,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
 
                 int show = View.GONE;
                 String message = "No";
-                if(isChecked) {
+                if (isChecked) {
                     show = View.VISIBLE;
                     message = "Yes";
                 }
@@ -459,6 +436,8 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     }
 
     private void initDayOfReminderControl() {
+        mReminderDaySectionView.setVisibility(mUser.enableReminder ? View.VISIBLE : View.GONE);
+
         final List<String> days = Arrays.asList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, days);
@@ -487,6 +466,8 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     }
 
     private void initTimeOfReminderControl() {
+        mReminderTimeSectionView.setVisibility(mUser.enableReminder ? View.VISIBLE : View.GONE);
+
         mReminderTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -514,6 +495,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     }
 
     private void initActionButtonControls() {
+        mSaveButton.setText(mIsEditMode ? "Save" : "Add");
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -556,7 +538,11 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         if (TextUtils.isEmpty(mUser.name)) {
             nameErrors.add("Required");
         }
-        else if (new UserService().isAlreadyAdded(mUser.name)) {
+        else if (mIsEditMode) {
+            User userWithSameName = new UserService().get(mUser.name);
+            if(userWithSameName != null && userWithSameName.getId() != mSelectedUserId)
+                nameErrors.add("This name is already used, try different");
+        } else if (new UserService().isAlreadyAdded(mUser.name)) {
             nameErrors.add("This name is already used, try different");
         }
         if(nameErrors.size() > 0)

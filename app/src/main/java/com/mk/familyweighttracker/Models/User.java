@@ -12,6 +12,7 @@ import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.AlarmReceiver;
+import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Services.PregnancyService;
 
@@ -175,7 +176,7 @@ public class User {
         Intent alarmReceiverIntent = new Intent(context, AlarmReceiver.class);
         alarmReceiverIntent.setData(Uri.parse("pwt://" + getId()));
 
-        alarmReceiverIntent.putExtra(UserDetailActivity.ARG_USER_ID, getId());
+        alarmReceiverIntent.putExtra(Constants.ARG_USER_ID, getId());
         return PendingIntent.getBroadcast(context, (int)getId(), alarmReceiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

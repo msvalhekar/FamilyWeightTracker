@@ -18,6 +18,7 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Fragments.UserDetailsProfileFragment;
+import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.SlidingTabLayout;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
@@ -39,13 +40,6 @@ import java.util.List;
 public class UserDetailActivity extends TrackerBaseActivity
         implements OnNewReadingAdded, UserDetailsProfileFragment.OnUserDeleted {
 
-    public static final String ARG_USER_ID = "user_id";
-    public static final String ARG_USER_NAME = "user_name";
-    public static final String ARG_IS_DATA_CHANGED = "IsDataChanged";
-    public static final String ARG_EDIT_READING_ID = "EditReadingId";
-    public static final int READING_ADD_REQUEST = 1;
-    public static final int READING_EDIT_REQUEST = 2;
-
     private long mUserId;
     private User mUser;
     private boolean mIsDataChanged = false;
@@ -55,7 +49,7 @@ public class UserDetailActivity extends TrackerBaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
 
-        mUserId = getIntent().getLongExtra(ARG_USER_ID, 0);
+        mUserId = getIntent().getLongExtra(Constants.ARG_USER_ID, 0);
         mUser = new UserService().get(mUserId);
         this.setTitle(mUser.name);
 
@@ -121,7 +115,7 @@ public class UserDetailActivity extends TrackerBaseActivity
 
         informDataChangedAndFinish();
 
-        String message = String.format("Memeber '%s' is removed successfully.", mUser.name);
+        String message = String.format("Member '%s' is removed successfully.", mUser.name);
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
@@ -165,7 +159,7 @@ public class UserDetailActivity extends TrackerBaseActivity
 
     private void informDataChangedAndFinish() {
         Intent intent = new Intent();
-        intent.putExtra(ARG_IS_DATA_CHANGED, mIsDataChanged);
+        intent.putExtra(Constants.ARG_IS_DATA_CHANGED, mIsDataChanged);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }

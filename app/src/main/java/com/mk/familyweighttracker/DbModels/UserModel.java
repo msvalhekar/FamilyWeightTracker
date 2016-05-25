@@ -113,6 +113,11 @@ public class UserModel extends Model {
 
     private static UserModel mapFromUser(User user) {
         UserModel userModel = new UserModel();
+
+        UserModel userFound = get(user.getId());
+        if(userFound != null)
+            userModel = userFound;
+
         userModel.name = user.name;
         userModel.imageBytes = user.imageBytes;
         userModel.dateOfBirth = user.dateOfBirth;

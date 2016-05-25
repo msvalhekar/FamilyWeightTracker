@@ -29,7 +29,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         _context = context;
 
-        long userId = intent.getLongExtra(UserDetailActivity.ARG_USER_ID, 0);
+        long userId = intent.getLongExtra(Constants.ARG_USER_ID, 0);
 
         ActiveAndroid.initialize(context);
 

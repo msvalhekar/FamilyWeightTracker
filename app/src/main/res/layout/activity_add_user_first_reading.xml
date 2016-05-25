@@ -64,7 +64,6 @@
                     android:text="@string/add_user_first_reading_weight_unit_lbs" />
             </RadioGroup>
         </TableRow>
-
         <TableRow>
             <TextView
                 android:id="@+id/add_first_reading_height_label"

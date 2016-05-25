@@ -23,6 +23,10 @@ public class UserService {
         return userRepository.getUser(userId);
     }
 
+    public User get(String userName) {
+        return userRepository.getUser(userName);
+    }
+
     public Boolean isAlreadyAdded(String name) {
         return userRepository.isAlreadyAdded(name);
     }
