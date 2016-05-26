@@ -228,16 +228,19 @@ public class UsersListActivity extends TrackerBaseActivity {
 
             private void setBmiControl() {
                 TextView bmiView = ((TextView) mView.findViewById(R.id.list_item_bmi));
+                TextView bmiCategoryView = ((TextView) mView.findViewById(R.id.list_item_bmi_category));
+
                 if(Double.isNaN(mUser.getBmi())){
                     bmiView.setText("");
+                    bmiCategoryView.setText("");
                     return;
                 }
 
                 bmiView.setText("BMI: " + mUser.getBmiStr());
 
-                TextView bmiCategoryView = ((TextView) mView.findViewById(R.id.list_item_bmi_category));
                 BodyWeightCategory weightCategory = mUser.getWeightCategory();
                 bmiCategoryView.setText(weightCategory.toString());
+
                 if(weightCategory == BodyWeightCategory.UnderWeight) {
                     bmiCategoryView.setBackgroundColor(Color.rgb(255,255,153));
                 } else if(weightCategory == BodyWeightCategory.Normal) {
