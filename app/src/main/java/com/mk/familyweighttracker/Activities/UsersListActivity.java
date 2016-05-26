@@ -71,11 +71,6 @@ public class UsersListActivity extends TrackerBaseActivity {
         if (requestCode == Constants.REQUEST_CODE_FOR_ADD_USER) {
             // update the list for new user
             onRefreshList();
-
-            long newUserId = data.getLongExtra(NEW_USER_ID_KEY, 0);
-            if(newUserId != 0) {
-                setReminderNotification(newUserId);
-            }
         }
         if (requestCode == Constants.REQUEST_CODE_FOR_USER_DATA_CHANGED) {
             // update the list for new record

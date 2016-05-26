@@ -557,12 +557,17 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         mUser = new UserService().get(userId);
         mUser.resetReminder(getApplicationContext());
 
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra(UsersListActivity.NEW_USER_ID_KEY, userId);
-        setResult(Activity.RESULT_OK, returnIntent);
+        if(mIsEditMode) {
+            Intent returnIntent = new Intent();
+            setResult(Activity.RESULT_OK, returnIntent);
+        } else {
+            Intent intent = new Intent(getApplicationContext(), com.mk.familyweighttracker.Activities.UserDetailActivity.class);
+            intent.putExtra(Constants.ARG_USER_ID, userId);
+            startActivity(intent);
+        }
         finish();
 
-        String message = String.format("New member '%s' is added successfully.", mUser.name);
+        String message = String.format("Member '%s' is %s successfully.", mUser.name, mIsEditMode ? "updated" : "added");
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 

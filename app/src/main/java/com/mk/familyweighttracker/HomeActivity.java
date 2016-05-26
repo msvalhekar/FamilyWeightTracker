@@ -1,6 +1,5 @@
 package com.mk.familyweighttracker;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,12 +11,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.activeandroid.ActiveAndroid;
-import com.mk.familyweighttracker.Activities.UsersListActivity;
+import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Models.User;
+import com.mk.familyweighttracker.Services.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +34,21 @@ public class HomeActivity extends AppCompatActivity {
         //items.add(new DashboardItem("Calculate BMI", ""));
         //items.add(new DashboardItem("Calculate Pregnancy Weight Gain", ""));
         //items.add(new DashboardItem("Track BMI", ""));
-        items.add(new DashboardItem("Track Pregnancy Weight Gain", UsersListActivity.class.getName()));
+        items.add(new DashboardItem("Track Pregnancy Weight Gain", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<User> users = new UserService().getAll();
+                if(users.size() > 0) {
+                    Intent intent = new Intent(getApplicationContext(), com.mk.familyweighttracker.Activities.UserDetailActivity.class);
+                    intent.putExtra(Constants.ARG_USER_ID, users.get(0).getId());
+                    startActivity(intent);
+                    return;
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), com.mk.familyweighttracker.Activities.AddPregnantUserActivity.class);
+                    startActivity(intent);
+                }
+            }
+        }));
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
         DashboardItemRecyclerViewAdapter adapter = new DashboardItemRecyclerViewAdapter(items);
@@ -108,37 +120,24 @@ public class HomeActivity extends AppCompatActivity {
 
             public DashboardItemViewHolder(View itemView) {
                 super(itemView);
-
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        try {
-                            Class className = Class.forName(mItem.ActivityClassName);
-                            Intent intent = new Intent(getApplicationContext(), className);
-                            startActivity(intent);
-                        } catch (Exception e) {
-                            Toast.makeText(v.getContext(), "Work In Progress", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
                 textView = ((TextView) itemView.findViewById(R.id.dashboard_gird_item_title));
             }
 
             public void setItem(DashboardItem item) {
                 mItem = item;
                 textView.setText(mItem.Title);
+                textView.setOnClickListener(mItem.ClickListener);
             }
         }
     }
 
     private class DashboardItem {
         public String Title;
-        public String ActivityClassName;
+        public View.OnClickListener ClickListener;
 
-        public DashboardItem(String displayName, String activityClassName) {
+        public DashboardItem(String displayName, View.OnClickListener clickListener) {
             this.Title = displayName;
-            this.ActivityClassName = activityClassName;
+            this.ClickListener = clickListener;
         }
     }
 }
