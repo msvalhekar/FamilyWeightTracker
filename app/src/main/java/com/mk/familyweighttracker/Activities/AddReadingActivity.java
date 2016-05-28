@@ -75,7 +75,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
             mUserReadingToProcess.Height = previousReading.Height;
         }
 
-        initMeasuredOnDateControl();
+        //initMeasuredOnDateControl();
         initWeekSequenceControl(mUserReadingToProcess.Sequence);
         initWeightSequenceControl(mUserReadingToProcess.Weight);
         initHeightSequenceControl(mUserReadingToProcess.Height);

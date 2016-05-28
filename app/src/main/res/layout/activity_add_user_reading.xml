@@ -36,7 +36,9 @@
             android:orientation="horizontal">
 
             <TableRow
-                android:layout_weight="1">
+                android:id="@+id/add_reading_taken_on_section"
+                android:layout_weight="1"
+                android:visibility="gone">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -52,6 +54,7 @@
                     android:text="@string/add_user_reading_date_default_value" />
             </TableRow>
             <TableRow
+                android:id="@+id/add_reading_sequence_section"
                 android:layout_weight="1">
                 <TextView
                     android:layout_width="0dp"
@@ -87,6 +90,7 @@
                     android:text="@string/add_user_reading_pending_weeks_default_value"/>
             </TableRow>
             <TableRow
+                android:id="@+id/add_reading_weight_section"
                 android:layout_weight="1">
                 <TextView
                     android:layout_width="0dp"
@@ -110,6 +114,7 @@
                     android:text="@string/add_user_reading_weight_unit_label"/>
             </TableRow>
             <TableRow
+                android:id="@+id/add_reading_height_section"
                 android:layout_weight="1">
                 <TextView
                     android:layout_width="0dp"
