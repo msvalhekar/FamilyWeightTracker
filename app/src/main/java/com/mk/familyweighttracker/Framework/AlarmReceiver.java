@@ -6,13 +6,9 @@ import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.NotificationCompat;
-import android.widget.Toast;
+import android.os.Vibrator;
 
 import com.activeandroid.ActiveAndroid;
-import com.mk.familyweighttracker.Activities.AddReadingActivity;
-import com.mk.familyweighttracker.Activities.UserDetailActivity;
-import com.mk.familyweighttracker.Activities.UsersListActivity;
 import com.mk.familyweighttracker.HomeActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
@@ -35,12 +31,17 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         try {
             sendReminderNotification(userId);
+            vibrateDevice();
         }
         catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
+    }
+
+    private void vibrateDevice() {
+        ((Vibrator) _context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(750);
     }
 
     private void sendReminderNotification(long userId) throws ClassNotFoundException {
