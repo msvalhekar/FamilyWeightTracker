@@ -124,7 +124,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:text="Day of Reminder"/>
+                android:text="Day of Week"/>
             <Button
                 android:id="@+id/add_user_reminder_day_button"
                 android:layout_width="0dp"
@@ -148,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:text="Time of Reminder"/>
+                android:text="Time of Day"/>
             <Button
                 android:id="@+id/add_user_reminder_time_button"
                 android:layout_width="0dp"

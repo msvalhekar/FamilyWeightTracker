@@ -117,18 +117,15 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
     }
 
     private void initReminderControls() {
-        mFragmentView.findViewById(R.id.view_user_reminder_divider).setVisibility(View.GONE);
+        mFragmentView.findViewById(R.id.view_user_reminder_check_section).setVisibility(View.VISIBLE);
         mFragmentView.findViewById(R.id.view_user_reminder_day_section).setVisibility(View.GONE);
         mFragmentView.findViewById(R.id.view_user_reminder_time_section).setVisibility(View.GONE);
 
         if(mUser.enableReminder) {
 
-            mFragmentView.findViewById(R.id.view_user_reminder_divider).setVisibility(View.VISIBLE);
+            mFragmentView.findViewById(R.id.view_user_reminder_check_section).setVisibility(View.GONE);
             mFragmentView.findViewById(R.id.view_user_reminder_day_section).setVisibility(View.VISIBLE);
             mFragmentView.findViewById(R.id.view_user_reminder_time_section).setVisibility(View.VISIBLE);
-
-            ((TextView) mFragmentView.findViewById(R.id.view_user_remind))
-                    .setText("Enabled");
 
             final List<String> days = Arrays.asList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
 
@@ -191,6 +188,7 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
             initUserDetailsControls();
             initPrePregnancyControls();
             initReminderControls();
+            getActivity().setTitle(mUser.name);
         }
     }
 

@@ -59,21 +59,35 @@
             style="@style/Divider"/>
         <TableRow
             android:layout_weight="1"
-            android:layout_margin="5dp">
+            android:layout_margin="5dp"
+            android:id="@+id/view_user_reminder_section"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Reminder"/>
+        </TableRow>
+        <TableRow
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:id="@+id/view_user_reminder_check_section"
+            >
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
                 android:gravity="left|center"
-                android:text="Weekly Reminder"/>
+                android:text="Configured?"/>
             <TextView
                 android:id="@+id/view_user_remind"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left|center"
-                android:text="Disabled" />
+                android:text="No" />
         </TableRow>
         <TableRow
             android:layout_weight="1"
@@ -86,7 +100,7 @@
                 android:layout_weight="1"
                 android:textStyle="bold"
                 android:gravity="left|center"
-                android:text="Day of Reminder"/>
+                android:text="Day of Week"/>
             <TextView
                 android:id="@+id/view_user_reminder_day"
                 android:layout_width="0dp"
@@ -106,7 +120,7 @@
                 android:layout_weight="1"
                 android:textStyle="bold"
                 android:gravity="left|center"
-                android:text="Time of Reminder"/>
+                android:text="Time of Day"/>
             <TextView
                 android:id="@+id/view_user_reminder_time"
                 android:layout_width="0dp"
@@ -201,7 +215,7 @@
                 android:layout_weight="1"
                 android:textStyle="bold"
                 android:gravity="left|center"
-                android:text="Body-Mass-Index"/>
+                android:text="Weight Category"/>
             <TextView
                 android:id="@+id/view_user_prepreg_wt_category"
                 android:layout_width="0dp"
