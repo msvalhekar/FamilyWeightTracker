@@ -100,28 +100,16 @@
                     android:text="@string/add_user_first_reading_height_unit_inches" />
             </RadioGroup>
         </TableRow>
+        <View style="@style/Divider"/>
+        <TableRow>
+            <Button
+                android:id="@+id/add_first_reading_save_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/round_shape_button"
+                android:layout_margin="2dp"
+                android:text="Save"/>
+        </TableRow>
     </TableLayout>
-    <View style="@style/Divider"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/add_first_reading_cancel_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/round_shape_button"
-            android:layout_margin="2dp"
-            android:text="@android:string/cancel"/>
-
-        <Button
-            android:id="@+id/add_first_reading_save_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/round_shape_button"
-            android:layout_margin="2dp"
-            android:text="Save"/>
-    </LinearLayout>
 </LinearLayout>

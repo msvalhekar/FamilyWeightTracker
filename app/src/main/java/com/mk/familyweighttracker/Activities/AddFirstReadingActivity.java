@@ -130,14 +130,6 @@ public class AddFirstReadingActivity extends TrackerBaseActivity {
     }
 
     private void initActionButtonControls() {
-        findViewById(R.id.add_first_reading_cancel_button)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                });
-
         findViewById(R.id.add_first_reading_save_button)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
