@@ -147,7 +147,7 @@
                     android:layout_weight="1"
                     android:layout_margin="2dp"
                     android:background="@drawable/round_shape_red_button"
-                    android:text="Delete"/>
+                    android:text="Remove"/>
                 <Button
                     android:id="@+id/add_reading_save_button"
                     android:layout_width="0dp"

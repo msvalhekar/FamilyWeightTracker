@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -71,6 +72,16 @@ public class AddFirstReadingActivity extends TrackerBaseActivity {
         setTitle(bEditMode ? "Edit Pre-pregnancy Reading" : "Add Pre-pregnancy Reading");
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void initHeightTextControl() {
         final EditText heightView = ((EditText) activityView.findViewById(R.id.add_first_reading_height));
         heightView.setText(String.valueOf(mUserReadingToProcess.Height));
@@ -110,12 +121,6 @@ public class AddFirstReadingActivity extends TrackerBaseActivity {
             ((RadioButton) activityView.findViewById(R.id.add_first_reading_height_unit_inch)).setChecked(true);
         else
             ((RadioButton) activityView.findViewById(R.id.add_first_reading_height_unit_cm)).setChecked(true);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // Check which request we're responding to
     }
 
     private void initToolbarControl() {
