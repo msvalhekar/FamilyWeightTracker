@@ -254,8 +254,10 @@ public class AddReadingActivity extends TrackerBaseActivity {
             }
         });
 
+        findViewById(R.id.add_user_pending_readings_divider).setVisibility(View.GONE);
         findViewById(R.id.add_user_pending_readings_section).setVisibility(View.GONE);
         if(pendingItems.size() > 0) {
+            findViewById(R.id.add_user_pending_readings_divider).setVisibility(View.VISIBLE);
             findViewById(R.id.add_user_pending_readings_section).setVisibility(View.VISIBLE);
 
             ((TextView) findViewById(R.id.add_reading_week_pending))
