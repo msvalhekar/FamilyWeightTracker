@@ -4,25 +4,33 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -30,6 +38,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -144,7 +153,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         if (requestCode == Constants.REQUEST_CODE_FOR_IMAGE_LOAD) {
             if (resultCode == RESULT_OK && data != null) {
                 mPickedImageUri = data.getData();
-                allowToCropImageBeforeSelection(mPickedImageUri);
+                allowToCropImageBeforeSelection();
             } else {
                 mPickedImageUri = null;
                 Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
@@ -154,18 +163,18 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             if (resultCode == RESULT_OK && data != null) {
                 // get the returned data
                 Bundle extras = data.getExtras();
-                // get the cropped bitmap
-                Bitmap selectedBitmap = extras.getParcelable("data");
+                if(extras != null) {
+                    // get the cropped bitmap
+                    Bitmap selectedBitmap = extras.getParcelable("data");
 
-                mImageButton.setImageBitmap(selectedBitmap);
-
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                try {
-                    boolean success = selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    mUser.imageBytes = stream.toByteArray();
-                }
-                catch (Exception e) {
-                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    try {
+                        boolean success = selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                        mUser.imageBytes = stream.toByteArray();
+                        mImageButton.setImageBitmap(BitmapFactory.decodeByteArray(mUser.imageBytes, 0, mUser.imageBytes.length));
+                    } catch (Exception e) {
+                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 }
             } else {
                 saveUserImage(mPickedImageUri);
@@ -192,36 +201,77 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         mImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, Constants.REQUEST_CODE_FOR_IMAGE_LOAD);
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(intent, Constants.REQUEST_CODE_FOR_IMAGE_LOAD);
             }
         });
     }
 
-    private void allowToCropImageBeforeSelection(Uri pickedImageUri) {
-        try {
-            Intent cropIntent = new Intent("com.android.camera.action.CROP");
-            // indicate image type and Uri
-            cropIntent.setDataAndType(pickedImageUri, "image/*");
-            // set crop properties
-            cropIntent.putExtra("crop", "true");
-            // indicate aspect of desired crop
-            cropIntent.putExtra("aspectX", 1);
-            cropIntent.putExtra("aspectY", 1);
-            // indicate output X and Y
-            cropIntent.putExtra("outputX", 512);
-            cropIntent.putExtra("outputY", 512);
-            // retrieve data on return
-            cropIntent.putExtra("return-data", true);
-            // start the activity - we handle returning in onActivityResult
-            startActivityForResult(cropIntent, Constants.REQUEST_CODE_FOR_IMAGE_CROP);
-        }
-        // respond to users whose devices do not support the crop action
-        catch (ActivityNotFoundException anfe) {
-            // display an error message
-            String errorMessage = "Device doesn't support the crop action!";
-            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
-            toast.show();
+    private void allowToCropImageBeforeSelection() {
+
+        final ArrayList<CropOption> cropOptions = new ArrayList<CropOption>();
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setType("image/*");
+        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
+        int size = list.size();
+
+        if (size == 0) {
+            Toast.makeText(this, "Can not find image cropper app", Toast.LENGTH_SHORT).show();
+            // todo: still need to save selected image
+            return;
+        } else {
+            intent.setData(mPickedImageUri);
+            intent.putExtra("outputX", 150);
+            intent.putExtra("outputY", 150);
+            intent.putExtra("aspectX", 1);
+            intent.putExtra("aspectY", 1);
+            intent.putExtra("crop", true);
+            intent.putExtra("scale", true);
+            intent.putExtra("return-data", true);
+
+            if (size == 1) {
+                Intent i = new Intent(intent);
+                ResolveInfo res = list.get(0);
+                i.setComponent(new ComponentName(res.activityInfo.packageName,  res.activityInfo.name));
+                startActivityForResult(i, Constants.REQUEST_CODE_FOR_IMAGE_CROP);
+            } else {
+                for (ResolveInfo res : list) {
+                    final CropOption co = new CropOption();
+
+                    co.title = getPackageManager().getApplicationLabel(res.activityInfo.applicationInfo);
+                    co.icon = getPackageManager().getApplicationIcon(res.activityInfo.applicationInfo);
+                    co.appIntent = new Intent(intent);
+                    co.appIntent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+                    cropOptions.add(co);
+                }
+
+                CropOptionAdapter adapter = new CropOptionAdapter(this, cropOptions);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Choose Cropper App");
+                builder.setAdapter(adapter,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int item) {
+                                startActivityForResult(
+                                        cropOptions.get(item).appIntent,
+                                        Constants.REQUEST_CODE_FOR_IMAGE_CROP);
+                            }
+                        });
+
+                builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+
+                        if (mPickedImageUri != null) {
+                            getContentResolver().delete(mPickedImageUri, null, null);
+                            mPickedImageUri = null;
+                        }
+                    }
+                });
+
+                builder.create().show();
+            }
         }
     }
 
@@ -590,5 +640,40 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             } else {
             }
         }
+    }
+
+    public class CropOptionAdapter extends ArrayAdapter<CropOption> {
+        private ArrayList<CropOption> mOptions;
+        private LayoutInflater mInflater;
+
+        public CropOptionAdapter(Context context, ArrayList<CropOption> options) {
+            super(context, R.layout.crop_selector, options);
+
+            mOptions = options;
+            mInflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup group) {
+            if (convertView == null)
+                convertView = mInflater.inflate(R.layout.crop_selector, null);
+
+            CropOption item = mOptions.get(position);
+
+            if (item != null) {
+                ((ImageView) convertView.findViewById(R.id.crop_selector_icon))
+                        .setImageDrawable(item.icon);
+                ((TextView) convertView.findViewById(R.id.crop_selector_title))
+                        .setText(item.title);
+                return convertView;
+            }
+            return null;
+        }
+    }
+
+    public class CropOption {
+        public CharSequence title;
+        public Drawable icon;
+        public Intent appIntent;
     }
 }
