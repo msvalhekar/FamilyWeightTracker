@@ -25,5 +25,6 @@
         android:layout_margin="10dp"
         app:layoutManager="GridLayoutManager"
         tools:context=".HomeActivity"
+        tools:listitem="@layout/dashboard_item_content"
         />
 </LinearLayout>
