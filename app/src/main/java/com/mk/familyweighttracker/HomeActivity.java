@@ -49,6 +49,13 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         }));
+//        items.add(new DashboardItem("May I Help You?", new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(), com.mk.familyweighttracker.Activities.TrackerHelpActivity.class);
+//                startActivity(intent);
+//            }
+//        }));
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
         DashboardItemRecyclerViewAdapter adapter = new DashboardItemRecyclerViewAdapter(items);
