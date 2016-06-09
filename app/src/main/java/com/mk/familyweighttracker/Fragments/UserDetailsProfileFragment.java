@@ -19,6 +19,7 @@ import com.mk.familyweighttracker.Activities.AddPregnantUserActivity;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
+import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
@@ -96,7 +97,7 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
             .setText(mUser.name);
 
         ((TextView) mFragmentView.findViewById(R.id.view_user_dob))
-            .setText(mUser.getDateOfBirthStr());
+            .setText(String.format("%s (%s)", mUser.getDateOfBirthStr(), Utility.calculateAge(mUser.dateOfBirth)));
     }
 
     private void initPrePregnancyControls() {
