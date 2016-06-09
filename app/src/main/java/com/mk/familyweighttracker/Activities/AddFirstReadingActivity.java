@@ -73,6 +73,20 @@ public class AddFirstReadingActivity extends TrackerBaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        sendAnalyticsData("Transition", "onResume", "AddFirstReadingActivity", 1);
+    }
+
+    @Override
+    protected void onPause() {
+        sendAnalyticsData("Transition", "onPause", "AddFirstReadingActivity", 1);
+
+        super.onPause();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:

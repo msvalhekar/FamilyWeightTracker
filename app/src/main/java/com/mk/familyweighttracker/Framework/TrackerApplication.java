@@ -1,18 +1,8 @@
 package com.mk.familyweighttracker.Framework;
 
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.Environment;
-
-import com.activeandroid.ActiveAndroid;
 import com.crashlytics.android.Crashlytics;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -20,6 +10,8 @@ import io.fabric.sdk.android.Fabric;
  * Created by mvalhekar on 18-05-2016.
  */
 public class TrackerApplication extends com.activeandroid.app.Application {
+
+    private Tracker mTracker;
 
     private Thread.UncaughtExceptionHandler exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
 
@@ -45,5 +37,14 @@ public class TrackerApplication extends com.activeandroid.app.Application {
 
     public void onTerminate() {
         super.onTerminate();
+    }
+
+    synchronized public Tracker getDefaultTracker() {
+        if (mTracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
+            mTracker = analytics.newTracker("UA-78914112-1");
+        }
+        return mTracker;
     }
 }

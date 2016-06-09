@@ -125,6 +125,20 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         setTitle(mIsEditMode ? R.string.title_activity_edit_user : R.string.title_activity_add_new_user);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        sendAnalyticsData("Transition", "onResume", "AddPregnantUserActivity", 1);
+    }
+
+    @Override
+    protected void onPause() {
+        sendAnalyticsData("Transition", "onPause", "AddPregnantUserActivity", 1);
+
+        super.onPause();
+    }
+
     private void findAllControls() {
         mOkCancelActionsSectionView = findViewById(R.id.add_user_ok_action_section);
         mSaveButton = ((Button) findViewById(R.id.add_user_save_button));
@@ -617,8 +631,10 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         }
         finish();
 
-        String message = String.format("Member '%s' is %s successfully.", mUser.name, mIsEditMode ? "updated" : "added");
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        String message = String.format("Congratulations and Welcome, '%s'.", mUser.name);
+        if(mIsEditMode)
+            message = "Profile updated successfully.";
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
     public class AddUserAsyncTask extends AsyncTask<AddPregnantUserActivity, Void, Boolean>

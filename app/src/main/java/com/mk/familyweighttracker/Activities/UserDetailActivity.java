@@ -66,6 +66,20 @@ public class UserDetailActivity extends TrackerBaseActivity
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        sendAnalyticsData("Transition", "onResume", "UserDetailActivity", 1);
+    }
+
+    @Override
+    protected void onPause() {
+        sendAnalyticsData("Transition", "onPause", "UserDetailActivity", 1);
+
+        super.onPause();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button

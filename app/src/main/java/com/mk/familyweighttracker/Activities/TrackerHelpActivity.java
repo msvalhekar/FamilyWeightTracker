@@ -49,8 +49,22 @@ public class TrackerHelpActivity extends TrackerBaseActivity {
         initToolbarControl();
 
         initHelpMessageControl();
-        
+
         initActionControls();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        sendAnalyticsData("Transition", "onResume", "TrackerHelpActivity", 1);
+    }
+
+    @Override
+    protected void onPause() {
+        sendAnalyticsData("Transition", "onPause", "TrackerHelpActivity", 1);
+
+        super.onPause();
     }
 
     private void initActionControls() {

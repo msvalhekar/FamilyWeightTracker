@@ -9,6 +9,7 @@ buildscript {
 }
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 23
@@ -18,9 +19,10 @@ android {
         applicationId "com.mk.familyweighttracker"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 101 // XYZ : X = release version, Y = sub version, Z = 1(PROD)/4(BETA)/7(ALPHA)
+        versionName "1.0.1"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -46,7 +48,6 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.1.1'
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.3'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
-        transitive = true;
-    }
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') { transitive = true; }
+    compile 'com.google.android.gms:play-services-analytics:9.0.0'
 }

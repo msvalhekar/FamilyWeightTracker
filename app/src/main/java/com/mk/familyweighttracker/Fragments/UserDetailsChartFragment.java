@@ -23,6 +23,7 @@ import com.mk.familyweighttracker.Activities.UserDetailActivity;
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
+import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.Models.WeekWeightGainRange;
@@ -48,6 +49,20 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
 
     public UserDetailsChartFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        ((TrackerBaseActivity) getActivity()).getTracker().setScreenName("User-Details-Chart-Fragment");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        ((TrackerBaseActivity) getActivity()).getTracker().setScreenName(null);
     }
 
     @Override

@@ -84,6 +84,20 @@ public class AddReadingActivity extends TrackerBaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        sendAnalyticsData("Transition", "onResume", "AddReadingActivity", 1);
+    }
+
+    @Override
+    protected void onPause() {
+        sendAnalyticsData("Transition", "onPause", "AddReadingActivity", 1);
+
+        super.onPause();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Check which request we're responding to
@@ -175,6 +189,8 @@ public class AddReadingActivity extends TrackerBaseActivity {
 
         final Button seqButton = ((Button) findViewById(R.id.add_reading_sequence_btn));
         seqButton.setText(String.valueOf(mUserReadingToProcess.Sequence));
+        seqButton.setClickable(!bEditMode);
+
         seqButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

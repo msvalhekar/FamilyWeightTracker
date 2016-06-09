@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.mk.familyweighttracker.Activities.AddPregnantUserActivity;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
+import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
@@ -37,6 +38,20 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
 
     public UserDetailsProfileFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        ((TrackerBaseActivity) getActivity()).getTracker().setScreenName("User-Details-Profile-Fragment");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        ((TrackerBaseActivity) getActivity()).getTracker().setScreenName(null);
     }
 
     @Override
