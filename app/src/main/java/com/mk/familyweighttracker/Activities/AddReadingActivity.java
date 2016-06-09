@@ -190,6 +190,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         final Button seqButton = ((Button) findViewById(R.id.add_reading_sequence_btn));
         seqButton.setText(String.valueOf(mUserReadingToProcess.Sequence));
         seqButton.setClickable(!bEditMode);
+        if(bEditMode) return;
 
         seqButton.setOnClickListener(new View.OnClickListener() {
             @Override
