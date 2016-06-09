@@ -2,6 +2,7 @@ package com.mk.familyweighttracker.Framework;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import io.fabric.sdk.android.Fabric;
@@ -42,9 +43,30 @@ public class TrackerApplication extends com.activeandroid.app.Application {
     synchronized public Tracker getDefaultTracker() {
         if (mTracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
             mTracker = analytics.newTracker("UA-78914112-1");
         }
         return mTracker;
     }
+
+    private void setAnalyticsScreen(String screen) {
+        getDefaultTracker().setScreenName(screen);
+    }
+
+    private void resetAnalyticsScreen() {
+        getDefaultTracker().setScreenName(null);
+    }
+
+    public void sendAnalyticsData(String screen, String category, String action, String label, long value) {
+        setAnalyticsScreen(screen);
+
+        getDefaultTracker().send(new HitBuilders.EventBuilder()
+                .setCategory(category)
+                .setAction(action)
+                .setLabel(label)
+                .setValue(value)
+                .build());
+
+        resetAnalyticsScreen();
+    }
+
 }

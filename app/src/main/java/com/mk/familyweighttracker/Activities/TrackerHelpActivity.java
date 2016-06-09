@@ -53,20 +53,6 @@ public class TrackerHelpActivity extends TrackerBaseActivity {
         initActionControls();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        sendAnalyticsData("Transition", "onResume", "TrackerHelpActivity", 1);
-    }
-
-    @Override
-    protected void onPause() {
-        sendAnalyticsData("Transition", "onPause", "TrackerHelpActivity", 1);
-
-        super.onPause();
-    }
-
     private void initActionControls() {
         ((Button) findViewById(R.id.tracker_help_ok_button))
                 .setOnClickListener(new View.OnClickListener() {

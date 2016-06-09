@@ -31,6 +31,7 @@ import com.mk.familyweighttracker.Activities.AddReadingActivity;
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
+import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
@@ -64,20 +65,6 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
 
     public UserDetailsRecordsFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        ((TrackerBaseActivity) getActivity()).getTracker().setScreenName("User-Details-Records-Fragment");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        ((TrackerBaseActivity) getActivity()).getTracker().setScreenName(null);
     }
 
     @Override
@@ -162,6 +149,8 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
                                 .setPositiveButton("Got it", null)
                                 .create()
                                 .show();
+                        ((TrackerApplication) getActivity().getApplication())
+                                .sendAnalyticsData("UserDetailsRecords", "UserDetailsRecordsFragment", "ShowReadingsHelp", "", 1);
                     }
                 });
 

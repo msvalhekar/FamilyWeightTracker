@@ -52,20 +52,6 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        ((TrackerBaseActivity) getActivity()).getTracker().setScreenName("User-Details-Chart-Fragment");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        ((TrackerBaseActivity) getActivity()).getTracker().setScreenName(null);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment

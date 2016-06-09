@@ -18,6 +18,7 @@ import com.activeandroid.ActiveAndroid;
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
@@ -70,20 +71,6 @@ public class AddFirstReadingActivity extends TrackerBaseActivity {
         initActionButtonControls();
 
         setTitle(bEditMode ? "Edit Pre-pregnancy Reading" : "Add Pre-pregnancy Reading");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        sendAnalyticsData("Transition", "onResume", "AddFirstReadingActivity", 1);
-    }
-
-    @Override
-    protected void onPause() {
-        sendAnalyticsData("Transition", "onPause", "AddFirstReadingActivity", 1);
-
-        super.onPause();
     }
 
     @Override
@@ -176,6 +163,9 @@ public class AddFirstReadingActivity extends TrackerBaseActivity {
     }
 
     private void onAddReading() {
+        ((TrackerApplication) getApplication())
+                .sendAnalyticsData("AddFirstReading", "AddFirstReadingActivity", "onAdded", "FirstReading", 1);
+
         new UserService().addReading(mUserReadingToProcess);
         new UserService().updateUnits(mSelectedUser.getId(), mNewWeightUnit, mNewHeightUnit);
 

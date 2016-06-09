@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
@@ -81,20 +82,6 @@ public class AddReadingActivity extends TrackerBaseActivity {
         initWeightSequenceControl(mUserReadingToProcess.Weight);
         initHeightSequenceControl(mUserReadingToProcess.Height);
         initActionButtonControls();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        sendAnalyticsData("Transition", "onResume", "AddReadingActivity", 1);
-    }
-
-    @Override
-    protected void onPause() {
-        sendAnalyticsData("Transition", "onPause", "AddReadingActivity", 1);
-
-        super.onPause();
     }
 
     @Override
@@ -450,6 +437,9 @@ public class AddReadingActivity extends TrackerBaseActivity {
     }
 
     private void onAddReading() {
+        ((TrackerApplication) getApplication())
+                .sendAnalyticsData("AddReading", "AddReadingActivity", "onAdded", String.valueOf(mUserReadingToProcess.Sequence), 1);
+
         new UserService().addReading(mUserReadingToProcess);
 
         Intent returnIntent = new Intent();
@@ -463,6 +453,9 @@ public class AddReadingActivity extends TrackerBaseActivity {
     }
 
     private void onDeleteReading() {
+        ((TrackerApplication) getApplication())
+                .sendAnalyticsData("AddReading", "AddReadingActivity", "onDeleted", String.valueOf(mUserReadingToProcess.Sequence), 1);
+
         new UserService().deleteReading(mUserReadingToProcess.Id);
 
         Intent returnIntent = new Intent();

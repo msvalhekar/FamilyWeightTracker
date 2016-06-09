@@ -125,20 +125,6 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         setTitle(mIsEditMode ? R.string.title_activity_edit_user : R.string.title_activity_add_new_user);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        sendAnalyticsData("Transition", "onResume", "AddPregnantUserActivity", 1);
-    }
-
-    @Override
-    protected void onPause() {
-        sendAnalyticsData("Transition", "onPause", "AddPregnantUserActivity", 1);
-
-        super.onPause();
-    }
-
     private void findAllControls() {
         mOkCancelActionsSectionView = findViewById(R.id.add_user_ok_action_section);
         mSaveButton = ((Button) findViewById(R.id.add_user_save_button));

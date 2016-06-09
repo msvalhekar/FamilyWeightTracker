@@ -21,6 +21,7 @@ import com.mk.familyweighttracker.Fragments.UserDetailsProfileFragment;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.SlidingTabLayout;
+import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Framework.UserDetailsTabsFactory;
 import com.mk.familyweighttracker.Models.User;
@@ -49,6 +50,8 @@ public class UserDetailActivity extends TrackerBaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
 
+        ((TrackerApplication) getApplication()).sendAnalyticsData("UserDetails", "UserDetailActivity", "onActivityCreated", "", 1);
+
         mUserId = getIntent().getLongExtra(Constants.ARG_USER_ID, 0);
         mUser = new UserService().get(mUserId);
         this.setTitle(mUser.name);
@@ -63,20 +66,6 @@ public class UserDetailActivity extends TrackerBaseActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         //getMenuInflater().inflate(R.menu.menu_user_detail, menu);
         return true;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        sendAnalyticsData("Transition", "onResume", "UserDetailActivity", 1);
-    }
-
-    @Override
-    protected void onPause() {
-        sendAnalyticsData("Transition", "onPause", "UserDetailActivity", 1);
-
-        super.onPause();
     }
 
     @Override
