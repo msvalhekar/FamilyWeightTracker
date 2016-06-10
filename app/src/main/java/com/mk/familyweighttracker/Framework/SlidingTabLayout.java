@@ -16,6 +16,7 @@ package com.mk.familyweighttracker.Framework;
  * limitations under the License.
  */
 
+import android.graphics.Color;
 import android.view.View;
 import android.content.Context;
 import android.graphics.Typeface;
@@ -175,7 +176,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 outValue, true);
         textView.setBackgroundResource(outValue.resourceId);
         textView.setAllCaps(true);
-
+        textView.setTextColor(Color.WHITE);
         int padding = (int) (TAB_VIEW_PADDING_DIPS * getResources().getDisplayMetrics().density);
         textView.setPadding(padding, padding, padding, padding);
 
