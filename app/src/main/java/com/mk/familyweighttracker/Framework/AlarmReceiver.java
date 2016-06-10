@@ -50,8 +50,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         UserReading latestReading = user.getLatestReading();
         long nextSequence = latestReading != null ? latestReading.Sequence +1 : 0;
-        String titleMessage = String.format("%s - Week %d Reading", user.name, nextSequence);
-        String textMessage = "Touch to record pregnancy weight for current week.";
+        String titleMessage = "Pregnancy weekly weight";
+        String textMessage = String.format("Touch to record week %d pregnancy weight.", nextSequence);
         android.support.v7.app.NotificationCompat.Builder builder =
                 (android.support.v7.app.NotificationCompat.Builder) new android.support.v7.app.NotificationCompat.Builder(_context)
                 .setContentTitle(titleMessage)

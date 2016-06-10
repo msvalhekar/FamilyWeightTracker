@@ -173,7 +173,7 @@ public class AddFirstReadingActivity extends TrackerBaseActivity {
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
 
-        String message = String.format("Pre-pregnancy reading %s successfully.", bEditMode ? "updated" : "added");
+        String message = "Pre-pregnancy reading saved.";
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

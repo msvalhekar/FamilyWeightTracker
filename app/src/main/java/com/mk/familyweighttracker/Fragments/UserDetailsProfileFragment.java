@@ -144,8 +144,8 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(v.getContext())
-                        .setTitle("Warning: Remove member")
-                        .setMessage(Html.fromHtml("Removing member will clear member data permanently. Do you want to continue?"))
+                        .setTitle("Remove User?")
+                        .setMessage(Html.fromHtml("User data will be lost permanently. Do you want to continue?"))
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override

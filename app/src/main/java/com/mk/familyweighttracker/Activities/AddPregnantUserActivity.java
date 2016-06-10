@@ -617,10 +617,9 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         }
         finish();
 
-        String message = String.format("Congratulations and Welcome, '%s'.", mUser.name);
-        if(mIsEditMode)
-            message = "Profile updated successfully.";
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        String message = mIsEditMode ? "Profile updated" : "Welcome and Congratulations";
+        int toastLength = mIsEditMode ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG;
+        Toast.makeText(getApplicationContext(), message, toastLength).show();
     }
 
     public class AddUserAsyncTask extends AsyncTask<AddPregnantUserActivity, Void, Boolean>

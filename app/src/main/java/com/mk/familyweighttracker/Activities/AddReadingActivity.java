@@ -446,9 +446,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
 
-        String message = String.format("Weight reading for week %d %s successfully.",
-                mUserReadingToProcess.Sequence,
-                bEditMode ? "updated" : "added");
+        String message = String.format("Week %d reading saved.", mUserReadingToProcess.Sequence);
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
@@ -462,7 +460,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
 
-        String message = String.format("Reading for week %d removed successfully.", mUserReadingToProcess.Sequence);
+        String message = String.format("Week %d reading removed.", mUserReadingToProcess.Sequence);
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

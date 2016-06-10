@@ -118,7 +118,7 @@ public class UserDetailActivity extends TrackerBaseActivity
 
         informDataChangedAndFinish();
 
-        String message = String.format("Member '%s' is removed successfully.", mUser.name);
+        String message = String.format("'%s' removed permanently.", mUser.name);
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
