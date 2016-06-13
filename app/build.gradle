@@ -16,17 +16,25 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.mk.familyweighttracker"
+        applicationId "com.mk.pregnancyweighttracker"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 101 // XYZ : X = release version, Y = sub version, Z = 1(PROD)/4(BETA)/7(ALPHA)
-        versionName "1.0.1"
+        versionCode 109
+        versionName "1.0.9"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("FamilyWeightTracker.jks")
+            keyAlias "MeenalkumarSubhashValhekar"
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }

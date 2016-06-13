@@ -6,9 +6,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:224359654867:android:1c1e465c7779a161",
+        "mobilesdk_app_id": "1:224359654867:android:3c4badfaaf1dcd91",
         "android_client_info": {
-          "package_name": "com.mk.familyweighttracker"
+          "package_name": "com.mk.pregnancyweighttracker"
         }
       },
       "oauth_client": [],
@@ -19,16 +19,17 @@
       ],
       "services": {
         "analytics_service": {
-          "status": 1
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-78914112-2"
+          }
         },
         "appinvite_service": {
           "status": 1,
           "other_platform_oauth_client": []
         },
         "ads_service": {
-          "status": 2,
-          "test_banner_ad_unit_id": "ca-app-pub-3940256099942544/6300978111",
-          "test_interstitial_ad_unit_id": "ca-app-pub-3940256099942544/1033173712"
+          "status": 1
         }
       }
     }

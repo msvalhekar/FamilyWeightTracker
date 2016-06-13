@@ -19,6 +19,10 @@ public class TrackerApplication extends com.activeandroid.app.Application {
     public void onCreate() {
         super.onCreate();
 
+        final Fabric fabric = new Fabric.Builder(this)
+                .kits(new Crashlytics())
+                .debuggable(true)
+                .build();
         Fabric.with(this, new Crashlytics());
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
@@ -43,7 +47,7 @@ public class TrackerApplication extends com.activeandroid.app.Application {
     synchronized public Tracker getDefaultTracker() {
         if (mTracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            mTracker = analytics.newTracker("UA-78914112-1");
+            mTracker = analytics.newTracker("UA-78914112-2");
         }
         return mTracker;
     }

@@ -25,6 +25,9 @@
         <meta-data
             android:name="AA_MODELS"
             android:value="com.mk.familyweighttracker.DbModels.UserModel, com.mk.familyweighttracker.DbModels.UserReadingModel" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="c42a891a159c01eeee521eb433d82b996f2b0307" />
 
         <activity
             android:name=".HomeActivity"
@@ -93,9 +96,5 @@
         </activity>
 
         <receiver android:name=".Framework.AlarmReceiver" />
-
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="c42a891a159c01eeee521eb433d82b996f2b0307" />
     </application>
 </manifest>
