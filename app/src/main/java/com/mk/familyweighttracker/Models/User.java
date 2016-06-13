@@ -42,6 +42,7 @@ public class User {
     public int reminderHour;
     public int reminderMinute;
     private List<UserReading> mReadings;
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
 
     public User(long id) {
         mId = id;
@@ -53,8 +54,11 @@ public class User {
     }
 
     public String getDateOfBirthStr() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         return dateFormat.format(dateOfBirth);
+    }
+
+    public String getLastMenstrualPeriodStr() {
+        return dateFormat.format(getPrepregnancyReading().TakenOn);
     }
 
     public String getStartingWeightStr() {
@@ -70,14 +74,16 @@ public class User {
     }
 
     public double getStartingWeight() {
-        if(mReadings.size() > 0)
-            return getReadings(true).get(0).Weight;
+        UserReading prepregReading = getPrepregnancyReading();
+        if(prepregReading != null)
+            return prepregReading.Weight;
         return 0;
     }
 
     public double getStartingHeight() {
-        if(mReadings.size() > 0)
-            return getReadings(true).get(0).Height;
+        UserReading prepregReading = getPrepregnancyReading();
+        if(prepregReading != null)
+            return prepregReading.Height;
         return 0;
     }
 
@@ -97,8 +103,7 @@ public class User {
         return getStartingHeight() / divideBy;
     }
 
-    public void addReading(long id, long sequence, double weight, double height, Date takenOn)
-    {
+    public void addReading(long id, long sequence, double weight, double height, Date takenOn) {
         UserReading reading = new UserReading(id, mId, sequence, weight, height, takenOn);
         mReadings.add(reading);
     }
@@ -118,6 +123,12 @@ public class User {
         for (int i = 0; i < readings.size(); i++) {
             if(readings.get(i).Id == id) return readings.get(i);
         }
+        return null;
+    }
+
+    public UserReading getPrepregnancyReading() {
+        if(mReadings != null && mReadings.size() > 0)
+            return getReadings(true).get(0);
         return null;
     }
 

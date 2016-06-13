@@ -20,6 +20,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
@@ -77,7 +78,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
             mUserReadingToProcess.Height = previousReading.Height;
         }
 
-        //initMeasuredOnDateControl();
+        initMeasuredOnDateControl();
         initWeekSequenceControl(mUserReadingToProcess.Sequence);
         initWeightSequenceControl(mUserReadingToProcess.Weight);
         initHeightSequenceControl(mUserReadingToProcess.Height);
@@ -141,11 +142,11 @@ public class AddReadingActivity extends TrackerBaseActivity {
     }
 
     private void initMeasuredOnDateControl() {
-        final Button dobView = ((Button) findViewById(R.id.add_reading_taken_on_btn));
+        final Button takenOnView = ((Button) findViewById(R.id.add_reading_taken_on_btn));
         final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
-        dobView.setText(dateFormatter.format(mUserReadingToProcess.TakenOn));
+        takenOnView.setText(dateFormatter.format(mUserReadingToProcess.TakenOn));
 
-        dobView.setOnClickListener(new View.OnClickListener() {
+        takenOnView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Calendar calendar = Calendar.getInstance();
@@ -158,12 +159,13 @@ public class AddReadingActivity extends TrackerBaseActivity {
                                 newDate.set(year, monthOfYear, dayOfMonth);
 
                                 mUserReadingToProcess.TakenOn = newDate.getTime();
-                                dobView.setText(dateFormatter.format(mUserReadingToProcess.TakenOn));
+                                takenOnView.setText(dateFormatter.format(mUserReadingToProcess.TakenOn));
                             }
                         },
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH));
+
                 datePickerDialog.getDatePicker().setMinDate(mSelectedUser.dateOfBirth.getTime());
                 datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
                 datePickerDialog.show();
@@ -325,10 +327,10 @@ public class AddReadingActivity extends TrackerBaseActivity {
         NumberPicker picker = new NumberPicker(activityView.getContext());
         picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
-        double distance = 5; //mSelectedUser.weightUnit == WeightUnit.lb ? 10 : 5;
+        double distance = mSelectedUser.weightUnit == WeightUnit.lb ? 20 : 10;
         double startFrom = lastReading - distance;
         double endAt = lastReading + distance;
-        final double incrementFactor = 0.05; // 50 grams
+        final double incrementFactor = 0.1; // 100 grams
 
         final List<String> itemsToDisplay = new ArrayList<>();
         for (double seqValue = lastReading; seqValue >= startFrom; seqValue -= incrementFactor) {

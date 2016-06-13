@@ -25,14 +25,32 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:padding="5dp">
+        <TableRow
+            android:id="@+id/add_first_reading_lmp_date_section"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="@string/add_user_first_reading_lmp_date_label"/>
+            <Button
+                android:id="@+id/add_first_reading_lmp_on_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:text="@string/add_user_first_reading_lmp_default_value" />
+        </TableRow>
         <TableRow>
             <TextView
                 android:id="@+id/add_first_reading_weight_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:gravity="left"
                 android:textStyle="bold"
                 android:text="@string/add_user_first_reading_weight_label"/>
 
@@ -40,7 +58,7 @@
                 android:id="@+id/add_first_reading_weight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.5"
                 android:inputType="numberDecimal"/>
 
             <RadioGroup
@@ -49,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="left"
-                android:layout_weight="1">
+                android:layout_weight="0.5">
                 <RadioButton
                     android:id="@+id/add_first_reading_weight_unit_kg"
                     android:layout_width="wrap_content"
@@ -70,14 +88,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:gravity="left"
                 android:textStyle="bold"
                 android:text="@string/add_user_first_reading_height_label"/>
             <EditText
                 android:id="@+id/add_first_reading_height"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.5"
                 android:inputType="number"/>
             <RadioGroup
                 android:id="@+id/add_first_reading_height_unit_switch"
@@ -85,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="left"
-                android:layout_weight="1">
+                android:layout_weight="0.5">
                 <RadioButton
                     android:id="@+id/add_first_reading_height_unit_cm"
                     android:layout_width="wrap_content"

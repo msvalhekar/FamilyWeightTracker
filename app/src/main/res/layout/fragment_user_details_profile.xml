@@ -222,6 +222,26 @@
                 android:gravity="left|center"
                 android:text="{wt category}" />
         </TableRow>
+        <TableRow
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:id="@+id/view_user_pre_pregnancy_lmp_section"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:gravity="left|center"
+                android:text="Last Menstrual Period"/>
+            <TextView
+                android:id="@+id/view_user_prepreg_lmp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:text="{dd/mm/yyyy}" />
+        </TableRow>
         <View style="@style/Divider"/>
         <TableRow
             android:layout_weight="1">

@@ -94,6 +94,7 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
         mFragmentView.findViewById(R.id.view_user_pre_pregnancy_height_section).setVisibility(View.GONE);
         mFragmentView.findViewById(R.id.view_user_pre_pregnancy_bmi_section).setVisibility(View.GONE);
         mFragmentView.findViewById(R.id.view_user_pre_pregnancy_wt_category_section).setVisibility(View.GONE);
+        mFragmentView.findViewById(R.id.view_user_pre_pregnancy_lmp_section).setVisibility(View.GONE);
 
         if(mUser.getReadings(true).size() > 0) {
 
@@ -103,6 +104,7 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
             mFragmentView.findViewById(R.id.view_user_pre_pregnancy_height_section).setVisibility(View.VISIBLE);
             mFragmentView.findViewById(R.id.view_user_pre_pregnancy_bmi_section).setVisibility(View.VISIBLE);
             mFragmentView.findViewById(R.id.view_user_pre_pregnancy_wt_category_section).setVisibility(View.VISIBLE);
+            mFragmentView.findViewById(R.id.view_user_pre_pregnancy_lmp_section).setVisibility(View.VISIBLE);
 
             ((TextView) mFragmentView.findViewById(R.id.view_user_prepreg_weight))
                     .setText(mUser.getStartingWeightStr());
@@ -115,6 +117,9 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
 
             ((TextView) mFragmentView.findViewById(R.id.view_user_prepreg_wt_category))
                     .setText(mUser.getWeightCategory().toString());
+
+            ((TextView) mFragmentView.findViewById(R.id.view_user_prepreg_lmp))
+                    .setText(mUser.getLastMenstrualPeriodStr());
         }
     }
 

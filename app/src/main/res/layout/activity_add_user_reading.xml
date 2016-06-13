@@ -31,19 +31,18 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="5dp"
             android:rowCount="6"
             android:columnCount="2"
             android:orientation="horizontal">
 
             <TableRow
                 android:id="@+id/add_reading_taken_on_section"
-                android:layout_weight="1"
-                android:visibility="gone">
+                android:layout_weight="1">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textStyle="bold"
                     android:text="@string/add_user_reading_date_label"/>
                 <Button
                     android:id="@+id/add_reading_taken_on_btn"

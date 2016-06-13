@@ -1,6 +1,7 @@
 package com.mk.familyweighttracker.Activities;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -9,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -26,6 +29,8 @@ import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class AddFirstReadingActivity extends TrackerBaseActivity {
@@ -64,6 +69,7 @@ public class AddFirstReadingActivity extends TrackerBaseActivity {
             mUserReadingToProcess.Height = 160;
         }
 
+        initLMPDateControl();
         initWeightTextControl();
         initHeightTextControl();
         initWeightUnitControls();
@@ -81,6 +87,38 @@ public class AddFirstReadingActivity extends TrackerBaseActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initLMPDateControl() {
+        final Button lmpDateView = ((Button) findViewById(R.id.add_first_reading_lmp_on_btn));
+        final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
+        lmpDateView.setText(dateFormatter.format(mUserReadingToProcess.TakenOn));
+
+        lmpDateView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar calendar = Calendar.getInstance();
+                calendar.setTime(mUserReadingToProcess.TakenOn);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(v.getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                Calendar newDate = Calendar.getInstance();
+                                newDate.set(year, monthOfYear, dayOfMonth);
+
+                                mUserReadingToProcess.TakenOn = newDate.getTime();
+                                lmpDateView.setText(dateFormatter.format(mUserReadingToProcess.TakenOn));
+                            }
+                        },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH));
+
+                datePickerDialog.getDatePicker().setMinDate(mSelectedUser.dateOfBirth.getTime());
+                datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+                datePickerDialog.show();
+            }
+        });
     }
 
     private void initHeightTextControl() {
