@@ -12,17 +12,19 @@ public class UserReading {
     public double Weight;
     public double Height;
     public Date TakenOn;
+    public String Note;
 
     public UserReading () {
     }
 
-    public UserReading(long id, long userId, long sequence, double weight, double height, Date takenOn)
+    public UserReading(long id, long userId, long sequence, double weight, double height, String note, Date takenOn)
     {
         Id = id;
         UserId = userId;
         Sequence = sequence;
         Weight = weight;
         Height = height;
+        Note = note;
         TakenOn = takenOn;
     }
 }

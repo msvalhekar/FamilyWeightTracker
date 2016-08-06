@@ -8,6 +8,7 @@ import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Models.User;
+import com.mk.familyweighttracker.Models.UserReading;
 
 import java.util.Date;
 import java.util.List;
@@ -106,7 +107,7 @@ public class UserModel extends Model {
         user.reminderMinute = this.reminderMinute;
 
         for (UserReadingModel reading: getReadings()) {
-            user.addReading(reading.getId(), reading.Sequence, reading.Weight, reading.Height, reading.TakenOn);
+            user.addReading(reading.mapToUserReading());
         }
         return user;
     }

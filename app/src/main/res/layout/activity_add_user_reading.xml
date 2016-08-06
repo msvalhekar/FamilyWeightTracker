@@ -118,6 +118,22 @@
                     android:text="@string/add_user_reading_height_unit_label"/>
             </TableRow>
             <View
+                android:id="@+id/add_user_reading_note_divider"
+                style="@style/Divider"/>
+            <TableRow
+                android:id="@+id/add_reading_note_section"
+                android:layout_weight="1">
+                <EditText
+                    android:id="@+id/add_reading_note_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left|center"
+                    android:lines="4"
+                    android:inputType="textMultiLine"
+                    android:hint="@string/add_user_reading_note_hint_value" />
+            </TableRow>
+            <View
                 android:id="@+id/add_user_pending_readings_divider"
                 style="@style/Divider"/>
             <TableRow

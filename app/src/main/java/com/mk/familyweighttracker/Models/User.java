@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
@@ -29,7 +30,10 @@ import java.util.List;
  */
 public class User {
 
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+
     private long mId;
+
     public String name;
     public byte[] imageBytes;
     public boolean isMale;
@@ -41,8 +45,8 @@ public class User {
     public int reminderDay;
     public int reminderHour;
     public int reminderMinute;
+
     private List<UserReading> mReadings;
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
 
     public User(long id) {
         mId = id;
@@ -103,9 +107,8 @@ public class User {
         return getStartingHeight() / divideBy;
     }
 
-    public void addReading(long id, long sequence, double weight, double height, Date takenOn) {
-        UserReading reading = new UserReading(id, mId, sequence, weight, height, takenOn);
-        mReadings.add(reading);
+    public void addReading(UserReading userReading) {
+        mReadings.add(userReading);
     }
 
     public List<UserReading> getReadings(final boolean ascending) {

@@ -40,7 +40,7 @@ public class UserService {
     }
 
     public void addReading(UserReading reading) {
-        userRepository.addReading(reading);
+        userRepository.saveReading(reading);
     }
 
     public void deleteReading(long readingId) {
@@ -58,7 +58,7 @@ public class UserService {
 
             if(convertHeight) reading.Height = Utility.convertHeightTo(reading.Height, heightUnit);
 
-            userRepository.addReading(reading);
+            userRepository.saveReading(reading);
         }
         userRepository.updateUnits(userId, weightUnit, heightUnit);
     }

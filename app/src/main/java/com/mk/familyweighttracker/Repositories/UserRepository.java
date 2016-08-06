@@ -50,8 +50,8 @@ public class UserRepository {
         UserModel.delete(userId);
     }
 
-    public void addReading(UserReading reading) {
-        UserReadingModel.add(reading);
+    public void saveReading(UserReading reading) {
+        UserReadingModel.save(reading);
     }
 
     public void deleteReading(long readingId) {

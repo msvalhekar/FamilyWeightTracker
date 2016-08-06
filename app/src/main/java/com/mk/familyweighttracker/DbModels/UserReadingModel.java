@@ -30,6 +30,9 @@ public class UserReadingModel extends Model {
     @Column(name = "TakenOn")
     public Date TakenOn;
 
+    @Column(name = "Note")
+    public String Note;
+
     @Column(name = "CreatedOn")
     public Date CreatedOn;
 
@@ -40,7 +43,7 @@ public class UserReadingModel extends Model {
                 .executeSingle();
     }
 
-    public static void add(final UserReading reading) {
+    public static void save(final UserReading reading) {
         UserReadingModel readingModel = new UserReadingModel();
 
         UserReadingModel model = UserReadingModel.get(reading.Id);
@@ -52,6 +55,7 @@ public class UserReadingModel extends Model {
         readingModel.Weight = reading.Weight;
         readingModel.Height = reading.Height;
         readingModel.TakenOn = reading.TakenOn;
+        readingModel.Note = reading.Note;
         readingModel.CreatedOn = new Date();
 
         readingModel.save();
@@ -69,5 +73,9 @@ public class UserReadingModel extends Model {
                 .from(UserReadingModel.class)
                 .where("User = ? ", userId)
                 .execute();
+    }
+
+    public UserReading mapToUserReading() {
+        return new UserReading(this.getId(), this.User.getId(), this.Sequence, this.Weight, this.Height, this.Note, this.TakenOn);
     }
 }

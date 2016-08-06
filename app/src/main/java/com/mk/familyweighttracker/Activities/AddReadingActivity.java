@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -78,6 +79,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
             mUserReadingToProcess.Height = previousReading.Height;
         }
 
+        initNoteControl();
         initMeasuredOnDateControl();
         initWeekSequenceControl(mUserReadingToProcess.Sequence);
         initWeightSequenceControl(mUserReadingToProcess.Weight);
@@ -171,6 +173,11 @@ public class AddReadingActivity extends TrackerBaseActivity {
                 datePickerDialog.show();
             }
         });
+    }
+
+    private void initNoteControl() {
+        final EditText noteView = ((EditText) findViewById(R.id.add_reading_note_edittext));
+        noteView.setText(mUserReadingToProcess.Note);
     }
 
     private void initWeekSequenceControl(long lastReading) {
@@ -441,6 +448,9 @@ public class AddReadingActivity extends TrackerBaseActivity {
     private void onAddReading() {
         ((TrackerApplication) getApplication())
                 .sendAnalyticsData("AddReading", "AddReadingActivity", "onAdded", String.valueOf(mUserReadingToProcess.Sequence), 1);
+
+        final EditText noteView = ((EditText) findViewById(R.id.add_reading_note_edittext));
+        mUserReadingToProcess.Note = noteView.getText().toString();
 
         new UserService().addReading(mUserReadingToProcess);
 
