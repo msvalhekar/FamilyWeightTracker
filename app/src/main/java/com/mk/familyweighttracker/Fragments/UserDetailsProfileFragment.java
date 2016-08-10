@@ -47,7 +47,7 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
         // Inflate the layout for this fragment
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_profile, container, false);
 
-        mSelectedUserId = getActivity().getIntent().getLongExtra(Constants.ARG_USER_ID, 0);
+        mSelectedUserId = getActivity().getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
         mUser = new UserService().get(mSelectedUserId);
 
         initUserDetailsControls();
@@ -168,8 +168,8 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), AddPregnantUserActivity.class);
-                intent.putExtra(Constants.ARG_USER_ID, mSelectedUserId);
-                startActivityForResult(intent, Constants.REQUEST_CODE_FOR_EDIT_USER);
+                intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
+                startActivityForResult(intent, Constants.RequestCode.EDIT_USER);
             }
         });
     }
@@ -180,7 +180,7 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
         // Check which request we're responding to
         if(resultCode != Activity.RESULT_OK) return;
 
-        if(requestCode == Constants.REQUEST_CODE_FOR_ADD_READING) {
+        if(requestCode == Constants.RequestCode.ADD_READING) {
             mUser = new UserService().get(mSelectedUserId);
             initPrePregnancyControls();
 
@@ -189,7 +189,7 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
             mIsOriginator = false;
         }
 
-        if(requestCode == Constants.REQUEST_CODE_FOR_EDIT_USER) {
+        if(requestCode == Constants.RequestCode.EDIT_USER) {
             // todo: refresh usersList
             mUser = new UserService().get(mSelectedUserId);
             initUserDetailsControls();

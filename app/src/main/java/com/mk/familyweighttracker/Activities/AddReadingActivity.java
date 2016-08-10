@@ -55,10 +55,10 @@ public class AddReadingActivity extends TrackerBaseActivity {
         initToolbarControl();
         activityView = findViewById(R.id.add_user_reading_layout);
 
-        long userId = getIntent().getLongExtra(Constants.ARG_USER_ID, 0);
+        long userId = getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
         mSelectedUser = new UserService().get(userId);
 
-        long readingId = getIntent().getLongExtra(Constants.ARG_EDIT_READING_ID, 0);
+        long readingId = getIntent().getLongExtra(Constants.ExtraArg.EDIT_READING_ID, 0);
         mUserReadingToProcess = mSelectedUser.getReadingById(readingId);
 
         if(mUserReadingToProcess != null) {

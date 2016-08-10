@@ -52,7 +52,7 @@ public class UserDetailActivity extends TrackerBaseActivity
 
         ((TrackerApplication) getApplication()).sendAnalyticsData("UserDetails", "UserDetailActivity", "onActivityCreated", "", 1);
 
-        mUserId = getIntent().getLongExtra(Constants.ARG_USER_ID, 0);
+        mUserId = getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
         mUser = new UserService().get(mUserId);
         this.setTitle(mUser.name);
 
@@ -162,7 +162,7 @@ public class UserDetailActivity extends TrackerBaseActivity
 
     private void informDataChangedAndFinish() {
         Intent intent = new Intent();
-        intent.putExtra(Constants.ARG_IS_DATA_CHANGED, mIsDataChanged);
+        intent.putExtra(Constants.ExtraArg.IS_DATA_CHANGED, mIsDataChanged);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }

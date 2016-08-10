@@ -97,7 +97,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         findAllControls();
 
         mIsEditMode = true;
-        mSelectedUserId = getIntent().getLongExtra(Constants.ARG_USER_ID, 0);
+        mSelectedUserId = getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
         mUser = new UserService().get(mSelectedUserId);
 
         if(mUser == null) {
@@ -150,7 +150,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Check which request we're responding to
-        if (requestCode == Constants.REQUEST_CODE_FOR_IMAGE_LOAD) {
+        if (requestCode == Constants.RequestCode.IMAGE_LOAD) {
             if (resultCode == RESULT_OK && data != null) {
                 mPickedImageUri = data.getData();
                 allowToCropImageBeforeSelection();
@@ -159,7 +159,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                 Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
             }
         }
-        else if (requestCode == Constants.REQUEST_CODE_FOR_IMAGE_CROP) {
+        else if (requestCode == Constants.RequestCode.IMAGE_CROP) {
             if (resultCode == RESULT_OK && data != null) {
                 // get the returned data
                 Bundle extras = data.getExtras();
@@ -203,7 +203,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.setType("image/*");
-                startActivityForResult(intent, Constants.REQUEST_CODE_FOR_IMAGE_LOAD);
+                startActivityForResult(intent, Constants.RequestCode.IMAGE_LOAD);
             }
         });
     }
@@ -234,7 +234,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                 Intent i = new Intent(intent);
                 ResolveInfo res = list.get(0);
                 i.setComponent(new ComponentName(res.activityInfo.packageName,  res.activityInfo.name));
-                startActivityForResult(i, Constants.REQUEST_CODE_FOR_IMAGE_CROP);
+                startActivityForResult(i, Constants.RequestCode.IMAGE_CROP);
             } else {
                 for (ResolveInfo res : list) {
                     final CropOption co = new CropOption();
@@ -255,7 +255,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                             public void onClick(DialogInterface dialog, int item) {
                                 startActivityForResult(
                                         cropOptions.get(item).appIntent,
-                                        Constants.REQUEST_CODE_FOR_IMAGE_CROP);
+                                        Constants.RequestCode.IMAGE_CROP);
                             }
                         });
 
@@ -612,7 +612,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             setResult(Activity.RESULT_OK, returnIntent);
         } else {
             Intent intent = new Intent(getApplicationContext(), com.mk.familyweighttracker.Activities.UserDetailActivity.class);
-            intent.putExtra(Constants.ARG_USER_ID, userId);
+            intent.putExtra(Constants.ExtraArg.USER_ID, userId);
             startActivity(intent);
         }
         finish();

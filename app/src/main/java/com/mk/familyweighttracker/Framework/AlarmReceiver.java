@@ -25,7 +25,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         _context = context;
 
-        long userId = intent.getLongExtra(Constants.ARG_USER_ID, 0);
+        long userId = intent.getLongExtra(Constants.ExtraArg.USER_ID, 0);
 
         ActiveAndroid.initialize(context);
 
@@ -64,10 +64,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 //            className = Class.forName("com.mk.familyweighttracker.Activities.AddFirstReadingActivity");
 //
 //        Intent readingIntent = new Intent(_context, className);
-//        readingIntent.putExtra(UserDetailActivity.ARG_USER_ID, user.getId());
+//        readingIntent.putExtra(UserDetailActivity.ExtraArg.USER_ID, user.getId());
 //
 //        Intent userDetailIntent = new Intent(_context, UserDetailActivity.class);
-//        userDetailIntent.putExtra(UserDetailActivity.ARG_USER_ID, user.getId());
+//        userDetailIntent.putExtra(UserDetailActivity.ExtraArg.USER_ID, user.getId());
 //        userDetailIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //
 //        Intent usersListIntent = new Intent(_context, UsersListActivity.class);

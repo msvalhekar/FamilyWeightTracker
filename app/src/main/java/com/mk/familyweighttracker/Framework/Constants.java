@@ -21,17 +21,25 @@ import java.util.GregorianCalendar;
  */
 public class Constants {
 
-    public static final String ARG_USER_ID = "user_id";
-    public static final String ARG_USER_NAME = "user_name";
-    public static final String ARG_IS_DATA_CHANGED = "IsDataChanged";
-    public static final String ARG_EDIT_READING_ID = "EditReadingId";
+    public static class ExtraArg {
+        public static final String USER_ID = "user_id";
+        public static final String IS_DATA_CHANGED = "IsDataChanged";
+        public static final String EDIT_READING_ID = "EditReadingId";
+    }
 
-    public static final int REQUEST_CODE_FOR_ADD_USER = 1;
-    public static final int REQUEST_CODE_FOR_EDIT_USER = 2;
-    public static final int REQUEST_CODE_FOR_USER_DATA_CHANGED = 10;
-    public static final int REQUEST_CODE_FOR_ADD_READING = 11;
-    public static final int REQUEST_CODE_FOR_EDIT_READING = 12;
+    public static class RequestCode {
+        public static final int ADD_USER = 1;
+        public static final int EDIT_USER = 2;
+        public static final int USER_DATA_CHANGED = 10;
+        public static final int ADD_READING = 11;
+        public static final int EDIT_READING = 12;
+        public static final int IMAGE_LOAD = 21;
+        public static final int IMAGE_CROP = 22;
+    }
 
-    public static final int REQUEST_CODE_FOR_IMAGE_LOAD = 21;
-    public static final int REQUEST_CODE_FOR_IMAGE_CROP = 22;
+
+    public static class LogTag {
+        public static final String App = "FWT_";
+        public static final String BootReceiver = App + "BootReceiver";
+    }
 }

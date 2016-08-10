@@ -68,13 +68,13 @@ public class UsersListActivity extends TrackerBaseActivity {
         if (resultCode != RESULT_OK) return;
 
             // Check which request we're responding to
-        if (requestCode == Constants.REQUEST_CODE_FOR_ADD_USER) {
+        if (requestCode == Constants.RequestCode.ADD_USER) {
             // update the list for new user
             onRefreshList();
         }
-        if (requestCode == Constants.REQUEST_CODE_FOR_USER_DATA_CHANGED) {
+        if (requestCode == Constants.RequestCode.USER_DATA_CHANGED) {
             // update the list for new record
-            boolean dataChanged = data.getBooleanExtra(Constants.ARG_IS_DATA_CHANGED, false);
+            boolean dataChanged = data.getBooleanExtra(Constants.ExtraArg.IS_DATA_CHANGED, false);
             if(dataChanged) {
                 onRefreshList();
             }
@@ -104,7 +104,7 @@ public class UsersListActivity extends TrackerBaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddPregnantUserActivity.class);
-                startActivityForResult(intent, Constants.REQUEST_CODE_FOR_ADD_USER);
+                startActivityForResult(intent, Constants.RequestCode.ADD_USER);
             }
         });
     }
@@ -169,8 +169,8 @@ public class UsersListActivity extends TrackerBaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), UserDetailActivity.class);
-                    intent.putExtra(Constants.ARG_USER_ID, user.getId());
-                    startActivityForResult(intent, Constants.REQUEST_CODE_FOR_USER_DATA_CHANGED);
+                    intent.putExtra(Constants.ExtraArg.USER_ID, user.getId());
+                    startActivityForResult(intent, Constants.RequestCode.USER_DATA_CHANGED);
                 }
             });
         }

@@ -74,7 +74,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_records, container, false);
 
         mWeekWeightGainRangeList = null;
-        mSelectedUserId = getActivity().getIntent().getLongExtra(Constants.ARG_USER_ID, 0);
+        mSelectedUserId = getActivity().getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
         mSelectedUser = new UserService().get(mSelectedUserId);
 
         userReadingList.clear();
@@ -95,12 +95,12 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
             public void onClick(View view) {
                 if(userReadingList.size() == 0) {
                     Intent intent = new Intent(getContext(), AddFirstReadingActivity.class);
-                    intent.putExtra(Constants.ARG_USER_ID, mSelectedUserId);
-                    startActivityForResult(intent, Constants.REQUEST_CODE_FOR_ADD_READING);
+                    intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
+                    startActivityForResult(intent, Constants.RequestCode.ADD_READING);
                 } else {
                     Intent intent = new Intent(getContext(), AddReadingActivity.class);
-                    intent.putExtra(Constants.ARG_USER_ID, mSelectedUserId);
-                    startActivityForResult(intent, Constants.REQUEST_CODE_FOR_ADD_READING);
+                    intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
+                    startActivityForResult(intent, Constants.RequestCode.ADD_READING);
                 }
             }
         });
@@ -224,14 +224,14 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         if (resultCode != Activity.RESULT_OK)
             return;
 
-        if(requestCode == Constants.REQUEST_CODE_FOR_ADD_READING) {
+        if(requestCode == Constants.RequestCode.ADD_READING) {
             onNewReadingAdded();
 
             mIsOriginator = true;
             ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
             mIsOriginator = false;
         }
-        else if(requestCode == Constants.REQUEST_CODE_FOR_EDIT_READING) {
+        else if(requestCode == Constants.RequestCode.EDIT_READING) {
             if(bFirstReadingChanged) {
                 mWeekWeightGainRangeList = null;
                 bFirstReadingChanged = false;
@@ -277,7 +277,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
 //                public void onClick(View v) {
 //                    Context context = v.getContext();
 //                    Intent intent = new Intent(context, UserDetailActivity.class);
-//                    intent.putExtra(UserDetailActivity.ARG_USER_ID, user.getId());
+//                    intent.putExtra(UserDetailActivity.ExtraArg.USER_ID, user.getId());
 //                    context.startActivity(intent);
 //                }
 //            });
@@ -395,14 +395,14 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
                         if(mUserReading.Sequence == 0) {
                             bFirstReadingChanged = true;
                             Intent intent = new Intent(getContext(), AddFirstReadingActivity.class);
-                            intent.putExtra(Constants.ARG_USER_ID, mSelectedUserId);
-                            intent.putExtra(Constants.ARG_EDIT_READING_ID, mUserReading.Id);
-                            startActivityForResult(intent, Constants.REQUEST_CODE_FOR_EDIT_READING);
+                            intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
+                            intent.putExtra(Constants.ExtraArg.EDIT_READING_ID, mUserReading.Id);
+                            startActivityForResult(intent, Constants.RequestCode.EDIT_READING);
                         } else {
                             Intent intent = new Intent(getContext(), AddReadingActivity.class);
-                            intent.putExtra(Constants.ARG_USER_ID, mSelectedUserId);
-                            intent.putExtra(Constants.ARG_EDIT_READING_ID, mUserReading.Id);
-                            startActivityForResult(intent, Constants.REQUEST_CODE_FOR_EDIT_READING);
+                            intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
+                            intent.putExtra(Constants.ExtraArg.EDIT_READING_ID, mUserReading.Id);
+                            startActivityForResult(intent, Constants.RequestCode.EDIT_READING);
                         }
                     }
                 });

@@ -43,7 +43,7 @@ public class HomeActivity extends AppCompatActivity {
                 List<User> users = new UserService().getAll();
                 if(users.size() > 0) {
                     Intent intent = new Intent(getApplicationContext(), com.mk.familyweighttracker.Activities.UserDetailActivity.class);
-                    intent.putExtra(Constants.ARG_USER_ID, users.get(0).getId());
+                    intent.putExtra(Constants.ExtraArg.USER_ID, users.get(0).getId());
                     startActivity(intent);
                     return;
                 } else {

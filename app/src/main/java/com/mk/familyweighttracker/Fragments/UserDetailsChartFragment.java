@@ -57,7 +57,7 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
         // Inflate the layout for this fragment
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_chart, container, false);
 
-        mSelectedUserId = getActivity().getIntent().getLongExtra(Constants.ARG_USER_ID, 0);
+        mSelectedUserId = getActivity().getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
 
         initChartControl();
 

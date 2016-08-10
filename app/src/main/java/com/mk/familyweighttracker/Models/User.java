@@ -190,7 +190,7 @@ public class User {
         Intent alarmReceiverIntent = new Intent(context, AlarmReceiver.class);
         alarmReceiverIntent.setData(Uri.parse("pwt://" + getId()));
 
-        alarmReceiverIntent.putExtra(Constants.ARG_USER_ID, getId());
+        alarmReceiverIntent.putExtra(Constants.ExtraArg.USER_ID, getId());
         return PendingIntent.getBroadcast(context, (int)getId(), alarmReceiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }
