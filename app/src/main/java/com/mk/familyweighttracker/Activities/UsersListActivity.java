@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
+import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Framework.Utility;
@@ -51,6 +52,8 @@ public class UsersListActivity extends TrackerBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users_item_list);
+
+        Analytic.sendScreenView(Constants.Activities.UsersListActivity);
 
         initToolbarControl();
 

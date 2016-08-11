@@ -1,5 +1,8 @@
 package com.mk.familyweighttracker.Framework;
 
+import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
+
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -12,12 +15,17 @@ import io.fabric.sdk.android.Fabric;
  */
 public class TrackerApplication extends com.activeandroid.app.Application {
 
+    private static AppCompatActivity currentActivity = null;
+    private static TrackerApplication application;
     private Tracker mTracker;
 
     private Thread.UncaughtExceptionHandler exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
 
+    public static TrackerApplication getApp() { return application; }
+
     public void onCreate() {
         super.onCreate();
+        application = this;
 
         final Fabric fabric = new Fabric.Builder(this)
                 .kits(new Crashlytics())
@@ -42,6 +50,8 @@ public class TrackerApplication extends com.activeandroid.app.Application {
 
     public void onTerminate() {
         super.onTerminate();
+        application = null;
+        currentActivity = null;
     }
 
     synchronized public Tracker getDefaultTracker() {
@@ -52,25 +62,11 @@ public class TrackerApplication extends com.activeandroid.app.Application {
         return mTracker;
     }
 
-    private void setAnalyticsScreen(String screen) {
-        getDefaultTracker().setScreenName(screen);
+    public static void setCurrentActivity(AppCompatActivity activity) {
+        currentActivity = activity;
     }
 
-    private void resetAnalyticsScreen() {
-        getDefaultTracker().setScreenName(null);
+    public static AppCompatActivity getCurrentActivity() {
+        return currentActivity;
     }
-
-    public void sendAnalyticsData(String screen, String category, String action, String label, long value) {
-        setAnalyticsScreen(screen);
-
-        getDefaultTracker().send(new HitBuilders.EventBuilder()
-                .setCategory(category)
-                .setAction(action)
-                .setLabel(label)
-                .setValue(value)
-                .build());
-
-        resetAnalyticsScreen();
-    }
-
 }

@@ -11,5 +11,7 @@ public class TrackerBaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        TrackerApplication.setCurrentActivity(this);
     }
 }

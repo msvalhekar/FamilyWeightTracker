@@ -18,6 +18,7 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Fragments.UserDetailsProfileFragment;
+import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.SlidingTabLayout;
@@ -50,11 +51,14 @@ public class UserDetailActivity extends TrackerBaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
 
-        ((TrackerApplication) getApplication()).sendAnalyticsData("UserDetails", "UserDetailActivity", "onActivityCreated", "", 1);
-
         mUserId = getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
         mUser = new UserService().get(mUserId);
         this.setTitle(mUser.name);
+
+        Analytic.setData(Constants.AnalyticsCategories.Activity,
+                Constants.AnalyticsEvents.UserDetailsACtivity,
+                String.format(Constants.AnalyticsActions.UserDetailsLoaded, mUser.name),
+                null);
 
         initToolbarControl();
 
@@ -115,6 +119,11 @@ public class UserDetailActivity extends TrackerBaseActivity
 
         mUser.removeReminder(getApplicationContext());
         new UserService().remove(mUserId);
+
+        Analytic.setData(Constants.AnalyticsCategories.Activity,
+                Constants.AnalyticsEvents.UserDelete,
+                String.format(Constants.AnalyticsActions.UserDeleted, mUser.name),
+                null);
 
         informDataChangedAndFinish();
 

@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -17,13 +16,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.activeandroid.ActiveAndroid;
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.WeightUnit;
+import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
-import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
-import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
@@ -47,6 +44,8 @@ public class AddFirstReadingActivity extends TrackerBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_user_first_reading);
+
+        Analytic.sendScreenView(Constants.Activities.AddFirstReadingActivity);
 
         initToolbarControl();
         activityView = findViewById(R.id.add_user_first_reading_layout);
@@ -201,11 +200,13 @@ public class AddFirstReadingActivity extends TrackerBaseActivity {
     }
 
     private void onAddReading() {
-        ((TrackerApplication) getApplication())
-                .sendAnalyticsData("AddFirstReading", "AddFirstReadingActivity", "onAdded", "FirstReading", 1);
-
         new UserService().addReading(mUserReadingToProcess);
         new UserService().updateUnits(mSelectedUser.getId(), mNewWeightUnit, mNewHeightUnit);
+
+        Analytic.setData(Constants.AnalyticsCategories.Activity,
+                Constants.AnalyticsEvents.AddFirstReading,
+                Constants.AnalyticsActions.FirstReadingAdded,
+                null);
 
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);

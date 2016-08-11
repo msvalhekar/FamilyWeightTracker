@@ -78,4 +78,14 @@
     <string name="help_record_exp_max_wt_message">Exp Max</string>
     <string name="add_photo">Add Photo</string>
     <string name="add_member">Add Member</string>
+    <string name="application_version_label">Application version</string>
+    <string name="application_version_friendly_name_label">Codename</string>
+    <string name="architecture_label">Architecture</string>
+    <string name="available_memory_label">Available memory</string>
+    <string name="battery_level_label">Battery level</string>
+    <string name="locale_label">Locale</string>
+    <string name="model_label">Model</string>
+    <string name="android_version_label">Android version</string>
+    <string name="processor_count_label">Processor count</string>
+    <string name="display_density">Display Density</string>
 </resources>

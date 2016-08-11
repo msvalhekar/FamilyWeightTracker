@@ -46,6 +46,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
+import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
@@ -91,6 +92,8 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_pregnant_user);
+
+        Analytic.sendScreenView(Constants.Activities.AddPregnantUserActivity);
 
         initToolbarControl();
 

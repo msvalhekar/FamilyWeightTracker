@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.mk.familyweighttracker.Activities.AddFirstReadingActivity;
 import com.mk.familyweighttracker.Activities.AddReadingActivity;
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
+import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
@@ -149,8 +150,12 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
                                 .setPositiveButton("Got it", null)
                                 .create()
                                 .show();
-                        ((TrackerApplication) getActivity().getApplication())
-                                .sendAnalyticsData("UserDetailsRecords", "UserDetailsRecordsFragment", "ShowReadingsHelp", "", 1);
+
+                        Analytic.setData(Constants.AnalyticsCategories.Activity,
+                                Constants.AnalyticsEvents.UserReadingHelp,
+                                Constants.AnalyticsActions.ShowUserReadingHelp,
+                                null);
+
                     }
                 });
 

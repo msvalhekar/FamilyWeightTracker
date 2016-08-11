@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Models.User;
@@ -27,7 +28,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ((TrackerApplication) getApplication()).sendAnalyticsData("Home", "HomeActivity", "onActivityCreated", "", 1);
+        Analytic.sendScreenView(Constants.Activities.HomeActivity);
 
         setContentView(R.layout.activity_home);
 

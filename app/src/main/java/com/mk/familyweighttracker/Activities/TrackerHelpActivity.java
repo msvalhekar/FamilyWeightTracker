@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Fragments.UserDetailsProfileFragment;
+import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.SlidingTabLayout;
@@ -45,6 +46,8 @@ public class TrackerHelpActivity extends TrackerBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tracker_help);
+
+        Analytic.sendScreenView(Constants.Activities.TrackerHelpActivity);
 
         initToolbarControl();
 

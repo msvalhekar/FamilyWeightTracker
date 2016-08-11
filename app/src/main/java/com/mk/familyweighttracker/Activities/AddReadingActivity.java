@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -24,7 +23,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mk.familyweighttracker.Enums.WeightUnit;
+import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
@@ -47,59 +46,15 @@ public class AddReadingActivity extends TrackerBaseActivity {
     private UserReading mUserReadingToProcess;
     private double mNewHeightValue;
     private Weight mNewWeight;
-    private double mNewWeightValue;
     private Long mNewSequenceValue;
     private View activityView;
-
-    private class Weight {
-        public static final int TWO_PLACES_AFTER_DECIMAL = 0;
-        public static final int ONE_PLACE_AFTER_DECIMAL = 1;
-        public static final int ONE_PLACE_BEFORE_DECIMAL = 2;
-        public static final int TWO_PLACES_BEFORE_DECIMAL = 3;
-        public static final int THREE_PLACES_BEFORE_DECIMAL = 4;
-
-        public int TwoPlacesAfterDecimal;
-        public int OnePlaceAfterDecimal;
-        public int OnePlaceBeforeDecimal;
-        public int TwoPlacesBeforeDecimal;
-        public int ThreePlacesBeforeDecimal;
-
-        public Weight(double weight){
-            weight *= 100;
-            ThreePlacesBeforeDecimal = (int)weight / 10000;
-            weight %= 10000;
-            TwoPlacesBeforeDecimal = (int)weight / 1000;
-            weight %= 1000;
-            OnePlaceBeforeDecimal = (int)weight / 100;
-            weight %= 100;
-            OnePlaceAfterDecimal = (int)weight / 10;
-            weight %= 10;
-            TwoPlacesAfterDecimal = (int)weight;
-        }
-
-        public double getWeight() {
-            return TwoPlacesAfterDecimal * 0.01
-                 + OnePlaceAfterDecimal * 0.1
-                 + OnePlaceBeforeDecimal * 1.0
-                 + TwoPlacesBeforeDecimal * 10.0
-                 + ThreePlacesBeforeDecimal * 100.0;
-        }
-
-        public void setValue(int id, int newValue) {
-            switch (id) {
-                case Weight.TWO_PLACES_AFTER_DECIMAL: mNewWeight.TwoPlacesAfterDecimal = newValue; break;
-                case Weight.ONE_PLACE_AFTER_DECIMAL: mNewWeight.OnePlaceAfterDecimal = newValue; break;
-                case Weight.ONE_PLACE_BEFORE_DECIMAL: mNewWeight.OnePlaceBeforeDecimal = newValue; break;
-                case Weight.TWO_PLACES_BEFORE_DECIMAL: mNewWeight.TwoPlacesBeforeDecimal = newValue; break;
-                case Weight.THREE_PLACES_BEFORE_DECIMAL: mNewWeight.ThreePlacesBeforeDecimal = newValue; break;
-            }
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_user_reading);
+
+        Analytic.sendScreenView(Constants.Activities.AddReadingActivity);
 
         initToolbarControl();
         activityView = findViewById(R.id.add_user_reading_layout);
@@ -520,13 +475,15 @@ public class AddReadingActivity extends TrackerBaseActivity {
     }
 
     private void onAddReading() {
-        ((TrackerApplication) getApplication())
-                .sendAnalyticsData("AddReading", "AddReadingActivity", "onAdded", String.valueOf(mUserReadingToProcess.Sequence), 1);
-
         final EditText noteView = ((EditText) findViewById(R.id.add_reading_note_edittext));
         mUserReadingToProcess.Note = noteView.getText().toString();
 
         new UserService().addReading(mUserReadingToProcess);
+
+        Analytic.setData(Constants.AnalyticsCategories.Activity,
+                Constants.AnalyticsEvents.AddReading,
+                String.format(Constants.AnalyticsActions.ReadingAdded, mUserReadingToProcess.Sequence),
+                null);
 
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
@@ -537,10 +494,12 @@ public class AddReadingActivity extends TrackerBaseActivity {
     }
 
     private void onDeleteReading() {
-        ((TrackerApplication) getApplication())
-                .sendAnalyticsData("AddReading", "AddReadingActivity", "onDeleted", String.valueOf(mUserReadingToProcess.Sequence), 1);
-
         new UserService().deleteReading(mUserReadingToProcess.Id);
+
+        Analytic.setData(Constants.AnalyticsCategories.Activity,
+                Constants.AnalyticsEvents.DeleteReading,
+                String.format(Constants.AnalyticsActions.ReadingDeleted, mUserReadingToProcess.Sequence),
+                null);
 
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
@@ -548,5 +507,50 @@ public class AddReadingActivity extends TrackerBaseActivity {
 
         String message = String.format("Week %d reading removed.", mUserReadingToProcess.Sequence);
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    private class Weight {
+        public static final int TWO_PLACES_AFTER_DECIMAL = 0;
+        public static final int ONE_PLACE_AFTER_DECIMAL = 1;
+        public static final int ONE_PLACE_BEFORE_DECIMAL = 2;
+        public static final int TWO_PLACES_BEFORE_DECIMAL = 3;
+        public static final int THREE_PLACES_BEFORE_DECIMAL = 4;
+
+        public int TwoPlacesAfterDecimal;
+        public int OnePlaceAfterDecimal;
+        public int OnePlaceBeforeDecimal;
+        public int TwoPlacesBeforeDecimal;
+        public int ThreePlacesBeforeDecimal;
+
+        public Weight(double weight){
+            weight *= 100;
+            ThreePlacesBeforeDecimal = (int)weight / 10000;
+            weight %= 10000;
+            TwoPlacesBeforeDecimal = (int)weight / 1000;
+            weight %= 1000;
+            OnePlaceBeforeDecimal = (int)weight / 100;
+            weight %= 100;
+            OnePlaceAfterDecimal = (int)weight / 10;
+            weight %= 10;
+            TwoPlacesAfterDecimal = (int)weight;
+        }
+
+        public double getWeight() {
+            return TwoPlacesAfterDecimal * 0.01
+                    + OnePlaceAfterDecimal * 0.1
+                    + OnePlaceBeforeDecimal * 1.0
+                    + TwoPlacesBeforeDecimal * 10.0
+                    + ThreePlacesBeforeDecimal * 100.0;
+        }
+
+        public void setValue(int id, int newValue) {
+            switch (id) {
+                case Weight.TWO_PLACES_AFTER_DECIMAL: mNewWeight.TwoPlacesAfterDecimal = newValue; break;
+                case Weight.ONE_PLACE_AFTER_DECIMAL: mNewWeight.OnePlaceAfterDecimal = newValue; break;
+                case Weight.ONE_PLACE_BEFORE_DECIMAL: mNewWeight.OnePlaceBeforeDecimal = newValue; break;
+                case Weight.TWO_PLACES_BEFORE_DECIMAL: mNewWeight.TwoPlacesBeforeDecimal = newValue; break;
+                case Weight.THREE_PLACES_BEFORE_DECIMAL: mNewWeight.ThreePlacesBeforeDecimal = newValue; break;
+            }
+        }
     }
 }
