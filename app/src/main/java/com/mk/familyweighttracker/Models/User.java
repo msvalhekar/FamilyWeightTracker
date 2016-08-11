@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
+import com.google.android.gms.analytics.AnalyticsReceiver;
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Enums.HeightUnit;
@@ -14,6 +16,7 @@ import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.AlarmReceiver;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.LogHelper;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Services.PregnancyService;
 
@@ -170,6 +173,8 @@ public class User {
 
         Date nextAlarmDate = Utility.getInitialDateOfReminder(reminderDay + 1, reminderHour, reminderMinute);
 
+        Log.i(Constants.LogTag.App, String.format("%s: Set reminder for '%s' to '%s'", Constants.LogTag.User, name, nextAlarmDate.toString()));
+
         Calendar nextAlarmDateTime = Calendar.getInstance();
         nextAlarmDateTime.setTime(nextAlarmDate);
 
@@ -180,6 +185,8 @@ public class User {
     }
 
     public void removeReminder(Context context) {
+        Log.i(Constants.LogTag.App, String.format("%s: Remove reminder of '%s'", Constants.LogTag.User, name));
+
         PendingIntent pendingIntent = getPendingIntent(context);
 
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
