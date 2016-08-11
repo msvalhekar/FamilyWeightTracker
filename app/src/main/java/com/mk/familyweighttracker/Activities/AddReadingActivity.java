@@ -311,16 +311,12 @@ public class AddReadingActivity extends TrackerBaseActivity {
                 setWeightControl(layout, onePlacesAfterDecimalPicker, Integer.toString(mNewWeight.OnePlaceAfterDecimal));
                 setWeightControl(layout, twoPlacesAfterDecimalPicker, Integer.toString(mNewWeight.TwoPlacesAfterDecimal));
 
-//                TextView textView = new TextView(v.getContext());
-//                textView.setText(String.format("Weight (%.2f %s)", mNewWeight.getWeight(), mSelectedUser.weightUnit.toString()));
-//                layout.addView(textView);
                 layout.setHorizontalGravity(Gravity.CENTER);
 
                 AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
                         .setView(layout)
                         .setCancelable(false)
                         .setMessage(String.format("Weight (%s)", mSelectedUser.weightUnit.toString()))
-                        //.setMessage(String.format("Weight (%.2f %s)", mNewWeight.getWeight(), mSelectedUser.weightUnit.toString()))
                         .setPositiveButton("SET", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -480,26 +476,21 @@ public class AddReadingActivity extends TrackerBaseActivity {
 
         new UserService().addReading(mUserReadingToProcess);
 
-        Analytic.setData(Constants.AnalyticsCategories.Activity,
-                Constants.AnalyticsEvents.AddReading,
-                String.format(Constants.AnalyticsActions.ReadingAdded, mUserReadingToProcess.Sequence),
-                null);
-
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
 
         String message = String.format("Week %d reading saved.", mUserReadingToProcess.Sequence);
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+        Analytic.setData(Constants.AnalyticsCategories.Activity,
+                Constants.AnalyticsEvents.AddReading,
+                String.format(Constants.AnalyticsActions.ReadingAdded, mUserReadingToProcess.Sequence),
+                null);
     }
 
     private void onDeleteReading() {
         new UserService().deleteReading(mUserReadingToProcess.Id);
-
-        Analytic.setData(Constants.AnalyticsCategories.Activity,
-                Constants.AnalyticsEvents.DeleteReading,
-                String.format(Constants.AnalyticsActions.ReadingDeleted, mUserReadingToProcess.Sequence),
-                null);
 
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
@@ -507,6 +498,11 @@ public class AddReadingActivity extends TrackerBaseActivity {
 
         String message = String.format("Week %d reading removed.", mUserReadingToProcess.Sequence);
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+        Analytic.setData(Constants.AnalyticsCategories.Activity,
+                Constants.AnalyticsEvents.DeleteReading,
+                String.format(Constants.AnalyticsActions.ReadingDeleted, mUserReadingToProcess.Sequence),
+                null);
     }
 
     private class Weight {

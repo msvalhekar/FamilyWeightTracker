@@ -64,8 +64,8 @@ public class Constants {
 
     public static class AnalyticsActions {
         public static final String FirstReadingAdded = "FirstReadingAdded";
-        public static final String ReadingAdded = "ReadingAdded %l";
-        public static final String ReadingDeleted = "ReadingDeleted %l";
+        public static final String ReadingAdded = "ReadingAdded %d";
+        public static final String ReadingDeleted = "ReadingDeleted %d";
         public static final String UserDetailsLoaded = "UserDetailsLoaded %s";
         public static final String UserDeleted = "UserDeleted %s";
         public static final String ShowUserReadingHelp = "ShowUserReadingHelp";
