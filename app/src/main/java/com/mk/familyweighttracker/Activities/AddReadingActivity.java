@@ -25,7 +25,6 @@ import android.widget.Toast;
 
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
-import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
@@ -48,6 +47,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
     private Weight mNewWeight;
     private Long mNewSequenceValue;
     private View activityView;
+    TextView mWeightDialogTitleView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         initNoteControl();
         initMeasuredOnDateControl();
         initWeekSequenceControl(mUserReadingToProcess.Sequence);
-        initWeightSequenceControl(mUserReadingToProcess.Weight);
+        initWeightSequenceControl();
         initHeightSequenceControl(mUserReadingToProcess.Height);
         initActionButtonControls();
     }
@@ -285,7 +285,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         return picker;
     }
 
-    private void initWeightSequenceControl(double lastReading) {
+    private void initWeightSequenceControl() {
         final NumberPicker twoPlacesAfterDecimalPicker = getWeightSequenceControl(Weight.TWO_PLACES_AFTER_DECIMAL);
         final NumberPicker onePlacesAfterDecimalPicker = getWeightSequenceControl(Weight.ONE_PLACE_AFTER_DECIMAL);
         final NumberPicker onePlaceB4DecimalPicker = getWeightSequenceControl(Weight.ONE_PLACE_BEFORE_DECIMAL);
@@ -329,9 +329,9 @@ public class AddReadingActivity extends TrackerBaseActivity {
                         .create();
                 alertDialog.show();
 
-                TextView messageView = (TextView) alertDialog.findViewById(android.R.id.message);
-                if (messageView != null)
-                    messageView.setGravity(Gravity.CENTER);
+                mWeightDialogTitleView = (TextView) alertDialog.findViewById(android.R.id.message);
+                if (mWeightDialogTitleView != null)
+                    mWeightDialogTitleView.setGravity(Gravity.CENTER);
             }
         });
     }
@@ -382,6 +382,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 int newValue = Integer.valueOf(itemsToDisplay.get(newVal));
                 mNewWeight.setValue(picker.getId(), newValue);
+                mWeightDialogTitleView.setText(Html.fromHtml(String.format("Weight (<font color='blue'>%.2f</font> %s)", mNewWeight.getWeight(), mSelectedUser.weightUnit.toString())));
             }
         });
 
