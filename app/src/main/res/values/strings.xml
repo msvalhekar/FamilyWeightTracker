@@ -30,7 +30,6 @@
     <string name="add_user_reading_height_label">Height</string>
     <string name="add_user_reading_height_default_value">(height)</string>
     <string name="add_user_reading_height_unit_label">(cm)</string>
-    <string name="add_user_reading_note_hint_value">Note anything e.g. how you feeling this week being with baby?</string>
     <string name="add_preg_user_name_hint">(nick name)</string>
     <string name="add_preg_user_dob_label">Date Of Birth</string>
     <string name="add_preg_user_dob_default_value">(dd-MM-yyyy [age])</string>

@@ -182,6 +182,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
     private void initNoteControl() {
         final EditText noteView = ((EditText) findViewById(R.id.add_reading_note_edittext));
         noteView.setText(mUserReadingToProcess.Note);
+        noteView.setHint(Html.fromHtml("<small>Note anything e.g. week with baby, reports, appointments, etc</small>"));
     }
 
     private void initWeekSequenceControl(long lastReading) {
