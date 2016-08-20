@@ -199,7 +199,6 @@ public class AddReadingActivity extends TrackerBaseActivity {
                 int indexOfNextSequence = Arrays.asList(sequencePicker.getDisplayedValues()).indexOf(String.valueOf(mUserReadingToProcess.Sequence));
                 sequencePicker.setValue(indexOfNextSequence);
 
-
                 LinearLayout layout = new LinearLayout(v.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
 
@@ -346,7 +345,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
 
         ViewGroup.LayoutParams params = numberPicker.getLayoutParams();
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-        params.width = 90;
+        params.width = 110;
         numberPicker.setLayoutParams(params);
 
         TextView textView = new TextView(activityView.getContext());

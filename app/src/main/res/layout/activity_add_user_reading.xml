@@ -122,7 +122,9 @@
                 style="@style/Divider"/>
             <TableRow
                 android:id="@+id/add_reading_note_section"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
                 <EditText
                     android:id="@+id/add_reading_note_edittext"
                     android:layout_width="match_parent"
