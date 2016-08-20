@@ -130,7 +130,8 @@
                     android:layout_weight="1"
                     android:gravity="left|center"
                     android:lines="4"
-                    android:inputType="textMultiLine"
+                    android:inputType="textMultiLine">
+                </EditText>
             </TableRow>
             <View
                 android:id="@+id/add_user_pending_readings_divider"
