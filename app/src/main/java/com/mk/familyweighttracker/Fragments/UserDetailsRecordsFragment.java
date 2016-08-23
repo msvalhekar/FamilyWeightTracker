@@ -153,7 +153,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
 
                         Analytic.setData(Constants.AnalyticsCategories.Activity,
                                 Constants.AnalyticsEvents.UserReadingHelp,
-                                Constants.AnalyticsActions.ShowUserReadingHelp,
+                                String.format(Constants.AnalyticsActions.ShowUserReadingHelp, mSelectedUser.name),
                                 null);
 
                     }

@@ -203,16 +203,16 @@ public class AddFirstReadingActivity extends TrackerBaseActivity {
         new UserService().addReading(mUserReadingToProcess);
         new UserService().updateUnits(mSelectedUser.getId(), mNewWeightUnit, mNewHeightUnit);
 
-        Analytic.setData(Constants.AnalyticsCategories.Activity,
-                Constants.AnalyticsEvents.AddFirstReading,
-                Constants.AnalyticsActions.FirstReadingAdded,
-                null);
-
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
 
         String message = "Pre-pregnancy reading saved.";
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+        Analytic.setData(Constants.AnalyticsCategories.Activity,
+                Constants.AnalyticsEvents.AddFirstReading,
+                String.format(bEditMode ? Constants.AnalyticsActions.FirstReadingEdited : Constants.AnalyticsActions.FirstReadingAdded, mSelectedUser.name),
+                null);
     }
 }

@@ -23,6 +23,7 @@ import java.util.GregorianCalendar;
  */
 public class Constants {
 
+    public static final String DB_NAME = "MkWeighTracker.db";
     public static final String LogDirectory = "sysLog";
 
     public static class Activities {
@@ -63,12 +64,16 @@ public class Constants {
     }
 
     public static class AnalyticsActions {
-        public static final String FirstReadingAdded = "FirstReadingAdded";
-        public static final String ReadingAdded = "ReadingAdded %d";
-        public static final String ReadingDeleted = "ReadingDeleted %d";
-        public static final String UserDetailsLoaded = "UserDetailsLoaded %s";
-        public static final String UserDeleted = "UserDeleted %s";
-        public static final String ShowUserReadingHelp = "ShowUserReadingHelp";
+        public static final String FirstReadingAdded = "%s -> FirstReadingAdded";
+        public static final String FirstReadingEdited = "%s -> FirstReadingEdited";
+        public static final String ReadingAdded = "%s -> ReadingAdded %d";
+        public static final String ReadingEdited = "%s -> ReadingEdited %d";
+        public static final String ReadingDeleted = "%s -> ReadingDeleted %d";
+        public static final String UserDetailsLoaded = "%s -> UserDetailsLoaded";
+        public static final String UserDeleted = "%s -> UserDeleted";
+        public static final String ShowUserReadingHelp = "%s -> ShowUserReadingHelp";
+        public static final String UserAdded = "UserAdded : %s";
+        public static final String UserEdited = "UserEdited : %s";
     }
 
     public static class AnalyticsEvents {
@@ -77,6 +82,7 @@ public class Constants {
         public static final String AddReading = "AddReading";
         public static final String DeleteReading = "DeleteReading";
         public static final String UserDetailsACtivity = "UserDetailsACtivity";
+        public static final String UserAdded = "UserAdded";
         public static final String UserDelete = "UserDelete";
         public static final String UserReadingHelp = "UserReadingHelp";
     }

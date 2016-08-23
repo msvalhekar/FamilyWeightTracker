@@ -3,7 +3,6 @@ package com.mk.familyweighttracker.Activities;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -623,6 +622,12 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         String message = mIsEditMode ? "Profile updated" : "Welcome and Congratulations";
         int toastLength = mIsEditMode ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG;
         Toast.makeText(getApplicationContext(), message, toastLength).show();
+
+        Analytic.setData(Constants.AnalyticsCategories.Activity,
+                //Constants.AnalyticsEvents.UserAdded,
+                String.format(mIsEditMode ? Constants.AnalyticsActions.UserEdited : Constants.AnalyticsActions.UserAdded, mUser.name),
+                String.format(mIsEditMode ? Constants.AnalyticsActions.UserEdited : Constants.AnalyticsActions.UserAdded, mUser.name),
+                null);
     }
 
     public class AddUserAsyncTask extends AsyncTask<AddPregnantUserActivity, Void, Boolean>

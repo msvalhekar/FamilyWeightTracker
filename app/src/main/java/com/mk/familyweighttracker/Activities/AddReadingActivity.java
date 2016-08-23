@@ -316,7 +316,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
                 AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
                         .setView(layout)
                         .setCancelable(false)
-                        .setMessage(String.format("Weight (%s)", mSelectedUser.weightUnit.toString()))
+                        .setMessage(String.format("Weight (%.2f %s)", mNewWeight.getWeight(), mSelectedUser.weightUnit.toString()))
                         .setPositiveButton("SET", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -486,7 +486,9 @@ public class AddReadingActivity extends TrackerBaseActivity {
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,
                 Constants.AnalyticsEvents.AddReading,
-                String.format(Constants.AnalyticsActions.ReadingAdded, mUserReadingToProcess.Sequence),
+                String.format(bEditMode ? Constants.AnalyticsActions.ReadingEdited : Constants.AnalyticsActions.ReadingAdded,
+                        mSelectedUser.name,
+                        mUserReadingToProcess.Sequence),
                 null);
     }
 
@@ -502,7 +504,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,
                 Constants.AnalyticsEvents.DeleteReading,
-                String.format(Constants.AnalyticsActions.ReadingDeleted, mUserReadingToProcess.Sequence),
+                String.format(Constants.AnalyticsActions.ReadingDeleted, mSelectedUser.name, mUserReadingToProcess.Sequence),
                 null);
     }
 
