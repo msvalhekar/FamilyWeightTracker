@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by mvalhekar on 25-03-2016.
@@ -163,6 +164,15 @@ public class User {
 
     public BodyWeightCategory getWeightCategory() {
         return new PregnancyService().getWeightCategory(getBmi());
+    }
+
+    public long getNextWeekSequence() {
+        UserReading prepregReading = getPrepregnancyReading();
+        if(prepregReading == null) return 0;
+
+        long timeDiff = new Date().getTime() - prepregReading.TakenOn.getTime();
+        long daysDiff = TimeUnit.DAYS.toDays(timeDiff);
+        return daysDiff / 7;
     }
 
     public void resetReminder(Context context) {
