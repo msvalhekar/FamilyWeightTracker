@@ -158,7 +158,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                 allowToCropImageBeforeSelection();
             } else {
                 mPickedImageUri = null;
-                Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_SHORT).show();
             }
         }
         else if (requestCode == Constants.RequestCode.IMAGE_CROP) {
@@ -175,7 +175,9 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                         mUser.imageBytes = stream.toByteArray();
                         mImageButton.setImageBitmap(BitmapFactory.decodeByteArray(mUser.imageBytes, 0, mUser.imageBytes.length));
                     } catch (Exception e) {
-                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                        Log.e(Constants.LogTag.App, e.getMessage());
                     }
                 }
             } else {
@@ -294,10 +296,14 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                 mUser.imageBytes = stream.toByteArray();
             }
             catch (Exception e) {
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+                Log.e(Constants.LogTag.App, e.getMessage());
             }
         } catch (Exception e) {
-            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            Log.e(Constants.LogTag.App, e.getMessage());
         }
     }
 
@@ -398,6 +404,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                     true);
         } catch (IOException e) {
             e.printStackTrace();
+            Log.e(Constants.LogTag.App, e.getMessage());
         }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -407,6 +414,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
 
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e(Constants.LogTag.App, e.getMessage());
         }
 
         return scaledBitmap;
