@@ -86,6 +86,11 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
 
         initReadingListControl();
 
+        Analytic.setData(Constants.AnalyticsCategories.Fragment,
+                Constants.AnalyticsEvents.UserDetailsRecords,
+                String.format(Constants.AnalyticsActions.UserDetailsRecords, mSelectedUser.name),
+                null);
+
         return mFragmentView;
     }
 

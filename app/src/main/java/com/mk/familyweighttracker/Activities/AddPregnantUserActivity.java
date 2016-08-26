@@ -624,8 +624,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         Toast.makeText(getApplicationContext(), message, toastLength).show();
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,
-                //Constants.AnalyticsEvents.UserAdded,
-                String.format(mIsEditMode ? Constants.AnalyticsActions.UserEdited : Constants.AnalyticsActions.UserAdded, mUser.name),
+                Constants.AnalyticsEvents.UserAdded,
                 String.format(mIsEditMode ? Constants.AnalyticsActions.UserEdited : Constants.AnalyticsActions.UserAdded, mUser.name),
                 null);
     }

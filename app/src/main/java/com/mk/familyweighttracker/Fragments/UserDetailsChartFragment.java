@@ -21,6 +21,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.mk.familyweighttracker.Activities.UserDetailActivity;
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
+import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
@@ -62,6 +63,11 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
         initChartControl();
 
         onNewReadingAdded();
+
+        Analytic.setData(Constants.AnalyticsCategories.Fragment,
+                Constants.AnalyticsEvents.UserDetailsChart,
+                String.format(Constants.AnalyticsActions.UserDetailsChart, mUser.name),
+                null);
 
         return mFragmentView;
     }

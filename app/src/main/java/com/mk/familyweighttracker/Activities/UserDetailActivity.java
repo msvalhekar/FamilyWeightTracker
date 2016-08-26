@@ -56,7 +56,7 @@ public class UserDetailActivity extends TrackerBaseActivity
         this.setTitle(mUser.name);
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,
-                Constants.AnalyticsEvents.UserDetailsACtivity,
+                Constants.AnalyticsEvents.UserDetailsActivity,
                 String.format(Constants.AnalyticsActions.UserDetailsLoaded, mUser.name),
                 null);
 

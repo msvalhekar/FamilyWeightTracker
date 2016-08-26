@@ -1,23 +1,5 @@
 package com.mk.familyweighttracker.Framework;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
-
-import com.mk.familyweighttracker.Enums.HeightUnit;
-import com.mk.familyweighttracker.Enums.WeightUnit;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 /**
  * Created by mvalhekar on 15-04-2016.
  */
@@ -59,11 +41,15 @@ public class Constants {
 
     public static class AnalyticsCategories {
         public static final String Activity = "Activity";
+        public static final String Fragment = "Fragment";
         public static final String BackgroundAction = "BackgroundAction";
         public static final String Action = "Action";
     }
 
     public static class AnalyticsActions {
+        public static final String UserDetailsProfile = "%s -> DetailsProfile";
+        public static final String UserDetailsChart = "%s -> DetailsChart";
+        public static final String UserDetailsRecords = "%s -> DetailsRecords";
         public static final String FirstReadingAdded = "%s -> FirstReadingAdded";
         public static final String FirstReadingEdited = "%s -> FirstReadingEdited";
         public static final String ReadingAdded = "%s -> ReadingAdded %d";
@@ -81,7 +67,10 @@ public class Constants {
         public static final String AddFirstReading = "AddFirstReading";
         public static final String AddReading = "AddReading";
         public static final String DeleteReading = "DeleteReading";
-        public static final String UserDetailsACtivity = "UserDetailsACtivity";
+        public static final String UserDetailsActivity = "UserDetailsActivity";
+        public static final String UserDetailsProfile = "UserDetailsProfile";
+        public static final String UserDetailsChart = "UserDetailsChart";
+        public static final String UserDetailsRecords = "UserDetailsRecords";
         public static final String UserAdded = "UserAdded";
         public static final String UserDelete = "UserDelete";
         public static final String UserReadingHelp = "UserReadingHelp";

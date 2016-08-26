@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.mk.familyweighttracker.Activities.AddPregnantUserActivity;
+import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
@@ -57,6 +58,11 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
         initReminderControls();
 
         initActionControls();
+
+        Analytic.setData(Constants.AnalyticsCategories.Fragment,
+                Constants.AnalyticsEvents.UserDetailsProfile,
+                String.format(Constants.AnalyticsActions.UserDetailsProfile, mUser.name),
+                null);
 
         return mFragmentView;
     }
