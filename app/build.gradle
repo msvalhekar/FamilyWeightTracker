@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
@@ -11,6 +13,28 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
 
+def getAppVersionCode() {
+    return 112
+}
+
+def computeApkName(variant) {
+    def flavorSuffix = ""
+    try {
+        flavorSuffix = variant.productFlavors.ext.flavorSuffix.get(0)
+    }
+    catch (ignored) {
+    }
+    return String.format("pregWeightTrack-%s%s.apk", getAppVersionName(), flavorSuffix)
+}
+
+def getAppVersionName() {
+    def major = (int)(getAppVersionCode() / 100)
+    def minor = (int)((getAppVersionCode() % 100) / 10)
+
+    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd")
+    return String.format("%s.%s.%s", major, minor, format.format(new Date()))
+}
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -19,22 +43,55 @@ android {
         applicationId "com.mk.pregnancyweighttracker"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 110
-        versionName "1.1.0"
+        multiDexEnabled true
+        versionCode getAppVersionCode()
+        versionName getAppVersionName()
     }
 
     signingConfigs {
         release {
             storeFile file("FamilyWeightTracker.jks")
+            storePassword ""
             keyAlias "MeenalkumarSubhashValhekar"
+            keyPassword ""
         }
     }
 
     buildTypes {
         release {
             minifyEnabled false
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+        }
+    }
+
+    productFlavors {
+        dev {
+            ext.flavorSuffix = "-dev"
+        }
+        prod {
+            ext.flavorSuffix = ""
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFile = new File(output.outputFile.parent, computeApkName(variant))
+        }
+
+        variant.assemble.doLast {
+            variant.outputs.each { output ->
+                println "aligned " + output.outputFile
+                println "unaligned " + output.packageApplication.outputFile
+
+                File unaligned = output.packageApplication.outputFile;
+                File aligned = output.outputFile
+                if (!unaligned.getName().equalsIgnoreCase(aligned.getName())) {
+                    println "deleting " + unaligned.getName()
+                    unaligned.delete()
+                }
+            }
         }
     }
 }
