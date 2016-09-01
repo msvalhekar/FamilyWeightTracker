@@ -6,6 +6,7 @@ package com.mk.familyweighttracker.Framework;
 public class Constants {
 
     public static final String DB_NAME = "MkWeighTracker.db";
+    public static final String APP_BACKUP_KEY = "MkWeighTracker";
     public static final String LogDirectory = "sysLog";
 
     public static class Activities {

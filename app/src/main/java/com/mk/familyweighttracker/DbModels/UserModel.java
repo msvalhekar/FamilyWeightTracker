@@ -8,7 +8,10 @@ import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Models.User;
-import com.mk.familyweighttracker.Models.UserReading;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.List;
@@ -81,6 +84,13 @@ public class UserModel extends Model {
         return model != null;
     }
 
+    public static void deleteAll() {
+        for (UserModel user : getAll()) {
+            UserReadingModel.deleteAllFor(user.getId());
+            UserModel.delete(UserModel.class, user.getId());
+        }
+    }
+
     public static void delete(long userId) {
         UserReadingModel.deleteAllFor(userId);
         UserModel.delete(UserModel.class, userId);
@@ -138,5 +148,48 @@ public class UserModel extends Model {
         userModel.weightUnit = weightUnit;
         userModel.heightUnit = heightUnit;
         userModel.save();
+    }
+
+    public JSONObject toJSON() throws JSONException {
+        JSONArray readingsJSONArray = new JSONArray();
+        for (UserReadingModel reading : getReadings()) {
+            readingsJSONArray.put(reading.toJSON());
+        }
+
+        return new JSONObject()
+                .put("name", name)
+                .put("imageBytes", imageBytes)
+                .put("dob", dateOfBirth.getTime())
+                .put("isMale", isMale)
+                .put("trackPeriod", trackingPeriod)
+                .put("wtUnit", weightUnit)
+                .put("htUnit", heightUnit)
+                .put("reminder", enableReminder)
+                .put("remDay", reminderDay)
+                .put("remHr", reminderHour)
+                .put("remMin", reminderMinute)
+                .put("readings", readingsJSONArray);
+    }
+
+    public static void saveFrom(JSONObject userJSON) throws JSONException {
+        UserModel user = new UserModel();
+        user.name = userJSON.getString("name");
+        user.imageBytes = (byte[]) userJSON.get("imageBytes");
+        user.dateOfBirth = new Date(userJSON.getLong("dob"));
+        user.isMale = userJSON.getBoolean("isMale");
+        user.trackingPeriod = TrackingPeriod.valueOf(userJSON.getString("trackPeriod"));
+        user.weightUnit = WeightUnit.valueOf(userJSON.getString("wtUnit"));
+        user.heightUnit = HeightUnit.valueOf(userJSON.getString("htUnit"));
+        user.enableReminder = userJSON.getBoolean("reminder");
+        user.reminderDay = userJSON.getInt("remDay");
+        user.reminderHour = userJSON.getInt("remHr");
+        user.reminderMinute = userJSON.getInt("remMin");
+        user.save();
+
+        JSONArray readingsJSONArray = userJSON.getJSONArray("readings");
+        for (int i=0; i<readingsJSONArray.length(); i++) {
+            JSONObject readingJSON = readingsJSONArray.getJSONObject(i);
+            UserReadingModel.saveFrom(readingJSON, user);
+        }
     }
 }

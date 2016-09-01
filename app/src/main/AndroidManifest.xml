@@ -12,11 +12,12 @@
 
     <application
         android:name=".Framework.TrackerApplication"
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:allowBackup="true"
+        android:backupAgent=".Framework.TrackerBackupAgent">
 
         <meta-data
             android:name="AA_DB_NAME"
@@ -30,6 +31,9 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="c42a891a159c01eeee521eb433d82b996f2b0307" />
+        <meta-data
+            android:name="com.google.android.backup.api_key"
+            android:value="AEdPqrEAAAAIWngp6zMmMi_8niZFJhGHqYm6BYivFhdK91IkSA" />
 
         <activity
             android:name=".HomeActivity"

@@ -7,6 +7,9 @@ import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.mk.familyweighttracker.Models.UserReading;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Date;
 
 /**
@@ -77,5 +80,28 @@ public class UserReadingModel extends Model {
 
     public UserReading mapToUserReading() {
         return new UserReading(this.getId(), this.User.getId(), this.Sequence, this.Weight, this.Height, this.Note, this.TakenOn);
+    }
+
+    public JSONObject toJSON() throws JSONException {
+        return new JSONObject()
+                .put("createdOn", CreatedOn.getTime())
+                .put("takenOn", TakenOn.getTime())
+                .put("seq", Sequence)
+                .put("wt", Weight)
+                .put("ht", Height)
+                .put("note", Note);
+    }
+
+    public static void saveFrom(JSONObject readingJSON, UserModel userModel) throws JSONException {
+        UserReadingModel reading = new UserReadingModel();
+        reading.CreatedOn = new Date(readingJSON.getLong("createdOn"));
+        reading.TakenOn = new Date(readingJSON.getLong("takenOn"));
+        reading.Sequence = readingJSON.getLong("seq");
+        reading.Weight = readingJSON.getDouble("wt");
+        reading.Height = readingJSON.getDouble("ht");
+        reading.Note = readingJSON.getString("note");
+        reading.User = userModel;
+
+        reading.save();
     }
 }

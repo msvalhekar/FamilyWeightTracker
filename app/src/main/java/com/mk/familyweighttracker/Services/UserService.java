@@ -1,7 +1,10 @@
 package com.mk.familyweighttracker.Services;
 
+import android.app.backup.BackupManager;
+
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.WeightUnit;
+import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
@@ -32,19 +35,24 @@ public class UserService {
     }
 
     public long add(User newUser) {
-        return userRepository.addUser(newUser);
+        long userId = userRepository.addUser(newUser);
+        dataChanged();
+        return userId;
     }
 
     public void remove(long userId) {
         userRepository.remove(userId);
+        dataChanged();
     }
 
     public void addReading(UserReading reading) {
         userRepository.saveReading(reading);
+        dataChanged();
     }
 
     public void deleteReading(long readingId) {
         userRepository.deleteReading(readingId);
+        dataChanged();
     }
 
     public void updateUnits(long userId, WeightUnit weightUnit, HeightUnit heightUnit) {
@@ -61,5 +69,10 @@ public class UserService {
             userRepository.saveReading(reading);
         }
         userRepository.updateUnits(userId, weightUnit, heightUnit);
+        dataChanged();
+    }
+
+    private void dataChanged() {
+        BackupManager.dataChanged(TrackerApplication.getApp().getPackageName());
     }
 }
