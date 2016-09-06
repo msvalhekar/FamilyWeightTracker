@@ -62,6 +62,12 @@ public class User {
         return mId;
     }
 
+    public int getReadingsCount() {
+        if(mReadings != null)
+            return mReadings.size();
+        return 0;
+    }
+
     public String getDateOfBirthStr() {
         return dateFormat.format(dateOfBirth);
     }

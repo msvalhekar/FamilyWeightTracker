@@ -75,7 +75,7 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
     private void setChartDescriptionControl() {
         mFragmentView.findViewById(R.id.user_detail_chart_description_section).setVisibility(View.VISIBLE);
 
-        UserReading latestReading = mUser.getReadings(false).get(0);
+        UserReading latestReading = mUser.getLatestReading();
 
         ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_week_no))
                 .setText(String.format("Week: %d", latestReading.Sequence));
@@ -222,7 +222,7 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
     @Override
     public void onNewReadingAdded() {
         mUser = new UserService().get(mSelectedUserId);
-        if(mUser.getReadings(true).size() == 0) return;
+        if(mUser.getReadingsCount() == 0) return;
 
         BodyWeightCategory weightCategory = mUser.getWeightCategory();
         mWeightRangeList = mPregnancyService.getWeightGainTableFor(mUser.getStartingWeight(), weightCategory, mUser.weightUnit);

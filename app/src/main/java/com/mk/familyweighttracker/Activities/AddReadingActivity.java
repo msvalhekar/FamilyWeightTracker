@@ -410,7 +410,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         findViewById(R.id.add_reading_weight_unit_section).setVisibility(View.GONE);
         if(!mUserReadingToProcess.isFirstReading()) return;
 
-        if(mSelectedUser.getReadings(true).size() > 1) return; // dont allow to change unit if other readings are added
+        if(mSelectedUser.getReadingsCount() > 1) return; // dont allow to change unit if other readings are added
 
         findViewById(R.id.add_reading_weight_unit_section).setVisibility(View.VISIBLE);
 
@@ -544,7 +544,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         findViewById(R.id.add_reading_height_unit_section).setVisibility(View.GONE);
         if(!mUserReadingToProcess.isFirstReading()) return;
 
-        if(mSelectedUser.getReadings(true).size() > 1) return; // dont allow to change unit if other readings are added
+        if(mSelectedUser.getReadingsCount() > 1) return; // dont allow to change unit if other readings are added
 
         findViewById(R.id.add_reading_height_unit_section).setVisibility(View.VISIBLE);
 

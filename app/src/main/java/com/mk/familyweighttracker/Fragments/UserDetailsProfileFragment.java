@@ -105,7 +105,7 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
         mFragmentView.findViewById(R.id.view_user_pre_pregnancy_wt_category_section).setVisibility(View.GONE);
         mFragmentView.findViewById(R.id.view_user_pre_pregnancy_lmp_section).setVisibility(View.GONE);
 
-        if(mUser.getReadings(true).size() > 0) {
+        if(mUser.getReadingsCount() > 0) {
 
             mFragmentView.findViewById(R.id.view_user_pre_pregnancy_divider).setVisibility(View.VISIBLE);
             mFragmentView.findViewById(R.id.view_user_pre_pregnancy_section).setVisibility(View.VISIBLE);
