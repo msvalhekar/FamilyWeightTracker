@@ -110,4 +110,5 @@
     <string name="ReadingNoteHintMessage"><![CDATA[<small>Note anything e.g. week with baby, reports, appointments, etc</small>]]></string>
     <string name="WeekNumberMessage">Week Number</string>
     <string name="WeeksMessage">week(s)</string>
+    <string name="Maximum40WeeksDataSupportedMessage">App supports only 40 weeks of pregnancy readings, additional readings cannot be added.</string>
 </resources>

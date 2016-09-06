@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mk.familyweighttracker.Activities.AddFirstReadingActivity;
 import com.mk.familyweighttracker.Activities.AddReadingActivity;
@@ -86,9 +87,15 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), AddReadingActivity.class);
-                intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
-                startActivityForResult(intent, Constants.RequestCode.ADD_READING);
+                if(mSelectedUser.getReadingsCount() < 41) {
+                    Intent intent = new Intent(getContext(), AddReadingActivity.class);
+                    intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
+                    startActivityForResult(intent, Constants.RequestCode.ADD_READING);
+                } else {
+                    Toast.makeText(view.getContext(),
+                            R.string.Maximum40WeeksDataSupportedMessage,
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

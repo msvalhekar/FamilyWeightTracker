@@ -102,7 +102,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
             mUserReadingToProcess.Weight = UserReading.DEFAULT_BASE_WEIGHT;
             mUserReadingToProcess.Height = UserReading.DEFAULT_BASE_HEIGHT;
             if(previousReading != null) {
-                mUserReadingToProcess.Sequence = previousReading.Sequence + 1;
+                mUserReadingToProcess.Sequence = getNextSequence(previousReading);
                 mUserReadingToProcess.Weight = previousReading.Weight;
                 mUserReadingToProcess.Height = previousReading.Height;
             }
@@ -118,6 +118,26 @@ public class AddReadingActivity extends TrackerBaseActivity {
         initHeightUnitControl();
         initHeightSequenceControl(mUserReadingToProcess.Height);
         initActionButtonControls();
+    }
+
+    private long getNextSequence(UserReading previousReading) {
+        long nextSequence = previousReading.Sequence + 1;
+        if(nextSequence > 40) {
+            List<UserReading> readings = mSelectedUser.getReadings(false);
+            UserReading prevReading = null;
+            UserReading currentReading = null;
+            for (int i = 0; i < readings.size(); i++) {
+                currentReading = readings.get(i);
+                if(prevReading != null && (prevReading.Sequence - currentReading.Sequence) > 1) {
+                    nextSequence = prevReading.Sequence -1;
+                    break;
+                }
+                prevReading = currentReading;
+            }
+            if(prevReading.Sequence == currentReading.Sequence)
+                nextSequence = currentReading.Sequence -1;
+        }
+        return nextSequence;
     }
 
     @Override
@@ -307,14 +327,14 @@ public class AddReadingActivity extends TrackerBaseActivity {
     }
 
     private void initWeekSequenceControl(long lastReading) {
-        final NumberPicker sequencePicker = getWeekSequenceControl(lastReading);
 
         final Button seqButton = ((Button) findViewById(R.id.add_reading_sequence_btn));
         seqButton.setText(String.valueOf(mUserReadingToProcess.Sequence));
-        //boolean isClickable1 = !bEditMode && !mUserReadingToProcess.isFirstReading();
-        boolean nonClickable = bEditMode || mUserReadingToProcess.isFirstReading();
-        seqButton.setClickable(!nonClickable);
-        if(nonClickable) return;
+        boolean nonEditable = bEditMode || mUserReadingToProcess.isFirstReading();
+        seqButton.setClickable(!nonEditable);
+        if(nonEditable) return;
+
+        final NumberPicker sequencePicker = getWeekSequenceControl(lastReading);
 
         seqButton.setOnClickListener(new View.OnClickListener() {
             @Override
