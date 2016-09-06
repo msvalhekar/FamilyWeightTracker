@@ -21,6 +21,9 @@ public class UserReadingModel extends Model {
     @Column(name = "User")
     public UserModel User;
 
+    @Column(name = "ImageBytes")
+    public byte[] ImageBytes;
+
     @Column(name = "Sequence")
     public long Sequence;
 
@@ -54,6 +57,7 @@ public class UserReadingModel extends Model {
             readingModel = model;
 
         readingModel.User = UserModel.get(reading.UserId);
+        readingModel.ImageBytes = reading.ImageBytes;
         readingModel.Sequence = reading.Sequence;
         readingModel.Weight = reading.Weight;
         readingModel.Height = reading.Height;
@@ -79,13 +83,14 @@ public class UserReadingModel extends Model {
     }
 
     public UserReading mapToUserReading() {
-        return new UserReading(this.getId(), this.User.getId(), this.Sequence, this.Weight, this.Height, this.Note, this.TakenOn);
+        return new UserReading(this.getId(), this.User.getId(), this.ImageBytes, this.Sequence, this.Weight, this.Height, this.Note, this.TakenOn);
     }
 
     public JSONObject toJSON() throws JSONException {
         return new JSONObject()
                 .put("createdOn", CreatedOn.getTime())
                 .put("takenOn", TakenOn.getTime())
+                .put("imageBytes", ImageBytes)
                 .put("seq", Sequence)
                 .put("wt", Weight)
                 .put("ht", Height)
@@ -96,6 +101,7 @@ public class UserReadingModel extends Model {
         UserReadingModel reading = new UserReadingModel();
         reading.CreatedOn = new Date(readingJSON.getLong("createdOn"));
         reading.TakenOn = new Date(readingJSON.getLong("takenOn"));
+        reading.ImageBytes = (byte[]) readingJSON.get("imageBytes");
         reading.Sequence = readingJSON.getLong("seq");
         reading.Weight = readingJSON.getDouble("wt");
         reading.Height = readingJSON.getDouble("ht");

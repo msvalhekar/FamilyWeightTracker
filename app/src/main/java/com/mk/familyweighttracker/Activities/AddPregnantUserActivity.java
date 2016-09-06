@@ -3,33 +3,21 @@ package com.mk.familyweighttracker.Activities;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -37,23 +25,25 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
+import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.ImageUtility;
+import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -116,6 +106,8 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             mUser.reminderDay = 1;
             mUser.reminderHour = 8;
             mUser.reminderMinute = 0;
+            mUser.weightUnit = WeightUnit.kg;
+            mUser.heightUnit = HeightUnit.cm;
         }
 
         initImageButtonControl();
@@ -152,16 +144,16 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Check which request we're responding to
-        if (requestCode == Constants.RequestCode.IMAGE_LOAD) {
+        if (requestCode == Constants.RequestCode.USER_IMAGE_LOAD) {
             if (resultCode == RESULT_OK && data != null) {
                 mPickedImageUri = data.getData();
-                allowToCropImageBeforeSelection();
+                ImageUtility.allowToCropImageBeforeSelection(this, mPickedImageUri, Constants.RequestCode.USER_IMAGE_CROP);
             } else {
                 mPickedImageUri = null;
                 Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_SHORT).show();
             }
         }
-        else if (requestCode == Constants.RequestCode.IMAGE_CROP) {
+        else if (requestCode == Constants.RequestCode.USER_IMAGE_CROP) {
             if (resultCode == RESULT_OK && data != null) {
                 // get the returned data
                 Bundle extras = data.getExtras();
@@ -207,76 +199,9 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.setType("image/*");
-                startActivityForResult(intent, Constants.RequestCode.IMAGE_LOAD);
+                startActivityForResult(intent, Constants.RequestCode.USER_IMAGE_LOAD);
             }
         });
-    }
-
-    private void allowToCropImageBeforeSelection() {
-
-        final ArrayList<CropOption> cropOptions = new ArrayList<CropOption>();
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setType("image/*");
-        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
-        int size = list.size();
-
-        if (size == 0) {
-            Toast.makeText(this, "Can not find image cropper app", Toast.LENGTH_SHORT).show();
-            // todo: still need to save selected image
-            return;
-        } else {
-            intent.setData(mPickedImageUri);
-            intent.putExtra("outputX", 150);
-            intent.putExtra("outputY", 150);
-            intent.putExtra("aspectX", 1);
-            intent.putExtra("aspectY", 1);
-            intent.putExtra("crop", true);
-            intent.putExtra("scale", true);
-            intent.putExtra("return-data", true);
-
-            if (size == 1) {
-                Intent i = new Intent(intent);
-                ResolveInfo res = list.get(0);
-                i.setComponent(new ComponentName(res.activityInfo.packageName,  res.activityInfo.name));
-                startActivityForResult(i, Constants.RequestCode.IMAGE_CROP);
-            } else {
-                for (ResolveInfo res : list) {
-                    final CropOption co = new CropOption();
-
-                    co.title = getPackageManager().getApplicationLabel(res.activityInfo.applicationInfo);
-                    co.icon = getPackageManager().getApplicationIcon(res.activityInfo.applicationInfo);
-                    co.appIntent = new Intent(intent);
-                    co.appIntent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-                    cropOptions.add(co);
-                }
-
-                CropOptionAdapter adapter = new CropOptionAdapter(this, cropOptions);
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Choose Cropper App");
-                builder.setAdapter(adapter,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int item) {
-                                startActivityForResult(
-                                        cropOptions.get(item).appIntent,
-                                        Constants.RequestCode.IMAGE_CROP);
-                            }
-                        });
-
-                builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-
-                        if (mPickedImageUri != null) {
-                            getContentResolver().delete(mPickedImageUri, null, null);
-                            mPickedImageUri = null;
-                        }
-                    }
-                });
-
-                builder.create().show();
-            }
-        }
     }
 
     private void saveUserImage(Uri pickedImageUri) {
@@ -287,7 +212,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             String imagePath = cursor.getString(cursor.getColumnIndex(filepath[0]));
             cursor.close();
 
-            Bitmap scaledBitmap = compressImage(imagePath);
+            Bitmap scaledBitmap = ImageUtility.compressImage(imagePath);
             mImageButton.setImageBitmap(scaledBitmap);
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -305,139 +230,6 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             e.printStackTrace();
             Log.e(Constants.LogTag.App, e.getMessage());
         }
-    }
-
-    public Bitmap compressImage(String filePath) {
-        //http://voidcanvas.com/whatsapp-like-image-compression-in-android/
-
-        Bitmap scaledBitmap = null;
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-
-        // by setting this field as true, the actual bitmap pixels are not loaded in the memory. Just the bounds are loaded. If
-        // you try the use the bitmap here, you will get null.
-        options.inJustDecodeBounds = true;
-        Bitmap bmp = BitmapFactory.decodeFile(filePath, options);
-
-        int actualHeight = options.outHeight;
-        int actualWidth = options.outWidth;
-
-        // max Height and width values of the compressed image is taken as 816x612
-        float maxHeight = 150.0f;
-        float maxWidth = 150.0f;
-        float imgRatio = actualWidth / actualHeight;
-        float maxRatio = maxWidth / maxHeight;
-
-        // width and height values are set maintaining the aspect ratio of the image
-        if (actualHeight > maxHeight || actualWidth > maxWidth) {
-            if (imgRatio < maxRatio) {
-                imgRatio = maxHeight / actualHeight;
-                actualWidth = (int) (imgRatio * actualWidth);
-                actualHeight = (int) maxHeight;
-            } else if (imgRatio > maxRatio) {
-                imgRatio = maxWidth / actualWidth;
-                actualHeight = (int) (imgRatio * actualHeight);
-                actualWidth = (int) maxWidth;
-            } else {
-                actualHeight = (int) maxHeight;
-                actualWidth = (int) maxWidth;
-            }
-        }
-
-        // setting inSampleSize value allows to load a scaled down version of the original image
-        options.inSampleSize = calculateInSampleSize(options, actualWidth, actualHeight);
-
-        // inJustDecodeBounds set to false to load the actual bitmap
-        options.inJustDecodeBounds = false;
-
-        // this options allow android to claim the bitmap memory if it runs low on memory
-        options.inPurgeable = true;
-        options.inInputShareable = true;
-        options.inTempStorage = new byte[16 * 1024];
-
-        try {
-            // load the bitmap from its path
-            bmp = BitmapFactory.decodeFile(filePath, options);
-        } catch (OutOfMemoryError exception) {
-            exception.printStackTrace();
-        }
-
-        try {
-            scaledBitmap = Bitmap.createBitmap(actualWidth, actualHeight, Bitmap.Config.ARGB_8888);
-        } catch (OutOfMemoryError exception) {
-            exception.printStackTrace();
-        }
-
-        float ratioX = actualWidth / (float) options.outWidth;
-        float ratioY = actualHeight / (float) options.outHeight;
-        float middleX = actualWidth / 2.0f;
-        float middleY = actualHeight / 2.0f;
-
-        Matrix scaleMatrix = new Matrix();
-        scaleMatrix.setScale(ratioX, ratioY, middleX, middleY);
-
-        Canvas canvas = new Canvas(scaledBitmap);
-        canvas.setMatrix(scaleMatrix);
-        canvas.drawBitmap(bmp, middleX - bmp.getWidth() / 2, middleY - bmp.getHeight() / 2, new Paint(Paint.FILTER_BITMAP_FLAG));
-
-        // check the rotation of the image and display it properly
-        ExifInterface exif;
-        try {
-            exif = new ExifInterface(filePath);
-
-            int orientation = exif.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION, 0);
-            Log.d("EXIF", "Exif: " + orientation);
-            Matrix matrix = new Matrix();
-            if (orientation == 6) {
-                matrix.postRotate(90);
-                Log.d("EXIF", "Exif: " + orientation);
-            } else if (orientation == 3) {
-                matrix.postRotate(180);
-                Log.d("EXIF", "Exif: " + orientation);
-            } else if (orientation == 8) {
-                matrix.postRotate(270);
-                Log.d("EXIF", "Exif: " + orientation);
-            }
-            scaledBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0,
-                    scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix,
-                    true);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(Constants.LogTag.App, e.getMessage());
-        }
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try {
-            // write the compressed bitmap at the destination specified by filename.
-            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e(Constants.LogTag.App, e.getMessage());
-        }
-
-        return scaledBitmap;
-    }
-
-    private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-            final int heightRatio = Math.round((float) height/ (float) reqHeight);
-            final int widthRatio = Math.round((float) width / (float) reqWidth);
-            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
-        }
-
-        final float totalPixels = width * height;
-        final float totalReqPixelsCap = reqWidth * reqHeight * 2;
-        while (totalPixels / (inSampleSize * inSampleSize) > totalReqPixelsCap) {
-            inSampleSize++;
-        }
-
-        return inSampleSize;
     }
 
     private void initNameControl() {
@@ -615,13 +407,13 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         long userId = new UserService().add(mUser);
 
         mUser = new UserService().get(userId);
-        mUser.resetReminder(getApplicationContext());
+        mUser.resetReminder();
 
         if(mIsEditMode) {
             Intent returnIntent = new Intent();
             setResult(Activity.RESULT_OK, returnIntent);
         } else {
-            Intent intent = new Intent(getApplicationContext(), com.mk.familyweighttracker.Activities.UserDetailActivity.class);
+            Intent intent = new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.UserDetailActivity.class);
             intent.putExtra(Constants.ExtraArg.USER_ID, userId);
             startActivity(intent);
         }
@@ -629,7 +421,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
 
         String message = mIsEditMode ? "Profile updated" : "Welcome and Congratulations";
         int toastLength = mIsEditMode ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG;
-        Toast.makeText(getApplicationContext(), message, toastLength).show();
+        Toast.makeText(TrackerApplication.getApp(), message, toastLength).show();
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,
                 Constants.AnalyticsEvents.UserAdded,
@@ -656,40 +448,5 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             } else {
             }
         }
-    }
-
-    public class CropOptionAdapter extends ArrayAdapter<CropOption> {
-        private ArrayList<CropOption> mOptions;
-        private LayoutInflater mInflater;
-
-        public CropOptionAdapter(Context context, ArrayList<CropOption> options) {
-            super(context, R.layout.crop_selector, options);
-
-            mOptions = options;
-            mInflater = LayoutInflater.from(context);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup group) {
-            if (convertView == null)
-                convertView = mInflater.inflate(R.layout.crop_selector, null);
-
-            CropOption item = mOptions.get(position);
-
-            if (item != null) {
-                ((ImageView) convertView.findViewById(R.id.crop_selector_icon))
-                        .setImageDrawable(item.icon);
-                ((TextView) convertView.findViewById(R.id.crop_selector_title))
-                        .setText(item.title);
-                return convertView;
-            }
-            return null;
-        }
-    }
-
-    public class CropOption {
-        public CharSequence title;
-        public Drawable icon;
-        public Intent appIntent;
     }
 }

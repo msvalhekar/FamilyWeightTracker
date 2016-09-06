@@ -30,8 +30,10 @@ public class Constants {
         public static final int USER_DATA_CHANGED = 10;
         public static final int ADD_READING = 11;
         public static final int EDIT_READING = 12;
-        public static final int IMAGE_LOAD = 21;
-        public static final int IMAGE_CROP = 22;
+        public static final int USER_IMAGE_LOAD = 21;
+        public static final int USER_IMAGE_CROP = 22;
+        public static final int READING_IMAGE_LOAD = 31;
+        public static final int READING_IMAGE_CROP = 32;
     }
 
     public static class LogTag {

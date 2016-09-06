@@ -1,6 +1,9 @@
 package com.mk.familyweighttracker.Framework;
 
+import android.util.Log;
+
 import com.mk.familyweighttracker.DbModels.UserModel;
+import com.mk.familyweighttracker.Services.UserService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,6 +54,12 @@ public class BackupRestoreDb {
         for (int i=0; i<usersJSONArray.length(); i++) {
             JSONObject userJSON = usersJSONArray.getJSONObject(i);
             UserModel.saveFrom(userJSON);
+
+            try {
+                new UserService().get(userJSON.getString("name")).resetReminder();
+            } catch (Exception e) {
+                Log.e(Constants.LogTag.App, e.getMessage());
+            }
         }
     }
 

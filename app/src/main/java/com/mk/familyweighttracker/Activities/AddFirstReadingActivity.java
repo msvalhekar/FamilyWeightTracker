@@ -20,6 +20,7 @@ import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
@@ -64,8 +65,8 @@ public class AddFirstReadingActivity extends TrackerBaseActivity {
             mUserReadingToProcess.UserId = userId;
             mUserReadingToProcess.Sequence = 0;
             mUserReadingToProcess.TakenOn = new Date();
-            mUserReadingToProcess.Weight = 60.0;
-            mUserReadingToProcess.Height = 160;
+            mUserReadingToProcess.Weight = UserReading.DEFAULT_BASE_WEIGHT;
+            mUserReadingToProcess.Height = UserReading.DEFAULT_BASE_HEIGHT;
         }
 
         initLMPDateControl();
@@ -208,7 +209,7 @@ public class AddFirstReadingActivity extends TrackerBaseActivity {
         finish();
 
         String message = "Pre-pregnancy reading saved.";
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(TrackerApplication.getApp(), message, Toast.LENGTH_SHORT).show();
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,
                 Constants.AnalyticsEvents.AddFirstReading,

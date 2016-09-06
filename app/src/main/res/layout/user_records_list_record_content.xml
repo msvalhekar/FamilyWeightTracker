@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:columnCount="5"
                 android:rowCount="1"
-                android:stretchColumns="0,1,2,3">
+                android:stretchColumns="*">
 
                 <TableRow>
                     <LinearLayout
@@ -56,6 +56,22 @@
                         android:orientation="vertical"
                         android:layout_row="0"
                         android:layout_column="0"
+                        >
+                        <ImageButton
+                            android:id="@+id/user_record_image_button"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="left|center_vertical"
+                            android:scaleType="fitCenter"
+                            android:background="#80FFFFFF"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_row="0"
+                        android:layout_column="1"
                         >
                         <TextView
                             android:id="@+id/record_item_period_no"
@@ -74,7 +90,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_row="0"
-                        android:layout_column="1"
+                        android:layout_column="2"
                         >
                         <TextView
                             android:id="@+id/record_item_weight"
@@ -93,7 +109,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_row="0"
-                        android:layout_column="2"
+                        android:layout_column="3"
                         >
                         <TextView
                             android:id="@+id/record_item_weight_exp_min"
@@ -112,7 +128,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_row="0"
-                        android:layout_column="3"
+                        android:layout_column="4"
                         >
                         <TextView
                             android:id="@+id/record_item_weight_exp_max"
@@ -124,23 +140,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12dp"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_row="0"
-                        android:layout_column="4"
-                        >
-                        <ImageButton
-                            android:id="@+id/user_record_edit_button"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="right|center_vertical"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/edit_icon"
-                            android:background="#80FFFFFF"
-                            />
                     </LinearLayout>
                 </TableRow>
             </TableLayout>

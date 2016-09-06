@@ -20,6 +20,8 @@ import android.widget.TextView;
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.ImageUtility;
+import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
@@ -106,7 +108,7 @@ public class UsersListActivity extends TrackerBaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), AddPregnantUserActivity.class);
+                Intent intent = new Intent(TrackerApplication.getApp(), AddPregnantUserActivity.class);
                 startActivityForResult(intent, Constants.RequestCode.ADD_USER);
             }
         });
@@ -323,11 +325,11 @@ public class UsersListActivity extends TrackerBaseActivity {
                 ImageView imageView = (ImageView) mView.findViewById(R.id.list_item_image);
                 if (mUser.imageBytes != null) {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(mUser.imageBytes, 0, mUser.imageBytes.length);
-                    imageView.setImageBitmap(Utility.getCircularBitmap(bitmap));
+                    imageView.setImageBitmap(ImageUtility.getCircularBitmap(bitmap));
                 } else {
                     if (mContactDefaultBitmap == null) {
                         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.contact_default);
-                        mContactDefaultBitmap = Utility.getCircularBitmap(bitmap);
+                        mContactDefaultBitmap = ImageUtility.getCircularBitmap(bitmap);
                     }
                     imageView.setImageBitmap(mContactDefaultBitmap);
                 }

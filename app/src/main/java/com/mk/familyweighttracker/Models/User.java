@@ -17,6 +17,7 @@ import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.AlarmReceiver;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.LogHelper;
+import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Services.PregnancyService;
 
@@ -175,9 +176,10 @@ public class User {
         return daysDiff / 7;
     }
 
-    public void resetReminder(Context context) {
+    public void resetReminder() {
+        Context context = TrackerApplication.getApp();
         if(enableReminder == false) {
-            removeReminder(context);
+            removeReminder();
             return;
         }
 
@@ -194,7 +196,9 @@ public class User {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, nextAlarmDateTime.getTimeInMillis(), Utility.WEEK_INTERVAL_MILLIS, pendingIntent);
     }
 
-    public void removeReminder(Context context) {
+    public void removeReminder() {
+        Context context = TrackerApplication.getApp();
+
         Log.i(Constants.LogTag.App, String.format("%s: Remove reminder of '%s'", Constants.LogTag.User, name));
 
         PendingIntent pendingIntent = getPendingIntent(context);

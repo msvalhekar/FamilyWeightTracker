@@ -40,7 +40,7 @@ public class BootReceiver extends BroadcastReceiver {
     private void setReminders() {
         List<User> users = new UserService().getAll();
         for (User user:users) {
-            user.resetReminder(_context);
+            user.resetReminder();
         }
     }
 }

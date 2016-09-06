@@ -3,6 +3,7 @@ package com.mk.familyweighttracker.Fragments;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.mk.familyweighttracker.Activities.AddPregnantUserActivity;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Framework.Utility;
@@ -81,8 +83,9 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
 
     private void initUserDetailsControls() {
         if(mUser.imageBytes != null) {
+            Bitmap imageBitmap = BitmapFactory.decodeByteArray(mUser.imageBytes, 0, mUser.imageBytes.length);
             ((ImageButton) mFragmentView.findViewById(R.id.view_user_image_button))
-                .setImageBitmap(BitmapFactory.decodeByteArray(mUser.imageBytes, 0, mUser.imageBytes.length));
+                .setImageBitmap(ImageUtility.getCircularBitmap(imageBitmap));
         }
 
         ((TextView) mFragmentView.findViewById(R.id.view_user_name))

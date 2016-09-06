@@ -117,7 +117,7 @@ public class UserDetailActivity extends TrackerBaseActivity
     public void onUserDeleted() {
         mIsDataChanged = true;
 
-        mUser.removeReminder(getApplicationContext());
+        mUser.removeReminder();
         new UserService().remove(mUserId);
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,
@@ -128,7 +128,7 @@ public class UserDetailActivity extends TrackerBaseActivity
         informDataChangedAndFinish();
 
         String message = String.format("'%s' removed permanently.", mUser.name);
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(TrackerApplication.getApp(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

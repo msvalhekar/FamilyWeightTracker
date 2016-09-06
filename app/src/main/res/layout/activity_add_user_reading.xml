@@ -32,14 +32,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:rowCount="6"
+            android:rowCount="10"
             android:columnCount="2"
             android:orientation="horizontal">
 
             <TableRow
+                android:layout_weight="1"
+                android:layout_gravity="center">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/add_user_reading_bump_label"/>
+                <ImageButton
+                    android:id="@+id/add_user_reading_image_button"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:gravity="left|center_vertical"
+                    android:src="@drawable/contact_default"
+                    android:contentDescription="@string/add_photo"
+                    android:background="@android:color/transparent">
+                </ImageButton>
+            </TableRow>
+            <TableRow
                 android:id="@+id/add_reading_taken_on_section"
                 android:layout_weight="1">
                 <TextView
+                    android:id="@+id/add_reading_taken_on_lable"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -70,9 +92,43 @@
                     android:text="@string/add_user_reading_period_default_value" />
             </TableRow>
             <TableRow
+                android:id="@+id/add_reading_weight_unit_section"
+                android:layout_weight="1"
+                >
+                <TextView
+                    android:id="@+id/add_reading_weight_unit_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="left|center"
+                    android:textStyle="bold"
+                    android:text="@string/add_user_reading_weight_unit_label"/>
+                <RadioGroup
+                    android:id="@+id/add_reading_weight_unit_switch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+                    <RadioButton
+                        android:id="@+id/add_reading_weight_unit_kg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/add_user_reading_weight_unit_kg" />
+                    <RadioButton
+                        android:id="@+id/add_reading_weight_unit_lb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="@string/add_user_reading_weight_unit_lbs" />
+                </RadioGroup>
+            </TableRow>
+            <TableRow
                 android:id="@+id/add_reading_weight_section"
                 android:layout_weight="1">
                 <TextView
+                    android:id="@+id/add_reading_weight_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -86,17 +142,51 @@
                     android:gravity="left|center"
                     android:text="@string/add_user_reading_weight_default_value" />
                 <TextView
-                    android:id="@+id/add_reading_weight_unit_label"
+                    android:id="@+id/add_reading_weight_unit_value"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.25"
                     android:textStyle="bold"
-                    android:text="@string/add_user_reading_weight_unit_label"/>
+                    android:text="@string/add_user_reading_weight_unit_value"/>
+            </TableRow>
+            <TableRow
+                android:id="@+id/add_reading_height_unit_section"
+                android:layout_weight="1"
+                >
+                <TextView
+                    android:id="@+id/add_reading_height_unit_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="left|center"
+                    android:textStyle="bold"
+                    android:text="@string/add_user_reading_height_unit_label"/>
+                <RadioGroup
+                    android:id="@+id/add_reading_height_unit_switch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+                    <RadioButton
+                        android:id="@+id/add_reading_height_unit_cm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/add_user_reading_height_unit_cms" />
+                    <RadioButton
+                        android:id="@+id/add_reading_height_unit_inch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="@string/add_user_reading_height_unit_inches" />
+                </RadioGroup>
             </TableRow>
             <TableRow
                 android:id="@+id/add_reading_height_section"
                 android:layout_weight="1">
                 <TextView
+                    android:id="@+id/add_reading_height_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -110,16 +200,16 @@
                     android:gravity="left|center"
                     android:text="@string/add_user_reading_height_default_value" />
                 <TextView
-                    android:id="@+id/add_reading_height_unit_label"
+                    android:id="@+id/add_reading_height_unit_value"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.25"
                     android:textStyle="bold"
-                    android:text="@string/add_user_reading_height_unit_label"/>
+                    android:text="@string/add_user_reading_height_unit_value"/>
             </TableRow>
-            <View
-                android:id="@+id/add_user_reading_note_divider"
-                style="@style/Divider"/>
+            <!--<View-->
+                <!--android:id="@+id/add_user_reading_note_divider"-->
+                <!--style="@style/Divider"/>-->
             <TableRow
                 android:id="@+id/add_reading_note_section"
                 android:layout_weight="1"
@@ -127,17 +217,14 @@
                 android:focusableInTouchMode="true">
                 <EditText
                     android:id="@+id/add_reading_note_edittext"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="left|center"
-                    android:lines="4"
+                    android:lines="2"
                     android:inputType="textMultiLine">
                 </EditText>
             </TableRow>
-            <View
-                android:id="@+id/add_user_pending_readings_divider"
-                style="@style/Divider"/>
             <TableRow
                 android:id="@+id/add_user_pending_readings_section"
                 android:layout_weight="1">
@@ -155,6 +242,7 @@
                     android:gravity="left|center"
                     android:clickable="false"
                     android:background="@android:color/transparent"
+                    android:textAllCaps="false"
                     android:text="@string/add_user_reading_pending_weeks_default_value"/>
             </TableRow>
             <View style="@style/Divider"/>

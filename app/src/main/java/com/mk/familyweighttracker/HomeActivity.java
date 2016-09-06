@@ -24,6 +24,8 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
+    private List<User> mUsers = new UserService().getAll();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,14 +43,13 @@ public class HomeActivity extends AppCompatActivity {
         items.add(new DashboardItem("Track Pregnancy Weight Gain", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<User> users = new UserService().getAll();
-                if(users.size() > 0) {
-                    Intent intent = new Intent(getApplicationContext(), com.mk.familyweighttracker.Activities.UserDetailActivity.class);
-                    intent.putExtra(Constants.ExtraArg.USER_ID, users.get(0).getId());
+                if(mUsers.size() > 0) {
+                    Intent intent = new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.UserDetailActivity.class);
+                    intent.putExtra(Constants.ExtraArg.USER_ID, mUsers.get(0).getId());
                     startActivity(intent);
                     return;
                 } else {
-                    Intent intent = new Intent(getApplicationContext(), com.mk.familyweighttracker.Activities.AddPregnantUserActivity.class);
+                    Intent intent = new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.AddPregnantUserActivity.class);
                     startActivity(intent);
                 }
             }
@@ -56,7 +57,7 @@ public class HomeActivity extends AppCompatActivity {
 //        items.add(new DashboardItem("May I Help You?", new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                Intent intent = new Intent(getApplicationContext(), com.mk.familyweighttracker.Activities.TrackerHelpActivity.class);
+//                Intent intent = new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.TrackerHelpActivity.class);
 //                startActivity(intent);
 //            }
 //        }));

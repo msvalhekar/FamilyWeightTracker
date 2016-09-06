@@ -60,7 +60,7 @@ public class TrackerBackupAgent extends BackupAgent {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
 
-        BackupRestoreDb backupRestoreDb = new BackupRestoreDb(2, dbFileLastModifiedTime);
+        BackupRestoreDb backupRestoreDb = new BackupRestoreDb(3, dbFileLastModifiedTime);
 
         try {
             JSONObject jsonObject = backupRestoreDb.getDatabaseJSON();

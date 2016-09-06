@@ -2,10 +2,9 @@ package com.mk.familyweighttracker.Fragments;
 
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,27 +12,18 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mk.familyweighttracker.Activities.AddFirstReadingActivity;
 import com.mk.familyweighttracker.Activities.AddReadingActivity;
-import com.mk.familyweighttracker.Activities.UserDetailActivity;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
-import com.mk.familyweighttracker.Framework.TrackerApplication;
-import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.Models.WeekWeightGainRange;
@@ -43,9 +33,6 @@ import com.mk.familyweighttracker.Services.UserService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -99,15 +86,9 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(userReadingList.size() == 0) {
-                    Intent intent = new Intent(getContext(), AddFirstReadingActivity.class);
-                    intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
-                    startActivityForResult(intent, Constants.RequestCode.ADD_READING);
-                } else {
-                    Intent intent = new Intent(getContext(), AddReadingActivity.class);
-                    intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
-                    startActivityForResult(intent, Constants.RequestCode.ADD_READING);
-                }
+                Intent intent = new Intent(getContext(), AddReadingActivity.class);
+                intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
+                startActivityForResult(intent, Constants.RequestCode.ADD_READING);
             }
         });
     }
@@ -146,7 +127,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         mRecyclerViewAdapter.notifyDataSetChanged();
 
 
-        mFragmentView.findViewById(R.id.help_record_information)
+        mFragmentView.findViewById(R.id.card_view)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -281,16 +262,6 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
             final UserReading reading = userReadingList.get(position);
 
             holder.setReading(reading);
-
-//            holder.mView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Context context = v.getContext();
-//                    Intent intent = new Intent(context, UserDetailActivity.class);
-//                    intent.putExtra(UserDetailActivity.ExtraArg.USER_ID, user.getId());
-//                    context.startActivity(intent);
-//                }
-//            });
         }
 
         @Override
@@ -323,7 +294,8 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
                 setPeriodControl();
                 setActualWeightControl();
                 setExpectedWeightControl();
-                setEditControl();
+                setImageControl();
+                setViewControl();
             }
 
             private void setExpectedWeightControl() {
@@ -397,23 +369,29 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
                         .setText(dateFormat.format(mUserReading.TakenOn));
             }
 
-            private void setEditControl() {
-                ImageButton button = ((ImageButton) mView.findViewById(R.id.user_record_edit_button));
-                button.setOnClickListener(new View.OnClickListener() {
+            private void setImageControl() {
+                ImageButton button = ((ImageButton) mView.findViewById(R.id.user_record_image_button));
+                Bitmap bitmap = null;
+                if(mUserReading.ImageBytes != null) {
+                    bitmap = ImageUtility.getCircularBitmap(
+                                BitmapFactory.decodeByteArray(mUserReading.ImageBytes, 0, mUserReading.ImageBytes.length));
+                } else {
+                    bitmap = BitmapFactory.decodeResource(getResources(), mUserReading.getDefaultImage());
+                }
+                button.setImageBitmap(bitmap);
+            }
+
+            private void setViewControl() {
+                mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if(mUserReading.Sequence == 0) {
                             bFirstReadingChanged = true;
-                            Intent intent = new Intent(getContext(), AddFirstReadingActivity.class);
-                            intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
-                            intent.putExtra(Constants.ExtraArg.EDIT_READING_ID, mUserReading.Id);
-                            startActivityForResult(intent, Constants.RequestCode.EDIT_READING);
-                        } else {
-                            Intent intent = new Intent(getContext(), AddReadingActivity.class);
-                            intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
-                            intent.putExtra(Constants.ExtraArg.EDIT_READING_ID, mUserReading.Id);
-                            startActivityForResult(intent, Constants.RequestCode.EDIT_READING);
                         }
+                        Intent intent = new Intent(getContext(), AddReadingActivity.class);
+                        intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
+                        intent.putExtra(Constants.ExtraArg.EDIT_READING_ID, mUserReading.Id);
+                        startActivityForResult(intent, Constants.RequestCode.EDIT_READING);
                     }
                 });
             }
