@@ -1,1 +1,0 @@
-ALTER TABLE UserReadings ADD COLUMN ImageBytes TEXT;

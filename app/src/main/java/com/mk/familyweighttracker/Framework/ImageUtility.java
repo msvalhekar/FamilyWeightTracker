@@ -19,6 +19,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ import com.mk.familyweighttracker.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,6 +48,8 @@ import java.util.List;
  * Created by mvalhekar on 15-04-2016.
  */
 public class ImageUtility {
+    private static final int SixHundred = 600;
+    private static final int EightHundred = 800;
 
     public static Bitmap getCircularBitmap(Bitmap bitmap) {
         final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
@@ -68,6 +72,25 @@ public class ImageUtility {
         bitmap.recycle();
 
         return output;
+    }
+
+    public static Bitmap resizeBitmap(Bitmap image) {
+        int maxWidth = EightHundred, maxHeight = SixHundred;
+        int imageWidth = image.getWidth();
+        int imageHeight = image.getHeight();
+        double imageAspect = (double) imageWidth / imageHeight;
+        double canvasAspect = (double) maxWidth / maxHeight;
+        double scaleFactor;
+
+        if (imageAspect < canvasAspect)
+            scaleFactor = (double) maxHeight / imageHeight;
+        else
+            scaleFactor = (double) maxWidth / imageWidth;
+
+        float scaleWidth = ((float) scaleFactor) * imageWidth;
+        float scaleHeight = ((float) scaleFactor) * imageHeight;
+
+        return Bitmap.createScaledBitmap(image, (int) scaleWidth, (int) scaleHeight, true);
     }
 
     public static Bitmap compressImage(String filePath) {
@@ -203,7 +226,7 @@ public class ImageUtility {
         return inSampleSize;
     }
 
-    public static void allowToCropImageBeforeSelection(final Activity activity, final Uri pickedImageUri, final int requestCode) {
+    public static void allowToCropImageBeforeSelection(final Activity activity, final Uri pickedImageUri, final int requestCode, String filePath) {
 
         final ArrayList<CropOption> cropOptions = new ArrayList<CropOption>();
         Intent intent = new Intent("com.android.camera.action.CROP");
@@ -217,13 +240,21 @@ public class ImageUtility {
             return;
         } else {
             intent.setData(pickedImageUri);
-            intent.putExtra("outputX", 150);
-            intent.putExtra("outputY", 150);
-            intent.putExtra("aspectX", 1);
-            intent.putExtra("aspectY", 1);
+            intent.putExtra("outputX", 600);
+            intent.putExtra("outputY", 800);
+            intent.putExtra("aspectX", 3);
+            intent.putExtra("aspectY", 4);
             intent.putExtra("crop", true);
             intent.putExtra("scale", true);
-            intent.putExtra("return-data", true);
+            intent.putExtra("noFaceDetection", true);
+
+            File destFile = new File(filePath);
+            try {
+                destFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(destFile));
 
             if (size == 1) {
                 Intent i = new Intent(intent);
@@ -266,6 +297,28 @@ public class ImageUtility {
                 builder.create().show();
             }
         }
+    }
+
+    public static String saveImage(String fileName, Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        String imagesDirectory = StorageUtility.getImagesDirectory();
+        String filePath = String.format("%s/%s", imagesDirectory, fileName);
+        File destination = new File(filePath);
+
+        FileOutputStream fileOutputStream;
+        try {
+            destination.createNewFile();
+            fileOutputStream = new FileOutputStream(destination);
+            fileOutputStream.write(outputStream.toByteArray());
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            outputStream = null;
+            fileOutputStream = null;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return filePath;
     }
 
     public static class CropOptionAdapter extends ArrayAdapter<CropOption> {

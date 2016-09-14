@@ -26,6 +26,7 @@ import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Framework.UserDetailsTabsFactory;
 import com.mk.familyweighttracker.Models.User;
+import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
@@ -68,7 +69,7 @@ public class UserDetailActivity extends TrackerBaseActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_user_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_user_detail, menu);
         return true;
     }
 
@@ -80,19 +81,28 @@ public class UserDetailActivity extends TrackerBaseActivity
                 informDataChangedAndFinish();
                 return true;
 
-            case R.id.user_detail_help:
-
-                View layout = getLayoutInflater().inflate(R.layout.help_popup_user_detail_readings, null);
-
-                PopupWindow window = new PopupWindow(this);
-                window.setContentView(layout);
-                window.setWidth(900);
-                window.setHeight(900);
-                window.setFocusable(true);
-                window.showAtLocation(layout, Gravity.NO_GRAVITY, 40, 20);
+            case R.id.user_detail_slideshow:
+                showSlides();
                 return true;
+
+//            case R.id.user_detail_help:
+//                View layout = getLayoutInflater().inflate(R.layout.help_popup_user_detail_readings, null);
+//
+//                PopupWindow window = new PopupWindow(this);
+//                window.setContentView(layout);
+//                window.setWidth(900);
+//                window.setHeight(900);
+//                window.setFocusable(true);
+//                window.showAtLocation(layout, Gravity.NO_GRAVITY, 40, 20);
+//                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showSlides() {
+        Intent intent = new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.UserSlideshowActivity.class);
+        intent.putExtra(Constants.ExtraArg.USER_ID, mUserId);
+        startActivity(intent);
     }
 
     private boolean mIsOriginator = false;

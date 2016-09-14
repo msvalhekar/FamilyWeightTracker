@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.StorageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Services.UserService;
@@ -29,10 +30,11 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
 
         Analytic.sendScreenView(Constants.Activities.HomeActivity);
 
-        setContentView(R.layout.activity_home);
+        StorageUtility.createDirectories();
 
         initToolbarControl();
 

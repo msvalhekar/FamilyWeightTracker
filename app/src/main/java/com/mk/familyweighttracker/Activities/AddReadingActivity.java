@@ -4,11 +4,8 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
@@ -16,7 +13,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,7 +41,6 @@ import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
-import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,8 +58,6 @@ public class AddReadingActivity extends TrackerBaseActivity {
     private Long mNewSequenceValue;
     private View activityView;
     TextView mWeightDialogTitleView;
-
-    Uri mPickedImageUri;
 
     private ImageButton getImageButton() {
         return ((ImageButton)findViewById(R.id.add_user_reading_image_button));
@@ -144,13 +137,14 @@ public class AddReadingActivity extends TrackerBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Check which request we're responding to
-        // Check which request we're responding to
         if (requestCode == Constants.RequestCode.READING_IMAGE_LOAD) {
             if (resultCode == RESULT_OK && data != null) {
-                mPickedImageUri = data.getData();
-                ImageUtility.allowToCropImageBeforeSelection(this, mPickedImageUri, Constants.RequestCode.READING_IMAGE_CROP);
+                ImageUtility.allowToCropImageBeforeSelection(
+                        this,
+                        data.getData(),
+                        Constants.RequestCode.READING_IMAGE_CROP,
+                        mUserReadingToProcess.getImagePath());
             } else {
-                mPickedImageUri = null;
                 Toast.makeText(this, R.string.ImageNotPickedMessage, Toast.LENGTH_SHORT).show();
             }
         }
@@ -160,51 +154,9 @@ public class AddReadingActivity extends TrackerBaseActivity {
                 Bundle extras = data.getExtras();
                 if(extras != null) {
                     // get the cropped bitmap
-                    Bitmap selectedBitmap = extras.getParcelable("data");
-
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    try {
-                        boolean success = selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                        byte[] imageBytes = stream.toByteArray();
-                        mUserReadingToProcess.ImageBytes = imageBytes;
-                        getImageButton().setImageBitmap(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
-                    } catch (Exception e) {
-                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                        Log.e(Constants.LogTag.App, e.getMessage());
-                    }
+                    getImageButton().setImageBitmap(mUserReadingToProcess.getImageAsBitmap(false));
                 }
-            } else {
-                saveUserReadingImage(mPickedImageUri);
             }
-        }
-    }
-
-    private void saveUserReadingImage(Uri pickedImageUri) {
-        try {
-            String[] filepath = {MediaStore.Images.Media.DATA };
-            Cursor cursor = getContentResolver().query(pickedImageUri, filepath, null, null, null);
-            cursor.moveToFirst();
-            String imagePath = cursor.getString(cursor.getColumnIndex(filepath[0]));
-            cursor.close();
-
-            Bitmap scaledBitmap = ImageUtility.compressImage(imagePath);
-            getImageButton().setImageBitmap(scaledBitmap);
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            try {
-                boolean success = scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                mUserReadingToProcess.ImageBytes = stream.toByteArray();
-            }
-            catch (Exception e) {
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-                Log.e(Constants.LogTag.App, e.getMessage());
-            }
-        } catch (Exception e) {
-            Toast.makeText(this, R.string.CouldNotProcessImageMessage, Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-            Log.e(Constants.LogTag.App, e.getMessage());
         }
     }
 
@@ -268,10 +220,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
     }
 
     private void initImageButtonControl() {
-        if(mUserReadingToProcess.ImageBytes != null) {
-            byte[] imageBytes = mUserReadingToProcess.ImageBytes;
-            getImageButton().setImageBitmap(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
-        }
+        getImageButton().setImageBitmap(mUserReadingToProcess.getImageAsBitmap(false));
 
         getImageButton().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -674,9 +623,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
             new UserService().updateUnits(mSelectedUser.getId(), mSelectedUser.weightUnit, mSelectedUser.heightUnit);
         }
 
-        final EditText noteView = ((EditText) findViewById(R.id.add_reading_note_edittext));
-        mUserReadingToProcess.Note = noteView.getText().toString();
-
+        updateNote();
         new UserService().addReading(mUserReadingToProcess);
 
         Intent returnIntent = new Intent();
@@ -692,6 +639,11 @@ public class AddReadingActivity extends TrackerBaseActivity {
                         mSelectedUser.name,
                         mUserReadingToProcess.Sequence),
                 null);
+    }
+
+    private void updateNote() {
+        final EditText noteView = ((EditText) findViewById(R.id.add_reading_note_edittext));
+        mUserReadingToProcess.Note = noteView.getText().toString();
     }
 
     private void onDeleteReading() {

@@ -3,8 +3,6 @@ package com.mk.familyweighttracker.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,11 +17,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mk.familyweighttracker.Activities.AddFirstReadingActivity;
 import com.mk.familyweighttracker.Activities.AddReadingActivity;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
-import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
@@ -378,14 +374,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
 
             private void setImageControl() {
                 ImageButton button = ((ImageButton) mView.findViewById(R.id.user_record_image_button));
-                Bitmap bitmap = null;
-                if(mUserReading.ImageBytes != null) {
-                    bitmap = ImageUtility.getCircularBitmap(
-                                BitmapFactory.decodeByteArray(mUserReading.ImageBytes, 0, mUserReading.ImageBytes.length));
-                } else {
-                    bitmap = BitmapFactory.decodeResource(getResources(), mUserReading.getDefaultImage());
-                }
-                button.setImageBitmap(bitmap);
+                button.setImageBitmap(mUserReading.getImageAsBitmap(true));
             }
 
             private void setViewControl() {

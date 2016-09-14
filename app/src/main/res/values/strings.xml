@@ -3,6 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_item_list">Members</string>
     <string name="title_tracker_help">Help / Instructions</string>
+    <string name="title_user_slideshow">Slides</string>
     <string name="title_item_detail">Member Detail</string>
     <string name="button_home_start_text">Start</string>
     <string name="title_activity_add_new_user">Add Member</string>
@@ -21,9 +22,9 @@
     <string name="add_user_reading_bump_label"><b>Bump photo</b> (optional)</string>
     <string name="add_user_reading_date_label"><b>Measured on</b> (optional)</string>
     <string name="add_user_reading_date_default_value">(measured on)</string>
-    <string name="add_user_reading_period_label">Week *</string>
+    <string name="add_user_reading_period_label"><b>Week</b> *</string>
     <string name="add_user_reading_period_default_value">(week number)</string>
-    <string name="add_user_reading_pending_weeks_label">Missing readings</string>
+    <string name="add_user_reading_pending_weeks_label"><b>Missing readings</b></string>
     <string name="add_user_reading_pending_weeks_default_value">(pending weeks)</string>
     <string name="add_user_reading_weight_label"><b>Weight</b></string>
     <string name="add_user_reading_weight_default_value">(weight)</string>

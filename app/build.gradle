@@ -14,7 +14,7 @@ apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
 
 def getAppVersionCode() {
-    return 112
+    return 120
 }
 
 def computeApkName(variant) {
@@ -24,7 +24,7 @@ def computeApkName(variant) {
     }
     catch (ignored) {
     }
-    return String.format("pregWeightTrack-%s%s.apk", getAppVersionName(), flavorSuffix)
+    return String.format("pwt-%s%s.apk", getAppVersionName(), flavorSuffix)
 }
 
 def getAppVersionName() {

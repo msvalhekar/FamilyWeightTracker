@@ -37,7 +37,7 @@ public class LogHelper {
     public static void sendLogEmail(final String customText) {
         LogHelper.createLogFile();
 
-        final String logFilePath = Utility.Storage.getZippedLogFilePath();
+        final String logFilePath = StorageUtility.getZippedLogFilePath();
         File file = new File(logFilePath);
 
         if (!file.exists())
@@ -72,7 +72,7 @@ public class LogHelper {
         final String DASH_LINE = "----------------------------------------\n\n";
 
         try {
-            String logFilePath = Utility.Storage.getLogFilePath();
+            String logFilePath = StorageUtility.getLogFilePath();
             FileWriter fileWriter = new FileWriter(new File(logFilePath));
 
             fileWriter.write(getSystemInformation().toString());
@@ -124,7 +124,7 @@ public class LogHelper {
     }
 
     private static void appendCustomLog(FileWriter fileWriter) {
-        File[] logFiles = new File(Utility.Storage.getLogDirectory()).listFiles();
+        File[] logFiles = new File(StorageUtility.getLogDirectory()).listFiles();
         String data;
 
         if(logFiles == null) return;
@@ -146,7 +146,7 @@ public class LogHelper {
     private static void zipETrackLogFile(String logFilePath) throws IOException {
         BufferedInputStream bufferedInputStream;
 
-        FileOutputStream destinationStream = new FileOutputStream(Utility.Storage.getZippedLogFilePath());
+        FileOutputStream destinationStream = new FileOutputStream(StorageUtility.getZippedLogFilePath());
         ZipOutputStream zipDestinationStream = new ZipOutputStream(new BufferedOutputStream(destinationStream));
         byte data[] = new byte[BUFFER];
 

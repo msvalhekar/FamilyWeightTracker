@@ -24,7 +24,7 @@
             android:value="MkWeighTracker.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="3" />
+            android:value="2" />
         <meta-data
             android:name="AA_MODELS"
             android:value="com.mk.familyweighttracker.DbModels.UserModel, com.mk.familyweighttracker.DbModels.UserReadingModel" />
@@ -80,6 +80,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.UsersListActivity" />
+        </activity>
+        <activity
+            android:name=".Activities.UserSlideshowActivity"
+            android:label="@string/title_user_slideshow"
+            android:parentActivityName=".Activities.UserDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.UserDetailActivity" />
         </activity>
         <activity
             android:name=".Activities.AddPregnantUserActivity"

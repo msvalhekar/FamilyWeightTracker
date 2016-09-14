@@ -7,12 +7,17 @@ public class Constants {
 
     public static final String DB_NAME = "MkWeighTracker.db";
     public static final String APP_BACKUP_KEY = "MkWeighTracker";
-    public static final String LogDirectory = "sysLog";
+
+    public static class AppDirectory {
+        public static final String LogDirectory = "sysLog";
+        public static final String ImagesDirectory = "imgs";
+    }
 
     public static class Activities {
         public static final String HomeActivity = "HomeActivity";
         public static final String UsersListActivity = "UsersListActivity";
         public static final String TrackerHelpActivity = "TrackerHelpActivity";
+        public static final String UserSlideshowActivity = "UserSlideshowActivity";
         public static final String AddReadingActivity = "AddReadingActivity";
         public static final String AddPregnantUserActivity = "AddPregnantUserActivity";
         public static final String AddFirstReadingActivity = "AddFirstReadingActivity";
