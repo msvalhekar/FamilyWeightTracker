@@ -5,20 +5,19 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".Framework.TrackerApplication"
+        android:allowBackup="true"
+        android:backupAgent=".Framework.TrackerBackupAgent"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:allowBackup="true"
-        android:backupAgent=".Framework.TrackerBackupAgent">
-
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="AA_DB_NAME"
             android:value="MkWeighTracker.db" />
@@ -36,24 +35,34 @@
             android:value="AEdPqrEAAAAIWngp6zMmMi_8niZFJhGHqYm6BYivFhdK91IkSA" />
 
         <activity
-            android:name=".HomeActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".Activities.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/splashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity-->
-            <!--android:name=".Framework.SendLog"-->
-            <!--android:theme="@android:style/Theme.Dialog"-->
-            <!--android:textAppearance="@android:style/TextAppearance.Large"-->
-            <!--android:windowSoftInputMode="stateHidden">-->
+
+        <activity
+            android:name=".HomeActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
             <!--<intent-filter>-->
-                <!--<action android:name="com.mk.familyweighttracker.SEND_LOG" />-->
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
-        <!--</activity>-->
+        </activity>
+        <!-- <activity -->
+        <!-- android:name=".Framework.SendLog" -->
+        <!-- android:theme="@android:style/Theme.Dialog" -->
+        <!-- android:textAppearance="@android:style/TextAppearance.Large" -->
+        <!-- android:windowSoftInputMode="stateHidden"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.mk.familyweighttracker.SEND_LOG" /> -->
+        <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
         <activity
             android:name=".Activities.TrackerHelpActivity"
             android:label="@string/title_tracker_help"
@@ -111,21 +120,23 @@
         </activity>
 
         <receiver android:name=".Framework.AlarmReceiver" />
-
         <receiver android:name=".Framework.BootReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
+        <receiver
+            android:name="com.google.android.gms.analytics.AnalyticsReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
             </intent-filter>
         </receiver>
-        <service android:name="com.google.android.gms.analytics.AnalyticsService"
+
+        <service
+            android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
     </application>
+
 </manifest>

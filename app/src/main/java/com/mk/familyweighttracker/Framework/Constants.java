@@ -7,6 +7,7 @@ public class Constants {
 
     public static final String DB_NAME = "MkWeighTracker.db";
     public static final String APP_BACKUP_KEY = "MkWeighTracker";
+    public static final int SPLASH_SCREEN_TIMEOUT_SECONDS = 1;
 
     public static class AppDirectory {
         public static final String LogDirectory = "sysLog";
