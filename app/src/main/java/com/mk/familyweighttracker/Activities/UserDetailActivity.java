@@ -30,6 +30,11 @@ import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -64,6 +69,8 @@ public class UserDetailActivity extends TrackerBaseActivity
         initToolbarControl();
 
         initDetailTabControl();
+
+        saveUserImageIfRequired();
     }
 
     @Override
@@ -97,6 +104,37 @@ public class UserDetailActivity extends TrackerBaseActivity
 //                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveUserImageIfRequired() {
+//        try {
+//            File file = new File(mUser.getImagePath());
+//            FileInputStream stream = new FileInputStream(file);
+//            mUser.imageBytes = new byte[(int)file.length()];
+//            stream.read(mUser.imageBytes, 0, (int)file.length());
+//            stream.close();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        if(mUser.imageBytes != null) {
+            try {
+                FileOutputStream outputStream = new FileOutputStream(mUser.getImagePath());
+                outputStream.write(mUser.imageBytes, 0, mUser.imageBytes.length);
+                outputStream.flush();
+                outputStream.close();
+
+                mUser.imageBytes = null;
+                new UserService().add(mUser);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void showSlides() {
