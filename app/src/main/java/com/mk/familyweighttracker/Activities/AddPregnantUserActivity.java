@@ -37,6 +37,7 @@ import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.ImageUtility;
+import com.mk.familyweighttracker.Framework.StorageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
@@ -44,6 +45,7 @@ import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -57,6 +59,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     private User mUser;
     private long mSelectedUserId;
     boolean mIsEditMode;
+    ImageUtility.CropDetail cropDetail = new ImageUtility.CropDetail(800, 800, 1, 1);
 
     private View mOkCancelActionsSectionView;
     private Button mCancelButton;
@@ -74,8 +77,6 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     private Button mReminderDayButton;
     private View mReminderTimeSectionView;
     private Button mReminderTimeButton;
-
-    Uri mPickedImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,11 +147,9 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         // Check which request we're responding to
         if (requestCode == Constants.RequestCode.USER_IMAGE_LOAD) {
             if (resultCode == RESULT_OK && data != null) {
-                mPickedImageUri = data.getData();
-                ImageUtility.cropImage(this, mPickedImageUri, Constants.RequestCode.USER_IMAGE_CROP);
+                ImageUtility.cropImage(this, data.getData(), Constants.RequestCode.USER_IMAGE_CROP, cropDetail);
             } else {
-                mPickedImageUri = null;
-                Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.ImageNotPickedMessage, Toast.LENGTH_SHORT).show();
             }
         }
         else if (requestCode == Constants.RequestCode.USER_IMAGE_CROP) {
@@ -159,21 +158,10 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                 Bundle extras = data.getExtras();
                 if(extras != null) {
                     // get the cropped bitmap
-                    Bitmap selectedBitmap = extras.getParcelable("data");
-
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    try {
-                        boolean success = selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                        mUser.imageBytes = stream.toByteArray();
-                        mImageButton.setImageBitmap(BitmapFactory.decodeByteArray(mUser.imageBytes, 0, mUser.imageBytes.length));
-                    } catch (Exception e) {
-                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                        Log.e(Constants.LogTag.App, e.getMessage());
-                    }
+                        mImageButton.setImageBitmap(BitmapFactory.decodeFile(StorageUtility.getTempImagePath()));
                 }
-            } else {
-                saveUserImage(mPickedImageUri);
+//            } else {
+//                saveUserImage(mPickedImageUri);
             }
         }
     }
@@ -190,9 +178,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     }
 
     private void initImageButtonControl() {
-        if(mUser.imageBytes != null) {
-            mImageButton.setImageBitmap(BitmapFactory.decodeByteArray(mUser.imageBytes, 0, mUser.imageBytes.length));
-        }
+        mImageButton.setImageBitmap(mUser.getImageAsBitmap(false));
 
         mImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,32 +190,9 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         });
     }
 
-    private void saveUserImage(Uri pickedImageUri) {
-        try {
-            String[] filepath = {MediaStore.Images.Media.DATA };
-            Cursor cursor = getContentResolver().query(pickedImageUri, filepath, null, null, null);
-            cursor.moveToFirst();
-            String imagePath = cursor.getString(cursor.getColumnIndex(filepath[0]));
-            cursor.close();
-
-            Bitmap scaledBitmap = ImageUtility.compressImage(imagePath);
-            mImageButton.setImageBitmap(scaledBitmap);
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            try {
-                boolean success = scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                mUser.imageBytes = stream.toByteArray();
-            }
-            catch (Exception e) {
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-                Log.e(Constants.LogTag.App, e.getMessage());
-            }
-        } catch (Exception e) {
-            Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-            Log.e(Constants.LogTag.App, e.getMessage());
-        }
+    private void saveImage() {
+        File source = new File(StorageUtility.getTempImagePath());
+        source.renameTo(new File(mUser.getImagePath()));
     }
 
     private void initNameControl() {
@@ -405,6 +368,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
 
     public void SaveUser() {
         long userId = new UserService().add(mUser);
+        saveImage();
 
         mUser = new UserService().get(userId);
         mUser.resetReminder();

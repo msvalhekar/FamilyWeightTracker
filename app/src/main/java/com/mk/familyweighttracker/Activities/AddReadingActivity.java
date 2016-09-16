@@ -60,6 +60,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
     private Long mNewSequenceValue;
     private View activityView;
     TextView mWeightDialogTitleView;
+    ImageUtility.CropDetail cropDetail = new ImageUtility.CropDetail(600, 800, 3, 4);
 
     private ImageButton getImageButton() {
         return ((ImageButton)findViewById(R.id.add_user_reading_image_button));
@@ -141,7 +142,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         // Check which request we're responding to
         if (requestCode == Constants.RequestCode.READING_IMAGE_LOAD) {
             if (resultCode == RESULT_OK && data != null) {
-                ImageUtility.cropImage(this, data.getData(), Constants.RequestCode.READING_IMAGE_CROP);
+                ImageUtility.cropImage(this, data.getData(), Constants.RequestCode.READING_IMAGE_CROP, cropDetail);
             } else {
                 Toast.makeText(this, R.string.ImageNotPickedMessage, Toast.LENGTH_SHORT).show();
             }

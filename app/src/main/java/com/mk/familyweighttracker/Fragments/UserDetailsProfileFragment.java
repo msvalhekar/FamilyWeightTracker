@@ -82,11 +82,7 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
     }
 
     private void initUserDetailsControls() {
-        if(mUser.imageBytes != null) {
-            Bitmap imageBitmap = BitmapFactory.decodeByteArray(mUser.imageBytes, 0, mUser.imageBytes.length);
-            ((ImageButton) mFragmentView.findViewById(R.id.view_user_image_button))
-                .setImageBitmap(ImageUtility.getCircularBitmap(imageBitmap));
-        }
+        ((ImageButton) mFragmentView.findViewById(R.id.view_user_image_button)).setImageBitmap(mUser.getImageAsBitmap(true));
 
         ((TextView) mFragmentView.findViewById(R.id.view_user_name))
             .setText(mUser.name);

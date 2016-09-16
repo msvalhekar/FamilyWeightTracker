@@ -4,6 +4,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
@@ -16,9 +18,12 @@ import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.AlarmReceiver;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Framework.LogHelper;
+import com.mk.familyweighttracker.Framework.StorageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.Utility;
+import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.PregnancyService;
 
 import java.text.SimpleDateFormat;
@@ -180,6 +185,19 @@ public class User {
         long timeDiff = new Date().getTime() - prepregReading.TakenOn.getTime();
         long daysDiff = TimeUnit.DAYS.toDays(timeDiff);
         return daysDiff / 7;
+    }
+
+    public String getImagePath() {
+        return String.format("%s/user.jpg", StorageUtility.getImagesDirectory());
+    }
+
+    public Bitmap getImageAsBitmap(boolean circular){
+        Bitmap bitmap = BitmapFactory.decodeFile(getImagePath());
+        if (bitmap != null)
+            return circular ? ImageUtility.getCircularBitmap(bitmap) : bitmap;
+
+        bitmap = BitmapFactory.decodeResource(TrackerApplication.getApp().getResources(), R.drawable.contact_default);
+        return circular ? ImageUtility.getCircularBitmap(bitmap) : bitmap;
     }
 
     public void resetReminder() {

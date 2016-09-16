@@ -226,7 +226,7 @@ public class ImageUtility {
         return inSampleSize;
     }
 
-    public static void cropImage(final Activity activity, final Uri pickedImageUri, final int requestCode) {
+    public static void cropImage(final Activity activity, final Uri pickedImageUri, final int requestCode, final CropDetail cropDetail) {
 
         final ArrayList<CropOption> cropOptions = new ArrayList<CropOption>();
         Intent intent = new Intent("com.android.camera.action.CROP");
@@ -240,10 +240,10 @@ public class ImageUtility {
             return;
         } else {
             intent.setData(pickedImageUri);
-            intent.putExtra("outputX", 600);
-            intent.putExtra("outputY", 800);
-            intent.putExtra("aspectX", 3);
-            intent.putExtra("aspectY", 4);
+            intent.putExtra("outputX", cropDetail.outputX);
+            intent.putExtra("outputY", cropDetail.outputY);
+            intent.putExtra("aspectX", cropDetail.aspectX);
+            intent.putExtra("aspectY", cropDetail.aspectY);
             intent.putExtra("crop", true);
             intent.putExtra("scale", true);
             intent.putExtra("noFaceDetection", true);
@@ -354,5 +354,19 @@ public class ImageUtility {
         public CharSequence title;
         public Drawable icon;
         public Intent appIntent;
+    }
+
+    public static class CropDetail {
+        public int outputX;
+        public int outputY;
+        public int aspectX;
+        public int aspectY;
+
+        public CropDetail(int outputX, int outputY, int aspectX, int aspectY) {
+            this.outputX = outputX;
+            this.outputY = outputY;
+            this.aspectX = aspectX;
+            this.aspectY = aspectY;
+        }
     }
 }
