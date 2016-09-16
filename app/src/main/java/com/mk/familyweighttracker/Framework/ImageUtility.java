@@ -226,7 +226,7 @@ public class ImageUtility {
         return inSampleSize;
     }
 
-    public static void allowToCropImageBeforeSelection(final Activity activity, final Uri pickedImageUri, final int requestCode, String filePath) {
+    public static void cropImage(final Activity activity, final Uri pickedImageUri, final int requestCode) {
 
         final ArrayList<CropOption> cropOptions = new ArrayList<CropOption>();
         Intent intent = new Intent("com.android.camera.action.CROP");
@@ -248,7 +248,7 @@ public class ImageUtility {
             intent.putExtra("scale", true);
             intent.putExtra("noFaceDetection", true);
 
-            File destFile = new File(filePath);
+            File destFile = new File(StorageUtility.getTempImagePath());
             try {
                 destFile.createNewFile();
             } catch (IOException e) {

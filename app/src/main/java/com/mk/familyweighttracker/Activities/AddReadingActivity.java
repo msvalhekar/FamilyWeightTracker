@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -33,6 +33,7 @@ import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.ImageUtility;
+import com.mk.familyweighttracker.Framework.StorageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Framework.WeightParser;
@@ -41,6 +42,7 @@ import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -139,11 +141,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         // Check which request we're responding to
         if (requestCode == Constants.RequestCode.READING_IMAGE_LOAD) {
             if (resultCode == RESULT_OK && data != null) {
-                ImageUtility.allowToCropImageBeforeSelection(
-                        this,
-                        data.getData(),
-                        Constants.RequestCode.READING_IMAGE_CROP,
-                        mUserReadingToProcess.getImagePath());
+                ImageUtility.cropImage(this, data.getData(), Constants.RequestCode.READING_IMAGE_CROP);
             } else {
                 Toast.makeText(this, R.string.ImageNotPickedMessage, Toast.LENGTH_SHORT).show();
             }
@@ -154,7 +152,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
                 Bundle extras = data.getExtras();
                 if(extras != null) {
                     // get the cropped bitmap
-                    getImageButton().setImageBitmap(mUserReadingToProcess.getImageAsBitmap(false));
+                    getImageButton().setImageBitmap(BitmapFactory.decodeFile(StorageUtility.getTempImagePath()));
                 }
             }
         }
@@ -624,6 +622,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         }
 
         updateNote();
+        saveImage();
         new UserService().addReading(mUserReadingToProcess);
 
         Intent returnIntent = new Intent();
@@ -639,6 +638,11 @@ public class AddReadingActivity extends TrackerBaseActivity {
                         mSelectedUser.name,
                         mUserReadingToProcess.Sequence),
                 null);
+    }
+
+    private void saveImage() {
+        File source = new File(StorageUtility.getTempImagePath());
+        source.renameTo(new File(mUserReadingToProcess.getImagePath()));
     }
 
     private void updateNote() {

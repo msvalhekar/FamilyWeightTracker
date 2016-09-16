@@ -19,6 +19,10 @@ public class StorageUtility {
         return getPath(getStoragePath(), Constants.AppDirectory.LogDirectory);
     }
 
+    public static String getTempImagePath() {
+        return getPath(getStoragePath(), Constants.AppDirectory.ImagesDirectory, "temp.jpg");
+    }
+
     public static String getImagesDirectory() {
         return getPath(getStoragePath(), Constants.AppDirectory.ImagesDirectory);
     }

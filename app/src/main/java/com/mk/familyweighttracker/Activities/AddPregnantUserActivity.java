@@ -147,7 +147,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         if (requestCode == Constants.RequestCode.USER_IMAGE_LOAD) {
             if (resultCode == RESULT_OK && data != null) {
                 mPickedImageUri = data.getData();
-                ImageUtility.allowToCropImageBeforeSelection(this, mPickedImageUri, Constants.RequestCode.USER_IMAGE_CROP);
+                ImageUtility.cropImage(this, mPickedImageUri, Constants.RequestCode.USER_IMAGE_CROP);
             } else {
                 mPickedImageUri = null;
                 Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_SHORT).show();
