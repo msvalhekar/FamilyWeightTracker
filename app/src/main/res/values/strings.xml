@@ -6,10 +6,11 @@
     <string name="title_user_slideshow">Slides</string>
     <string name="title_item_detail">Member Detail</string>
     <string name="button_home_start_text">Start</string>
-    <string name="title_activity_add_new_user">Add Member</string>
-    <string name="title_activity_edit_user">Edit Member</string>
+    <string name="title_activity_add_new_user">Add</string>
+    <string name="title_activity_edit_user">Edit</string>
     <string name="title_activity_add_user_reading">Add/Edit Reading</string>
     <string name="title_activity_add_user_first_reading">Add/Edit First Reading</string>
+    <string name="title_activity_splash">SplashActivity</string>
     <string name="add_user_first_reading_label">Week 0 : Pre-Pregnancy</string>
     <string name="add_user_first_reading_lmp_date_label"><b>Last Menstrual Period *</b></string>
     <string name="add_user_first_reading_lmp_default_value">DD/MM/YYYY (LMP)</string>
@@ -84,8 +85,9 @@
     <string name="help_record_exp_min_wt_message">Exp Min</string>
     <string name="help_record_wt_diff_against_actual_message">(v/s actual)</string>
     <string name="help_record_exp_max_wt_message">Exp Max</string>
-    <string name="add_photo">Add Photo</string>
-    <string name="add_member">Add Member</string>
+    <string name="AddReadingImageLable">Add Photo</string>
+    <string name="AddUserLabel">Add</string>
+
     <string name="application_version_label">Application version</string>
     <string name="application_version_friendly_name_label">Codename</string>
     <string name="architecture_label">Architecture</string>
@@ -96,6 +98,7 @@
     <string name="android_version_label">Android version</string>
     <string name="processor_count_label">Processor count</string>
     <string name="display_density">Display Density</string>
+
     <string name="WeekNReadingSavedMessage">Week %d reading saved.</string>
     <string name="WeekNReadingRemovedMessage">Week %d reading removed.</string>
     <string name="EditPrePregnancyReadingMessage">Edit Pre-pregnancy Reading</string>

@@ -53,7 +53,7 @@
                     android:scaleType="fitCenter"
                     android:gravity="left|center_vertical"
                     android:src="@drawable/contact_default"
-                    android:contentDescription="@string/add_photo"
+                    android:contentDescription="@string/AddReadingImageLable"
                     android:background="@android:color/transparent">
                 </ImageButton>
             </TableRow>
