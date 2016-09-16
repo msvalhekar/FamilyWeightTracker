@@ -158,7 +158,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                 Bundle extras = data.getExtras();
                 if(extras != null) {
                     // get the cropped bitmap
-                        mImageButton.setImageBitmap(BitmapFactory.decodeFile(StorageUtility.getTempImagePath()));
+                    mImageButton.setImageBitmap(BitmapFactory.decodeFile(StorageUtility.getTempImagePath()));
                 }
 //            } else {
 //                saveUserImage(mPickedImageUri);

@@ -10,6 +10,7 @@ import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.Repositories.UserRepository;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -30,6 +31,10 @@ public class UserService {
         return userRepository.getUser(userName);
     }
 
+    public UserReading getReading(long readingId) {
+        return userRepository.getUserReading(readingId);
+    }
+
     public Boolean isAlreadyAdded(String name) {
         return userRepository.isAlreadyAdded(name);
     }
@@ -41,6 +46,12 @@ public class UserService {
     }
 
     public void remove(long userId) {
+        User user = get(userId);
+        for(UserReading reading : user.getReadings(true)) {
+            new File(reading.getImagePath()).delete();
+        }
+        new File(user.getImagePath()).delete();
+
         userRepository.remove(userId);
         dataChanged();
     }
@@ -51,6 +62,9 @@ public class UserService {
     }
 
     public void deleteReading(long readingId) {
+        UserReading reading = getReading(readingId);
+        new File(reading.getImagePath()).delete();
+
         userRepository.deleteReading(readingId);
         dataChanged();
     }

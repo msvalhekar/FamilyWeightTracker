@@ -27,6 +27,12 @@ public class UserRepository {
         return userModel.mapToUser();
     }
 
+    public UserReading getUserReading(long readingId) {
+        UserReadingModel readingModel = UserReadingModel.get(readingId);
+        if(readingModel == null) return null;
+        return readingModel.mapToUserReading();
+    }
+
     public Boolean isAlreadyAdded(String name) {
         return UserModel.exists(name.toLowerCase().trim());
     }
