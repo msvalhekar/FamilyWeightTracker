@@ -11,9 +11,12 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -269,9 +272,23 @@ public class AddReadingActivity extends TrackerBaseActivity {
     }
 
     private void initNoteControl() {
+        final TextView noteLengthView = ((TextView) findViewById(R.id.add_reading_note_length));
+
         final EditText noteView = ((EditText) findViewById(R.id.add_reading_note_edittext));
         noteView.setText(mUserReadingToProcess.Note);
         noteView.setHint(Html.fromHtml(getString(R.string.ReadingNoteHintMessage)));
+        noteView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                noteLengthView.setText(String.format("%d / %d", s.length(), 200));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
     }
 
     private void initWeekSequenceControl(long lastReading) {

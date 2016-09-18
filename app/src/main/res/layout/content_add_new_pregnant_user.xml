@@ -22,7 +22,6 @@
                 android:scaleType="fitCenter"
                 android:gravity="center"
                 android:src="@drawable/contact_default"
-                android:contentDescription="@string/AddReadingImageLable"
                 android:background="@android:color/transparent"
                 android:layout_span="3">
             </ImageButton>

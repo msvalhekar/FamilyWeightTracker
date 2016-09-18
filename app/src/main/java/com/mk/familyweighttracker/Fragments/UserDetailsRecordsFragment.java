@@ -367,7 +367,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
                 ((TextView) mView.findViewById(R.id.record_item_period_no))
                         .setText(String.format("%s %02d", mSelectedUser.trackingPeriod, mUserReading.Sequence));
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("EEE dd-MM");
                 ((TextView) mView.findViewById(R.id.record_item_taken_on))
                         .setText(dateFormat.format(mUserReading.TakenOn));
             }
