@@ -1,28 +1,29 @@
 package com.mk.familyweighttracker.Activities;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.StringHelper;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * An activity representing a list of Items. This activity
@@ -36,23 +37,25 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
 
     private long mUserId;
     private User mUser;
+    ViewPager mSlidesPager;
+    SlidesPagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_slide_show);
 
         Analytic.sendScreenView(Constants.Activities.UserSlideshowActivity);
 
         mUserId = getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
         mUser = new UserService().get(mUserId);
-        this.setTitle(String.format("%s - Slides", mUser.name));
-
-        initToolbarControl();
-
-        initSlidesPagerControl();
 
         initActionControls();
+        initSlidesPagerControl();
+
+        startSlideShow();
     }
 
     private void initActionControls() {
@@ -66,35 +69,43 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
     }
 
     private void initSlidesPagerControl() {
-        ViewPager slidesPager = ((ViewPager) findViewById(R.id.user_slideshow_pager));
-        List<Bitmap> images = new ArrayList<>();
-        for (UserReading reading: mUser.getReadings(true)) {
-            images.add(reading.getImageAsBitmap(false));
-        }
-        SlidesPagerAdapter adapter = new SlidesPagerAdapter(images);
-        slidesPager.setAdapter(adapter);
+        mSlidesPager = ((ViewPager) findViewById(R.id.user_slideshow_pager));
+        mPagerAdapter = new SlidesPagerAdapter(mUser.getReadings(true));
+        mSlidesPager.setAdapter(mPagerAdapter);
     }
 
-    private void initToolbarControl() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_slide_show);
-        setSupportActionBar(toolbar);
-        // Show the Up button in the action bar.
-//        ActionBar actionBar = getSupportActionBar();
-//        if (actionBar != null) {
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//        }
+    private void startSlideShow() {
+        final boolean[] isFirstTime = {true};
+        //final int[] i = {0};
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int nextItemIndex = isFirstTime[0] ? mSlidesPager.getCurrentItem() : mSlidesPager.getCurrentItem()+1;
+                        if(nextItemIndex == mPagerAdapter.getCount()) {
+                            cancel();
+                            finish();
+                        }
+                        mSlidesPager.setCurrentItem(nextItemIndex);
+                        isFirstTime[0] = false;
+                    }
+                });
+            }
+        }, 100, 3000);
     }
 
     public class SlidesPagerAdapter extends PagerAdapter {
-        private List<Bitmap> mImages;
+        private List<UserReading> mUserReadings;
 
-        public SlidesPagerAdapter(List<Bitmap> images) {
-            mImages = images;
+        public SlidesPagerAdapter(List<UserReading> userReadings) {
+            mUserReadings = userReadings;
         }
 
         @Override
         public int getCount() {
-            return mImages.size();
+            return mUserReadings.size();
         }
 
         @Override
@@ -106,8 +117,18 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
         public Object instantiateItem(ViewGroup container, int position) {
             View itemView = getLayoutInflater().inflate(R.layout.layout_slide_show_item, container, false);
 
-            ImageView imageView = (ImageView) itemView.findViewById(R.id.user_slideshow_item_image);
-            imageView.setImageBitmap(mImages.get(position));
+            UserReading reading = mUserReadings.get(position);
+
+            ((ImageView) itemView.findViewById(R.id.user_slideshow_item_image))
+                    .setImageBitmap(reading.getImageAsBitmap(false));
+
+            ((TextView) itemView.findViewById(R.id.user_slideshow_week))
+                    .setText(String.format("Week %d", reading.Sequence));
+
+            ((TextView) itemView.findViewById(R.id.user_slideshow_note))
+                    .setText(StringHelper.isNullOrEmpty(reading.Note)
+                            ? "[add notes, your feelings, your thoughts of this week]"
+                            : reading.Note);
 
             container.addView(itemView);
 

@@ -7,7 +7,7 @@ public class Constants {
 
     public static final String DB_NAME = "MkWeighTracker.db";
     public static final String APP_BACKUP_KEY = "MkWeighTracker";
-    public static final int SPLASH_SCREEN_TIMEOUT_SECONDS = 1;
+    public static final int SPLASH_SCREEN_TIMEOUT_SECONDS = 3000;
 
     public static class AppDirectory {
         public static final String LogDirectory = "sysLog";
@@ -18,6 +18,7 @@ public class Constants {
         public static final String HomeActivity = "HomeActivity";
         public static final String UsersListActivity = "UsersListActivity";
         public static final String TrackerHelpActivity = "TrackerHelpActivity";
+        public static final String UserMediaActivity = "UserMediaActivity";
         public static final String UserSlideshowActivity = "UserSlideshowActivity";
         public static final String AddReadingActivity = "AddReadingActivity";
         public static final String AddPregnantUserActivity = "AddPregnantUserActivity";
@@ -58,6 +59,7 @@ public class Constants {
     public static class AnalyticsActions {
         public static final String UserDetailsProfile = "%s -> DetailsProfile";
         public static final String UserDetailsChart = "%s -> DetailsChart";
+        public static final String UserDetailsMedia = "%s -> DetailsMedia";
         public static final String UserDetailsRecords = "%s -> DetailsRecords";
         public static final String FirstReadingAdded = "%s -> FirstReadingAdded";
         public static final String FirstReadingEdited = "%s -> FirstReadingEdited";
@@ -80,6 +82,7 @@ public class Constants {
         public static final String UserDetailsProfile = "UserDetailsProfile";
         public static final String UserDetailsChart = "UserDetailsChart";
         public static final String UserDetailsRecords = "UserDetailsRecords";
+        public static final String UserDetailsMedia = "UserDetailsMedia";
         public static final String UserAdded = "UserAdded";
         public static final String UserDelete = "UserDelete";
         public static final String UserReadingHelp = "UserReadingHelp";

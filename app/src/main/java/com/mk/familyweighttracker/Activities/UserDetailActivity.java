@@ -9,12 +9,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Fragments.UserDetailsProfileFragment;
@@ -26,12 +23,9 @@ import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Framework.UserDetailsTabsFactory;
 import com.mk.familyweighttracker.Models.User;
-import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -86,11 +80,7 @@ public class UserDetailActivity extends TrackerBaseActivity
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 informDataChangedAndFinish();
-                return true;
-
-            case R.id.user_detail_slideshow:
-                showSlides();
-                return true;
+                break;
 
 //            case R.id.user_detail_help:
 //                View layout = getLayoutInflater().inflate(R.layout.help_popup_user_detail_readings, null);
@@ -107,6 +97,7 @@ public class UserDetailActivity extends TrackerBaseActivity
     }
 
     private void saveUserImageIfRequired() {
+//        toTest: older versions with image stored in db, can probably remove commented part in next release
 //        try {
 //            File file = new File(mUser.getImagePath());
 //            FileInputStream stream = new FileInputStream(file);
@@ -135,12 +126,6 @@ public class UserDetailActivity extends TrackerBaseActivity
                 e.printStackTrace();
             }
         }
-    }
-
-    private void showSlides() {
-        Intent intent = new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.UserSlideshowActivity.class);
-        intent.putExtra(Constants.ExtraArg.USER_ID, mUserId);
-        startActivity(intent);
     }
 
     private boolean mIsOriginator = false;

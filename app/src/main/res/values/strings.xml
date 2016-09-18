@@ -20,8 +20,8 @@
     <string name="add_user_first_reading_height_label">Height *</string>
     <string name="add_user_first_reading_height_unit_cms">cms</string>
     <string name="add_user_first_reading_height_unit_inches">inches</string>
-    <string name="add_user_reading_bump_label"><b>Bump photo</b> (optional)</string>
-    <string name="add_user_reading_date_label"><b>Measured on</b> (optional)</string>
+    <string name="add_user_reading_bump_label"><b>Bump photo</b></string>
+    <string name="add_user_reading_date_label"><b>Measured on</b></string>
     <string name="add_user_reading_date_default_value">(measured on)</string>
     <string name="add_user_reading_period_label"><b>Week</b> *</string>
     <string name="add_user_reading_period_default_value">(week number)</string>
@@ -31,6 +31,7 @@
     <string name="add_user_reading_weight_default_value">(weight)</string>
     <string name="add_user_reading_weight_unit_value">(kg)</string>
     <string name="add_user_reading_weight_unit_label"><b>Weight Unit *</b></string>
+    <string name="add_user_reading_unit_desc_label">One time setting</string>
     <string name="add_user_reading_weight_unit_kg">kgs</string>
     <string name="add_user_reading_weight_unit_lbs">lbs</string>
     <string name="add_user_reading_height_unit_label"><b>Height Unit *</b></string>
@@ -85,8 +86,8 @@
     <string name="help_record_exp_min_wt_message">Exp Min</string>
     <string name="help_record_wt_diff_against_actual_message">(v/s actual)</string>
     <string name="help_record_exp_max_wt_message">Exp Max</string>
-    <string name="AddReadingImageLable">Add Photo</string>
     <string name="AddUserLabel">Add</string>
+    <string name="slideshow_activity_title_format">%s\'s Wonderful Pregnancy</string>
 
     <string name="application_version_label">Application version</string>
     <string name="application_version_friendly_name_label">Codename</string>
@@ -115,4 +116,10 @@
     <string name="WeekNumberMessage">Week Number</string>
     <string name="WeeksMessage">week(s)</string>
     <string name="Maximum40WeeksDataSupportedMessage">App supports only 40 weeks of pregnancy readings, additional readings cannot be added.</string>
+
+    <string name="menu_user_detail_media">Media</string>
+    <string name="user_media_slideshow_label">Preview</string>
+    <string name="user_media_bkgnd_music_label">Choose Background Music</string>
+    <string name="user_media_share_label">Share</string>
+    <string name="user_media_export_label">Export</string>
 </resources>

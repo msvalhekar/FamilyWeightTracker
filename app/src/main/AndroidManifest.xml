@@ -66,7 +66,6 @@
         <activity
             android:name=".Activities.TrackerHelpActivity"
             android:label="@string/title_tracker_help"
-            android:parentActivityName=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -84,7 +83,6 @@
         <activity
             android:name=".Activities.UserDetailActivity"
             android:label="Member Details"
-            android:parentActivityName=".Activities.UsersListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -93,8 +91,7 @@
         <activity
             android:name=".Activities.UserSlideshowActivity"
             android:label="@string/title_user_slideshow"
-            android:parentActivityName=".Activities.UserDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/splashScreenTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.UserDetailActivity" />
@@ -102,7 +99,6 @@
         <activity
             android:name=".Activities.AddPregnantUserActivity"
             android:label="@string/title_activity_add_new_user"
-            android:parentActivityName=".Activities.UsersListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

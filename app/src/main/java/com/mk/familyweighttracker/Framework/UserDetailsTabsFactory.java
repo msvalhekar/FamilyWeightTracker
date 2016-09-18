@@ -30,6 +30,7 @@ public class UserDetailsTabsFactory {
             _homeTabs.put("Profile", new UserDetailsProfileFragment());
             _homeTabs.put("Readings", new UserDetailsRecordsFragment());
             _homeTabs.put("Trend", new UserDetailsChartFragment());
+            _homeTabs.put("MWP", new UserDetailsMediaFragment());
         }
         return _homeTabs;
     }
