@@ -1,5 +1,6 @@
 package com.mk.familyweighttracker.Activities;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -52,20 +53,9 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
         mUserId = getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
         mUser = new UserService().get(mUserId);
 
-        initActionControls();
         initSlidesPagerControl();
 
         startSlideShow();
-    }
-
-    private void initActionControls() {
-//        ((Button) findViewById(R.id.tracker_help_ok_button))
-//                .setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        finish();
-//                    }
-//                });
     }
 
     private void initSlidesPagerControl() {
@@ -123,12 +113,15 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
                     .setImageBitmap(reading.getImageAsBitmap(false));
 
             ((TextView) itemView.findViewById(R.id.user_slideshow_week))
-                    .setText(String.format("Week %d", reading.Sequence));
+                    .setText(String.format(getString(R.string.slideshow_week_number_format), reading.Sequence));
 
-            ((TextView) itemView.findViewById(R.id.user_slideshow_note))
-                    .setText(StringHelper.isNullOrEmpty(reading.Note)
-                            ? "[add notes, your feelings, your thoughts of this week]"
-                            : reading.Note);
+            TextView noteView = ((TextView) itemView.findViewById(R.id.user_slideshow_note));
+            if(StringHelper.isNullOrEmpty(reading.Note)) {
+                noteView.setText(R.string.slideshow_empty_note_message);
+                noteView.setTextColor(Color.RED);
+            } else {
+                noteView.setText(reading.Note);
+            }
 
             container.addView(itemView);
 

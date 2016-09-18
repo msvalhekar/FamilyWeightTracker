@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
@@ -24,8 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
-
-    private List<User> mUsers = new UserService().getAll();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +44,10 @@ public class HomeActivity extends AppCompatActivity {
         items.add(new DashboardItem("Track Pregnancy Weight Gain", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mUsers.size() > 0) {
+                List<User> users = new UserService().getAll();
+                if(users.size() > 0) {
                     Intent intent = new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.UserDetailActivity.class);
-                    intent.putExtra(Constants.ExtraArg.USER_ID, mUsers.get(0).getId());
+                    intent.putExtra(Constants.ExtraArg.USER_ID, users.get(0).getId());
                     startActivity(intent);
                     return;
                 } else {

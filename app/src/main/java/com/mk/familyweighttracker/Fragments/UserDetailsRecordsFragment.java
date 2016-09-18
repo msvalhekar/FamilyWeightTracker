@@ -153,8 +153,8 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
             mFragmentView.findViewById(R.id.user_records_list_record_content_help).setVisibility(View.GONE);
 
             mFragmentView.findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
-            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_title)).setText("No data found.");
-            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_description)).setText("Add reading(s) using '+' button below.");
+            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_title)).setText(R.string.user_readings_not_found_message);
+            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_description)).setText(R.string.user_readings_add_reading_message);
         }
     }
 

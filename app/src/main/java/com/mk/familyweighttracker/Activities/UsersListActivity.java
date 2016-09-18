@@ -132,7 +132,7 @@ public class UsersListActivity extends TrackerBaseActivity {
 
         if(mUserList.size() == 0) {
             findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
-            ((TextView) findViewById(R.id.empty_mesage_title)).setText("No data found.");
+            ((TextView) findViewById(R.id.empty_mesage_title)).setText(R.string.user_readings_not_found_message);
             ((TextView) findViewById(R.id.empty_mesage_description)).setText("Use below button to Add member(s).");
             return true;
         }

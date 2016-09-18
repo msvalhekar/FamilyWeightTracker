@@ -124,4 +124,6 @@
     <string name="user_media_export_label">Export</string>
     <string name="slideshow_empty_note_message">[add notes, your feelings, your thoughts of this week]</string>
     <string name="slideshow_week_number_format">Week %d</string>
+    <string name="user_readings_not_found_message">No data found.</string>
+    <string name="user_readings_add_reading_message">Add reading(s) using \'+\' button below.</string>
 </resources>

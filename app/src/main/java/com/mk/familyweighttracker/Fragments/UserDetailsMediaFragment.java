@@ -54,6 +54,10 @@ public class UserDetailsMediaFragment extends Fragment implements OnNewReadingAd
             .setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(mUser.getReadingsCount() == 0) {
+                        Toast.makeText(v.getContext(), R.string.user_readings_not_found_message, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     Intent intent = new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.UserSlideshowActivity.class);
                     intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
                     startActivity(intent);
