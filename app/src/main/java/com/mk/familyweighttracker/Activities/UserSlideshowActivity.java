@@ -1,6 +1,10 @@
 package com.mk.familyweighttracker.Activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -15,7 +19,9 @@ import android.widget.TextView;
 
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.PreferenceHelper;
 import com.mk.familyweighttracker.Framework.StringHelper;
+import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
@@ -40,6 +46,7 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
     private User mUser;
     ViewPager mSlidesPager;
     SlidesPagerAdapter mPagerAdapter;
+    MediaPlayer mMediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +61,13 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
         mUser = new UserService().get(mUserId);
 
         initSlidesPagerControl();
+    }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        startBackgroundAudio();
         startSlideShow();
     }
 
@@ -64,19 +77,32 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
         mSlidesPager.setAdapter(mPagerAdapter);
     }
 
+    private void startBackgroundAudio() {
+        String audioUriString = PreferenceHelper.getString(Constants.SharedPreference.SelectedBackgroundAudio, "");
+
+        if(StringHelper.isNullOrEmpty(audioUriString))
+            return;
+
+        mMediaPlayer = MediaPlayer.create(this, Uri.parse(audioUriString));
+        mMediaPlayer.setLooping(true);
+        mMediaPlayer.start();
+    }
+
     private void startSlideShow() {
         final boolean[] isFirstTime = {true};
-        //final int[] i = {0};
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        int nextItemIndex = isFirstTime[0] ? mSlidesPager.getCurrentItem() : mSlidesPager.getCurrentItem()+1;
-                        if(nextItemIndex == mPagerAdapter.getCount()) {
+                        int nextItemIndex = mSlidesPager.getCurrentItem();
+                        if(!isFirstTime[0])
+                            nextItemIndex++;
+
+                        if (nextItemIndex == mPagerAdapter.getCount()) {
                             cancel();
-                            finish();
+                            stopMediaAndFinish();
                         }
                         mSlidesPager.setCurrentItem(nextItemIndex);
                         isFirstTime[0] = false;
@@ -84,6 +110,15 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
                 });
             }
         }, 100, 3000);
+    }
+
+    private void stopMediaAndFinish() {
+        if(mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+        }
+
+        finish();
     }
 
     public class SlidesPagerAdapter extends PagerAdapter {

@@ -50,10 +50,10 @@ public class UserDetailActivity extends TrackerBaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
+        setTitle(getString(R.string.user_detail_activity_title));
 
         mUserId = getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
         mUser = new UserService().get(mUserId);
-        this.setTitle(mUser.name);
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,
                 Constants.AnalyticsEvents.UserDetailsActivity,

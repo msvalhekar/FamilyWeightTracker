@@ -7,11 +7,17 @@ public class Constants {
 
     public static final String DB_NAME = "MkWeighTracker.db";
     public static final String APP_BACKUP_KEY = "MkWeighTracker";
+    public static final String SHARED_PREF_KEY = "com.mk.familyweighttracker.MkWeighTracker";
+
     public static final int SPLASH_SCREEN_TIMEOUT_SECONDS = 3000;
 
     public static class AppDirectory {
         public static final String LogDirectory = "sysLog";
         public static final String ImagesDirectory = "imgs";
+    }
+
+    public static class SharedPreference {
+        public static final String SelectedBackgroundAudio = "SelectedBackgroundAudio";
     }
 
     public static class Activities {
@@ -41,6 +47,7 @@ public class Constants {
         public static final int USER_IMAGE_CROP = 22;
         public static final int READING_IMAGE_LOAD = 31;
         public static final int READING_IMAGE_CROP = 32;
+        public static final int MEDIA_BROWSE_AUDIO = 41;
     }
 
     public static class LogTag {

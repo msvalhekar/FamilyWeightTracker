@@ -1,6 +1,10 @@
 package com.mk.familyweighttracker.Fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,10 +15,13 @@ import android.widget.Toast;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
+import com.mk.familyweighttracker.Framework.PreferenceHelper;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
+
+import javax.xml.transform.Result;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,11 +37,9 @@ public class UserDetailsMediaFragment extends Fragment implements OnNewReadingAd
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_media, container, false);
-        //getActivity().setTitle("My Wonderful Pregnancy");
 
         mSelectedUserId = getActivity().getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
         mUser = new UserService().get(mSelectedUserId);
@@ -47,6 +52,19 @@ public class UserDetailsMediaFragment extends Fragment implements OnNewReadingAd
                 null);
 
         return mFragmentView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Uri audioUri = null;
+        if(requestCode == Constants.RequestCode.MEDIA_BROWSE_AUDIO) {
+            if(resultCode == Activity.RESULT_OK) {
+                audioUri = data.getData();
+            }
+
+            String audioUriStr = audioUri == null ? "" : audioUri.toString();
+            PreferenceHelper.putString(Constants.SharedPreference.SelectedBackgroundAudio, audioUriStr);
+        }
     }
 
     private void initActionControls() {
@@ -68,7 +86,10 @@ public class UserDetailsMediaFragment extends Fragment implements OnNewReadingAd
             .setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Choose Background Music", Toast.LENGTH_SHORT).show();
+                    Intent selectAudioIntent = new Intent();
+                    selectAudioIntent.setType("audio/*");
+                    selectAudioIntent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(selectAudioIntent, Constants.RequestCode.MEDIA_BROWSE_AUDIO);
                 }
             });
 
