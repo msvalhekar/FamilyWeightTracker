@@ -122,4 +122,6 @@
     <string name="user_media_bkgnd_music_label">Choose Background Music</string>
     <string name="user_media_share_label">Share</string>
     <string name="user_media_export_label">Export</string>
+    <string name="slideshow_empty_note_message">[add notes, your feelings, your thoughts of this week]</string>
+    <string name="slideshow_week_number_format">Week %d</string>
 </resources>

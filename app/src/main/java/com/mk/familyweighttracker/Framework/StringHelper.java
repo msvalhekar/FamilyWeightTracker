@@ -12,6 +12,6 @@ import java.util.GregorianCalendar;
  */
 public class StringHelper {
     public static boolean isNullOrEmpty(String msg) {
-        return msg == null || msg == "";
+        return msg == null || msg.equals("");
     }
 }

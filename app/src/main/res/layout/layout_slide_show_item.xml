@@ -20,8 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:textSize="15dp"
-        android:textAlignment="center"
-        android:text="this is beautiful week for me with my baby. We did lot of talking and sharing everything that came in mind.">
+        android:textAlignment="center">
     </TextView>
 
     <ImageView
