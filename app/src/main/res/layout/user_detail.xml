@@ -38,7 +38,7 @@
             android:drawableLeft="@drawable/share"
             android:background="@drawable/round_shape_small_pink_button"
             android:textColor="#9A0396"
-            android:text="Share"/>
+            android:text="@string/app_share_label"/>
 
         <Button
             android:id="@+id/app_rate"
@@ -50,6 +50,6 @@
             android:drawableLeft="@drawable/rate"
             android:background="@drawable/round_shape_small_pink_button"
             android:textColor="#9A0396"
-            android:text="Rate"/>
+            android:text="@string/app_rate_label"/>
     </LinearLayout>
 </LinearLayout>
