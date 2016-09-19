@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +37,15 @@ public class HomeActivity extends AppCompatActivity {
         StorageUtility.createDirectories();
 
         initToolbarControl();
+        initDashboardControl();
+    }
 
+    private void initToolbarControl() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_home);
+        setSupportActionBar(toolbar);
+    }
+
+    private void initDashboardControl() {
         List<DashboardItem> items = new ArrayList<>();
         //items.add(new DashboardItem("Calculate BMI", ""));
         //items.add(new DashboardItem("Calculate Pregnancy Weight Gain", ""));
@@ -71,11 +80,6 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapter);
-    }
-
-    private void initToolbarControl() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_home);
-        setSupportActionBar(toolbar);
     }
 
     @Override
