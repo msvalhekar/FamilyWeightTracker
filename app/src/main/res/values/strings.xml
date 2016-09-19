@@ -127,4 +127,10 @@
     <string name="user_readings_not_found_message">No data found.</string>
     <string name="user_readings_add_reading_message">Add reading(s) using \'+\' button below.</string>
     <string name="user_detail_activity_title">My Wonderful Pregnancy</string>
+    <string name="background_audio_not_set_message">Background music not set.</string>
+    <string name="background_audio_not_found_message">Background audio file not found. Select again.</string>
+    <string name="app_share_line_1">\'Pregnancy Weight Tracker\'</string>
+    <string name="app_share_line_2">\nSimple and Smart way of tracking weekly pregnancy weight gain with expected weight range suggestions.</string>
+    <string name="app_share_line_3">\n\nInterestingly, it also helps capture your memorable pregnancy moments and innovatively makes a \'My Wonderful Pregnancy\' experience.</string>
+    <string name="app_share_line_4">\n\nGive it a try !!!</string>
 </resources>

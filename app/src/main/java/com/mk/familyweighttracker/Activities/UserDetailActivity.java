@@ -2,6 +2,7 @@ package com.mk.familyweighttracker.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,9 +10,12 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Fragments.UserDetailsProfileFragment;
@@ -61,7 +65,7 @@ public class UserDetailActivity extends TrackerBaseActivity
                 null);
 
         initToolbarControl();
-
+        initInteractionControl();
         initDetailTabControl();
 
         saveUserImageIfRequired();
@@ -200,6 +204,43 @@ public class UserDetailActivity extends TrackerBaseActivity
 
         // Setting the ViewPager For the SlidingTabsLayout
         slidingTabLayout.setViewPager(viewPager);
+    }
+
+
+    private void initInteractionControl() {
+        ((Button) findViewById(R.id.app_share)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, getShareText());
+                startActivity(shareIntent);
+            }
+        });
+
+        ((Button) findViewById(R.id.app_rate)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String appName = TrackerApplication.getApp().getPackageName();
+                try {
+                    Intent rateIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appName));
+                    startActivity(rateIntent);
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    String appStoreSearchUrl = String.format(Constants.PLAY_STORE_APP_SEARCH_URL, appName);
+                    Intent rateIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(appStoreSearchUrl));
+                    startActivity(rateIntent);
+                }
+            }
+        });
+    }
+
+    private String getShareText() {
+        return getString(R.string.app_share_line_1) +
+                getString(R.string.app_share_line_2) +
+                getString(R.string.app_share_line_3) +
+                getString(R.string.app_share_line_4) +
+                "\n\n" +
+                String.format(Constants.PLAY_STORE_APP_SEARCH_URL, TrackerApplication.getApp().getPackageName());
     }
 
     private void informDataChangedAndFinish() {

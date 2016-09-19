@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,10 +13,43 @@
         android:elevation="2dp"
         android:background="@color/colorPrimary"
         />
+
     <android.support.v4.view.ViewPager
         android:id="@+id/user_detail_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FEDAFD"
+        android:orientation="horizontal"
+        android:padding="2dp"
+        android:gravity="center">
+        <Button
+            android:id="@+id/app_share"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_margin="3dp"
+            android:paddingLeft="10dp"
+            android:textAllCaps="false"
+            android:drawableLeft="@drawable/share"
+            android:background="@drawable/round_shape_small_pink_button"
+            android:textColor="#9A0396"
+            android:text="Share"/>
+
+        <Button
+            android:id="@+id/app_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_margin="3dp"
+            android:paddingLeft="10dp"
+            android:textAllCaps="false"
+            android:drawableLeft="@drawable/rate"
+            android:background="@drawable/round_shape_small_pink_button"
+            android:textColor="#9A0396"
+            android:text="Rate"/>
+    </LinearLayout>
 </LinearLayout>
