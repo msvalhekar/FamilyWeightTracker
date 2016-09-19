@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -16,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
@@ -28,6 +30,9 @@ import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -47,6 +52,7 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
     ViewPager mSlidesPager;
     SlidesPagerAdapter mPagerAdapter;
     MediaPlayer mMediaPlayer;
+    Timer mSlidesTimer = new Timer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,26 +77,42 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
         startSlideShow();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            stopMediaAndFinish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     private void initSlidesPagerControl() {
         mSlidesPager = ((ViewPager) findViewById(R.id.user_slideshow_pager));
         mPagerAdapter = new SlidesPagerAdapter(mUser.getReadings(true));
         mSlidesPager.setAdapter(mPagerAdapter);
+        //mSlidesPager.setPageTransformer(true, new ZoomOutPageTransformer());
     }
 
     private void startBackgroundAudio() {
         String audioUriString = PreferenceHelper.getString(Constants.SharedPreference.SelectedBackgroundAudio, "");
 
-        if(StringHelper.isNullOrEmpty(audioUriString))
+        if(StringHelper.isNullOrEmpty(audioUriString)) {
+            Toast.makeText(UserSlideshowActivity.this, R.string.background_audio_not_set_message, Toast.LENGTH_SHORT).show();
             return;
+        }
 
         mMediaPlayer = MediaPlayer.create(this, Uri.parse(audioUriString));
+        if(mMediaPlayer == null) {
+            Toast.makeText(UserSlideshowActivity.this, R.string.background_audio_not_found_message, Toast.LENGTH_SHORT).show();
+            return;
+        }
         mMediaPlayer.setLooping(true);
         mMediaPlayer.start();
     }
 
     private void startSlideShow() {
         final boolean[] isFirstTime = {true};
-        new Timer().schedule(new TimerTask() {
+        mSlidesTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 runOnUiThread(new Runnable() {
@@ -101,10 +123,9 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
                             nextItemIndex++;
 
                         if (nextItemIndex == mPagerAdapter.getCount()) {
-                            cancel();
                             stopMediaAndFinish();
                         }
-                        mSlidesPager.setCurrentItem(nextItemIndex);
+                        mSlidesPager.setCurrentItem(nextItemIndex, true);
                         isFirstTime[0] = false;
                     }
                 });
@@ -118,6 +139,7 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
             mMediaPlayer.release();
         }
 
+        mSlidesTimer.cancel();
         finish();
     }
 
@@ -166,6 +188,45 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((LinearLayout) object);
+        }
+    }
+
+    public class ZoomOutPageTransformer implements ViewPager.PageTransformer {
+        private static final float MIN_SCALE = 0.5f;
+        private static final float MIN_ALPHA = 0.5f;
+
+        public void transformPage(View view, float position) {
+            int pageWidth = view.getWidth();
+            int pageHeight = view.getHeight();
+
+            if (position < -1) { // [-Infinity,-1)
+                // This page is way off-screen to the left.
+                view.setAlpha(0);
+
+            } else if (position <= 1) { // [-1,1]
+                // Modify the default slide transition to shrink the page as well
+                float scaleFactor = Math.max(MIN_SCALE, 1 - Math.abs(position));
+                float vertMargin = pageHeight * (1 - scaleFactor) / 2;
+                float horzMargin = pageWidth * (1 - scaleFactor) / 2;
+                if (position < 0) {
+                    view.setTranslationX(horzMargin - vertMargin / 2);
+                } else {
+                    view.setTranslationX(-horzMargin + vertMargin / 2);
+                }
+
+                // Scale the page down (between MIN_SCALE and 1)
+                view.setScaleX(scaleFactor);
+                view.setScaleY(scaleFactor);
+
+                // Fade the page relative to its size.
+                view.setAlpha(MIN_ALPHA +
+                        (scaleFactor - MIN_SCALE) /
+                                (1 - MIN_SCALE) * (1 - MIN_ALPHA));
+
+            } else { // (1,+Infinity]
+                // This page is way off-screen to the right.
+                view.setAlpha(0);
+            }
         }
     }
 }
