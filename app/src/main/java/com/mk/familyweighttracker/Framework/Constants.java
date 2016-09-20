@@ -28,6 +28,7 @@ public class Constants {
         public static final String UserMediaActivity = "UserMediaActivity";
         public static final String UserSlideshowActivity = "UserSlideshowActivity";
         public static final String AddReadingActivity = "AddReadingActivity";
+        public static final String AppFeedbackActivity = "AppFeedbackActivity";
         public static final String AddPregnantUserActivity = "AddPregnantUserActivity";
         public static final String AddFirstReadingActivity = "AddFirstReadingActivity";
     }

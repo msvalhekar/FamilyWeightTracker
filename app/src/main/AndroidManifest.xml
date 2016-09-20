@@ -54,7 +54,7 @@
             <!--</intent-filter>-->
         </activity>
         <!-- <activity -->
-        <!-- android:name=".Framework.SendLog" -->
+        <!-- android:name=".Framework.SendLogActivity" -->
         <!-- android:theme="@android:style/Theme.Dialog" -->
         <!-- android:textAppearance="@android:style/TextAppearance.Large" -->
         <!-- android:windowSoftInputMode="stateHidden"> -->
@@ -92,6 +92,14 @@
             android:name=".Activities.UserSlideshowActivity"
             android:label="@string/title_user_slideshow"
             android:theme="@style/splashScreenTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.UserDetailActivity" />
+        </activity>
+        <activity
+            android:name=".Activities.AppFeedbackActivity"
+            android:label="@string/title_app_feedback"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.UserDetailActivity" />

@@ -18,7 +18,7 @@ import java.io.InputStreamReader;
 /**
  * Created by mvalhekar on 24-05-2016.
  */
-public class SendLog extends AppCompatActivity implements View.OnClickListener {
+public class SendLogActivity extends AppCompatActivity implements View.OnClickListener {
     // http://stackoverflow.com/questions/19897628/need-to-handle-uncaught-exception-and-send-log-file
 
     @Override

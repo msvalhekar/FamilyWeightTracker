@@ -4,6 +4,7 @@
     <string name="title_item_list">Members</string>
     <string name="title_tracker_help">Help / Instructions</string>
     <string name="title_user_slideshow">Slides</string>
+    <string name="title_app_feedback">Share feedback</string>
     <string name="title_item_detail">Member Detail</string>
     <string name="button_home_start_text">Start</string>
     <string name="title_activity_add_new_user">Add</string>
@@ -134,6 +135,10 @@
     <string name="app_share_line_2">\nSimple and Smart way of tracking weekly pregnancy weight gain with expected weight range suggestions.</string>
     <string name="app_share_line_3">\n\nInterestingly, it also helps capture your memorable pregnancy moments and innovatively makes a \'My Wonderful Pregnancy\' experience.</string>
     <string name="app_share_line_4">\n\nGive it a try !!!</string>
+    <string name="app_feedback_message">Please let us know your feedback about app. Like, what you like or do not like? what more feature(s) you would like to see in app? etc</string>
     <string name="app_share_label">Share</string>
     <string name="app_rate_label">Like</string>
+    <string name="app_feedback_label">Feedback</string>
+    <string name="app_feedback_thanks_message">Thank you for your valuable feedback !!!</string>
+    <string name="app_feedback_hint_message">[your feedback]</string>
 </resources>

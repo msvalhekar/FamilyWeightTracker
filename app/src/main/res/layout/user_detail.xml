@@ -51,5 +51,17 @@
             android:background="@drawable/round_shape_small_pink_button"
             android:textColor="#9A0396"
             android:text="@string/app_rate_label"/>
+
+        <Button
+            android:id="@+id/app_feedback"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_margin="3dp"
+            android:paddingLeft="10dp"
+            android:textAllCaps="false"
+            android:drawableLeft="@drawable/feedback"
+            android:background="@drawable/round_shape_small_pink_button"
+            android:textColor="#9A0396"
+            android:text="@string/app_feedback_label"/>
     </LinearLayout>
 </LinearLayout>
