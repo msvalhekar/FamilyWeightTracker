@@ -21,6 +21,7 @@
     <string name="add_user_first_reading_height_unit_cms">cms</string>
     <string name="add_user_first_reading_height_unit_inches">inches</string>
     <string name="add_user_reading_bump_label"><b>Bump photo</b></string>
+    <string name="add_user_reading_bump_desc_label">Tap to select your photo</string>
     <string name="add_user_reading_date_label"><b>Measured on</b></string>
     <string name="add_user_reading_date_default_value">(measured on)</string>
     <string name="add_user_reading_period_label"><b>Week</b> *</string>
@@ -112,7 +113,7 @@
     <string name="PrePregnancyReadingRemovalErrorMessage">This first reading is used to calculate expected range.</string>
     <string name="ReadingRemovalConfirmation">Confirm removal</string>
     <string name="ReadingRemovalConfirmationMessage">Are you sure you want to remove this reading?</string>
-    <string name="ReadingNoteHintMessage"><![CDATA[<small>Note anything e.g. week with baby, reports, appointments, etc</small>]]></string>
+    <string name="ReadingNoteHintMessage"><![CDATA[<small>[add notes, your feelings, your thoughts or talk to baby]</small>]]></string>
     <string name="WeekNumberMessage">Week Number</string>
     <string name="WeeksMessage">week(s)</string>
     <string name="Maximum40WeeksDataSupportedMessage">App supports only 40 weeks of pregnancy readings, additional readings cannot be added.</string>
@@ -122,7 +123,7 @@
     <string name="user_media_bkgnd_music_label">Choose Background Music</string>
     <string name="user_media_share_label">Share</string>
     <string name="user_media_export_label">Export</string>
-    <string name="slideshow_empty_note_message">[add notes, your feelings, your thoughts of this week]</string>
+    <string name="slideshow_empty_note_message">[add notes, your feelings, your thoughts or talk to baby]</string>
     <string name="slideshow_week_number_format">Week %d</string>
     <string name="user_readings_not_found_message">No data found.</string>
     <string name="user_readings_add_reading_message">Add reading(s) using \'+\' button below.</string>

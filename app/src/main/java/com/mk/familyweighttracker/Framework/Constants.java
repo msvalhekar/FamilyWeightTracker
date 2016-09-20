@@ -10,7 +10,7 @@ public class Constants {
     public static final String SHARED_PREF_KEY = "com.mk.familyweighttracker.MkWeighTracker";
     public static final String PLAY_STORE_APP_SEARCH_URL = "http://play.google.com/store/apps/details?id=%s";
 
-    public static final int SPLASH_SCREEN_TIMEOUT_SECONDS = 30;
+    public static final int SPLASH_SCREEN_TIMEOUT_SECONDS = 2500;
 
     public static class AppDirectory {
         public static final String LogDirectory = "sysLog";

@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.StringHelper;
 import com.mk.familyweighttracker.HomeActivity;
 import com.mk.familyweighttracker.R;
 
@@ -53,11 +54,11 @@ public class SplashActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        if(appVersion != "") {
+        if(StringHelper.isNullOrEmpty(appVersion)) {
+            versionTv.setVisibility(View.GONE);
+        } else {
             versionTv.setText(appVersion);
             versionTv.setVisibility(View.VISIBLE);
-        } else {
-            versionTv.setVisibility(View.GONE);
         }
     }
 }

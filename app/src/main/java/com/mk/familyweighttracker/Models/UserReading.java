@@ -60,19 +60,51 @@ public class UserReading {
         if (bitmap != null)
             return circular ? ImageUtility.getCircularBitmap(bitmap) : bitmap;
 
-        int resourceId = -1;
-        int monthNumber = (int)(Sequence / 4.45);
-        switch (monthNumber) {
-            case 0: resourceId = R.mipmap.ic_month1; break;
-            case 1: resourceId = R.mipmap.ic_month2; break;
-            case 2: resourceId = R.mipmap.ic_month3; break;
-            case 3: resourceId = R.mipmap.ic_month4; break;
-            case 4: resourceId = R.mipmap.ic_month5; break;
-            case 5: resourceId = R.mipmap.ic_month6; break;
-            case 6: resourceId = R.mipmap.ic_month7; break;
-            case 7: resourceId = R.mipmap.ic_month8; break;
-            case 8: resourceId = R.mipmap.ic_month9; break;
-        }
+        int resourceId = R.drawable.w30;
+//        switch ((int)Sequence) {
+//            case 0: resourceId = R.drawable.w00; break;
+//            case 1: resourceId = R.drawable.w00; break;
+//            case 2: resourceId = R.drawable.w00; break;
+//            case 3: resourceId = R.drawable.w03; break;
+//            case 4: resourceId = R.drawable.w04; break;
+//            case 5: resourceId = R.drawable.w05; break;
+//            case 6: resourceId = R.drawable.w03; break;
+//            case 7: resourceId = R.drawable.w07; break;
+//            case 8: resourceId = R.drawable.w08; break;
+//            case 9: resourceId = R.drawable.w09; break;
+//            case 10: resourceId = R.drawable.w10; break;
+//            case 11: resourceId = R.drawable.w11; break;
+//            case 12: resourceId = R.drawable.w12; break;
+//            case 13: resourceId = R.drawable.w04; break;
+//            case 14: resourceId = R.drawable.w09; break;
+//            case 15: resourceId = R.drawable.w15; break;
+//            case 16: resourceId = R.drawable.w08; break;
+//            case 17: resourceId = R.drawable.w17; break;
+//            case 18: resourceId = R.drawable.w18; break;
+//            case 19: resourceId = R.drawable.w19; break;
+//            case 20: resourceId = R.drawable.w20; break;
+//            case 21: resourceId = R.drawable.w21; break;
+//            case 22: resourceId = R.drawable.w11; break;
+//            case 23: resourceId = R.drawable.w23; break;
+//            case 24: resourceId = R.drawable.w24; break;
+//            case 25: resourceId = R.drawable.w25; break;
+//            case 26: resourceId = R.drawable.w26; break;
+//            case 27: resourceId = R.drawable.w27; break;
+//            case 28: resourceId = R.drawable.w19; break;
+//            case 29: resourceId = R.drawable.w23; break;
+//            case 30: resourceId = R.drawable.w30; break;
+//            case 31: resourceId = R.drawable.w31; break;
+//            case 32: resourceId = R.drawable.w32; break;
+//            case 33: resourceId = R.drawable.w24; break;
+//            case 34: resourceId = R.drawable.w20; break;
+//            case 35: resourceId = R.drawable.w35; break;
+//            case 36: resourceId = R.drawable.w36; break;
+//            case 37: resourceId = R.drawable.w37; break;
+//            case 38: resourceId = R.drawable.w38; break;
+//            case 39: resourceId = R.drawable.w26; break;
+//            case 40: resourceId = R.drawable.w40; break;
+//            case 41: resourceId = R.drawable.w41; break;
+//        }
         bitmap = BitmapFactory.decodeResource(TrackerApplication.getApp().getResources(), resourceId);
         return circular ? ImageUtility.getCircularBitmap(bitmap) : bitmap;
     }
