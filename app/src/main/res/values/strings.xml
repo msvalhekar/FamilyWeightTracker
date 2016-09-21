@@ -141,4 +141,8 @@
     <string name="app_feedback_label">Feedback</string>
     <string name="app_feedback_thanks_message">Thank you for your valuable feedback !!!</string>
     <string name="app_feedback_hint_message">[your feedback]</string>
+    <string name="home_app_introduction_message">Simple and Smart way of tracking weekly pregnancy weight gain with expected weight range suggestions. Experience of \'My Wonderful Pregnancy\' with innovative ideas for capturing your memorable pregnancy moments.</string>
+    <string name="home_app_disclaimer_label">Disclaimer</string>
+    <string name="home_app_disclaimer_message">Description</string>
+    <string name="home_app_disclaimer_ok_label">OK</string>
 </resources>
