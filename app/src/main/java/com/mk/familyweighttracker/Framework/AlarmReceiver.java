@@ -50,38 +50,14 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         UserReading latestReading = user.getLatestReading();
         long nextSequence = latestReading != null ? latestReading.Sequence +1 : 0;
-        String titleMessage = "Pregnancy weekly weight";
-        String textMessage = String.format("Touch to record week %d pregnancy weight.", nextSequence);
+        String titleMessage = _context.getString(R.string.notification_title);
+        String textMessage = String.format(_context.getString(R.string.notification_message), nextSequence);
         android.support.v7.app.NotificationCompat.Builder builder =
                 (android.support.v7.app.NotificationCompat.Builder) new android.support.v7.app.NotificationCompat.Builder(_context)
                 .setContentTitle(titleMessage)
                 .setSmallIcon(R.mipmap.ic_notification)
                 .setContentText(textMessage)
                 .setAutoCancel(true);
-
-//        Class className = Class.forName("com.mk.familyweighttracker.Activities.AddReadingActivity");
-//        if(user.getLatestReading() == null)
-//            className = Class.forName("com.mk.familyweighttracker.Activities.AddFirstReadingActivity");
-//
-//        Intent readingIntent = new Intent(_context, className);
-//        readingIntent.putExtra(UserDetailActivity.ExtraArg.USER_ID, user.getId());
-//
-//        Intent userDetailIntent = new Intent(_context, UserDetailActivity.class);
-//        userDetailIntent.putExtra(UserDetailActivity.ExtraArg.USER_ID, user.getId());
-//        userDetailIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//
-//        Intent usersListIntent = new Intent(_context, UsersListActivity.class);
-//        usersListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//
-//        Intent dashboardIntent = new Intent(_context, HomeActivity.class);
-//        dashboardIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//
-//        PendingIntent pendingIntent = PendingIntent.getActivities(
-//                _context,
-//                (int) user.getId(),
-//                new Intent[]{dashboardIntent, usersListIntent, userDetailIntent, readingIntent},
-//                PendingIntent.FLAG_ONE_SHOT);
-//        builder.setContentIntent(pendingIntent);
 
         Intent intent = new Intent(_context, HomeActivity.class);
 

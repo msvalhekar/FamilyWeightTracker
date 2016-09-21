@@ -89,7 +89,7 @@
     <string name="help_record_wt_diff_against_actual_message">(v/s actual)</string>
     <string name="help_record_exp_max_wt_message">Exp Max</string>
     <string name="AddUserLabel">Add</string>
-    <string name="slideshow_activity_title_format">%s\'s Wonderful Pregnancy</string>
+    <string name="slideshow_activity_title_format">%s\'s Wondrous Pregnancy</string>
 
     <string name="application_version_label">Application version</string>
     <string name="application_version_friendly_name_label">Codename</string>
@@ -128,12 +128,12 @@
     <string name="slideshow_week_number_format">Week %d</string>
     <string name="user_readings_not_found_message">No data found.</string>
     <string name="user_readings_add_reading_message">Add reading(s) using \'+\' button below.</string>
-    <string name="user_detail_activity_title">My Wonderful Pregnancy</string>
+    <string name="user_detail_activity_title">My Wondrous Pregnancy</string>
     <string name="background_audio_not_set_message">Background music not set.</string>
     <string name="background_audio_not_found_message">Background audio file not found. Select again.</string>
     <string name="app_share_line_1">\'Pregnancy Weight Tracker\'</string>
     <string name="app_share_line_2">\nSimple and Smart way of tracking weekly pregnancy weight gain with expected weight range suggestions.</string>
-    <string name="app_share_line_3">\n\nInterestingly, it also helps capture your memorable pregnancy moments and innovatively makes a \'My Wonderful Pregnancy\' experience.</string>
+    <string name="app_share_line_3">\n\nInterestingly, it also helps capture your memorable pregnancy moments and innovatively makes a \'My Wondrous Pregnancy\' experience.</string>
     <string name="app_share_line_4">\n\nGive it a try !!!</string>
     <string name="app_feedback_message">Please let us know your feedback about app. Like, what you like or do not like? what more feature(s) you would like to see in app? etc</string>
     <string name="app_share_label">Share</string>
@@ -141,8 +141,10 @@
     <string name="app_feedback_label">Feedback</string>
     <string name="app_feedback_thanks_message">Thank you for your valuable feedback !!!</string>
     <string name="app_feedback_hint_message">[your feedback]</string>
-    <string name="home_app_introduction_message">Simple and Smart way of tracking weekly pregnancy weight gain with expected weight range suggestions. Experience of \'My Wonderful Pregnancy\' with innovative ideas for capturing your memorable pregnancy moments.</string>
+    <string name="home_app_introduction_message">Smart and Simple to use. \nCapture your memorable pregnancy moments. \nExperience \'My Wondrous Pregnancy\'.</string>
     <string name="home_app_disclaimer_label">Disclaimer</string>
-    <string name="home_app_disclaimer_message">Description</string>
+    <string name="home_app_disclaimer_message">This App is for making your pregnancy a wonderful experience using information and data that your provide in App. This App is for making your pregnancy a wonderful experience using information and data that your provide in App. This App is for making your pregnancy a wonderful experience using information and data that your provide in App. This App is for making your pregnancy a wonderful experience using information and data that your provide in App.</string>
     <string name="home_app_disclaimer_ok_label">OK</string>
+    <string name="notification_title">Pregnancy weekly weight</string>
+    <string name="notification_message">Touch to record week %d pregnancy weight.</string>
 </resources>
