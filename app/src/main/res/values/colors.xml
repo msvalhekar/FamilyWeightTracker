@@ -5,4 +5,8 @@
     <color name="colorAccent">#FF82AD</color>
     <color name="tabsScrollColor">#FFFFFF</color>
     <color name="listHeaderColor">#DBD5D5</color>
+
+    <color name="app_social_layout_background">#CACAFF</color>
+    <color name="app_social_button_background">#9393FF</color>
+    <color name="app_social_button_text">#2F2FFF</color>
 </resources>
