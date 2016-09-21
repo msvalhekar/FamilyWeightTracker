@@ -143,7 +143,7 @@
     <string name="app_feedback_hint_message">[your feedback]</string>
     <string name="home_app_introduction_message">Smart and Simple to use. \nCapture your memorable pregnancy moments. \nExperience \'My Wondrous Pregnancy\'.</string>
     <string name="home_app_disclaimer_label">Disclaimer</string>
-    <string name="home_app_disclaimer_message">This App is for making your pregnancy a wonderful experience using information and data that your provide in App. This App is for making your pregnancy a wonderful experience using information and data that your provide in App. This App is for making your pregnancy a wonderful experience using information and data that your provide in App. This App is for making your pregnancy a wonderful experience using information and data that your provide in App.</string>
+    <string name="home_app_disclaimer_message">This App is for making user\'s pregnancy a wonderful experience using information and data that user provide in the App. All calculations are indicative and may not be accurate, also there can be variations from person to person. Consult your doctor for any queries. App do not share user\'s personal data outside of this app.</string>
     <string name="home_app_disclaimer_ok_label">OK</string>
     <string name="notification_title">Pregnancy weekly weight</string>
     <string name="notification_message">Touch to record week %d pregnancy weight.</string>
