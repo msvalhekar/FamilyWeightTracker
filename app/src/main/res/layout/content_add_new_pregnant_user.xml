@@ -16,8 +16,8 @@
             android:layout_gravity="center">
             <ImageButton
                 android:id="@+id/add_user_image_button"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_weight="2"
                 android:scaleType="fitCenter"
                 android:gravity="center"
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:text="Name"/>
+                android:text="@string/add_user_name_text"/>
             <EditText
                 android:id="@+id/add_user_name_edit_text"
                 android:layout_width="0dp"
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:text="Date Of Birth"/>
+                android:text="@string/add_user_dob_text"/>
             <Button
                 android:id="@+id/add_user_dob_button"
                 android:layout_width="0dp"
@@ -58,37 +58,25 @@
                 android:gravity="left|center"
                 android:text="dd/mm/yyyy" />
         </TableRow>
+        <View
+            android:id="@+id/add_user_delivery_due_divider"
+            style="@style/Divider"/>
         <TableRow
-            android:layout_weight="1"
-            android:visibility="gone">
+            android:id="@+id/add_user_delivery_due_section"
+            android:layout_weight="1">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:gravity="center_vertical"
-                android:text="Gender"/>
-            <RadioGroup
-                android:id="@+id/add_user_gender_switch"
+                android:text="@string/delivery_due_date_label"/>
+            <Button
+                android:id="@+id/add_user_delivery_due_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="left"
-                android:layout_weight="1">
-                <RadioButton
-                    android:id="@+id/add_user_gender_male"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="Male" />
-                <RadioButton
-                    android:id="@+id/add_user_gender_female"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:text="Female" />
-            </RadioGroup>
-
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:text="(Due Date)" />
         </TableRow>
         <View style="@style/Divider"/>
         <TableRow
@@ -99,7 +87,7 @@
                 android:layout_weight="1"
                 android:textStyle="bold"
                 android:layout_gravity="center"
-                android:text="Remind Weekly?"/>
+                android:text="@string/add_user_reminder_text"/>
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/add_user_remind_checkbox"
                 android:layout_width="0dp"
@@ -123,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:text="Day of Week"/>
+                android:text="@string/add_user_reminder_dow_text"/>
             <Button
                 android:id="@+id/add_user_reminder_day_button"
                 android:layout_width="0dp"
@@ -147,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:text="Time of Day"/>
+                android:text="@string/add_user_reminder_tod_text"/>
             <Button
                 android:id="@+id/add_user_reminder_time_button"
                 android:layout_width="0dp"
@@ -168,7 +156,7 @@
                 android:layout_margin="2dp"
                 android:background="@drawable/round_shape_button"
                 android:textSize="25sp"
-                android:text="@string/AddUserLabel"/>
+                android:text="@string/add_user_activity_title"/>
         </TableRow>
 
 

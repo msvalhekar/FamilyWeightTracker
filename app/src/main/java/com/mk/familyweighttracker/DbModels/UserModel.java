@@ -55,6 +55,9 @@ public class UserModel extends Model {
     @Column(name = "ReminderMinute")
     private int reminderMinute;
 
+    @Column(name = "DeliveryDueDate")
+    private Date deliveryDueDate;
+
     public List<UserReadingModel> getReadings() {
         return getMany(UserReadingModel.class, "User");
     }
@@ -107,6 +110,7 @@ public class UserModel extends Model {
         user.name = this.name;
         user.imageBytes = this.imageBytes;
         user.dateOfBirth = this.dateOfBirth;
+        user.deliveryDueDate = this.deliveryDueDate;
         user.isMale = this.isMale;
         user.trackingPeriod = this.trackingPeriod;
         user.weightUnit = this.weightUnit;
@@ -132,6 +136,7 @@ public class UserModel extends Model {
         userModel.name = user.name;
         userModel.imageBytes = user.imageBytes;
         userModel.dateOfBirth = user.dateOfBirth;
+        userModel.deliveryDueDate = user.deliveryDueDate;
         userModel.isMale = user.isMale;
         userModel.trackingPeriod = user.trackingPeriod;
         userModel.weightUnit = user.weightUnit;
@@ -159,7 +164,8 @@ public class UserModel extends Model {
         return new JSONObject()
                 .put("name", name)
                 .put("imageBytes", imageBytes)
-                .put("dob", dateOfBirth.getTime())
+                .put("dob", dateOfBirth == null ? 0 : dateOfBirth.getTime())
+                .put("ddd", deliveryDueDate == null ? 0 : deliveryDueDate.getTime())
                 .put("isMale", isMale)
                 .put("trackPeriod", trackingPeriod)
                 .put("wtUnit", weightUnit)
@@ -175,7 +181,8 @@ public class UserModel extends Model {
         UserModel user = new UserModel();
         user.name = userJSON.getString("name");
         user.imageBytes = (byte[]) userJSON.get("imageBytes");
-        user.dateOfBirth = new Date(userJSON.getLong("dob"));
+        user.dateOfBirth = userJSON.getLong("dob") == 0 ? null : new Date(userJSON.getLong("dob"));
+        user.deliveryDueDate = userJSON.getLong("ddd") == 0 ? null : new Date(userJSON.getLong("ddd"));
         user.isMale = userJSON.getBoolean("isMale");
         user.trackingPeriod = TrackingPeriod.valueOf(userJSON.getString("trackPeriod"));
         user.weightUnit = WeightUnit.valueOf(userJSON.getString("wtUnit"));

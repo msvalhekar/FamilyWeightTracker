@@ -48,6 +48,7 @@ public class User {
     public byte[] imageBytes;
     public boolean isMale;
     public Date dateOfBirth;
+    public Date deliveryDueDate;
     public TrackingPeriod trackingPeriod;
     public WeightUnit weightUnit;
     public HeightUnit heightUnit;
@@ -74,7 +75,26 @@ public class User {
     }
 
     public String getDateOfBirthStr() {
+        if(dateOfBirth == null) return "Not set";
         return dateFormat.format(dateOfBirth);
+    }
+
+    public String getDeliveryDueDateStr() {
+        if(deliveryDueDate == null) return "Not set";
+        return dateFormat.format(deliveryDueDate);
+    }
+
+    public String getDeliveryRemainingStr() {
+        if(deliveryDueDate == null) return "Not set";
+        long remainingDays = Utility.calculateRemainingDays(deliveryDueDate);
+        if(remainingDays < 30)
+            return String.format("%s day", remainingDays) + (remainingDays > 1 ? "s" : "");
+
+        long remDays = remainingDays % 7;
+        long remWeeks = remainingDays / 7;
+        String remDaysStr = "";
+        if(remDays > 0) remDaysStr = String.format(", %d day(s)", remDays);
+        return String.valueOf(String.format("%s weeks%s", remWeeks, remDaysStr));
     }
 
     public String getLastMenstrualPeriodStr() {

@@ -34,14 +34,11 @@
             android:layout_height="20dp"
             android:layout_margin="3dp"
             android:paddingLeft="10dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
             android:textAllCaps="false"
             android:drawableLeft="@drawable/ic_share"
             android:background="@drawable/round_shape_small_button"
             android:textColor="@color/app_social_button_text"
             android:text="@string/app_share_label"/>
-        <!--android:drawableLeft="@drawable/share"-->
 
         <Button
             android:id="@+id/app_rate"
@@ -49,8 +46,6 @@
             android:layout_height="20dp"
             android:layout_margin="3dp"
             android:paddingLeft="10dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
             android:textAllCaps="false"
             android:drawableLeft="@drawable/ic_thumb_up"
             android:background="@drawable/round_shape_small_button"
@@ -64,8 +59,6 @@
             android:layout_margin="3dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
             android:textAllCaps="false"
             android:drawableLeft="@drawable/ic_feedback"
             android:background="@drawable/round_shape_small_button"

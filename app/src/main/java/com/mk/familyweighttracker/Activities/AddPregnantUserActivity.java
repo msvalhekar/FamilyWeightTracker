@@ -72,6 +72,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     private Button mReminderDayButton;
     private View mReminderTimeSectionView;
     private Button mReminderTimeButton;
+    private Button mDeliveryDueButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,13 +91,9 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
 
         if(mUser == null) {
             mIsEditMode = false;
-            final Calendar calendar = Calendar.getInstance();
-            calendar.setTime(new Date());
-            calendar.set(calendar.get(Calendar.YEAR) - 18, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 
             mUser = new User(0);
             mUser.isMale = false;
-            mUser.dateOfBirth = calendar.getTime();
             mUser.trackingPeriod = TrackingPeriod.Week;
             mUser.enableReminder = true;
             mUser.reminderDay = 1;
@@ -110,6 +107,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         initNameControl();
         initDateOfBirthControl();
         initReminderControl();
+        initDeliveryDueDateControl();
         initActionButtonControls();
 
         setTitle(mIsEditMode ? R.string.title_activity_edit_user : R.string.title_activity_add_new_user);
@@ -123,10 +121,6 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         mNameText = ((EditText) findViewById(R.id.add_user_name_edit_text));
         mDobButton = ((Button) findViewById(R.id.add_user_dob_button));
 
-        mGenderRadioGroup = ((RadioGroup) findViewById(R.id.add_user_gender_switch));
-        mGenderMaleRdButton = ((RadioButton) findViewById(R.id.add_user_gender_male));
-        mGenderFemaleRdButton = ((RadioButton) findViewById(R.id.add_user_gender_female));
-
         mEnableReminderCkBox = ((SwitchCompat) findViewById(R.id.add_user_remind_checkbox));
         mReminderMessageButton = ((Button) findViewById(R.id.add_user_remind_message_button));
         mReminderDaySectionView = findViewById(R.id.add_user_reminder_day_section);
@@ -134,6 +128,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         mReminderDayButton = ((Button) findViewById(R.id.add_user_reminder_day_button));
         mReminderTimeSectionView = findViewById(R.id.add_user_reminder_time_section);
         mReminderTimeButton = ((Button) findViewById(R.id.add_user_reminder_time_button));
+        mDeliveryDueButton = ((Button) findViewById(R.id.add_user_delivery_due_button));
     }
 
     @Override
@@ -149,14 +144,8 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         }
         else if (requestCode == Constants.RequestCode.USER_IMAGE_CROP) {
             if (resultCode == RESULT_OK && data != null) {
-                // get the returned data
-                Bundle extras = data.getExtras();
-                if(extras != null) {
-                    // get the cropped bitmap
-                    mImageButton.setImageBitmap(BitmapFactory.decodeFile(StorageUtility.getTempImagePath()));
-                }
-//            } else {
-//                saveUserImage(mPickedImageUri);
+                // get the returned data, the cropped bitmap
+                mImageButton.setImageBitmap(BitmapFactory.decodeFile(StorageUtility.getTempImagePath()));
             }
         }
     }
@@ -195,13 +184,13 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     }
 
     private void initDateOfBirthControl() {
-        mDobButton.setText(mUser.getDateOfBirthStr(), TextView.BufferType.SPANNABLE);
+        mDobButton.setText(mUser.getDateOfBirthStr());
 
         mDobButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Calendar calendar = Calendar.getInstance();
-                calendar.setTime(mUser.dateOfBirth);
+                calendar.setTime(mUser.dateOfBirth == null ? new Date() : mUser.dateOfBirth);
 
                 new DatePickerDialog(v.getContext(),
                         new DatePickerDialog.OnDateSetListener() {
@@ -243,6 +232,35 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         mEnableReminderCkBox.setChecked(mUser.enableReminder);
         initDayOfReminderControl();
         initTimeOfReminderControl();
+    }
+
+    private void initDeliveryDueDateControl() {
+
+        mDeliveryDueButton.setText(mUser.getDeliveryDueDateStr());
+
+        mDeliveryDueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar calendar = Calendar.getInstance();
+                calendar.setTime(mUser.deliveryDueDate == null ? new Date() : mUser.deliveryDueDate);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(v.getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                Calendar newDate = Calendar.getInstance();
+                                newDate.set(year, monthOfYear, dayOfMonth, 0, 0, 0);
+
+                                mUser.deliveryDueDate = newDate.getTime();
+                                mDeliveryDueButton.setText(mUser.getDeliveryDueDateStr());
+                            }
+                        },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH));
+
+                datePickerDialog.show();
+            }
+        });
     }
 
     private void initDayOfReminderControl() {
@@ -378,9 +396,8 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         }
         finish();
 
-        String message = mIsEditMode ? "Profile updated" : "Welcome and Congratulations";
-        int toastLength = mIsEditMode ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG;
-        Toast.makeText(TrackerApplication.getApp(), message, toastLength).show();
+        String message = mIsEditMode ? getString(R.string.user_details_updated_message) : getString(R.string.user_added_message);
+        Toast.makeText(TrackerApplication.getApp(), message, Toast.LENGTH_SHORT).show();
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,
                 Constants.AnalyticsEvents.UserAdded,

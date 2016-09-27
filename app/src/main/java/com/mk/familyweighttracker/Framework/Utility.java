@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by mvalhekar on 15-04-2016.
@@ -32,6 +33,8 @@ public class Utility {
     }
 
     public static String calculateAge(Date dateOfBirth) {
+        if(dateOfBirth == null) return "-";
+
         Calendar dob = Calendar.getInstance();
         dob.setTime(dateOfBirth);
 
@@ -100,5 +103,20 @@ public class Utility {
 
     public static String getResourceString(int resourceId) {
         return TrackerApplication.getApp().getResources().getString(resourceId);
+    }
+
+    public static long calculateRemainingDays(Date deliveryDueDate) {
+        if(deliveryDueDate == null)
+            return -1;
+
+        Calendar today = Calendar.getInstance();
+        today.set(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+        Date todayDate = today.getTime();
+
+        if(deliveryDueDate.before(todayDate))
+            return 0;
+
+        long diffInMs = deliveryDueDate.getTime() - todayDate.getTime();
+        return TimeUnit.MILLISECONDS.toDays(diffInMs);
     }
 }

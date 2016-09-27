@@ -88,8 +88,7 @@
     <string name="help_record_exp_min_wt_message">Exp Min</string>
     <string name="help_record_wt_diff_against_actual_message">(v/s actual)</string>
     <string name="help_record_exp_max_wt_message">Exp Max</string>
-    <string name="AddUserLabel">Add</string>
-    <string name="slideshow_activity_title_format">%s\'s Wondrous Pregnancy</string>
+    <string name="slideshow_activity_title_format">%s\'s Wonderful Pregnancy</string>
 
     <string name="application_version_label">Application version</string>
     <string name="application_version_friendly_name_label">Codename</string>
@@ -128,12 +127,12 @@
     <string name="slideshow_week_number_format">Week %d</string>
     <string name="user_readings_not_found_message">No data found.</string>
     <string name="user_readings_add_reading_message">Add reading(s) using \'+\' button below.</string>
-    <string name="user_detail_activity_title">My Wondrous Pregnancy</string>
+    <string name="user_detail_activity_title">My Wonderful Pregnancy</string>
     <string name="background_audio_not_set_message">Background music not set.</string>
     <string name="background_audio_not_found_message">Background audio file not found. Select again.</string>
     <string name="app_share_line_1">\'Pregnancy Weight Tracker\'</string>
     <string name="app_share_line_2">\nSimple and Smart way of tracking weekly pregnancy weight gain with expected weight range suggestions.</string>
-    <string name="app_share_line_3">\n\nInterestingly, it also helps capture your memorable pregnancy moments and innovatively makes a \'My Wondrous Pregnancy\' experience.</string>
+    <string name="app_share_line_3">\n\nInterestingly, it also helps capture your memorable pregnancy moments and innovatively makes a \'My Wonderful Pregnancy\' experience.</string>
     <string name="app_share_line_4">\n\nGive it a try !!!</string>
     <string name="app_feedback_message">Please let us know your feedback about app. Like, what you like or do not like? what more feature(s) you would like to see in app? etc</string>
     <string name="app_share_label">Share</string>
@@ -141,10 +140,36 @@
     <string name="app_feedback_label">Feedback</string>
     <string name="app_feedback_thanks_message">Thank you for your valuable feedback !!!</string>
     <string name="app_feedback_hint_message">[your feedback]</string>
-    <string name="home_app_introduction_message">Smart and Simple to use. \nCapture your memorable pregnancy moments. \nExperience \'My Wondrous Pregnancy\'.</string>
+    <string name="home_app_introduction_message">Smart and Simple. \nCapture special pregnancy moments. \nExperience \'My Wonderful Pregnancy\'.</string>
     <string name="home_app_disclaimer_label">Disclaimer</string>
-    <string name="home_app_disclaimer_message">This App is for making user\'s pregnancy a wonderful experience using information and data that user provide in the App. All calculations are indicative and may not be accurate, also there can be variations from person to person. Consult your doctor for any queries. App do not share user\'s personal data outside of this app.</string>
+    <string name="home_app_disclaimer_message">This App is for making user\'s pregnancy a wonderful experience by making use of information and data that user provide in the App. The calculations are indicative and may vary from person to person. App is not approved or sponsored by medical professionals. Always raise any and all questions or concerns about your pregnancy with your doctor. App do not share user\'s personal data outside of this app.</string>
     <string name="home_app_disclaimer_ok_label">OK</string>
     <string name="notification_title">Pregnancy weekly weight</string>
     <string name="notification_message">Touch to record week %d pregnancy weight.</string>
+    <string name="delivery_due_date_label">Delivery Due Date</string>
+    <string name="delivery_remaining_days_label">Remaining</string>
+    <string name="delete_user_warning_message">User data will be lost permanently. Do you want to continue?</string>
+    <string name="delete_user_warning_title">Remove User?</string>
+    <string name="yes_label">Yes</string>
+    <string name="no_label">No</string>
+    <string name="reminder_message_format"></string>
+    <string name="value_not_set_message">Not set</string>
+
+    <string name="add_user_activity_title">Add</string>
+    <string name="add_user_reminder_text">Remind Weekly?</string>
+    <string name="add_user_name_text">Name</string>
+    <string name="add_user_dob_text">Date Of Birth</string>
+    <string name="add_user_reminder_dow_text">Day of Week</string>
+    <string name="add_user_reminder_tod_text">Time of Day</string>
+    <string name="user_details_reminder_text">Weekly Reminder</string>
+    <string name="user_detail_dob_empty_message">DOB Not Set</string>
+    <string name="user_detail_prepreg_summary_label">Pre Pregnancy Summary</string>
+    <string name="user_detail_prepreg_weight_label">Weight</string>
+    <string name="user_detail_prepreg_height_label">Height</string>
+    <string name="user_detail_prepreg_bmi_label">BMI - Category</string>
+    <string name="user_detail_prepreg_lmp_label">Last Menstrual Period</string>
+    <string name="user_detail_remove_btn_label">Remove</string>
+    <string name="user_detail_edit_btn_label">Edit</string>
+    <string name="user_details_updated_message">Profile updated</string>
+    <string name="user_added_message">Welcome and Congratulations</string>
 </resources>
