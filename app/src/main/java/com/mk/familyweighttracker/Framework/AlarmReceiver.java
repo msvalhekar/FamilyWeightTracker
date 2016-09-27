@@ -9,11 +9,15 @@ import android.content.Intent;
 import android.os.Vibrator;
 
 import com.activeandroid.ActiveAndroid;
+import com.mk.familyweighttracker.Activities.SplashActivity;
 import com.mk.familyweighttracker.HomeActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by mvalhekar on 16-05-2016.
@@ -41,7 +45,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     private void vibrateDevice() {
-        ((Vibrator) _context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(750);
+        long[] pattern = new long[]{100, 100, 100, 200, 100, 300, 100, 200, 100, 100};
+        ((Vibrator) _context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(pattern, -1);
     }
 
     private void sendReminderNotification(long userId) throws ClassNotFoundException {
@@ -55,11 +60,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         android.support.v7.app.NotificationCompat.Builder builder =
                 (android.support.v7.app.NotificationCompat.Builder) new android.support.v7.app.NotificationCompat.Builder(_context)
                 .setContentTitle(titleMessage)
-                .setSmallIcon(R.mipmap.ic_notification)
+                .setSmallIcon(R.drawable.launcher)
                 .setContentText(textMessage)
                 .setAutoCancel(true);
 
-        Intent intent = new Intent(_context, HomeActivity.class);
+        Intent intent = new Intent(_context, SplashActivity.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(_context);
         stackBuilder.addNextIntent(intent);
