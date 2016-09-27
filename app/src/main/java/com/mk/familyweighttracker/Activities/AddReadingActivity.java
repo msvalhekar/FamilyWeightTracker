@@ -152,12 +152,8 @@ public class AddReadingActivity extends TrackerBaseActivity {
         }
         else if (requestCode == Constants.RequestCode.READING_IMAGE_CROP) {
             if (resultCode == RESULT_OK && data != null) {
-                // get the returned data
-                Bundle extras = data.getExtras();
-                if(extras != null) {
-                    // get the cropped bitmap
-                    getImageButton().setImageBitmap(BitmapFactory.decodeFile(StorageUtility.getTempImagePath()));
-                }
+                // get the returned data,  the cropped bitmap
+                getImageButton().setImageBitmap(BitmapFactory.decodeFile(StorageUtility.getTempImagePath()));
             }
         }
     }
