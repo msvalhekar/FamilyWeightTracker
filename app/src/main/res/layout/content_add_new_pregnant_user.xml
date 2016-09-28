@@ -13,7 +13,8 @@
 
         <TableRow
             android:layout_weight="1"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp">
             <ImageButton
                 android:id="@+id/add_user_image_button"
                 android:layout_width="100dp"
@@ -27,7 +28,8 @@
             </ImageButton>
         </TableRow>
         <TableRow
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_marginBottom="5dp">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -43,7 +45,8 @@
                 android:hint="(nick name)"/>
         </TableRow>
         <TableRow
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_marginBottom="5dp">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -53,9 +56,11 @@
             <Button
                 android:id="@+id/add_user_dob_button"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_weight="1"
                 android:gravity="left|center"
+                android:paddingLeft="10dp"
+                android:background="@drawable/background"
                 android:text="dd/mm/yyyy" />
         </TableRow>
         <View
@@ -63,7 +68,8 @@
             style="@style/Divider"/>
         <TableRow
             android:id="@+id/add_user_delivery_due_section"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_marginBottom="5dp">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -73,14 +79,17 @@
             <Button
                 android:id="@+id/add_user_delivery_due_button"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_weight="1"
                 android:gravity="left|center"
+                android:paddingLeft="10dp"
+                android:background="@drawable/background"
                 android:text="(Due Date)" />
         </TableRow>
         <View style="@style/Divider"/>
         <TableRow
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_marginBottom="5dp">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -91,13 +100,13 @@
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/add_user_remind_checkbox"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_weight="0.3"
                 android:layout_gravity="left|center"/>
             <Button
                 android:id="@+id/add_user_remind_message_button"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_weight="0.7"
                 android:background="@android:color/transparent"
                 android:layout_gravity="left|center"
@@ -105,7 +114,8 @@
         </TableRow>
         <TableRow
             android:id="@+id/add_user_reminder_day_section"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_marginBottom="5dp">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -115,21 +125,27 @@
             <Button
                 android:id="@+id/add_user_reminder_day_button"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_weight="1"
                 android:gravity="left|center"
-                android:text="dd/mm/yyyy" />
+                android:text="SUNDAY"
+                android:paddingLeft="10dp"
+                android:background="@drawable/background"
+                />
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/add_user_reminder_day_spinner"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_gravity="left"
                 android:spinnerMode="dialog"
+                android:paddingLeft="10dp"
+                android:background="@drawable/background"
                 />
         </TableRow>
         <TableRow
             android:id="@+id/add_user_reminder_time_section"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_marginBottom="5dp">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -139,15 +155,18 @@
             <Button
                 android:id="@+id/add_user_reminder_time_button"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_weight="1"
                 android:gravity="left|center"
+                android:paddingLeft="10dp"
+                android:background="@drawable/background"
                 android:text="hh:mm" />
         </TableRow>
         <View style="@style/Divider"/>
         <TableRow
             android:id="@+id/add_user_ok_action_section"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_marginBottom="5dp">
             <Button
                 android:id="@+id/add_user_save_button"
                 android:layout_width="0dp"
@@ -158,7 +177,5 @@
                 android:textSize="25sp"
                 android:text="@string/add_user_activity_title"/>
         </TableRow>
-
-
     </TableLayout>
 </ScrollView>
