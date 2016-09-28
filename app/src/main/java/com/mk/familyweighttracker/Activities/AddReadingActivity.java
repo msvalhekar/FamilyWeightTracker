@@ -260,7 +260,9 @@ public class AddReadingActivity extends TrackerBaseActivity {
                         calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH));
 
-                datePickerDialog.getDatePicker().setMinDate(mSelectedUser.dateOfBirth.getTime());
+                if(mSelectedUser.dateOfBirth != null) {
+                    datePickerDialog.getDatePicker().setMinDate(mSelectedUser.dateOfBirth.getTime());
+                }
                 datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
                 datePickerDialog.show();
             }
