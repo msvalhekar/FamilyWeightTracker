@@ -60,7 +60,7 @@
                 android:layout_weight="1"
                 android:gravity="left|center"
                 android:paddingLeft="10dp"
-                android:background="@drawable/background"
+                android:background="@drawable/background_button"
                 android:text="dd/mm/yyyy" />
         </TableRow>
         <View
@@ -83,7 +83,7 @@
                 android:layout_weight="1"
                 android:gravity="left|center"
                 android:paddingLeft="10dp"
-                android:background="@drawable/background"
+                android:background="@drawable/background_button"
                 android:text="(Due Date)" />
         </TableRow>
         <View style="@style/Divider"/>
@@ -130,7 +130,7 @@
                 android:gravity="left|center"
                 android:text="SUNDAY"
                 android:paddingLeft="10dp"
-                android:background="@drawable/background"
+                android:background="@drawable/background_button"
                 />
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/add_user_reminder_day_spinner"
@@ -139,7 +139,7 @@
                 android:layout_gravity="left"
                 android:spinnerMode="dialog"
                 android:paddingLeft="10dp"
-                android:background="@drawable/background"
+                android:background="@drawable/background_button"
                 />
         </TableRow>
         <TableRow
@@ -159,7 +159,7 @@
                 android:layout_weight="1"
                 android:gravity="left|center"
                 android:paddingLeft="10dp"
-                android:background="@drawable/background"
+                android:background="@drawable/background_button"
                 android:text="hh:mm" />
         </TableRow>
         <View style="@style/Divider"/>

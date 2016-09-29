@@ -68,7 +68,7 @@
                     android:layout_height="70dp"
                     android:scaleType="fitCenter"
                     android:gravity="start"
-                    android:background="@drawable/background">
+                    android:background="@drawable/background_button">
                 </ImageButton>
             </TableRow>
             <TableRow
@@ -89,7 +89,7 @@
                     android:layout_weight="1"
                     android:gravity="left|center"
                     android:paddingLeft="10dp"
-                    android:background="@drawable/background"
+                    android:background="@drawable/background_button"
                     android:text="@string/add_user_reading_date_default_value" />
             </TableRow>
             <TableRow
@@ -109,7 +109,7 @@
                     android:layout_weight="1"
                     android:gravity="left|center"
                     android:paddingLeft="10dp"
-                    android:background="@drawable/background"
+                    android:background="@drawable/background_button"
                     android:text="@string/add_user_reading_period_default_value" />
             </TableRow>
             <TableRow
@@ -176,7 +176,7 @@
                     android:layout_weight="0.75"
                     android:gravity="left|center"
                     android:paddingLeft="10dp"
-                    android:background="@drawable/background"
+                    android:background="@drawable/background_button"
                     android:text="@string/add_user_reading_weight_default_value" />
                 <TextView
                     android:id="@+id/add_reading_weight_unit_value"
@@ -251,7 +251,7 @@
                     android:layout_weight="0.75"
                     android:gravity="left|center"
                     android:paddingLeft="10dp"
-                    android:background="@drawable/background"
+                    android:background="@drawable/background_button"
                     android:text="@string/add_user_reading_height_default_value" />
                 <TextView
                     android:id="@+id/add_reading_height_unit_value"
