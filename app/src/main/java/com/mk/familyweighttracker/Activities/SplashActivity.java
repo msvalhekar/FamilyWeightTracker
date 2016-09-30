@@ -57,7 +57,7 @@ public class SplashActivity extends AppCompatActivity {
         if(StringHelper.isNullOrEmpty(appVersion)) {
             versionTv.setVisibility(View.GONE);
         } else {
-            versionTv.setText(appVersion);
+            versionTv.setText(String.format(getString(R.string.splash_activity_version_format), appVersion));
             versionTv.setVisibility(View.VISIBLE);
         }
     }
