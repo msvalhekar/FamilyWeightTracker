@@ -328,7 +328,7 @@ public class UsersListActivity extends TrackerBaseActivity {
                     imageView.setImageBitmap(ImageUtility.getCircularBitmap(bitmap));
                 } else {
                     if (mContactDefaultBitmap == null) {
-                        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.contact_default);
+                        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.splash);
                         mContactDefaultBitmap = ImageUtility.getCircularBitmap(bitmap);
                     }
                     imageView.setImageBitmap(mContactDefaultBitmap);

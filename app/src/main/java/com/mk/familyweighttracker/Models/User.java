@@ -216,7 +216,7 @@ public class User {
         if (bitmap != null)
             return circular ? ImageUtility.getCircularBitmap(bitmap) : bitmap;
 
-        bitmap = BitmapFactory.decodeResource(TrackerApplication.getApp().getResources(), R.drawable.contact_default);
+        bitmap = BitmapFactory.decodeResource(TrackerApplication.getApp().getResources(), R.drawable.splash);
         return circular ? ImageUtility.getCircularBitmap(bitmap) : bitmap;
     }
 

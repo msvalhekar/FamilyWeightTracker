@@ -33,7 +33,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_gravity="center"
                 android:scaleType="centerInside"
-                android:src="@drawable/contact_default"
+                android:src="@drawable/splash"
                 android:layout_rowSpan="3"
                 android:layout_column="0"/>
 
