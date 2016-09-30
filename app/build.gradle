@@ -28,10 +28,10 @@ def computeApkName(variant) {
 }
 
 def getAppVersionName() {
-    def major = (int)(getAppVersionCode() / 100)
-    def minor = (int)((getAppVersionCode() % 100) / 10)
+    def major = (int) (getAppVersionCode() / 100)
+    def minor = (int) ((getAppVersionCode() % 100) / 10)
 
-    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd")
+    SimpleDateFormat format = new SimpleDateFormat("yyMMdd")
     return String.format("%s.%s.%s", major, minor, format.format(new Date()))
 }
 
