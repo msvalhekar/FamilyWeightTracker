@@ -15,17 +15,32 @@
             android:layout_weight="1"
             android:layout_gravity="center"
             android:layout_marginBottom="5dp">
-            <ImageButton
-                android:id="@+id/add_user_image_button"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_weight="2"
-                android:scaleType="fitCenter"
                 android:gravity="center"
-                android:src="@drawable/contact_default"
-                android:background="@android:color/transparent"
-                android:layout_span="3">
-            </ImageButton>
+                >
+                <ImageButton
+                    android:id="@+id/add_user_image_button"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="2"
+                    android:scaleType="fitCenter"
+                    android:gravity="center"
+                    android:src="@drawable/splash"
+                    android:background="@android:color/transparent"
+                    android:layout_span="3">
+                </ImageButton>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:textSize="10dp"
+                    android:text="@string/add_user_reading_bump_desc_label"/>
+            </LinearLayout>
         </TableRow>
         <TableRow
             android:layout_weight="1"
