@@ -3,5 +3,5 @@
     <solid android:color="@android:color/transparent" android:angle="270"/>
     <stroke
         android:width="3dp"
-        android:color="#9A0396" />
+        android:color="@color/negative_button_color" />
 </shape>
