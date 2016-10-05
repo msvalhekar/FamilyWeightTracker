@@ -14,7 +14,7 @@ apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
 
 def getAppVersionCode() {
-    return 121
+    return 122
 }
 
 def computeApkName(variant) {
