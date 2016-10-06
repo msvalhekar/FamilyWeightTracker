@@ -2,10 +2,6 @@ package com.mk.familyweighttracker.Framework;
 
 import com.google.android.gms.analytics.HitBuilders;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 /**
  * Created by mvalhekar on 03-08-2016.
  */

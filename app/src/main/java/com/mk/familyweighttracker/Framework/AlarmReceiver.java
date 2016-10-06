@@ -10,14 +10,10 @@ import android.os.Vibrator;
 
 import com.activeandroid.ActiveAndroid;
 import com.mk.familyweighttracker.Activities.SplashActivity;
-import com.mk.familyweighttracker.HomeActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by mvalhekar on 16-05-2016.

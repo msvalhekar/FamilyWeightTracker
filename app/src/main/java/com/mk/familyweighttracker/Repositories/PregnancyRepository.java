@@ -3,7 +3,6 @@ package com.mk.familyweighttracker.Repositories;
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.Utility;
-import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.WeekWeightGainRange;
 
 import java.util.ArrayList;

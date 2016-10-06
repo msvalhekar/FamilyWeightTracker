@@ -1,21 +1,13 @@
 package com.mk.familyweighttracker.Framework;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Vibrator;
 
 import com.activeandroid.ActiveAndroid;
-import com.mk.familyweighttracker.HomeActivity;
 import com.mk.familyweighttracker.Models.User;
-import com.mk.familyweighttracker.Models.UserReading;
-import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
-import java.util.Date;
 import java.util.List;
 
 /**

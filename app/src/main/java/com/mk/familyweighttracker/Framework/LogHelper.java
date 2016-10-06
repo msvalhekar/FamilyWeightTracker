@@ -1,16 +1,9 @@
 package com.mk.familyweighttracker.Framework;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.widget.Toast;
-
-import com.activeandroid.ActiveAndroid;
-import com.mk.familyweighttracker.Models.User;
-import com.mk.familyweighttracker.R;
-import com.mk.familyweighttracker.Services.UserService;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -23,7 +16,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;

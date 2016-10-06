@@ -2,16 +2,12 @@ package com.mk.familyweighttracker.Models;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.provider.MediaStore;
 
-import com.activeandroid.annotation.Column;
 import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Framework.StorageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.R;
 
-import java.io.IOException;
 import java.util.Date;
 
 /**

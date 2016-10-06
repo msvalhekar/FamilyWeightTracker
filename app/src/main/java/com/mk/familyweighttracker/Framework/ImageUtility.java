@@ -30,8 +30,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mk.familyweighttracker.Enums.HeightUnit;
-import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.R;
 
 import java.io.ByteArrayOutputStream;
@@ -39,9 +37,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**

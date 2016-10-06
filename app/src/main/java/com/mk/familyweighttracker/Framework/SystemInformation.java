@@ -11,9 +11,6 @@ import android.os.StatFs;
 
 import com.mk.familyweighttracker.R;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 
