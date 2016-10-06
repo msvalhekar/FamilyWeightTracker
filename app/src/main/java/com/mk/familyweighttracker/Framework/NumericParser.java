@@ -3,7 +3,7 @@ package com.mk.familyweighttracker.Framework;
 /**
  * Created by mvalhekar on 04-09-2016.
  */
-public class WeightParser {
+public class NumericParser {
     public static final int HUNDREDTHS_PLACE = 0;
     public static final int TENTHS_PLACE = 1;
     public static final int ONES_PLACE = 2;
@@ -16,7 +16,7 @@ public class WeightParser {
     public int TensValue;
     public int HundredsValue;
 
-    public WeightParser(double number){
+    public NumericParser(double number){
         number *= 100;
         HundredsValue = (int)number / 10000;
         number %= 10000;
@@ -39,11 +39,11 @@ public class WeightParser {
 
     public void setValue(int id, int newValue) {
         switch (id) {
-            case WeightParser.HUNDREDTHS_PLACE: HundredthsValue = newValue; break;
-            case WeightParser.TENTHS_PLACE: TenthsValue = newValue; break;
-            case WeightParser.ONES_PLACE: OnesValue = newValue; break;
-            case WeightParser.TENS_PLACE: TensValue = newValue; break;
-            case WeightParser.HUNDREDS_PLACE: HundredsValue = newValue; break;
+            case NumericParser.HUNDREDTHS_PLACE: HundredthsValue = newValue; break;
+            case NumericParser.TENTHS_PLACE: TenthsValue = newValue; break;
+            case NumericParser.ONES_PLACE: OnesValue = newValue; break;
+            case NumericParser.TENS_PLACE: TensValue = newValue; break;
+            case NumericParser.HUNDREDS_PLACE: HundredsValue = newValue; break;
         }
     }
 }

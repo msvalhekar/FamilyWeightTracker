@@ -38,7 +38,7 @@ import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Framework.StorageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
-import com.mk.familyweighttracker.Framework.WeightParser;
+import com.mk.familyweighttracker.Framework.NumericParser;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
@@ -58,8 +58,8 @@ public class AddReadingActivity extends TrackerBaseActivity {
     private User mSelectedUser;
     private UserReading mUserReadingToProcess;
     private double mNewHeightValue;
-    private WeightParser mNewWeightParser;
-    private WeightParser mNewHeightParser;
+    private NumericParser mNewWeightParser;
+    private NumericParser mNewHeightParser;
     private Long mNewSequenceValue;
     private View activityView;
     TextView mWeightDialogTitleView;
@@ -421,11 +421,11 @@ public class AddReadingActivity extends TrackerBaseActivity {
         ((TextView) findViewById(R.id.add_reading_weight_label))
                 .setText(String.format("%s *", getString(R.string.add_user_reading_weight_label)));
 
-        final NumberPicker hundredthsPicker = getWeightSequenceControl(WeightParser.HUNDREDTHS_PLACE);
-        final NumberPicker tenthsPicker = getWeightSequenceControl(WeightParser.TENTHS_PLACE);
-        final NumberPicker onesPicker = getWeightSequenceControl(WeightParser.ONES_PLACE);
-        final NumberPicker tensPicker = getWeightSequenceControl(WeightParser.TENS_PLACE);
-        final NumberPicker hundredsPicker = getWeightSequenceControl(WeightParser.HUNDREDS_PLACE);
+        final NumberPicker hundredthsPicker = getWeightSequenceControl(NumericParser.HUNDREDTHS_PLACE);
+        final NumberPicker tenthsPicker = getWeightSequenceControl(NumericParser.TENTHS_PLACE);
+        final NumberPicker onesPicker = getWeightSequenceControl(NumericParser.ONES_PLACE);
+        final NumberPicker tensPicker = getWeightSequenceControl(NumericParser.TENS_PLACE);
+        final NumberPicker hundredsPicker = getWeightSequenceControl(NumericParser.HUNDREDS_PLACE);
 
         ((TextView) findViewById(R.id.add_reading_weight_unit_value)).setText(mSelectedUser.weightUnit.toString());
 
@@ -438,7 +438,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
                 LinearLayout layout = new LinearLayout(v.getContext());
                 layout.setOrientation(LinearLayout.HORIZONTAL);
 
-                mNewWeightParser = new WeightParser(mUserReadingToProcess.Weight);
+                mNewWeightParser = new NumericParser(mUserReadingToProcess.Weight);
 
                 setWeightControl(layout, hundredsPicker, Integer.toString(mNewWeightParser.HundredsValue));
                 setWeightControl(layout, tensPicker, Integer.toString(mNewWeightParser.TensValue));
@@ -486,7 +486,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         TextView textView = new TextView(activityView.getContext());
         textView.setText(" ");
         int id = numberPicker.getId();
-        if(id == WeightParser.ONES_PLACE) {
+        if(id == NumericParser.ONES_PLACE) {
             textView.setText(Html.fromHtml("<big>.</big>"));
             numberPicker.measure(0, 0);
             textView.setHeight(numberPicker.getMeasuredHeight());
@@ -559,10 +559,10 @@ public class AddReadingActivity extends TrackerBaseActivity {
         ((TextView) findViewById(R.id.add_reading_height_label))
                 .setText(String.format("%s *", getString(R.string.add_user_reading_height_label)));
 
-        final NumberPicker tenthsPicker = getHeightSequenceControl(WeightParser.TENTHS_PLACE);
-        final NumberPicker onesPicker = getHeightSequenceControl(WeightParser.ONES_PLACE);
-        final NumberPicker tensPicker = getHeightSequenceControl(WeightParser.TENS_PLACE);
-        final NumberPicker hundredsPicker = getHeightSequenceControl(WeightParser.HUNDREDS_PLACE);
+        final NumberPicker tenthsPicker = getHeightSequenceControl(NumericParser.TENTHS_PLACE);
+        final NumberPicker onesPicker = getHeightSequenceControl(NumericParser.ONES_PLACE);
+        final NumberPicker tensPicker = getHeightSequenceControl(NumericParser.TENS_PLACE);
+        final NumberPicker hundredsPicker = getHeightSequenceControl(NumericParser.HUNDREDS_PLACE);
 
         ((TextView) findViewById(R.id.add_reading_height_unit_value)).setText(mSelectedUser.heightUnit.toString());
 
@@ -575,7 +575,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
                 LinearLayout layout = new LinearLayout(v.getContext());
                 layout.setOrientation(LinearLayout.HORIZONTAL);
 
-                mNewHeightParser = new WeightParser(mUserReadingToProcess.Height);
+                mNewHeightParser = new NumericParser(mUserReadingToProcess.Height);
 
                 setWeightControl(layout, hundredsPicker, Integer.toString(mNewHeightParser.HundredsValue));
                 setWeightControl(layout, tensPicker, Integer.toString(mNewHeightParser.TensValue));
