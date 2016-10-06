@@ -16,7 +16,6 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,9 +59,11 @@ public class AddReadingActivity extends TrackerBaseActivity {
     private UserReading mUserReadingToProcess;
     private double mNewHeightValue;
     private WeightParser mNewWeightParser;
+    private WeightParser mNewHeightParser;
     private Long mNewSequenceValue;
     private View activityView;
     TextView mWeightDialogTitleView;
+    TextView mHeightDialogTitleView;
     ImageUtility.CropDetail cropDetail = new ImageUtility.CropDetail(600, 800, 3, 4);
 
     private ImageButton getImageButton() {
@@ -115,7 +116,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         initWeightSequenceControl();
         initWeightUnitControl();
         initHeightUnitControl();
-        initHeightSequenceControl(mUserReadingToProcess.Height);
+        initHeightSequenceControl();
         initActionButtonControls();
     }
 
@@ -260,7 +261,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
                         calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH));
 
-                if(mSelectedUser.dateOfBirth != null) {
+                if (mSelectedUser.dateOfBirth != null) {
                     datePickerDialog.getDatePicker().setMinDate(mSelectedUser.dateOfBirth.getTime());
                 }
                 datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
@@ -277,7 +278,8 @@ public class AddReadingActivity extends TrackerBaseActivity {
         noteView.setHint(Html.fromHtml(getString(R.string.ReadingNoteHintMessage)));
         noteView.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -285,7 +287,8 @@ public class AddReadingActivity extends TrackerBaseActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
     }
 
@@ -390,11 +393,13 @@ public class AddReadingActivity extends TrackerBaseActivity {
     }
 
     private void initWeightUnitControl() {
+        findViewById(R.id.add_reading_weight_section_divider).setVisibility(View.GONE);
         findViewById(R.id.add_reading_weight_unit_section).setVisibility(View.GONE);
         if(!mUserReadingToProcess.isFirstReading()) return;
 
         if(mSelectedUser.getReadingsCount() > 1) return; // dont allow to change unit if other readings are added
 
+        findViewById(R.id.add_reading_weight_section_divider).setVisibility(View.VISIBLE);
         findViewById(R.id.add_reading_weight_unit_section).setVisibility(View.VISIBLE);
 
         ((RadioGroup) activityView.findViewById(R.id.add_reading_weight_unit_switch))
@@ -416,11 +421,11 @@ public class AddReadingActivity extends TrackerBaseActivity {
         ((TextView) findViewById(R.id.add_reading_weight_label))
                 .setText(String.format("%s *", getString(R.string.add_user_reading_weight_label)));
 
-        final NumberPicker twoPlacesAfterDecimalPicker = getWeightSequenceControl(WeightParser.TWO_PLACES_AFTER_DECIMAL);
-        final NumberPicker onePlacesAfterDecimalPicker = getWeightSequenceControl(WeightParser.ONE_PLACE_AFTER_DECIMAL);
-        final NumberPicker onePlaceB4DecimalPicker = getWeightSequenceControl(WeightParser.ONE_PLACE_BEFORE_DECIMAL);
-        final NumberPicker twoPlacesB4DecimalPicker = getWeightSequenceControl(WeightParser.TWO_PLACES_BEFORE_DECIMAL);
-        final NumberPicker threePlacesB4DecimalPicker = getWeightSequenceControl(WeightParser.THREE_PLACES_BEFORE_DECIMAL);
+        final NumberPicker hundredthsPicker = getWeightSequenceControl(WeightParser.HUNDREDTHS_PLACE);
+        final NumberPicker tenthsPicker = getWeightSequenceControl(WeightParser.TENTHS_PLACE);
+        final NumberPicker onesPicker = getWeightSequenceControl(WeightParser.ONES_PLACE);
+        final NumberPicker tensPicker = getWeightSequenceControl(WeightParser.TENS_PLACE);
+        final NumberPicker hundredsPicker = getWeightSequenceControl(WeightParser.HUNDREDS_PLACE);
 
         ((TextView) findViewById(R.id.add_reading_weight_unit_value)).setText(mSelectedUser.weightUnit.toString());
 
@@ -435,22 +440,22 @@ public class AddReadingActivity extends TrackerBaseActivity {
 
                 mNewWeightParser = new WeightParser(mUserReadingToProcess.Weight);
 
-                setWeightControl(layout, threePlacesB4DecimalPicker, Integer.toString(mNewWeightParser.ThreePlacesBeforeDecimal));
-                setWeightControl(layout, twoPlacesB4DecimalPicker, Integer.toString(mNewWeightParser.TwoPlacesBeforeDecimal));
-                setWeightControl(layout, onePlaceB4DecimalPicker, Integer.toString(mNewWeightParser.OnePlaceBeforeDecimal));
-                setWeightControl(layout, onePlacesAfterDecimalPicker, Integer.toString(mNewWeightParser.OnePlaceAfterDecimal));
-                setWeightControl(layout, twoPlacesAfterDecimalPicker, Integer.toString(mNewWeightParser.TwoPlacesAfterDecimal));
+                setWeightControl(layout, hundredsPicker, Integer.toString(mNewWeightParser.HundredsValue));
+                setWeightControl(layout, tensPicker, Integer.toString(mNewWeightParser.TensValue));
+                setWeightControl(layout, onesPicker, Integer.toString(mNewWeightParser.OnesValue));
+                setWeightControl(layout, tenthsPicker, Integer.toString(mNewWeightParser.TenthsValue));
+                setWeightControl(layout, hundredthsPicker, Integer.toString(mNewWeightParser.HundredthsValue));
 
                 layout.setHorizontalGravity(Gravity.CENTER);
 
                 AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
                         .setView(layout)
                         .setCancelable(false)
-                        .setMessage(String.format("Weight (%.2f %s)", mNewWeightParser.getWeight(), mSelectedUser.weightUnit.toString()))
+                        .setMessage(String.format("Weight (%.2f %s)", mNewWeightParser.getNumber(), mSelectedUser.weightUnit.toString()))
                         .setPositiveButton("SET", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mUserReadingToProcess.Weight = mNewWeightParser.getWeight();
+                                mUserReadingToProcess.Weight = mNewWeightParser.getNumber();
                                 ((Button) findViewById(R.id.add_reading_weight_btn))
                                         .setText(String.format("%.2f", mUserReadingToProcess.Weight));
                             }
@@ -481,7 +486,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         TextView textView = new TextView(activityView.getContext());
         textView.setText(" ");
         int id = numberPicker.getId();
-        if(id == WeightParser.ONE_PLACE_BEFORE_DECIMAL) {
+        if(id == WeightParser.ONES_PLACE) {
             textView.setText(Html.fromHtml("<big>.</big>"));
             numberPicker.measure(0, 0);
             textView.setHeight(numberPicker.getMeasuredHeight());
@@ -515,7 +520,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
                 mWeightDialogTitleView.setText(Html.fromHtml(
                         String.format("%s (<font color='blue'>%.2f</font> %s)",
                                 getString(R.string.add_user_reading_weight_label),
-                                mNewWeightParser.getWeight(),
+                                mNewWeightParser.getNumber(),
                                 mSelectedUser.weightUnit.toString())));
             }
         });
@@ -524,11 +529,15 @@ public class AddReadingActivity extends TrackerBaseActivity {
     }
 
     private void initHeightUnitControl() {
+        findViewById(R.id.add_reading_height_section_divider).setVisibility(View.GONE);
+        findViewById(R.id.add_reading_note_section_divider).setVisibility(View.GONE);
         findViewById(R.id.add_reading_height_unit_section).setVisibility(View.GONE);
         if(!mUserReadingToProcess.isFirstReading()) return;
 
         if(mSelectedUser.getReadingsCount() > 1) return; // dont allow to change unit if other readings are added
 
+        findViewById(R.id.add_reading_height_section_divider).setVisibility(View.VISIBLE);
+        findViewById(R.id.add_reading_note_section_divider).setVisibility(View.VISIBLE);
         findViewById(R.id.add_reading_height_unit_section).setVisibility(View.VISIBLE);
 
         ((RadioGroup) activityView.findViewById(R.id.add_reading_height_unit_switch))
@@ -546,74 +555,66 @@ public class AddReadingActivity extends TrackerBaseActivity {
                 .setChecked(true);
     }
 
-    private void initHeightSequenceControl(double lastReading) {
-        String heightLabel = getString(R.string.add_user_reading_height_label);
+    private void initHeightSequenceControl() {
         ((TextView) findViewById(R.id.add_reading_height_label))
-                .setText(mUserReadingToProcess.isFirstReading() ? String.format("%s *", heightLabel) : heightLabel);
+                .setText(String.format("%s *", getString(R.string.add_user_reading_height_label)));
 
-        final NumberPicker valuePicker = getHeightSequenceControl(lastReading);
+        final NumberPicker tenthsPicker = getHeightSequenceControl(WeightParser.TENTHS_PLACE);
+        final NumberPicker onesPicker = getHeightSequenceControl(WeightParser.ONES_PLACE);
+        final NumberPicker tensPicker = getHeightSequenceControl(WeightParser.TENS_PLACE);
+        final NumberPicker hundredsPicker = getHeightSequenceControl(WeightParser.HUNDREDS_PLACE);
 
         ((TextView) findViewById(R.id.add_reading_height_unit_value)).setText(mSelectedUser.heightUnit.toString());
 
         final Button buttonView = ((Button) findViewById(R.id.add_reading_height_btn));
-        buttonView.setText(String.format("%.1f", mUserReadingToProcess.Height));
+        buttonView.setText(String.format("%.2f", mUserReadingToProcess.Height));
 
         buttonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int indexOfNextValue = Arrays.asList(valuePicker.getDisplayedValues()).indexOf(String.format("%.1f", mUserReadingToProcess.Height));
-                valuePicker.setValue(indexOfNextValue);
-
                 LinearLayout layout = new LinearLayout(v.getContext());
-                layout.setOrientation(LinearLayout.VERTICAL);
+                layout.setOrientation(LinearLayout.HORIZONTAL);
 
-                if (valuePicker.getParent() != null)
-                    ((ViewGroup) valuePicker.getParent()).removeView(valuePicker);
-                layout.addView(valuePicker);
+                mNewHeightParser = new WeightParser(mUserReadingToProcess.Height);
 
-                ViewGroup.LayoutParams params = valuePicker.getLayoutParams();
-                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                valuePicker.setLayoutParams(params);
+                setWeightControl(layout, hundredsPicker, Integer.toString(mNewHeightParser.HundredsValue));
+                setWeightControl(layout, tensPicker, Integer.toString(mNewHeightParser.TensValue));
+                setWeightControl(layout, onesPicker, Integer.toString(mNewHeightParser.OnesValue));
+                setWeightControl(layout, tenthsPicker, Integer.toString(mNewHeightParser.TenthsValue));
+
                 layout.setHorizontalGravity(Gravity.CENTER);
 
                 AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
                         .setView(layout)
                         .setCancelable(false)
-                        .setMessage("Height (" + mSelectedUser.heightUnit.toString() + ")")
+                        .setMessage(String.format("Height (%.2f %s)", mNewHeightParser.getNumber(), mSelectedUser.heightUnit.toString()))
                         .setPositiveButton("SET", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mUserReadingToProcess.Height = mNewHeightValue;
+                                mUserReadingToProcess.Height = mNewHeightParser.getNumber();
                                 ((Button) findViewById(R.id.add_reading_height_btn))
-                                        .setText(String.format("%.1f", mUserReadingToProcess.Height));
+                                        .setText(String.format("%.2f", mUserReadingToProcess.Height));
                             }
                         })
                         .setNegativeButton("Cancel", null)
                         .create();
                 alertDialog.show();
 
-                TextView messageView = (TextView) alertDialog.findViewById(android.R.id.message);
-                if (messageView != null)
-                    messageView.setGravity(Gravity.CENTER);
+                mHeightDialogTitleView = (TextView) alertDialog.findViewById(android.R.id.message);
+                if (mHeightDialogTitleView != null)
+                    mHeightDialogTitleView.setGravity(Gravity.CENTER);
             }
         });
     }
 
-    private NumberPicker getHeightSequenceControl(double lastReading) {
+    private NumberPicker getHeightSequenceControl(int id) {
         NumberPicker picker = new NumberPicker(activityView.getContext());
+        picker.setId(id);
         picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
-        double startFrom = lastReading - 15;
-        double endAt = lastReading + 15;
-        final double incrementFactor = 0.5;
-
         final List<String> itemsToDisplay = new ArrayList<>();
-        for (double seqValue = lastReading; seqValue >= startFrom; seqValue -= incrementFactor) {
-            itemsToDisplay.add(0, String.format("%.1f", seqValue));
-        }
-        for (double seqValue = lastReading + incrementFactor; seqValue <= endAt; seqValue += incrementFactor) {
-            itemsToDisplay.add(String.format("%.1f", seqValue));
+        for (int seqValue = 0; seqValue < 10; seqValue ++) {
+            itemsToDisplay.add(seqValue, Integer.toString(seqValue));
         }
 
         String[] values = itemsToDisplay.toArray(new String[itemsToDisplay.size()]);
@@ -625,7 +626,13 @@ public class AddReadingActivity extends TrackerBaseActivity {
         picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                mNewHeightValue = Double.valueOf(itemsToDisplay.get(newVal));
+                int newValue = Integer.valueOf(itemsToDisplay.get(newVal));
+                mNewHeightParser.setValue(picker.getId(), newValue);
+                mHeightDialogTitleView.setText(Html.fromHtml(
+                        String.format("%s (<font color='blue'>%.2f</font> %s)",
+                                getString(R.string.add_user_reading_height_label),
+                                mNewHeightParser.getNumber(),
+                                mSelectedUser.heightUnit.toString())));
             }
         });
 

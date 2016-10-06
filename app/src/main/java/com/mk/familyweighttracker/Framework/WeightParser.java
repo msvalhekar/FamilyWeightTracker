@@ -4,46 +4,46 @@ package com.mk.familyweighttracker.Framework;
  * Created by mvalhekar on 04-09-2016.
  */
 public class WeightParser {
-    public static final int TWO_PLACES_AFTER_DECIMAL = 0;
-    public static final int ONE_PLACE_AFTER_DECIMAL = 1;
-    public static final int ONE_PLACE_BEFORE_DECIMAL = 2;
-    public static final int TWO_PLACES_BEFORE_DECIMAL = 3;
-    public static final int THREE_PLACES_BEFORE_DECIMAL = 4;
+    public static final int HUNDREDTHS_PLACE = 0;
+    public static final int TENTHS_PLACE = 1;
+    public static final int ONES_PLACE = 2;
+    public static final int TENS_PLACE = 3;
+    public static final int HUNDREDS_PLACE = 4;
 
-    public int TwoPlacesAfterDecimal;
-    public int OnePlaceAfterDecimal;
-    public int OnePlaceBeforeDecimal;
-    public int TwoPlacesBeforeDecimal;
-    public int ThreePlacesBeforeDecimal;
+    public int HundredthsValue;
+    public int TenthsValue;
+    public int OnesValue;
+    public int TensValue;
+    public int HundredsValue;
 
-    public WeightParser(double weight){
-        weight *= 100;
-        ThreePlacesBeforeDecimal = (int)weight / 10000;
-        weight %= 10000;
-        TwoPlacesBeforeDecimal = (int)weight / 1000;
-        weight %= 1000;
-        OnePlaceBeforeDecimal = (int)weight / 100;
-        weight %= 100;
-        OnePlaceAfterDecimal = (int)weight / 10;
-        weight %= 10;
-        TwoPlacesAfterDecimal = (int)weight;
+    public WeightParser(double number){
+        number *= 100;
+        HundredsValue = (int)number / 10000;
+        number %= 10000;
+        TensValue = (int)number / 1000;
+        number %= 1000;
+        OnesValue = (int)number / 100;
+        number %= 100;
+        TenthsValue = (int)number / 10;
+        number %= 10;
+        HundredthsValue = (int)number;
     }
 
-    public double getWeight() {
-        return TwoPlacesAfterDecimal * 0.01
-                + OnePlaceAfterDecimal * 0.1
-                + OnePlaceBeforeDecimal * 1.0
-                + TwoPlacesBeforeDecimal * 10.0
-                + ThreePlacesBeforeDecimal * 100.0;
+    public double getNumber() {
+        return HundredthsValue * 0.01
+                + TenthsValue * 0.1
+                + OnesValue * 1.0
+                + TensValue * 10.0
+                + HundredsValue * 100.0;
     }
 
     public void setValue(int id, int newValue) {
         switch (id) {
-            case WeightParser.TWO_PLACES_AFTER_DECIMAL: TwoPlacesAfterDecimal = newValue; break;
-            case WeightParser.ONE_PLACE_AFTER_DECIMAL: OnePlaceAfterDecimal = newValue; break;
-            case WeightParser.ONE_PLACE_BEFORE_DECIMAL: OnePlaceBeforeDecimal = newValue; break;
-            case WeightParser.TWO_PLACES_BEFORE_DECIMAL: TwoPlacesBeforeDecimal = newValue; break;
-            case WeightParser.THREE_PLACES_BEFORE_DECIMAL: ThreePlacesBeforeDecimal = newValue; break;
+            case WeightParser.HUNDREDTHS_PLACE: HundredthsValue = newValue; break;
+            case WeightParser.TENTHS_PLACE: TenthsValue = newValue; break;
+            case WeightParser.ONES_PLACE: OnesValue = newValue; break;
+            case WeightParser.TENS_PLACE: TensValue = newValue; break;
+            case WeightParser.HUNDREDS_PLACE: HundredsValue = newValue; break;
         }
     }
 }

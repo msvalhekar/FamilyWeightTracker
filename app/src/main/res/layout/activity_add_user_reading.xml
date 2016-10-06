@@ -112,6 +112,9 @@
                     android:background="@drawable/background_button"
                     android:text="@string/add_user_reading_period_default_value" />
             </TableRow>
+            <View
+                android:id="@+id/add_reading_weight_section_divider"
+                style="@style/Divider"/>
             <TableRow
                 android:id="@+id/add_reading_weight_unit_section"
                 android:layout_weight="1"
@@ -186,6 +189,9 @@
                     android:textStyle="bold"
                     android:text="@string/add_user_reading_weight_unit_value"/>
             </TableRow>
+            <View
+                android:id="@+id/add_reading_height_section_divider"
+                style="@style/Divider"/>
             <TableRow
                 android:id="@+id/add_reading_height_unit_section"
                 android:layout_weight="1"
@@ -261,6 +267,9 @@
                     android:textStyle="bold"
                     android:text="@string/add_user_reading_height_unit_value"/>
             </TableRow>
+            <View
+                android:id="@+id/add_reading_note_section_divider"
+                style="@style/Divider"/>
             <TableRow
                 android:id="@+id/add_reading_note_section"
                 android:layout_weight="1"
