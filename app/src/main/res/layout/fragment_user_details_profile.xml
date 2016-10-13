@@ -47,8 +47,28 @@
             </LinearLayout>
         </TableRow>
         <View
-            android:id="@+id/view_user_delivery_due_divider"
+            android:id="@+id/view_user_delivery_section_divider"
             style="@style/Divider"/>
+        <TableRow
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:id="@+id/view_user_delivery_twins_section"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:gravity="left|center"
+                android:text="@string/delivery_have_twins_label"/>
+            <TextView
+                android:id="@+id/view_user_delivery_twins"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:text="{haveTwins}" />
+        </TableRow>
         <TableRow
             android:layout_weight="1"
             android:layout_margin="5dp"

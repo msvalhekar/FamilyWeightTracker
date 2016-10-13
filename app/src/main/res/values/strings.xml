@@ -147,6 +147,9 @@
     <string name="notification_title">Pregnancy weekly weight</string>
     <string name="notification_message">Touch to record week %d pregnancy weight.</string>
     <string name="delivery_due_date_label">Delivery Due Date</string>
+    <string name="delivery_have_twins_label">Pregnant with twins?</string>
+    <string name="add_user_have_twins_no">No</string>
+    <string name="add_user_have_twins_yes">Yes</string>
     <string name="delivery_remaining_days_label">Remaining</string>
     <string name="delete_user_warning_message">User data will be lost permanently. Do you want to continue?</string>
     <string name="delete_user_warning_title">Remove User?</string>

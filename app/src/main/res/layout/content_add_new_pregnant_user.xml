@@ -79,8 +79,34 @@
                 android:text="dd/mm/yyyy" />
         </TableRow>
         <View
-            android:id="@+id/add_user_delivery_due_divider"
+            android:id="@+id/add_user_delivery_section_divider"
             style="@style/Divider"/>
+        <TableRow
+            android:id="@+id/add_user_delivery_twins_section"
+            android:layout_weight="1"
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:text="@string/delivery_have_twins_label"/>
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/add_user_have_twins_checkbox"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="0.3"
+                android:layout_gravity="left|center"/>
+            <Button
+                android:id="@+id/add_user_have_twins_button"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="0.7"
+                android:background="@android:color/transparent"
+                android:layout_gravity="left|center"
+                android:text="@string/add_user_have_twins_no"/>
+        </TableRow>
         <TableRow
             android:id="@+id/add_user_delivery_due_section"
             android:layout_weight="1"

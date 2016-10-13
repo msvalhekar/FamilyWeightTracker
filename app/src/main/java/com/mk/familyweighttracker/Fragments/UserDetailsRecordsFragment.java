@@ -196,7 +196,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         if(baseWeight == 0) return;
 
         mWeekWeightGainRangeList = new PregnancyService()
-            .getWeightGainTableFor(baseWeight, mSelectedUser.getWeightCategory(), mSelectedUser.weightUnit);
+            .getWeightGainTableFor(baseWeight, mSelectedUser.getWeightCategory(), mSelectedUser.weightUnit, mSelectedUser.haveTwins);
     }
 
     private WeekWeightGainRange getWeightGainTableFor(long weekNumber) {

@@ -43,6 +43,9 @@ public class UserModel extends Model {
     @Column(name = "HeightUnit")
     private HeightUnit heightUnit;
 
+    @Column(name = "HaveTwins")
+    private boolean haveTwins;
+
     @Column(name = "EnableReminder")
     private boolean enableReminder;
 
@@ -115,6 +118,7 @@ public class UserModel extends Model {
         user.trackingPeriod = this.trackingPeriod;
         user.weightUnit = this.weightUnit;
         user.heightUnit = this.heightUnit;
+        user.haveTwins = this.haveTwins;
         user.enableReminder = this.enableReminder;
         user.reminderDay = this.reminderDay;
         user.reminderHour = this.reminderHour;
@@ -141,6 +145,7 @@ public class UserModel extends Model {
         userModel.trackingPeriod = user.trackingPeriod;
         userModel.weightUnit = user.weightUnit;
         userModel.heightUnit = user.heightUnit;
+        userModel.haveTwins = user.haveTwins;
         userModel.enableReminder = user.enableReminder;
         userModel.reminderDay = user.reminderDay;
         userModel.reminderHour = user.reminderHour;
@@ -170,6 +175,7 @@ public class UserModel extends Model {
                 .put("trackPeriod", trackingPeriod)
                 .put("wtUnit", weightUnit)
                 .put("htUnit", heightUnit)
+                .put("twins", haveTwins)
                 .put("reminder", enableReminder)
                 .put("remDay", reminderDay)
                 .put("remHr", reminderHour)
@@ -187,6 +193,7 @@ public class UserModel extends Model {
         user.trackingPeriod = TrackingPeriod.valueOf(userJSON.getString("trackPeriod"));
         user.weightUnit = WeightUnit.valueOf(userJSON.getString("wtUnit"));
         user.heightUnit = HeightUnit.valueOf(userJSON.getString("htUnit"));
+        user.haveTwins = userJSON.getBoolean("twins");
         user.enableReminder = userJSON.getBoolean("reminder");
         user.reminderDay = userJSON.getInt("remDay");
         user.reminderHour = userJSON.getInt("remHr");

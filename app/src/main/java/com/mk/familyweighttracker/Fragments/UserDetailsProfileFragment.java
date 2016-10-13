@@ -49,6 +49,7 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
         mUser = new UserService().get(mSelectedUserId);
 
         initUserDetailsControls();
+        initTwinsControls();
         initDeliveryDueDateControls();
         initPrePregnancyControls();
         initReminderControls();
@@ -130,6 +131,14 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
         }
     }
 
+    private void initTwinsControls() {
+        String message = getResources().getString(
+                mUser.haveTwins ? R.string.add_user_have_twins_yes : R.string.add_user_have_twins_no);
+
+        ((TextView) mFragmentView.findViewById(R.id.view_user_delivery_twins))
+                .setText(message);
+    }
+
     private void initReminderControls() {
         ((TextView) mFragmentView.findViewById(R.id.view_user_reminder_day)).setText(R.string.value_not_set_message);
         if(mUser.enableReminder) {
@@ -188,6 +197,7 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
             // todo: refresh usersList
             mUser = new UserService().get(mSelectedUserId);
             initUserDetailsControls();
+            initTwinsControls();
             initPrePregnancyControls();
             initReminderControls();
             getActivity().setTitle(mUser.name);

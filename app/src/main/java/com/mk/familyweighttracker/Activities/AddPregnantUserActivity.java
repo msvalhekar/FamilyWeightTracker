@@ -65,7 +65,9 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     private RadioGroup mGenderRadioGroup;
     private RadioButton mGenderMaleRdButton;
     private RadioButton mGenderFemaleRdButton;
+    private android.support.v7.widget.SwitchCompat mHaveTwinsCkBox;
     private android.support.v7.widget.SwitchCompat mEnableReminderCkBox;
+    private Button mTwinsMessageButton;
     private Button mReminderMessageButton;
     private View mReminderDaySectionView;
     private android.support.v7.widget.AppCompatSpinner mReminderDaySpinner;
@@ -95,6 +97,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             mUser = new User(0);
             mUser.isMale = false;
             mUser.trackingPeriod = TrackingPeriod.Week;
+            mUser.haveTwins = false;
             mUser.enableReminder = true;
             mUser.reminderDay = 1;
             mUser.reminderHour = 8;
@@ -106,6 +109,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         initImageButtonControl();
         initNameControl();
         initDateOfBirthControl();
+        initTwinsControl();
         initReminderControl();
         initDeliveryDueDateControl();
         initActionButtonControls();
@@ -121,6 +125,8 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         mNameText = ((EditText) findViewById(R.id.add_user_name_edit_text));
         mDobButton = ((Button) findViewById(R.id.add_user_dob_button));
 
+        mHaveTwinsCkBox = ((SwitchCompat) findViewById(R.id.add_user_have_twins_checkbox));
+        mTwinsMessageButton = ((Button) findViewById(R.id.add_user_have_twins_button));
         mEnableReminderCkBox = ((SwitchCompat) findViewById(R.id.add_user_remind_checkbox));
         mReminderMessageButton = ((Button) findViewById(R.id.add_user_remind_message_button));
         mReminderDaySectionView = findViewById(R.id.add_user_reminder_day_section);
@@ -210,6 +216,22 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         });
     }
 
+    private void initTwinsControl() {
+        mHaveTwinsCkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mUser.haveTwins = isChecked;
+
+                String message = getResources().getString(
+                        isChecked ? R.string.add_user_have_twins_yes : R.string.add_user_have_twins_no);
+
+                mTwinsMessageButton.setText(message);
+            }
+        });
+
+        mHaveTwinsCkBox.setChecked(mUser.haveTwins);
+    }
+
     private void initReminderControl() {
         mEnableReminderCkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -217,10 +239,10 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                 mUser.enableReminder = isChecked;
 
                 int show = View.GONE;
-                String message = "No";
+                String message = getResources().getString(R.string.add_user_have_twins_no);
                 if (isChecked) {
                     show = View.VISIBLE;
-                    message = "Yes";
+                    message = getResources().getString(R.string.add_user_have_twins_yes);
                 }
 
                 mReminderDaySectionView.setVisibility(show);

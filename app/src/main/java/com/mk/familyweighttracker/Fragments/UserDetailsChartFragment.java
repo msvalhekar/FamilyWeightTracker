@@ -222,7 +222,7 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
         if(mUser.getReadingsCount() == 0) return;
 
         BodyWeightCategory weightCategory = mUser.getWeightCategory();
-        mWeightRangeList = mPregnancyService.getWeightGainTableFor(mUser.getStartingWeight(), weightCategory, mUser.weightUnit);
+        mWeightRangeList = mPregnancyService.getWeightGainTableFor(mUser.getStartingWeight(), weightCategory, mUser.weightUnit, mUser.haveTwins);
 
         loadChartDataForPregnancy();
         setChartDescriptionControl();

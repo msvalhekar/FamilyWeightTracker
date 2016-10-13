@@ -18,8 +18,8 @@ public class PregnancyService {
     public PregnancyService() {
     }
 
-    public List<WeekWeightGainRange> getWeightGainTableFor(double baseWeight, BodyWeightCategory category, WeightUnit weightUnit) {
-        List<WeekWeightGainRange> records = repository.getWeightGainTableFor(category, weightUnit);
+    public List<WeekWeightGainRange> getWeightGainTableFor(double baseWeight, BodyWeightCategory category, WeightUnit weightUnit, boolean forTwins) {
+        List<WeekWeightGainRange> records = repository.createWeightGainTableFor(category, weightUnit, forTwins);
 
         List<WeekWeightGainRange> recordsToReturn = new ArrayList<>();
         for (WeekWeightGainRange record: records) {

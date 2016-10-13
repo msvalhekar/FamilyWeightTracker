@@ -48,6 +48,7 @@ public class User {
     public TrackingPeriod trackingPeriod;
     public WeightUnit weightUnit;
     public HeightUnit heightUnit;
+    public boolean haveTwins;
     public boolean enableReminder;
     public int reminderDay;
     public int reminderHour;
