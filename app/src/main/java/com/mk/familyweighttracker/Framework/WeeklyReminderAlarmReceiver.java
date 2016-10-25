@@ -1,15 +1,12 @@
 package com.mk.familyweighttracker.Framework;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Vibrator;
 
 import com.activeandroid.ActiveAndroid;
-import com.mk.familyweighttracker.Activities.SplashActivity;
+import com.mk.familyweighttracker.Models.PushNotification;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
@@ -51,24 +48,12 @@ public class WeeklyReminderAlarmReceiver extends BroadcastReceiver {
 
         UserReading latestReading = user.getLatestReading();
         long nextSequence = latestReading != null ? latestReading.Sequence +1 : 0;
-        String titleMessage = _context.getString(R.string.notification_title);
-        String textMessage = String.format(_context.getString(R.string.notification_message), nextSequence);
-        android.support.v7.app.NotificationCompat.Builder builder =
-                (android.support.v7.app.NotificationCompat.Builder) new android.support.v7.app.NotificationCompat.Builder(_context)
-                .setContentTitle(titleMessage)
-                .setSmallIcon(R.drawable.launcher)
-                .setContentText(textMessage)
-                .setAutoCancel(true);
 
-        Intent intent = new Intent(_context, SplashActivity.class);
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(_context);
-        stackBuilder.addNextIntent(intent);
-
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent((int)user.getId(), PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-
-        NotificationManager manager = ((NotificationManager) _context.getSystemService(Context.NOTIFICATION_SERVICE));
-        manager.notify((int)user.getId(), builder.build());
+        PushNotification pushNotification = new PushNotification();
+        pushNotification.title = _context.getString(R.string.notification_title);
+        pushNotification.message = String.format(_context.getString(R.string.notification_message), nextSequence);
+        pushNotification.context = _context;
+        pushNotification.requestCode = (int)user.getId();
+        NotificationCenter.showNotification(pushNotification);
     }
 }
