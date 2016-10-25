@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 
+import com.mk.familyweighttracker.BuildConfig;
 import com.mk.familyweighttracker.R;
 
 import java.util.LinkedHashMap;
@@ -21,15 +22,16 @@ public class SystemInformation {
 
     public static LinkedHashMap<String, String> getSystemInformation() {
         LinkedHashMap<String, String> data = new LinkedHashMap<>();
-        //data.put(Utility.getResourceString(R.string.application_version_label), Settings.getAppVersionName());
-        data.put(Utility.getResourceString(R.string.architecture_label), SystemInformation.getOSArchitecture());
-        data.put(Utility.getResourceString(R.string.available_memory_label), SystemInformation.getAvailableMemoryString());
-        data.put(Utility.getResourceString(R.string.battery_level_label), SystemInformation.getBatteryLevel());
-        data.put(Utility.getResourceString(R.string.locale_label), SystemInformation.getLocaleName());
-        data.put(Utility.getResourceString(R.string.model_label), SystemInformation.getDeviceName());
-        data.put(Utility.getResourceString(R.string.android_version_label), SystemInformation.getAndroidVersionName());
-        data.put(Utility.getResourceString(R.string.processor_count_label), String.valueOf(SystemInformation.getProcessorCount()));
-        data.put(Utility.getResourceString(R.string.display_density), SystemInformation.getDisplayDensity());
+        String appVersionLabel = String.format("%s (%d)", getAppVersionName(), getAppVersionCode());
+        data.put(Utility.getResourceString(R.string.application_version_label), appVersionLabel);
+        data.put(Utility.getResourceString(R.string.architecture_label), getOSArchitecture());
+        data.put(Utility.getResourceString(R.string.available_memory_label), getAvailableMemoryString());
+        data.put(Utility.getResourceString(R.string.battery_level_label), getBatteryLevel());
+        data.put(Utility.getResourceString(R.string.locale_label), getLocaleName());
+        data.put(Utility.getResourceString(R.string.model_label), getDeviceName());
+        data.put(Utility.getResourceString(R.string.android_version_label), getAndroidVersionName());
+        data.put(Utility.getResourceString(R.string.processor_count_label), String.valueOf(getProcessorCount()));
+        data.put(Utility.getResourceString(R.string.display_density), getDisplayDensity());
         return data;
     }
 
@@ -71,7 +73,7 @@ public class SystemInformation {
         return String.valueOf(((float) level / (float) scale) * 100.0f) + "%";
     }
 
-    public static String getApplicationVersionName() {
+    public static String getAppVersionName() {
         Application app = TrackerApplication.getApp();
 
         try {
@@ -80,7 +82,7 @@ public class SystemInformation {
             e.printStackTrace();
         }
 
-        return "";
+        return BuildConfig.VERSION_NAME;
     }
 
     public static String getOSArchitecture() {
@@ -91,7 +93,7 @@ public class SystemInformation {
         return String.format("%d dpi", TrackerApplication.getApp().getResources().getDisplayMetrics().densityDpi);
     }
 
-    public static int getApplicationVersionCode() {
+    public static int getAppVersionCode() {
         Application app = TrackerApplication.getApp();
 
         try {
@@ -100,5 +102,5 @@ public class SystemInformation {
             e.printStackTrace();
         }
 
-        return 1;
+        return BuildConfig.VERSION_CODE;
     }}

@@ -32,6 +32,7 @@ def getAppVersionName() {
     def minor = (int) ((getAppVersionCode() % 100) / 10)
 
     SimpleDateFormat format = new SimpleDateFormat("yyMMdd")
+    //return String.format("%s.%s.%s", major, minor, format.format(new Date(2016, 9, 6)))
     return String.format("%s.%s.%s", major, minor, format.format(new Date()))
 }
 
@@ -115,4 +116,5 @@ dependencies {
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') { transitive = true; }
     compile 'com.google.android.gms:play-services-analytics:9.0.0'
+    compile 'org.jsoup:jsoup:1.8.3'
 }

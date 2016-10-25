@@ -117,4 +117,21 @@ public class Utility {
         long diffInMs = deliveryDueDate.getTime() - todayDate.getTime();
         return TimeUnit.MILLISECONDS.toDays(diffInMs);
     }
+
+    public static long calculateDateDiff(Date toDate) {
+        return calculateDateDiff(new Date(), toDate);
+    }
+
+    public static long calculateDateDiff(Date fromDate, Date toDate) {
+        if(toDate == null)
+            return -1;
+
+        if(toDate.before(fromDate)) {
+            long diffInMs = fromDate.getTime() - toDate.getTime();
+            return TimeUnit.MILLISECONDS.toDays(diffInMs) * -1;
+        }
+
+        long diffInMs = toDate.getTime() - fromDate.getTime();
+        return TimeUnit.MILLISECONDS.toDays(diffInMs);
+    }
 }

@@ -16,6 +16,14 @@
         android:layout_centerHorizontal="true"
         android:src="@drawable/splash" />
 
+    <ProgressBar
+        android:id="@+id/splash_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/splash_vesion_text"
+        style="@android:style/Widget.ProgressBar.Inverse"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/splash_vesion_text"
         android:layout_width="match_parent"

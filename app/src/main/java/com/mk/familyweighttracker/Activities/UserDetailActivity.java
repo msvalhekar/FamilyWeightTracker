@@ -229,15 +229,7 @@ public class UserDetailActivity extends TrackerBaseActivity
         ((Button) findViewById(R.id.app_rate)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String appName = TrackerApplication.getApp().getPackageName();
-                try {
-                    Intent rateIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appName));
-                    startActivity(rateIntent);
-                } catch (android.content.ActivityNotFoundException anfe) {
-                    String appStoreSearchUrl = String.format(Constants.PLAY_STORE_APP_SEARCH_URL, appName);
-                    Intent rateIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(appStoreSearchUrl));
-                    startActivity(rateIntent);
-                }
+                navigateToAppStore();
             }
         });
     }

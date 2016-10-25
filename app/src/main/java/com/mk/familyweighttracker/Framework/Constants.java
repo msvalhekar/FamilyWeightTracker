@@ -8,9 +8,12 @@ public class Constants {
     public static final String DB_NAME = "MkWeighTracker.db";
     public static final String APP_BACKUP_KEY = "MkWeighTracker";
     public static final String SHARED_PREF_KEY = "com.mk.familyweighttracker.MkWeighTracker";
+
+    public static final String PLAY_STORE_MARKET_SEARCH_URL = "market://details?id=%s";
     public static final String PLAY_STORE_APP_SEARCH_URL = "http://play.google.com/store/apps/details?id=%s";
 
     public static final int SPLASH_SCREEN_TIMEOUT_SECONDS = 2500;
+    public static final int CHECK_MARKET_APP_UPDATE_AFTER_DAYS = 30;
 
     public static class AppDirectory {
         public static final String LogDirectory = "sysLog";
@@ -19,6 +22,7 @@ public class Constants {
 
     public static class SharedPreference {
         public static final String SelectedBackgroundAudio = "SelectedBackgroundAudio";
+        public static final String AppMarketLastUpdateCheckedOn = "AppMarketLastUpdateCheckedOn";
     }
 
     public static class Activities {
@@ -37,6 +41,7 @@ public class Constants {
         public static final String USER_ID = "user_id";
         public static final String IS_DATA_CHANGED = "IsDataChanged";
         public static final String EDIT_READING_ID = "EditReadingId";
+        public static final String PROMPT_FOR_UPGRADE = "PromptForUpgrade";
     }
 
     public static class RequestCode {

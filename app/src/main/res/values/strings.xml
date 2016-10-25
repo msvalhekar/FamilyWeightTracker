@@ -90,7 +90,7 @@
     <string name="help_record_exp_max_wt_message">Exp Max</string>
     <string name="slideshow_activity_title_format">%s\'s Wonderful Pregnancy</string>
 
-    <string name="application_version_label">Application version</string>
+    <string name="application_version_label">Application version (code)</string>
     <string name="application_version_friendly_name_label">Codename</string>
     <string name="architecture_label">Architecture</string>
     <string name="available_memory_label">Available memory</string>
@@ -176,4 +176,8 @@
     <string name="user_details_updated_message">Profile updated</string>
     <string name="user_added_message">Welcome and Congratulations</string>
     <string name="splash_activity_version_format">Version: %s</string>
+    <string name="app_update_title">Upgrade Available</string>
+    <string name="app_update_message">A new version of the App is available now.\\n\\nWould you like to upgrade now?</string>
+    <string name="app_update_positive_label">UPGRADE</string>
+    <string name="app_update_negative_label">LATER</string>
 </resources>

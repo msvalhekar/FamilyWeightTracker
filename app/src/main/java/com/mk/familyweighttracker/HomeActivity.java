@@ -1,11 +1,11 @@
 package com.mk.familyweighttracker;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,12 +13,13 @@ import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.StorageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
+import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Services.UserService;
 
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends TrackerBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,8 @@ public class HomeActivity extends AppCompatActivity {
 
         initToolbarControl();
         initDisclaimerControl();
+
+        promptForUpgradeIfRequired();
     }
 
     private void initDisclaimerControl() {
@@ -40,7 +43,7 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         List<User> users = new UserService().getAll();
-                        if(users.size() > 0) {
+                        if (users.size() > 0) {
                             Intent intent = new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.UserDetailActivity.class);
                             intent.putExtra(Constants.ExtraArg.USER_ID, users.get(0).getId());
                             startActivity(intent);
@@ -59,26 +62,28 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    private void promptForUpgradeIfRequired() {
+        boolean promptForUpgrade = getIntent().getBooleanExtra(Constants.ExtraArg.PROMPT_FOR_UPGRADE, false);
 
-        //noinspection SimplifiableIfStatement
+        if (!promptForUpgrade) return;
 
-        return super.onOptionsItemSelected(item);
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.app_update_title))
+                .setMessage(getString(R.string.app_update_message))
+                .setPositiveButton(getString(R.string.app_update_positive_label), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        navigateToAppStore();
+                    }
+                })
+                .setNegativeButton(getString(R.string.app_update_negative_label), null)
+                .create()
+                .show();
     }
 }
