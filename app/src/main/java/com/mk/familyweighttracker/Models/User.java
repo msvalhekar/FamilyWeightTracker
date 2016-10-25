@@ -13,7 +13,7 @@ import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Enums.WeightUnit;
-import com.mk.familyweighttracker.Framework.AlarmReceiver;
+import com.mk.familyweighttracker.Framework.WeeklyReminderAlarmReceiver;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Framework.StorageUtility;
@@ -249,7 +249,7 @@ public class User {
     }
 
     private PendingIntent getPendingIntent(Context context) {
-        Intent alarmReceiverIntent = new Intent(context, AlarmReceiver.class);
+        Intent alarmReceiverIntent = new Intent(context, WeeklyReminderAlarmReceiver.class);
         alarmReceiverIntent.setData(Uri.parse("pwt://" + getId()));
 
         alarmReceiverIntent.putExtra(Constants.ExtraArg.USER_ID, getId());

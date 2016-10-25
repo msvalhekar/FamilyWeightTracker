@@ -118,7 +118,7 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
-        <receiver android:name=".Framework.AlarmReceiver" />
+        <receiver android:name=".Framework.WeeklyReminderAlarmReceiver" />
         <receiver android:name=".Framework.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

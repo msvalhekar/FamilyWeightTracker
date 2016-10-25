@@ -18,7 +18,7 @@ import com.mk.familyweighttracker.Services.UserService;
 /**
  * Created by mvalhekar on 16-05-2016.
  */
-public class AlarmReceiver extends BroadcastReceiver {
+public class WeeklyReminderAlarmReceiver extends BroadcastReceiver {
 
     private Context _context;
     @Override
