@@ -46,7 +46,7 @@ public class SplashActivity extends TrackerBaseActivity {
 
         ProgressBar progressBar = ((ProgressBar) findViewById(R.id.splash_progress_bar));
 
-        setAppVersion();
+        initAppVersionControl();
 
         setLastUpdateCheckedDateForFirstTime();
 
@@ -64,6 +64,22 @@ public class SplashActivity extends TrackerBaseActivity {
                 gotoHomeActivity(false);
             }
         }, Constants.SPLASH_SCREEN_TIMEOUT_SECONDS);
+    }
+
+    private void initAppVersionControl() {
+        TextView versionTv = (TextView) findViewById(R.id.splash_vesion_text);
+        String appVersion = "";
+        try {
+            appVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if(StringHelper.isNullOrEmpty(appVersion)) {
+            versionTv.setVisibility(View.GONE);
+        } else {
+            versionTv.setText(String.format(getString(R.string.splash_activity_version_format), appVersion));
+            versionTv.setVisibility(View.VISIBLE);
+        }
     }
 
     private void gotoHomeActivity(boolean promptUpgrade) {
@@ -90,20 +106,11 @@ public class SplashActivity extends TrackerBaseActivity {
         }
     }
 
-    private void setAppVersion() {
-        TextView versionTv = (TextView) findViewById(R.id.splash_vesion_text);
-        String appVersion = "";
-        try {
-            appVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        if(StringHelper.isNullOrEmpty(appVersion)) {
-            versionTv.setVisibility(View.GONE);
-        } else {
-            versionTv.setText(String.format(getString(R.string.splash_activity_version_format), appVersion));
-            versionTv.setVisibility(View.VISIBLE);
-        }
+    public boolean isEligibleToCheckVersionOnPlayStore() {
+        Date lastCheckedOn = PreferenceHelper.getDate(Constants.SharedPreference.AppMarketLastUpdateCheckedOn, new Date());
+        long lastCheckedBeforeDays = Utility.calculateDateDiff(lastCheckedOn);
+
+        return (Constants.CHECK_MARKET_APP_UPDATE_AFTER_DAYS < lastCheckedBeforeDays);
     }
 
     private void upgradeAppIfRequired(String marketAppVersion) {
@@ -117,16 +124,6 @@ public class SplashActivity extends TrackerBaseActivity {
         AppVersion current = AppVersion.parseFrom(currentAppVersion);
 
         gotoHomeActivity(current.compareTo(market) < 0);
-    }
-
-    public boolean isEligibleToCheckVersionOnPlayStore() {
-        Date lastCheckedOn = PreferenceHelper.getDate(Constants.SharedPreference.AppMarketLastUpdateCheckedOn, new Date());
-        long lastCheckedBeforeDays = Utility.calculateDateDiff(lastCheckedOn);
-
-        if(lastCheckedBeforeDays < Constants.CHECK_MARKET_APP_UPDATE_AFTER_DAYS)
-            return false;
-
-        return true;
     }
 
     private class MarketAppInfoReader extends AsyncTask<Void, String, String> {
@@ -152,6 +149,10 @@ public class SplashActivity extends TrackerBaseActivity {
 
         @Override
         protected void onPostExecute(final String result){
+            Calendar today = Calendar.getInstance();
+            today.set(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+            PreferenceHelper.putDate(Constants.SharedPreference.AppMarketLastUpdateCheckedOn, today.getTime());
+
             upgradeAppIfRequired(result);
         }
     }
