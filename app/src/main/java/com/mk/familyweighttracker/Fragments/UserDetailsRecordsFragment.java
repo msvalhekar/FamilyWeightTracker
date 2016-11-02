@@ -1,7 +1,8 @@
 package com.mk.familyweighttracker.Fragments;
 
-
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mk.familyweighttracker.Activities.AddPregnantUserActivity;
 import com.mk.familyweighttracker.Activities.AddReadingActivity;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
@@ -45,7 +47,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
 
     private View mFragmentView;
     private RecyclerView mRecyclerView;
-    private SimpleItemRecyclerViewAdapter mRecyclerViewAdapter;
+    private UserReadingRecyclerViewAdapter readingAdapter;
     private boolean bFirstReadingChanged;
 
     public UserDetailsRecordsFragment() {
@@ -82,11 +84,45 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         FloatingActionButton fab = (FloatingActionButton) mFragmentView.findViewById(R.id.button_user_add_record);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if(mSelectedUser.getReadingsCount() < 41) {
-                    Intent intent = new Intent(getContext(), AddReadingActivity.class);
-                    intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
-                    startActivityForResult(intent, Constants.RequestCode.ADD_READING);
+            public void onClick(final View view) {
+                if (!mSelectedUser.maxReadingsReached()) {
+//                    // TODO: 31-10-2016 show dialog with 0 and 1-40 and 41 readings and purpose
+//                    // if not shown already - sharedPreference
+//
+//                    LinearLayout linearLayout = new LinearLayout(view.getContext());
+//                    linearLayout.setOrientation(LinearLayout.VERTICAL);
+//                    TableLayout tableLayout = new TableLayout(view.getContext());
+//                    tableLayout.setOrientation(LinearLayout.HORIZONTAL);
+//                    TableRow tableRow = new TableRow(view.getContext());
+//                    TextView weekNumberView = new TextView(view.getContext());
+//                    weekNumberView.setText("Week Number");
+//                    tableRow.addView(weekNumberView);
+//                    tableLayout.addView(tableRow);
+//                    linearLayout.addView(tableLayout);
+//                    //View typesView = mFragmentView.findViewById(R.id.pregnancy_reading_types);
+//                    //((ViewGroup) typesView.getParent()).removeView(typesView);
+//                    new AlertDialog.Builder(view.getContext())
+//                            .setTitle("Pregnancy Reading Types")
+//                            //.setCancelable(false)
+//                            //.setView(R.id.pregnancy_reading_types)
+//                            //.setView(typesView)
+//                            .setView(linearLayout)
+//                            .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    Toast.makeText(view.getContext(), "reading types shown", Toast.LENGTH_SHORT).show();
+//                                }
+//                            })
+//                            .create()
+//                            .show();
+
+                    if (promptIfDeliveryDateNotSet(view.getContext()))
+                        return;
+
+                    if (showDialogIfConflictingReading(view.getContext()))
+                        return;
+
+                    gotoAddReading();
                 } else {
                     Toast.makeText(view.getContext(),
                             R.string.Maximum40WeeksDataSupportedMessage,
@@ -94,6 +130,67 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
                 }
             }
         });
+    }
+
+    private boolean showDialogIfConflictingReading(Context context) {
+        long estimatedSequence = mSelectedUser.getEstimatedSequence();
+        final UserReading reading = new UserService().getReadingBySequence(estimatedSequence);
+        if (reading != null) {
+            String messageFormat = getResources().getString(R.string.add_conflicting_week_message);
+
+            new AlertDialog.Builder(context)
+                    .setTitle(R.string.add_conflicting_week_title)
+                    .setMessage(String.format(messageFormat, reading.Sequence))
+                    .setPositiveButton("Edit Existing", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            gotoEditReading(reading.Id);
+                        }
+                    })
+                    .setNegativeButton("Add Next", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            gotoAddReading();
+                        }
+                    })
+                    .create()
+                    .show();
+            return true;
+        }
+        return false;
+    }
+
+    private void gotoEditReading(long readingId) {
+        Intent intent = new Intent(getContext(), AddReadingActivity.class);
+        intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
+        intent.putExtra(Constants.ExtraArg.EDIT_READING_ID, readingId);
+        startActivityForResult(intent, Constants.RequestCode.EDIT_READING);
+    }
+
+    private void gotoAddReading() {
+        Intent intent = new Intent(getContext(), AddReadingActivity.class);
+        intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
+        startActivityForResult(intent, Constants.RequestCode.ADD_READING);
+    }
+
+    private boolean promptIfDeliveryDateNotSet(final Context context) {
+        if (mSelectedUser.deliveryDueDate != null)
+            return false;
+
+        new AlertDialog.Builder(context)
+                .setTitle(R.string.delivery_due_date_required_title)
+                .setMessage(R.string.delivery_due_date_required_message)
+                .setPositiveButton("SET NOW", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(context, AddPregnantUserActivity.class);
+                        intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
+                        startActivityForResult(intent, Constants.RequestCode.EDIT_USER);
+                    }
+                })
+                .create()
+                .show();
+        return true;
     }
 
     private boolean mIsOriginator = false;
@@ -114,21 +211,19 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
             }
         }
         userReadingList.add(i, latestReadings.get(i));
-        mRecyclerViewAdapter.notifyDataSetChanged();
-        //mRecyclerViewAdapter.notifyItemInserted(i);
-        //mRecyclerView.scrollToPosition(0);
+        readingAdapter.notifyDataSetChanged();
+
         mFragmentView.findViewById(R.id.empty_view).setVisibility(View.GONE);
         mFragmentView.findViewById(R.id.user_records_list_record_content_help).setVisibility(View.VISIBLE);
     }
 
     private void initReadingListControl() {
 
-        mRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter();
+        readingAdapter = new UserReadingRecyclerViewAdapter();
         mRecyclerView = ((RecyclerView) mFragmentView.findViewById(R.id.user_record_list));
         //mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setAdapter(mRecyclerViewAdapter);
-        mRecyclerViewAdapter.notifyDataSetChanged();
-
+        mRecyclerView.setAdapter(readingAdapter);
+        readingAdapter.notifyDataSetChanged();
 
         mFragmentView.findViewById(R.id.card_view)
                 .setOnClickListener(new View.OnClickListener() {
@@ -238,7 +333,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
             for (int i=0; i< latestReadings.size(); i++) {
                 userReadingList.add(latestReadings.get(i));
             }
-            mRecyclerViewAdapter.notifyDataSetChanged();
+            readingAdapter.notifyDataSetChanged();
 
             mIsOriginator = true;
             ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
@@ -246,11 +341,11 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         }
     }
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    private class UserReadingRecyclerViewAdapter
+            extends RecyclerView.Adapter<UserReadingRecyclerViewAdapter.ViewHolder> {
 
-        public SimpleItemRecyclerViewAdapter() {
-        }
+//        public UserReadingRecyclerViewAdapter() {
+//        }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -285,14 +380,18 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
             {
                 mUserReading = reading;
 
-                mView.findViewById(R.id.user_record_for_pregnancy_section)
-                        .setVisibility(mUserReading.Sequence == 0 ? View.VISIBLE : View.GONE);
+                View sectionView = mView.findViewById(R.id.user_record_for_extra_section);
+                sectionView.setVisibility(View.GONE);
 
-//                if(mUserReading.Sequence == 0) {
-//                    mView.findViewById(R.id.user_record_for_pregnancy_section).setVisibility(View.VISIBLE);
-//                } else {
-//                    mView.findViewById(R.id.user_record_for_pregnancy_section).setVisibility(View.GONE);
-//                }
+                if(mUserReading.isPrePregnancyReading()) {
+                    sectionView.setVisibility(View.VISIBLE);
+                    ((TextView) mView.findViewById(R.id.record_item_extra_message))
+                            .setText(R.string.pre_pregnancy_label);
+                } else if(mUserReading.isDeliveryReading()) {
+                    sectionView.setVisibility(View.VISIBLE);
+                    ((TextView) mView.findViewById(R.id.record_item_extra_message))
+                            .setText(R.string.delivery_label);
+                }
 
                 setPeriodControl();
                 setActualWeightControl();
@@ -381,13 +480,10 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
                 mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(mUserReading.Sequence == 0) {
+                        if(mUserReading.isPrePregnancyReading()) {
                             bFirstReadingChanged = true;
                         }
-                        Intent intent = new Intent(getContext(), AddReadingActivity.class);
-                        intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
-                        intent.putExtra(Constants.ExtraArg.EDIT_READING_ID, mUserReading.Id);
-                        startActivityForResult(intent, Constants.RequestCode.EDIT_READING);
+                        gotoEditReading(mUserReading.Id);
                     }
                 });
             }
