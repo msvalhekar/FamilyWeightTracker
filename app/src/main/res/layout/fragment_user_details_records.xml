@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <include layout="@layout/empty_view" />
-    <include layout="@layout/user_reocrds_list" />
+    <include layout="@layout/user_records_list" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/button_user_add_record"

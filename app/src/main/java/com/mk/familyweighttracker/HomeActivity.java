@@ -33,6 +33,11 @@ public class HomeActivity extends TrackerBaseActivity {
 
         initToolbarControl();
         initDisclaimerControl();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         promptForUpgradeIfRequired();
     }
@@ -42,18 +47,26 @@ public class HomeActivity extends TrackerBaseActivity {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        List<User> users = new UserService().getAll();
-                        if (users.size() > 0) {
-                            Intent intent = new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.UserDetailActivity.class);
-                            intent.putExtra(Constants.ExtraArg.USER_ID, users.get(0).getId());
-                            startActivity(intent);
-                            return;
-                        } else {
-                            Intent intent = new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.AddPregnantUserActivity.class);
-                            startActivity(intent);
-                        }
+                        startActivity(new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.UsersListActivity.class));
+//                        List<User> users = new UserService().getAll();
+//                        if (users.size() > 0) {
+//                            gotoPregnancyDetailActivity(users.get(0).getId());
+//                        } else {
+//                            gotoAddPregnantUserActivity();
+//                        }
                     }
                 });
+    }
+
+    private void gotoAddPregnantUserActivity() {
+        Intent intent = new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.AddPregnantUserActivity.class);
+        startActivity(intent);
+    }
+
+    private void gotoPregnancyDetailActivity(long userId) {
+        Intent intent = new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.UserDetailActivity.class);
+        intent.putExtra(Constants.ExtraArg.USER_ID, userId);
+        startActivity(intent);
     }
 
     private void initToolbarControl() {

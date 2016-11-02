@@ -1,12 +1,14 @@
 package com.mk.familyweighttracker.Activities;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
@@ -14,8 +16,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Framework.Analytic;
@@ -46,7 +50,7 @@ public class UsersListActivity extends TrackerBaseActivity {
     public static final String NEW_USER_ID_KEY = "newUserId";
 
     private RecyclerView mRecyclerView;
-    private SimpleItemRecyclerViewAdapter mRecyclerViewAdapter;
+    private UsersRecyclerViewAdapter usersAdapter;
     private List<User> mUserList = new ArrayList<>();
     private Bitmap mContactDefaultBitmap;
 
@@ -61,18 +65,21 @@ public class UsersListActivity extends TrackerBaseActivity {
 
         initAddNewUserControl();
 
-        mUserList.clear();
-        for (User user: new UserService().getAll())
-            mUserList.add(user);
-
         initUserListControl();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        onRefreshList();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK) return;
 
-            // Check which request we're responding to
+        // Check which request we're responding to
         if (requestCode == Constants.RequestCode.ADD_USER) {
             // update the list for new user
             onRefreshList();
@@ -108,32 +115,61 @@ public class UsersListActivity extends TrackerBaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TrackerApplication.getApp(), AddPregnantUserActivity.class);
-                startActivityForResult(intent, Constants.RequestCode.ADD_USER);
+                final ArrayAdapter<String> userTypesAdapter = new ArrayAdapter<String>(UsersListActivity.this, android.R.layout.select_dialog_singlechoice);
+                if(mUserList.size() == 0)
+                    userTypesAdapter.add(UserType.Pregnancy.toString());
+                userTypesAdapter.add(UserType.Infant.toString());
+                //        for (UserType userType:UserType.values()){
+                //            userTypesAdapter.add(userType.toString());
+                //        }
+
+                new AlertDialog.Builder(view.getContext())
+                        .setTitle("*** Start tracking ***")
+                        .setAdapter(userTypesAdapter, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String selectedUserType = userTypesAdapter.getItem(which);
+                                switchToAddUserActivity(UserType.getUserType(selectedUserType));
+                            }
+                        })
+                        .create()
+                        .show();
             }
         });
     }
 
-    private void initUserListControl() {
-        showEmptyListControl();
+    private void switchToAddUserActivity(UserType userType) {
+        switch (userType) {
+            case Pregnancy:
+                Intent intent = new Intent(TrackerApplication.getApp(), AddPregnantUserActivity.class);
+                startActivityForResult(intent, Constants.RequestCode.ADD_USER);
+                break;
+            case Infant:
+                Toast.makeText(UsersListActivity.this, "Feature coming soon, in next Update", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
 
-        mRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter();
+    private void initUserListControl() {
+        showHideEmptyListControl();
+
+        usersAdapter = new UsersRecyclerViewAdapter();
 
         mRecyclerView = ((RecyclerView) findViewById(R.id.item_list));
         assert mRecyclerView != null;
 
-        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+        mRecyclerView.setAdapter(usersAdapter);
 
-        mRecyclerViewAdapter.notifyDataSetChanged();
+        usersAdapter.notifyDataSetChanged();
     }
 
-    private boolean showEmptyListControl() {
+    private boolean showHideEmptyListControl() {
         findViewById(R.id.empty_view).setVisibility(View.GONE);
 
         if(mUserList.size() == 0) {
             findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
             ((TextView) findViewById(R.id.empty_mesage_title)).setText(R.string.user_readings_not_found_message);
-            ((TextView) findViewById(R.id.empty_mesage_description)).setText("Use below button to Add member(s).");
+            ((TextView) findViewById(R.id.empty_mesage_description)).setText(R.string.user_readings_add_user_message);
             return true;
         }
         return false;
@@ -146,15 +182,40 @@ public class UsersListActivity extends TrackerBaseActivity {
         for (User user: latestUsers)
             mUserList.add(user);
 
-        showEmptyListControl();
+        showHideEmptyListControl();
 
-        mRecyclerViewAdapter.notifyDataSetChanged();
+        usersAdapter.notifyDataSetChanged();
     }
 
-    private class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    enum UserType {
+        Pregnancy ("Pregnancy Weight"),
+        Infant ("Infant Growth");
 
-        public SimpleItemRecyclerViewAdapter() {
+        final static String PREGNANCY = "Pregnancy Weight";
+        final static String INFANT = "Infant Growth";
+
+        final String value;
+        UserType(String value) {
+            this.value = value;
+        }
+
+        public String toString() {
+            return value;
+        }
+
+        public static UserType getUserType(String value){
+            switch (value) {
+                case PREGNANCY: return Pregnancy;
+                case INFANT: return Infant;
+            }
+            return Pregnancy;
+        }
+    }
+
+    private class UsersRecyclerViewAdapter
+            extends RecyclerView.Adapter<UsersRecyclerViewAdapter.ViewHolder> {
+
+        public UsersRecyclerViewAdapter() {
         }
 
         @Override
