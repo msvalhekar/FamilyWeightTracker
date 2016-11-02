@@ -35,6 +35,10 @@ public class UserService {
         return userRepository.getUserReading(readingId);
     }
 
+    public UserReading getReadingBySequence(long sequence) {
+        return userRepository.getUserReadingBySequence(sequence);
+    }
+
     public Boolean isAlreadyAdded(String name) {
         return userRepository.isAlreadyAdded(name);
     }
@@ -74,7 +78,7 @@ public class UserService {
         boolean convertWeight = user.weightUnit != weightUnit;
         boolean convertHeight = user.heightUnit != heightUnit;
         for (UserReading reading : user.getReadings(true)) {
-            if(reading.Sequence == 0) continue;
+            if(reading.isPrePregnancyReading()) continue;
 
             if(convertWeight) reading.Weight = Utility.convertWeightTo(reading.Weight, weightUnit);
 

@@ -36,6 +36,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class User {
 
+    public static int MAXIMUM_READINGS_COUNT = 42;
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
 
     private long mId;
@@ -69,6 +70,10 @@ public class User {
         if(mReadings != null)
             return mReadings.size();
         return 0;
+    }
+
+    public boolean maxReadingsReached() {
+        return getReadingsCount() >= MAXIMUM_READINGS_COUNT;
     }
 
     public String getDateOfBirthStr() {
@@ -162,6 +167,14 @@ public class User {
         return null;
     }
 
+    public UserReading getReadingBySequence(long sequence) {
+        List<UserReading> readings = getReadings(true);
+        for (int i = 0; i < readings.size(); i++) {
+            if(readings.get(i).Sequence == sequence) return readings.get(i);
+        }
+        return null;
+    }
+
     public UserReading getPrepregnancyReading() {
         if(mReadings != null && mReadings.size() > 0)
             return getReadings(true).get(0);
@@ -169,8 +182,12 @@ public class User {
     }
 
     public UserReading getLatestReading() {
-        if(mReadings != null && mReadings.size() > 0)
+        if(mReadings != null && mReadings.size() > 0) {
+            if (mReadings.size() == User.MAXIMUM_READINGS_COUNT) {
+                return getReadings(false).get(1);
+            }
             return getReadings(false).get(0);
+        }
         return null;
     }
 
@@ -255,4 +272,29 @@ public class User {
         alarmReceiverIntent.putExtra(Constants.ExtraArg.USER_ID, getId());
         return PendingIntent.getBroadcast(context, (int)getId(), alarmReceiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
+
+    public long getEstimatedSequence() {
+        if(deliveryDueDate == null)
+            return -1;
+
+        if(getPrepregnancyReading() == null)
+            return 0;
+
+        long days = Utility.calculateDateDiff(deliveryDueDate);
+        long remainingWeeks = days / 7;
+        return 40 - remainingWeeks;
+    }
+
+    public long getNextAvailableSequence() {
+        long estSeq = getEstimatedSequence();
+        Boolean found = false;
+        while (!found) {
+            UserReading reading = getReadingBySequence(estSeq);
+            if(reading == null)
+                return estSeq;
+            estSeq ++;
+        }
+        return -1;
+    }
+
 }

@@ -52,7 +52,6 @@
     <string name="add_preg_user_reminder_time_default_value">(timeOfDay)</string>
     <string name="add_user_reading_sequence_label">Reading for</string>
     <string name="empty_view_title_message">(No data found.)</string>
-    <string name="empty_view_add_reading_message">(Use below button to Add reading(s).)</string>
     <string name="user_detail_chart_desc_week_no_default_value">(week no)</string>
     <string name="user_detail_chart_desc_exp_this_week_default_value">(exp this week)</string>
     <string name="user_detail_chart_desc_exp_max_week_default_value">(exp 40th week)</string>
@@ -103,9 +102,11 @@
 
     <string name="WeekNReadingSavedMessage">Week %d reading saved.</string>
     <string name="WeekNReadingRemovedMessage">Week %d reading removed.</string>
+    <string name="EditDeliveryReadingMessage">Edit Delivery Reading</string>
     <string name="EditPrePregnancyReadingMessage">Edit Pre-pregnancy Reading</string>
     <string name="EditReadingMessage">Edit Reading</string>
     <string name="AddPrePregnancyReadingMessage">Add Pre-pregnancy Reading</string>
+    <string name="AddDeliveryReadingMessage">Add Delivery Reading</string>
     <string name="AddReadingMessage">Add Reading</string>
     <string name="ImageNotPickedMessage">You haven\'t picked Image</string>
     <string name="CouldNotProcessImageMessage">Unable to process image request</string>
@@ -126,6 +127,7 @@
     <string name="slideshow_empty_note_message">[add notes, your feelings, your thoughts or talk to baby]</string>
     <string name="slideshow_week_number_format">Week %d</string>
     <string name="user_readings_not_found_message">No data found.</string>
+    <string name="user_readings_add_user_message">Add member(s) using \'+\' button below.</string>
     <string name="user_readings_add_reading_message">Add reading(s) using \'+\' button below.</string>
     <string name="user_detail_activity_title">My Wonderful Pregnancy</string>
     <string name="background_audio_not_set_message">Background music not set.</string>
@@ -179,5 +181,11 @@
     <string name="app_update_title">Upgrade Available</string>
     <string name="app_update_message">A new version of the App is available now.\\n\\nWould you like to upgrade now?</string>
     <string name="app_update_positive_label">UPGRADE</string>
-    <string name="app_update_negative_label">LATER</string>
+    <string name="app_update_negative_label">NEXT TIME</string>
+    <string name="pre_pregnancy_label">Pre-pregnancy</string>
+    <string name="delivery_label">Delivery</string>
+    <string name="add_conflicting_week_message">Suggested current week is %s. But this Reading is already added. What you want to do?</string>
+    <string name="add_conflicting_week_title">Conflicting Week Reading</string>
+    <string name="delivery_due_date_required_message">Must set \'Delivery Due Date\' for accuracy of current week suggestion.</string>
+    <string name="delivery_due_date_required_title">Delivery Date Not Set</string>
 </resources>

@@ -47,8 +47,12 @@ public class UserReading {
         TakenOn = takenOn;
     }
 
-    public boolean isFirstReading() {
+    public boolean isPrePregnancyReading() {
         return Sequence == 0;
+    }
+
+    public boolean isDeliveryReading() {
+        return Sequence == User.MAXIMUM_READINGS_COUNT -1;
     }
 
     public Bitmap getImageAsBitmap(boolean circular){
