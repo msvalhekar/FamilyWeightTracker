@@ -40,8 +40,7 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_profile, container, false);
 

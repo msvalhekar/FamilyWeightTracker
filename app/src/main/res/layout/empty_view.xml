@@ -21,6 +21,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="15dp"
-        android:gravity="center"
-        android:text="@string/empty_view_add_reading_message"/>
+        android:gravity="center"/>
 </LinearLayout>

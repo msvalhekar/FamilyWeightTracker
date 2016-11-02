@@ -20,6 +20,10 @@ public class PreferenceHelper {
         return mPreferences.getString(key, defaultValue);
     }
 
+    public static Boolean getBoolean(String key, Boolean defaultValue) {
+        return mPreferences.getBoolean(key, defaultValue);
+    }
+
     public static void putDate(String key, Date value) {
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putLong(key, value.getTime());
@@ -29,6 +33,12 @@ public class PreferenceHelper {
     public static void putString(String key, String value) {
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putString(key, value);
+        editor.commit();
+    }
+
+    public static void putBoolean(String key, Boolean value) {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putBoolean(key, value);
         editor.commit();
     }
 }

@@ -39,6 +39,7 @@ import com.mk.familyweighttracker.Framework.StorageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Framework.NumericParser;
+import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
@@ -57,7 +58,6 @@ public class AddReadingActivity extends TrackerBaseActivity {
     private boolean bEditMode;
     private User mSelectedUser;
     private UserReading mUserReadingToProcess;
-    private double mNewHeightValue;
     private NumericParser mNewWeightParser;
     private NumericParser mNewHeightParser;
     private Long mNewSequenceValue;
@@ -88,7 +88,13 @@ public class AddReadingActivity extends TrackerBaseActivity {
 
         if(mUserReadingToProcess != null) {
             bEditMode = true;
-            setTitle(getString(mUserReadingToProcess.isFirstReading() ? R.string.EditPrePregnancyReadingMessage : R.string.EditReadingMessage));
+            int messageId = R.string.EditReadingMessage;
+            if(mUserReadingToProcess.isPrePregnancyReading()) {
+                messageId = R.string.EditPrePregnancyReadingMessage;
+            } else if(mUserReadingToProcess.isDeliveryReading()) {
+                messageId = R.string.EditDeliveryReadingMessage;
+            }
+            setTitle(getString(messageId));
             findViewById(R.id.add_reading_delete_button).setVisibility(View.VISIBLE);
         } else {
             bEditMode = false;
@@ -98,15 +104,24 @@ public class AddReadingActivity extends TrackerBaseActivity {
             mUserReadingToProcess = new UserReading();
             mUserReadingToProcess.UserId = userId;
             mUserReadingToProcess.TakenOn = new Date();
-            mUserReadingToProcess.Sequence = 0;
+            mUserReadingToProcess.Sequence = mSelectedUser.getNextAvailableSequence();
+            if(mUserReadingToProcess.Sequence == User.MAXIMUM_READINGS_COUNT) {
+                Toast.makeText(this, R.string.Maximum40WeeksDataSupportedMessage, Toast.LENGTH_LONG).show();
+                return;
+            }
             mUserReadingToProcess.Weight = UserReading.DEFAULT_BASE_WEIGHT;
             mUserReadingToProcess.Height = UserReading.DEFAULT_BASE_HEIGHT;
             if(previousReading != null) {
-                mUserReadingToProcess.Sequence = getNextSequence(previousReading);
                 mUserReadingToProcess.Weight = previousReading.Weight;
                 mUserReadingToProcess.Height = previousReading.Height;
             }
-            setTitle(getString(mUserReadingToProcess.isFirstReading() ? R.string.AddPrePregnancyReadingMessage : R.string.AddReadingMessage));
+            int messageId = R.string.AddReadingMessage;
+            if(mUserReadingToProcess.isPrePregnancyReading()) {
+                messageId = R.string.AddPrePregnancyReadingMessage;
+            } else if(mUserReadingToProcess.isDeliveryReading()) {
+                messageId = R.string.AddDeliveryReadingMessage;
+            }
+            setTitle(getString(messageId));
         }
 
         initImageButtonControl();
@@ -118,26 +133,6 @@ public class AddReadingActivity extends TrackerBaseActivity {
         initHeightUnitControl();
         initHeightSequenceControl();
         initActionButtonControls();
-    }
-
-    private long getNextSequence(UserReading previousReading) {
-        long nextSequence = previousReading.Sequence + 1;
-        if(nextSequence > 40) {
-            List<UserReading> readings = mSelectedUser.getReadings(false);
-            UserReading prevReading = null;
-            UserReading currentReading = null;
-            for (int i = 0; i < readings.size(); i++) {
-                currentReading = readings.get(i);
-                if(prevReading != null && (prevReading.Sequence - currentReading.Sequence) > 1) {
-                    nextSequence = prevReading.Sequence -1;
-                    break;
-                }
-                prevReading = currentReading;
-            }
-            if(prevReading.Sequence == currentReading.Sequence)
-                nextSequence = currentReading.Sequence -1;
-        }
-        return nextSequence;
     }
 
     @Override
@@ -193,7 +188,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (mUserReadingToProcess.isFirstReading()) {
+                        if (mUserReadingToProcess.isPrePregnancyReading()) {
                             new AlertDialog.Builder(v.getContext())
                                     .setTitle(getString(R.string.PrePregnancyReadingRemovalError))
                                     .setMessage(getString(R.string.PrePregnancyReadingRemovalErrorMessage))
@@ -233,7 +228,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
 
     private void initMeasuredOnDateControl() {
         ((TextView) findViewById(R.id.add_reading_taken_on_lable))
-                .setText(getResources().getText(mUserReadingToProcess.isFirstReading()
+                .setText(getResources().getText(mUserReadingToProcess.isPrePregnancyReading()
                         ? R.string.add_user_first_reading_lmp_date_label
                         : R.string.add_user_reading_date_label));
 
@@ -292,21 +287,22 @@ public class AddReadingActivity extends TrackerBaseActivity {
         });
     }
 
-    private void initWeekSequenceControl(long lastReading) {
+    private void initWeekSequenceControl(long nextReading) {
 
         final Button seqButton = ((Button) findViewById(R.id.add_reading_sequence_btn));
         seqButton.setText(String.valueOf(mUserReadingToProcess.Sequence));
-        boolean nonEditable = bEditMode || mUserReadingToProcess.isFirstReading();
+        boolean nonEditable = bEditMode || mUserReadingToProcess.isPrePregnancyReading();
         seqButton.setClickable(!nonEditable);
         if(nonEditable) return;
-
-        final NumberPicker sequencePicker = getWeekSequenceControl(lastReading);
 
         seqButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int indexOfNextSequence = Arrays.asList(sequencePicker.getDisplayedValues()).indexOf(String.valueOf(mUserReadingToProcess.Sequence));
-                sequencePicker.setValue(indexOfNextSequence);
+                NumberPicker sequencePicker = getWeekSequenceControl(mUserReadingToProcess.Sequence);
+                int indexOfNextSequence = Arrays.asList(sequencePicker.getDisplayedValues())
+                        .indexOf(String.valueOf(mUserReadingToProcess.Sequence));
+                if(indexOfNextSequence != -1)
+                    sequencePicker.setValue(indexOfNextSequence);
 
                 LinearLayout layout = new LinearLayout(v.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
@@ -349,14 +345,15 @@ public class AddReadingActivity extends TrackerBaseActivity {
         picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         long startFrom = 1;
-        long endAt = 40;
+        long endAt = User.MAXIMUM_READINGS_COUNT;
         final long incrementFactor = 1;
 
+        List<UserReading> readings = mSelectedUser.getReadings(true);
         final List<String> itemsToDisplay = new ArrayList<>();
         final List<String> pendingItems = new ArrayList<>();
-        for (long seqValue = startFrom; seqValue <= endAt; seqValue += incrementFactor) {
+        for (long seqValue = startFrom; seqValue < endAt; seqValue += incrementFactor) {
             boolean found = false;
-            for (UserReading reading : mSelectedUser.getReadings(true)) {
+            for (UserReading reading : readings) {
                 if (reading.Sequence == seqValue) {
                     found = true;
                 }
@@ -395,7 +392,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
     private void initWeightUnitControl() {
         findViewById(R.id.add_reading_weight_section_divider).setVisibility(View.GONE);
         findViewById(R.id.add_reading_weight_unit_section).setVisibility(View.GONE);
-        if(!mUserReadingToProcess.isFirstReading()) return;
+        if(!mUserReadingToProcess.isPrePregnancyReading()) return;
 
         if(mSelectedUser.getReadingsCount() > 1) return; // dont allow to change unit if other readings are added
 
@@ -532,7 +529,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         findViewById(R.id.add_reading_height_section_divider).setVisibility(View.GONE);
         findViewById(R.id.add_reading_note_section_divider).setVisibility(View.GONE);
         findViewById(R.id.add_reading_height_unit_section).setVisibility(View.GONE);
-        if(!mUserReadingToProcess.isFirstReading()) return;
+        if(!mUserReadingToProcess.isPrePregnancyReading()) return;
 
         if(mSelectedUser.getReadingsCount() > 1) return; // dont allow to change unit if other readings are added
 
@@ -640,7 +637,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
     }
 
     private void onAddReading() {
-        if(mUserReadingToProcess.isFirstReading()) {
+        if(mUserReadingToProcess.isPrePregnancyReading()) {
             new UserService().updateUnits(mSelectedUser.getId(), mSelectedUser.weightUnit, mSelectedUser.heightUnit);
         }
 

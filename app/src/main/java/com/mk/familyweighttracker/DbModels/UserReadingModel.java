@@ -48,6 +48,13 @@ public class UserReadingModel extends Model {
                 .executeSingle();
     }
 
+    public static UserReadingModel getBySequence(long sequence) {
+        return new Select()
+                .from(UserReadingModel.class)
+                .where("Sequence = ?", sequence)
+                .executeSingle();
+    }
+
     public static void save(final UserReading reading) {
         UserReadingModel readingModel = new UserReadingModel();
 

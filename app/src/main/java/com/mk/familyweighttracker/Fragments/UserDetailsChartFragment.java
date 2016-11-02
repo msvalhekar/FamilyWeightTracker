@@ -185,6 +185,9 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
         for (UserReading reading: userReadings) {
             values.add(new Entry((float) reading.Weight, (int) reading.Sequence));
         }
+        if(values.size() == User.MAXIMUM_READINGS_COUNT) {
+            values.remove(values.size()-1);
+        }
 
         LineDataSet lineDataSet = new LineDataSet(values, "actual weight");
         lineDataSet.setLineWidth(5f);
