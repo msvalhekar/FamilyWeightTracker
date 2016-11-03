@@ -30,12 +30,13 @@
                 android:visibility="gone">
                 <TextView
                     android:id="@+id/record_item_extra_message"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:textSize="12dp"
+                    android:textSize="16dp"
                     android:textStyle="bold"
                     android:textColor="@android:color/holo_purple"
+                    android:textAlignment="center"
                     android:text="@string/record_item_message"/>
                 <View
                     android:id="@+id/record_item_extra_divider"

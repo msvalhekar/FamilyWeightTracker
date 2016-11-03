@@ -73,7 +73,7 @@ public class User {
     }
 
     public boolean maxReadingsReached() {
-        return getReadingsCount() >= MAXIMUM_READINGS_COUNT;
+        return getReadingsCount() >= MAXIMUM_READINGS_COUNT || getDeliveryReading() != null;
     }
 
     public String getDateOfBirthStr() {
@@ -181,12 +181,22 @@ public class User {
         return null;
     }
 
+    public UserReading getDeliveryReading() {
+        if(mReadings != null && mReadings.size() > 0) {
+            List<UserReading> readings = getReadings(false);
+            if(readings.get(0).isDeliveryReading())
+            return readings.get(0);
+        }
+        return null;
+    }
+
     public UserReading getLatestReading() {
         if(mReadings != null && mReadings.size() > 0) {
-            if (mReadings.size() == User.MAXIMUM_READINGS_COUNT) {
-                return getReadings(false).get(1);
+            List<UserReading> readings = getReadings(false);
+            if (readings.get(0).isDeliveryReading()) {
+                return readings.get(1);
             }
-            return getReadings(false).get(0);
+            return readings.get(0);
         }
         return null;
     }

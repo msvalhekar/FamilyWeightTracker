@@ -90,17 +90,19 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
             }
         }
 
-        ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_actual))
-                .setText(Html.fromHtml(String.format("Weight: %.2f %s", latestReading.Weight, mUser.weightUnit)));
-        ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_min_exp_this_week))
-                .setText(Html.fromHtml(String.format("Min: %.2f", latestWeekRange.MinimumWeight)));
-        ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_min_exp_40th_week))
-                .setText(Html.fromHtml(String.format("Min: %.2f", fortiethWeekRange.MinimumWeight)));
+        if(latestWeekRange != null) {
+            ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_actual))
+                    .setText(Html.fromHtml(String.format("Weight: %.2f %s", latestReading.Weight, mUser.weightUnit)));
+            ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_min_exp_this_week))
+                    .setText(Html.fromHtml(String.format("Min: %.2f", latestWeekRange.MinimumWeight)));
+            ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_min_exp_40th_week))
+                    .setText(Html.fromHtml(String.format("Min: %.2f", fortiethWeekRange.MinimumWeight)));
 
-        ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_max_exp_this_week))
-                .setText(Html.fromHtml(String.format("Max: %.2f", latestWeekRange.MaximumWeight)));
-        ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_max_exp_40th_week))
-                .setText(Html.fromHtml(String.format("Max: %.2f", fortiethWeekRange.MaximumWeight)));
+            ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_max_exp_this_week))
+                    .setText(Html.fromHtml(String.format("Max: %.2f", latestWeekRange.MaximumWeight)));
+            ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_max_exp_40th_week))
+                    .setText(Html.fromHtml(String.format("Max: %.2f", fortiethWeekRange.MaximumWeight)));
+        }
     }
 
     private void initChartControl()
@@ -183,11 +185,12 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
 
         int index = 0;
         for (UserReading reading: userReadings) {
-            values.add(new Entry((float) reading.Weight, (int) reading.Sequence));
+            if(!reading.isDeliveryReading())
+                values.add(new Entry((float) reading.Weight, (int) reading.Sequence));
         }
-        if(values.size() == User.MAXIMUM_READINGS_COUNT) {
-            values.remove(values.size()-1);
-        }
+//        if(values.size() == User.MAXIMUM_READINGS_COUNT) {
+//            values.remove(values.size()-1);
+//        }
 
         LineDataSet lineDataSet = new LineDataSet(values, "actual weight");
         lineDataSet.setLineWidth(5f);
