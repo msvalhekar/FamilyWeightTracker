@@ -161,8 +161,14 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
             ((ImageView) itemView.findViewById(R.id.user_slideshow_item_image))
                     .setImageBitmap(reading.getImageAsBitmap(false));
 
+            String weekMsg = String.format(getString(R.string.slideshow_week_number_format), reading.Sequence);
+            if(reading.isPrePregnancyReading())
+                weekMsg = getString(R.string.pre_pregnancy_label);
+            else if(reading.isDeliveryReading())
+                weekMsg = getString(R.string.delivery_label);
+            
             ((TextView) itemView.findViewById(R.id.user_slideshow_week))
-                    .setText(String.format(getString(R.string.slideshow_week_number_format), reading.Sequence));
+                    .setText(weekMsg);
 
             TextView noteView = ((TextView) itemView.findViewById(R.id.user_slideshow_note));
             if(StringHelper.isNullOrEmpty(reading.Note)) {
