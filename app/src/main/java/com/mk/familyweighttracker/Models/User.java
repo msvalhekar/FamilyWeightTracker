@@ -292,7 +292,8 @@ public class User {
 
         long days = Utility.calculateDateDiff(deliveryDueDate);
         long remainingWeeks = days / 7;
-        return 40 - remainingWeeks;
+        long estSeq = 40 - remainingWeeks;
+        return estSeq < 0 ? 0 : estSeq;
     }
 
     public long getNextAvailableSequence() {
