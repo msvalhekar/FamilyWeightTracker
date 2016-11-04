@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
@@ -39,8 +38,6 @@ import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Framework.StorageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
-import com.mk.familyweighttracker.Framework.NumericParser;
-import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
@@ -130,6 +127,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         initWeightUnitControl();
         initHeightUnitControl();
         initHeightSequenceControl();
+        initMissingReadingsControl();
         initActionButtonControls();
     }
 
@@ -289,6 +287,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
 
         final Button seqButton = ((Button) findViewById(R.id.add_reading_sequence_btn));
         seqButton.setText(String.valueOf(mUserReadingToProcess.Sequence));
+
         boolean nonEditable = bEditMode || mUserReadingToProcess.isPrePregnancyReading();
         seqButton.setClickable(!nonEditable);
         if(nonEditable) return;
@@ -296,7 +295,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         seqButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NumberPicker sequencePicker = getWeekSequenceControl(mUserReadingToProcess.Sequence);
+                NumberPicker sequencePicker = getWeekSequenceControl();
                 int indexOfNextSequence = Arrays.asList(sequencePicker.getDisplayedValues())
                         .indexOf(String.valueOf(mUserReadingToProcess.Sequence));
                 if (indexOfNextSequence != -1)
@@ -338,7 +337,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         });
     }
 
-    private NumberPicker getWeekSequenceControl(long lastReading) {
+    private NumberPicker getWeekSequenceControl() {
         NumberPicker picker = new NumberPicker(activityView.getContext());
         picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
@@ -348,7 +347,6 @@ public class AddReadingActivity extends TrackerBaseActivity {
 
         List<UserReading> readings = mSelectedUser.getReadings(true);
         final List<String> itemsToDisplay = new ArrayList<>();
-        final List<String> pendingItems = new ArrayList<>();
         for (long seqValue = startFrom; seqValue < endAt; seqValue += incrementFactor) {
             boolean found = false;
             for (UserReading reading : readings) {
@@ -358,8 +356,6 @@ public class AddReadingActivity extends TrackerBaseActivity {
             }
             if(!found) {
                 itemsToDisplay.add(String.valueOf(seqValue));
-                if(seqValue < lastReading)
-                    pendingItems.add(String.valueOf(seqValue));
             }
         }
 
@@ -376,6 +372,24 @@ public class AddReadingActivity extends TrackerBaseActivity {
             }
         });
 
+        return picker;
+    }
+
+    private void initMissingReadingsControl() {
+
+        List<UserReading> readings = mSelectedUser.getReadings(true);
+        final List<String> pendingItems = new ArrayList<>();
+        for (long seqValue = 1; seqValue < mUserReadingToProcess.Sequence; seqValue++) {
+            boolean found = false;
+            for (UserReading reading : readings) {
+                if (reading.Sequence == seqValue) {
+                    found = true;
+                }
+            }
+            if(!found)
+                pendingItems.add(String.valueOf(seqValue));
+        }
+
         findViewById(R.id.add_user_pending_readings_section).setVisibility(View.GONE);
         if(pendingItems.size() > 0) {
             findViewById(R.id.add_user_pending_readings_section).setVisibility(View.VISIBLE);
@@ -383,8 +397,6 @@ public class AddReadingActivity extends TrackerBaseActivity {
             ((TextView) findViewById(R.id.add_reading_week_pending))
                     .setText(String.format("%s %s", TextUtils.join(", ", pendingItems), getString(R.string.WeeksMessage)));
         }
-
-        return picker;
     }
 
     private void initWeightUnitControl() {
