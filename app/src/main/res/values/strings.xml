@@ -121,7 +121,7 @@
 
     <string name="menu_user_detail_media">Media</string>
     <string name="user_media_slideshow_label">Preview</string>
-    <string name="user_media_bkgnd_music_label">Choose Background Music</string>
+    <string name="user_media_bkgnd_music_label">Set Background Music</string>
     <string name="user_media_share_label">Share</string>
     <string name="user_media_export_label">Export</string>
     <string name="slideshow_empty_note_message">[add notes, your feelings, your thoughts or talk to baby]</string>

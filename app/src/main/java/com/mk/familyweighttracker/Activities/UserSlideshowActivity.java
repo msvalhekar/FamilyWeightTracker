@@ -166,7 +166,7 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
                 weekMsg = getString(R.string.pre_pregnancy_label);
             else if(reading.isDeliveryReading())
                 weekMsg = getString(R.string.delivery_label);
-            
+
             ((TextView) itemView.findViewById(R.id.user_slideshow_week))
                     .setText(weekMsg);
 

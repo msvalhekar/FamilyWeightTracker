@@ -1,23 +1,31 @@
 package com.mk.familyweighttracker.Fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.PreferenceHelper;
+import com.mk.familyweighttracker.Framework.StringHelper;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
+
+import java.io.File;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,6 +64,8 @@ public class UserDetailsMediaFragment extends Fragment implements OnNewReadingAd
         if(requestCode == Constants.RequestCode.MEDIA_BROWSE_AUDIO) {
             if(resultCode == Activity.RESULT_OK) {
                 audioUri = data.getData();
+
+                updateAudioTextControl(audioUri);
             }
 
             String audioUriStr = audioUri == null ? "" : audioUri.toString();
@@ -68,7 +78,7 @@ public class UserDetailsMediaFragment extends Fragment implements OnNewReadingAd
             .setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mUser.getReadingsCount() == 0) {
+                    if (mUser.getReadingsCount() == 0) {
                         Toast.makeText(v.getContext(), R.string.user_readings_not_found_message, Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -77,6 +87,11 @@ public class UserDetailsMediaFragment extends Fragment implements OnNewReadingAd
                     startActivity(intent);
                 }
             });
+
+        String audioUriString = PreferenceHelper.getString(Constants.SharedPreference.SelectedBackgroundAudio, "");
+        if(!StringHelper.isNullOrEmpty(audioUriString)) {
+            updateAudioTextControl(Uri.parse(audioUriString));
+        }
 
         mFragmentView.findViewById(R.id.media_select_bkgd_music_button)
             .setOnClickListener(new View.OnClickListener() {
@@ -118,4 +133,29 @@ public class UserDetailsMediaFragment extends Fragment implements OnNewReadingAd
         mUser = new UserService().get(mSelectedUserId);
         if(mUser.getReadingsCount() == 0) return;
     }
+
+    private void updateAudioTextControl(Uri audioUri) {
+        String audioName = getFilename(audioUri);
+        ((TextView) mFragmentView.findViewById(R.id.media_bkgd_music_name)).setText(audioName);
+    }
+
+    private String getFilename(Uri uri) {
+        String fileName = null;
+        Context context = this.getContext();
+        String scheme = uri.getScheme();
+        if (scheme.equals("file")) {
+            fileName = uri.getLastPathSegment();
+        }
+        else if (scheme.equals("content")) {
+            String[] proj = { MediaStore.Video.Media.TITLE };
+            Cursor cursor = context.getContentResolver().query(uri, proj, null, null, null);
+            if (cursor != null && cursor.getCount() != 0) {
+                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE);
+                cursor.moveToFirst();
+                fileName = cursor.getString(columnIndex);
+            }
+        }
+        return fileName;
+    }
 }
+

@@ -9,9 +9,20 @@
         android:id="@+id/media_select_bkgd_music_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="3dp"
         android:background="@drawable/round_shape_button"
         android:text="@string/user_media_bkgnd_music_label"/>
+    <TextView
+        android:id="@+id/media_bkgd_music_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:text="Audio not set"/>
 
     <Button
         android:id="@+id/media_slideshow_button"
@@ -26,7 +37,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
-        android:visibility="gone"
         android:background="@drawable/round_shape_button"
         android:text="@string/user_media_share_label"/>
 
