@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
@@ -21,8 +20,6 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -323,6 +320,12 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH));
+
+//                Calendar maxDate = Calendar.getInstance();
+//                maxDate.setTime(new Date());
+//                datePickerDialog.getDatePicker().setMinDate(maxDate.getTimeInMillis());
+//                maxDate.add(Calendar.DAY_OF_MONTH, 287);
+//                datePickerDialog.getDatePicker().setMaxDate(maxDate.getTimeInMillis());
 
                 datePickerDialog.show();
             }
