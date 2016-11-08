@@ -148,7 +148,8 @@ public class UserDetailsMediaFragment extends Fragment implements OnNewReadingAd
             if (cursor != null && cursor.getCount() != 0) {
                 int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE);
                 cursor.moveToFirst();
-                return cursor.getString(columnIndex);
+                String fileName = cursor.getString(columnIndex);
+                return StringHelper.isNullOrEmpty(fileName) ? uri.getLastPathSegment() : fileName;
             }
             } catch (Exception e) {
             }

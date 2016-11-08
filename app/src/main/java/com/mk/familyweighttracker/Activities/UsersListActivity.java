@@ -267,7 +267,7 @@ public class UsersListActivity extends TrackerBaseActivity {
 
                         int imageViewWidth = mView.findViewById(R.id.list_item_image).getWidth();
                         int viewWidth = mView.getWidth() - imageViewWidth;
-                        int nameViewWidth = viewWidth * 1 / 3;
+                        int nameViewWidth = viewWidth / 3;
                         ((TextView) mView.findViewById(R.id.list_item_name)).setWidth(nameViewWidth);
                         ((TextView) mView.findViewById(R.id.list_item_weight)).setWidth(nameViewWidth);
                         ((TextView) mView.findViewById(R.id.list_item_height)).setWidth(nameViewWidth);
@@ -384,16 +384,7 @@ public class UsersListActivity extends TrackerBaseActivity {
 
             private void setUserImageControl() {
                 ImageView imageView = (ImageView) mView.findViewById(R.id.list_item_image);
-                if (mUser.imageBytes != null) {
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(mUser.imageBytes, 0, mUser.imageBytes.length);
-                    imageView.setImageBitmap(ImageUtility.getCircularBitmap(bitmap));
-                } else {
-                    if (mContactDefaultBitmap == null) {
-                        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.splash);
-                        mContactDefaultBitmap = ImageUtility.getCircularBitmap(bitmap);
-                    }
-                    imageView.setImageBitmap(mContactDefaultBitmap);
-                }
+                imageView.setImageBitmap(mUser.getImageAsBitmap(true));
             }
         }
     }
