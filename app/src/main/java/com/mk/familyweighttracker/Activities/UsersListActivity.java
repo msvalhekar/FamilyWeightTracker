@@ -145,7 +145,7 @@ public class UsersListActivity extends TrackerBaseActivity {
                 startActivityForResult(intent, Constants.RequestCode.ADD_USER);
                 break;
             case Infant:
-                Toast.makeText(UsersListActivity.this, "Feature coming soon, in next Update", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UsersListActivity.this, "Will be available in next Update.", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
