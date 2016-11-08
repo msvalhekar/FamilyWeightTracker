@@ -344,9 +344,6 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
     private class UserReadingRecyclerViewAdapter
             extends RecyclerView.Adapter<UserReadingRecyclerViewAdapter.ViewHolder> {
 
-//        public UserReadingRecyclerViewAdapter() {
-//        }
-
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
@@ -356,9 +353,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-
             final UserReading reading = userReadingList.get(position);
-
             holder.setReading(reading);
         }
 
@@ -466,7 +461,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
                 ((TextView) mView.findViewById(R.id.record_item_period_no))
                         .setText(String.format("%s %02d", mSelectedUser.trackingPeriod, mUserReading.Sequence));
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("EEE dd-MM");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd-MMM");
                 ((TextView) mView.findViewById(R.id.record_item_taken_on))
                         .setText(dateFormat.format(mUserReading.TakenOn));
             }

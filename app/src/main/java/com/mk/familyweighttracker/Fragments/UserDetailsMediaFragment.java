@@ -140,22 +140,20 @@ public class UserDetailsMediaFragment extends Fragment implements OnNewReadingAd
     }
 
     private String getFilename(Uri uri) {
-        String fileName = null;
-        Context context = this.getContext();
         String scheme = uri.getScheme();
-        if (scheme.equals("file")) {
-            fileName = uri.getLastPathSegment();
-        }
-        else if (scheme.equals("content")) {
+        if (scheme.equals("content")) {
             String[] proj = { MediaStore.Video.Media.TITLE };
-            Cursor cursor = context.getContentResolver().query(uri, proj, null, null, null);
+            try {
+            Cursor cursor = this.getContext().getContentResolver().query(uri, proj, null, null, null);
             if (cursor != null && cursor.getCount() != 0) {
                 int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE);
                 cursor.moveToFirst();
-                fileName = cursor.getString(columnIndex);
+                return cursor.getString(columnIndex);
+            }
+            } catch (Exception e) {
             }
         }
-        return fileName;
+        return uri.getLastPathSegment();
     }
 }
 

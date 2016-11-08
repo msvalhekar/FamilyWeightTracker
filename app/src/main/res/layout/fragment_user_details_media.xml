@@ -37,6 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
+        android:visibility="gone"
         android:background="@drawable/round_shape_button"
         android:text="@string/user_media_share_label"/>
 

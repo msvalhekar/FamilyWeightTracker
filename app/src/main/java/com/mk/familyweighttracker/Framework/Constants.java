@@ -12,7 +12,7 @@ public class Constants {
     public static final String PLAY_STORE_MARKET_SEARCH_URL = "market://details?id=%s";
     public static final String PLAY_STORE_APP_SEARCH_URL = "http://play.google.com/store/apps/details?id=%s";
 
-    public static final int SPLASH_SCREEN_TIMEOUT_SECONDS = 2500;
+    public static final int SPLASH_SCREEN_TIMEOUT_SECONDS = 1800;
     public static final int CHECK_MARKET_APP_UPDATE_AFTER_DAYS = 30;
 
     public static class AppDirectory {
