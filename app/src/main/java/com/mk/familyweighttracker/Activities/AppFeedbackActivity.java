@@ -69,7 +69,7 @@ public class AppFeedbackActivity extends TrackerBaseActivity {
                         final EditText noteEditView = ((EditText) findViewById(R.id.app_feedback_note_edittext));
                         String feedbackMessage = noteEditView.getText().toString();
                         if(StringHelper.isNullOrEmpty(feedbackMessage)) {
-                            Toast.makeText(AppFeedbackActivity.this, "No feedback shared. Write your feedback and Send.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AppFeedbackActivity.this, R.string.error_feedback_content_required_message, Toast.LENGTH_SHORT).show();
                             return;
                         }
                         finish();
@@ -78,7 +78,7 @@ public class AppFeedbackActivity extends TrackerBaseActivity {
                         emailIntent.setType("plain/text");
                         emailIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");
                         emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"mvalhekar@gmail.com"});
-                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "PWT - Feedback - " + mUser.name);
+                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, String.format(getString(R.string.feedback_email_subject_message), mUser.name));
                         emailIntent.putExtra(Intent.EXTRA_TEXT, feedbackMessage); // do this so some email clients don't complain about empty body.
                         startActivity (emailIntent);
 

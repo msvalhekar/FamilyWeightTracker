@@ -100,19 +100,6 @@ public class UserDetailActivity extends TrackerBaseActivity
     }
 
     private void saveUserImageIfRequired() {
-//        toTest: older versions with image stored in db, can probably remove commented part in next release
-//        try {
-//            File file = new File(mUser.getImagePath());
-//            FileInputStream stream = new FileInputStream(file);
-//            mUser.imageBytes = new byte[(int)file.length()];
-//            stream.read(mUser.imageBytes, 0, (int)file.length());
-//            stream.close();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
         if(mUser.imageBytes != null) {
             try {
                 FileOutputStream outputStream = new FileOutputStream(mUser.getImagePath());
@@ -163,7 +150,7 @@ public class UserDetailActivity extends TrackerBaseActivity
 
         informDataChangedAndFinish();
 
-        String message = String.format("'%s' removed permanently.", mUser.name);
+        String message = String.format(getString(R.string.user_removed_message), mUser.name);
         Toast.makeText(TrackerApplication.getApp(), message, Toast.LENGTH_SHORT).show();
     }
 
@@ -235,7 +222,7 @@ public class UserDetailActivity extends TrackerBaseActivity
     }
 
     private String getShareText() {
-        return getString(R.string.app_share_line_1) +
+        return String.format("\'%s\'", getString(R.string.app_name)) +
                 getString(R.string.app_share_line_2) +
                 getString(R.string.app_share_line_3) +
                 getString(R.string.app_share_line_4) +
@@ -250,8 +237,7 @@ public class UserDetailActivity extends TrackerBaseActivity
         finish();
     }
 
-    public class UserDetailsTabPagerAdapter extends FragmentStatePagerAdapter
-    {
+    private class UserDetailsTabPagerAdapter extends FragmentStatePagerAdapter {
         private int mTabsCount;
         private Object[] mTabs;
         private Object[] mTitles;

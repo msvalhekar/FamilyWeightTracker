@@ -246,7 +246,7 @@
                 android:layout_weight="1"
                 android:layout_margin="2dp"
                 android:background="@drawable/round_shape_button"
-                android:text="@string/user_detail_edit_btn_label"/>
+                android:text="@string/edit_label"/>
         </TableRow>
     </TableLayout>
 </ScrollView>

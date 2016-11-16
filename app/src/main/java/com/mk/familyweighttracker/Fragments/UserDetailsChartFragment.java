@@ -75,11 +75,11 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
         UserReading latestReading = mUser.getLatestReading();
 
         ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_week_no))
-                .setText(String.format("Week: %d", latestReading.Sequence));
+                .setText(String.format(getString(R.string.chart_desc_current_week_label), latestReading.Sequence));
         ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_exp_this_week))
-                .setText("Exp this Week");
+                .setText(R.string.chart_desc_exp_current_week_label);
         ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_exp_40th_week))
-                .setText("Exp on 40th Week");
+                .setText(R.string.chart_desc_40th_week_label);
 
         WeekWeightGainRange fortiethWeekRange = mWeightRangeList.get(mWeightRangeList.size()-1);
         WeekWeightGainRange latestWeekRange = null;
@@ -92,16 +92,16 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
 
         if(latestWeekRange != null) {
             ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_actual))
-                    .setText(Html.fromHtml(String.format("Weight: %.2f %s", latestReading.Weight, mUser.weightUnit)));
+                    .setText(Html.fromHtml(String.format("%s: %.2f %s", getString(R.string.user_detail_prepreg_weight_label), latestReading.Weight, mUser.weightUnit)));
             ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_min_exp_this_week))
-                    .setText(Html.fromHtml(String.format("Min: %.2f", latestWeekRange.MinimumWeight)));
+                    .setText(Html.fromHtml(String.format("%s: %.2f", getString(R.string.chart_desc_exp_min_wt_label), latestWeekRange.MinimumWeight)));
             ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_min_exp_40th_week))
-                    .setText(Html.fromHtml(String.format("Min: %.2f", fortiethWeekRange.MinimumWeight)));
+                    .setText(Html.fromHtml(String.format("%s: %.2f", getString(R.string.chart_desc_exp_min_wt_label), fortiethWeekRange.MinimumWeight)));
 
             ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_max_exp_this_week))
-                    .setText(Html.fromHtml(String.format("Max: %.2f", latestWeekRange.MaximumWeight)));
+                    .setText(Html.fromHtml(String.format("%s: %.2f", getString(R.string.chart_desc_exp_max_wt_label), latestWeekRange.MaximumWeight)));
             ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_max_exp_40th_week))
-                    .setText(Html.fromHtml(String.format("Max: %.2f", fortiethWeekRange.MaximumWeight)));
+                    .setText(Html.fromHtml(String.format("%s: %.2f", getString(R.string.chart_desc_exp_max_wt_label), fortiethWeekRange.MaximumWeight)));
         }
     }
 
@@ -170,12 +170,12 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
             double value = isMinimum ? weightRange.MinimumWeight : weightRange.MaximumWeight;
             values.add(new Entry((float) value, index++));
         }
-        String label = isMinimum ? "expected minimum" : "expected maximum";
+        String label = isMinimum ? getString(R.string.chart_exp_min_legend) : getString(R.string.chart_exp_max_legend);
         LineDataSet lineDataSet = new LineDataSet(values, label);
         lineDataSet.setLineWidth(2f);
         lineDataSet.setDrawValues(false);
 
-        int color = isMinimum ? Color.parseColor("#009999") : Color.parseColor("#FF66B2");
+        int color = isMinimum ? R.color.chart_exp_min_color : R.color.chart_exp_max_color;
         lineDataSet.setColor(color);
         return lineDataSet;
     }
@@ -192,7 +192,7 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
 //            values.remove(values.size()-1);
 //        }
 
-        LineDataSet lineDataSet = new LineDataSet(values, "actual weight");
+        LineDataSet lineDataSet = new LineDataSet(values, getString(R.string.chart_actual_weight_legend));
         lineDataSet.setLineWidth(5f);
         lineDataSet.setCircleRadius(2f);
 

@@ -91,7 +91,7 @@
                     android:textSize="25sp"
                     android:textColor="@color/negative_button_color"
                     android:background="@drawable/pink_border_circle"
-                    android:text="@string/home_app_disclaimer_ok_label" />
+                    android:text="@string/ok_label" />
             </LinearLayout>
 
         </LinearLayout>

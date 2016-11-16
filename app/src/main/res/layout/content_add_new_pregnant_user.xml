@@ -106,7 +106,7 @@
                 android:layout_weight="0.7"
                 android:background="@android:color/transparent"
                 android:layout_gravity="left|center"
-                android:text="@string/add_user_have_twins_no"/>
+                android:text="@string/no_label"/>
         </TableRow>
         <TableRow
             android:id="@+id/add_user_delivery_due_section"
@@ -217,7 +217,7 @@
                 android:layout_margin="2dp"
                 android:background="@drawable/round_shape_button"
                 android:textSize="25sp"
-                android:text="@string/add_user_activity_title"/>
+                android:text="@string/add_label"/>
         </TableRow>
     </TableLayout>
 </ScrollView>

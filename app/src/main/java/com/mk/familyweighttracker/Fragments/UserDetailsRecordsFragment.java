@@ -141,13 +141,13 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
             new AlertDialog.Builder(context)
                     .setTitle(R.string.add_conflicting_week_title)
                     .setMessage(String.format(messageFormat, reading.Sequence))
-                    .setPositiveButton("Edit Existing", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(context.getString(R.string.add_conflicting_week_positive_action_label), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             gotoEditReading(reading.Id);
                         }
                     })
-                    .setNegativeButton("Add Next", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(context.getString(R.string.add_conflicting_week_negative_action_label), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             gotoAddReading();
@@ -180,7 +180,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
         new AlertDialog.Builder(context)
                 .setTitle(R.string.delivery_due_date_required_title)
                 .setMessage(R.string.delivery_due_date_required_message)
-                .setPositiveButton("SET NOW", new DialogInterface.OnClickListener() {
+                .setPositiveButton(context.getString(R.string.button_due_date_action_lable), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(context, AddPregnantUserActivity.class);
@@ -231,7 +231,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
                     public void onClick(View v) {
                         new AlertDialog.Builder(getContext())
                                 .setMessage(Html.fromHtml(getLegendMessage()))
-                                .setPositiveButton("Got it", null)
+                                .setPositiveButton(getString(R.string.got_it_label), null)
                                 .create()
                                 .show();
 

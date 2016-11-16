@@ -17,22 +17,19 @@
                  android:id="@+id/user_detail_chart_description_week_no"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:layout_column="0"
-                 android:text="@string/user_detail_chart_desc_week_no_default_value"/>
+                 android:layout_column="0"/>
              <TextView
                  android:id="@+id/user_detail_chart_description_exp_this_week"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:layout_column="1"
-                 android:textStyle="bold"
-                 android:text="@string/user_detail_chart_desc_exp_this_week_default_value"/>
+                 android:textStyle="bold"/>
              <TextView
                  android:id="@+id/user_detail_chart_description_exp_40th_week"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:layout_column="2"
-                 android:textStyle="bold"
-                 android:text="@string/user_detail_chart_desc_exp_max_week_default_value"/>
+                 android:textStyle="bold"/>
          </TableRow>
          <TableRow>
              <TextView
@@ -40,34 +37,29 @@
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:layout_column="0"
-                 android:textStyle="bold"
-                 android:text="@string/user_detail_chart_desc_weight_actual_default_value"/>
+                 android:textStyle="bold"/>
              <TextView
                  android:id="@+id/user_detail_chart_description_weight_max_exp_this_week"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:layout_column="1"
-                 android:text="@string/user_detail_chart_desc_weight_max_exp_n_week_default_value"/>
+                 android:layout_column="1"/>
              <TextView
                  android:id="@+id/user_detail_chart_description_weight_max_exp_40th_week"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:layout_column="2"
-                 android:text="@string/user_detail_chart_desc_max_exp_last_week_default_value"/>
+                 android:layout_column="2"/>
          </TableRow>
          <TableRow>
              <TextView
                  android:id="@+id/user_detail_chart_description_weight_min_exp_this_week"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:layout_column="1"
-                 android:text="@string/user_detail_chart_desc_weight_min_exp_n_week_default_value"/>
+                 android:layout_column="1"/>
              <TextView
                  android:id="@+id/user_detail_chart_description_weight_min_exp_40th_week"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:layout_column="2"
-                 android:text="@string/user_detail_chart_desc_min_exp_last_week_default_value"/>
+                 android:layout_column="2"/>
          </TableRow>
     </TableLayout>
 

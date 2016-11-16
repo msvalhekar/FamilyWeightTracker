@@ -124,7 +124,7 @@ public class UsersListActivity extends TrackerBaseActivity {
                 //        }
 
                 new AlertDialog.Builder(view.getContext())
-                        .setTitle("*** Start tracking ***")
+                        .setTitle(getString(R.string.add_user_options_title))
                         .setAdapter(userTypesAdapter, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -297,7 +297,7 @@ public class UsersListActivity extends TrackerBaseActivity {
                     return;
                 }
 
-                bmiView.setText("BMI: " + mUser.getBmiStr());
+                bmiView.setText(String.format(getString(R.string.bmi_with_value_label), mUser.getBmiStr()));
 
                 BodyWeightCategory weightCategory = mUser.getWeightCategory();
                 bmiCategoryView.setText(weightCategory.toString());

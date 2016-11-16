@@ -132,7 +132,7 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
 
     private void initTwinsControls() {
         String message = getResources().getString(
-                mUser.haveTwins ? R.string.add_user_have_twins_yes : R.string.add_user_have_twins_no);
+                mUser.haveTwins ? R.string.yes_label : R.string.no_label);
 
         ((TextView) mFragmentView.findViewById(R.id.view_user_delivery_twins))
                 .setText(message);
@@ -141,8 +141,15 @@ public class UserDetailsProfileFragment extends Fragment implements OnNewReading
     private void initReminderControls() {
         ((TextView) mFragmentView.findViewById(R.id.view_user_reminder_day)).setText(R.string.value_not_set_message);
         if(mUser.enableReminder) {
-            final List<String> days = Arrays.asList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
-            String reminderText = String.format("%02d:%02d every %s", mUser.reminderHour, mUser.reminderMinute, days.get(mUser.reminderDay));
+            final List<String> days = Arrays.asList(
+                    getString(R.string.WEEK_DAY_SUNDAY),
+                    getString(R.string.WEEK_DAY_MONDAY),
+                    getString(R.string.WEEK_DAY_TUESDAY),
+                    getString(R.string.WEEK_DAY_WEDNESDAY),
+                    getString(R.string.WEEK_DAY_THURSDAY),
+                    getString(R.string.WEEK_DAY_FRIDAY),
+                    getString(R.string.WEEK_DAY_SATURDAY));
+            String reminderText = String.format("%02d:%02d %s %s", mUser.reminderHour, mUser.reminderMinute, getString(R.string.profile_reminder_message), days.get(mUser.reminderDay));
             ((TextView) mFragmentView.findViewById(R.id.view_user_reminder_day)).setText(reminderText);
         }
     }

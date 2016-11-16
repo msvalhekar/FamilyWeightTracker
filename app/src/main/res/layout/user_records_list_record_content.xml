@@ -36,8 +36,7 @@
                     android:textSize="16dp"
                     android:textStyle="bold"
                     android:textColor="@android:color/holo_purple"
-                    android:textAlignment="center"
-                    android:text="@string/record_item_message"/>
+                    android:textAlignment="center"/>
                 <View
                     android:id="@+id/record_item_extra_divider"
                     style="@style/Divider"

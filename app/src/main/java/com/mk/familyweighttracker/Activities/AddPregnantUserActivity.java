@@ -48,6 +48,9 @@ import java.util.List;
 
 public class AddPregnantUserActivity extends TrackerBaseActivity {
 
+    public static final String ERROR_FIELD_KEY_NAME = "Name";
+    public static final String ERROR_FIELD_KEY_DUE_DATE = "DDD";
+
     private User mUser;
     private long mSelectedUserId;
     boolean mIsEditMode;
@@ -98,7 +101,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         initDeliveryDueDateControl();
         initActionButtonControls();
 
-        setTitle(mIsEditMode ? R.string.title_activity_edit_user : R.string.title_activity_add_new_user);
+        setTitle(mIsEditMode ? R.string.edit_label : R.string.add_label);
     }
 
     private void findAllControls() {
@@ -198,7 +201,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                 mUser.haveTwins = isChecked;
 
                 String message = getResources().getString(
-                        isChecked ? R.string.add_user_have_twins_yes : R.string.add_user_have_twins_no);
+                        isChecked ? R.string.yes_label : R.string.no_label);
 
                 ((Button) findViewById(R.id.add_user_have_twins_button)).setText(message);
             }
@@ -217,10 +220,10 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                 mUser.enableReminder = isChecked;
 
                 int show = View.GONE;
-                String message = getResources().getString(R.string.add_user_have_twins_no);
+                String message = getResources().getString(R.string.no_label);
                 if (isChecked) {
                     show = View.VISIBLE;
-                    message = getResources().getString(R.string.add_user_have_twins_yes);
+                    message = getResources().getString(R.string.yes_label);
                 }
 
                 mReminderDaySectionView.setVisibility(show);
@@ -237,7 +240,14 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     private void initDayOfReminderControl() {
         mReminderDaySectionView.setVisibility(mUser.enableReminder ? View.VISIBLE : View.GONE);
 
-        final List<String> days = Arrays.asList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
+        final List<String> days = Arrays.asList(
+                getString(R.string.WEEK_DAY_SUNDAY),
+                getString(R.string.WEEK_DAY_MONDAY),
+                getString(R.string.WEEK_DAY_TUESDAY),
+                getString(R.string.WEEK_DAY_WEDNESDAY),
+                getString(R.string.WEEK_DAY_THURSDAY),
+                getString(R.string.WEEK_DAY_FRIDAY),
+                getString(R.string.WEEK_DAY_SATURDAY));
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, days);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -335,7 +345,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     private void initActionButtonControls() {
         Button saveButton = ((Button) findViewById(R.id.add_user_save_button));
 
-        saveButton.setText(mIsEditMode ? "Save" : "Add");
+        saveButton.setText(mIsEditMode ? getString(R.string.save_label) : getString(R.string.add_label));
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -349,11 +359,11 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
 
         if (errors.size() > 0) {
             for (String key : errors.keySet()) {
-                if (key == "Name") {
+                if (key == ERROR_FIELD_KEY_NAME) {
                     mNameText.setError(errors.get(key).get(0));
                     mNameText.requestFocus();
                     break;
-                } else if (key == "DDD") {
+                } else if (key == ERROR_FIELD_KEY_DUE_DATE) {
                     mDeliveryDueDateButton.setError(errors.get(key).get(0));
                     mDeliveryDueDateButton.requestFocus();
                     break;
@@ -379,22 +389,22 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         mUser.name = mNameText.getText().toString();
         ArrayList<String> nameErrors = new ArrayList<>();
         if (TextUtils.isEmpty(mUser.name)) {
-            nameErrors.add("Required");
+            nameErrors.add(getString(R.string.error_field_required_message));
         }
         else if (mIsEditMode) {
             User userWithSameName = new UserService().get(mUser.name);
             if(userWithSameName != null && userWithSameName.getId() != mSelectedUserId)
-                nameErrors.add("This name is already used, try different");
+                nameErrors.add(getString(R.string.error_user_name_used_message));
         } else if (new UserService().isAlreadyAdded(mUser.name)) {
-            nameErrors.add("This name is already used, try different");
+            nameErrors.add(getString(R.string.error_user_name_used_message));
         }
         if(nameErrors.size() > 0)
-            errors.put("Name", nameErrors);
+            errors.put(ERROR_FIELD_KEY_NAME, nameErrors);
 
         if(mUser.deliveryDueDate == null) {
             ArrayList<String> deliverDateErrors = new ArrayList<>();
-            deliverDateErrors.add("Required");
-            errors.put("DDD", deliverDateErrors);
+            deliverDateErrors.add(getString(R.string.error_field_required_message));
+            errors.put(ERROR_FIELD_KEY_DUE_DATE, deliverDateErrors);
         }
         return errors;
     }

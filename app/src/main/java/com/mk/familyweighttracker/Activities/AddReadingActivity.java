@@ -188,7 +188,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
                             new AlertDialog.Builder(v.getContext())
                                     .setTitle(getString(R.string.PrePregnancyReadingRemovalError))
                                     .setMessage(getString(R.string.PrePregnancyReadingRemovalErrorMessage))
-                                    .setPositiveButton("Ok", null)
+                                    .setPositiveButton(R.string.ok_label, null)
                                     .create()
                                     .show();
                             return;
@@ -196,13 +196,13 @@ public class AddReadingActivity extends TrackerBaseActivity {
                         new AlertDialog.Builder(v.getContext())
                                 .setTitle(getString(R.string.ReadingRemovalConfirmation))
                                 .setMessage(getString(R.string.ReadingRemovalConfirmationMessage))
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                .setPositiveButton(R.string.yes_label, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         onDeleteReading();
                                     }
                                 })
-                                .setNegativeButton("No", null)
+                                .setNegativeButton(R.string.no_label, null)
                                 .create()
                                 .show();
                     }
@@ -318,7 +318,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
                         .setView(layout)
                         .setCancelable(false)
                         .setMessage(getString(R.string.WeekNumberMessage))
-                        .setPositiveButton("SET", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.set_label, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mUserReadingToProcess.Sequence = mNewSequenceValue;
@@ -326,7 +326,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
                                         .setText(String.valueOf(mUserReadingToProcess.Sequence));
                             }
                         })
-                        .setNegativeButton("Cancel", null)
+                        .setNegativeButton(R.string.cancel_label, null)
                         .create();
                 alertDialog.show();
 
@@ -443,7 +443,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
                         .setView(layout)
                         .setCancelable(false)
                         .setMessage(getWeightDialogTitle(false, layout.getNumber()))
-                        .setPositiveButton("SET", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.set_label, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mUserReadingToProcess.Weight = layout.getNumber();
@@ -451,7 +451,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
                                         .setText(String.format("%.2f", mUserReadingToProcess.Weight));
                             }
                         })
-                        .setNegativeButton("Cancel", null)
+                        .setNegativeButton(R.string.cancel_label, null)
                         .create();
                 alertDialog.show();
 
@@ -476,7 +476,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
             valueFormat = "<font color='blue'>%.2f</font>";
 
         String valueString = String.format(valueFormat, number);
-        return Html.fromHtml(String.format("Weight (%s %s)", valueString, mSelectedUser.weightUnit.toString()));
+        return Html.fromHtml(String.format("%s (%s %s)", getString(R.string.user_detail_prepreg_weight_label), valueString, mSelectedUser.weightUnit.toString()));
     }
 
     private void initHeightSequenceControl() {
@@ -498,7 +498,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
                         .setView(layout)
                         .setCancelable(false)
                         .setMessage(getHeightDialogTitle(false, layout.getNumber()))
-                        .setPositiveButton("SET", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getString(R.string.set_label), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mUserReadingToProcess.Height = layout.getNumber();
@@ -506,7 +506,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
                                         .setText(String.format("%.2f", mUserReadingToProcess.Height));
                             }
                         })
-                        .setNegativeButton("Cancel", null)
+                        .setNegativeButton(getString(R.string.cancel_label), null)
                         .create();
                 alertDialog.show();
 
@@ -531,7 +531,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
             valueFormat = "<font color='blue'>%.2f</font>";
 
         String valueString = String.format(valueFormat, number);
-        return Html.fromHtml(String.format("Height (%s %s)", valueString, mSelectedUser.heightUnit.toString()));
+        return Html.fromHtml(String.format("%s (%s %s)", getString(R.string.user_detail_prepreg_height_label), valueString, mSelectedUser.heightUnit.toString()));
     }
 
     private void initHeightUnitControl() {

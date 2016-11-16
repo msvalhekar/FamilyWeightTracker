@@ -45,7 +45,6 @@
                 android:textStyle="bold"
                 android:layout_column="1"
                 android:textAlignment="center"
-                android:text="Meenalkumar Valhekar"
                 android:layout_row="0" />
 
             <LinearLayout
@@ -60,8 +59,7 @@
                     android:id="@+id/list_item_age"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="13dp"
-                    android:text="30 years"/>
+                    android:textSize="13dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -75,14 +73,12 @@
                     android:id="@+id/list_item_weight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15dp"
-                    android:text="60 kgs."/>
+                    android:textSize="15dp"/>
                 <TextView
                     android:id="@+id/list_item_weight_diff"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="10dp"
-                    android:text="5 kgs."/>
+                    android:textSize="10dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -96,14 +92,12 @@
                     android:id="@+id/list_item_height"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15dp"
-                    android:text="5 ft 6 inch"/>
+                    android:textSize="15dp"/>
                 <TextView
                     android:id="@+id/list_item_height_diff"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="10dp"
-                    android:text="0 ft 1 inch"/>
+                    android:textSize="10dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -117,8 +111,7 @@
                     android:id="@+id/list_item_bmi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15dp"
-                    android:text="150"/>
+                    android:textSize="15dp"/>
             </LinearLayout>
 
             <LinearLayout

@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"
-            android:text="max 500">
+            android:text="@string/feedback_max_length_label">
         </TextView>
     </LinearLayout>
     <View style="@style/Divider"/>
@@ -65,7 +65,7 @@
             android:layout_weight="1"
             android:layout_margin="2dp"
             android:background="@drawable/round_shape_red_button"
-            android:text="Cancel"/>
+            android:text="@string/cancel_label"/>
         <Button
             android:id="@+id/app_feedback_send_button"
             android:layout_width="0dp"
@@ -73,6 +73,6 @@
             android:layout_weight="1"
             android:layout_margin="2dp"
             android:background="@drawable/round_shape_button"
-            android:text="Send"/>
+            android:text="@string/send_label"/>
     </LinearLayout>
 </LinearLayout>

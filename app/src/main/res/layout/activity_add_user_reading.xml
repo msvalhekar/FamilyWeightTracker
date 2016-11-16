@@ -89,8 +89,7 @@
                     android:layout_weight="1"
                     android:gravity="left|center"
                     android:paddingLeft="10dp"
-                    android:background="@drawable/background_button"
-                    android:text="@string/add_user_reading_date_default_value" />
+                    android:background="@drawable/background_button" />
             </TableRow>
             <TableRow
                 android:id="@+id/add_reading_sequence_section"
@@ -109,8 +108,7 @@
                     android:layout_weight="1"
                     android:gravity="left|center"
                     android:paddingLeft="10dp"
-                    android:background="@drawable/background_button"
-                    android:text="@string/add_user_reading_period_default_value" />
+                    android:background="@drawable/background_button"/>
             </TableRow>
             <View
                 android:id="@+id/add_reading_weight_section_divider"
@@ -179,8 +177,7 @@
                     android:layout_weight="0.75"
                     android:gravity="left|center"
                     android:paddingLeft="10dp"
-                    android:background="@drawable/background_button"
-                    android:text="@string/add_user_reading_weight_default_value" />
+                    android:background="@drawable/background_button"/>
                 <TextView
                     android:id="@+id/add_reading_weight_unit_value"
                     android:layout_width="0dp"
@@ -257,15 +254,13 @@
                     android:layout_weight="0.75"
                     android:gravity="left|center"
                     android:paddingLeft="10dp"
-                    android:background="@drawable/background_button"
-                    android:text="@string/add_user_reading_height_default_value" />
+                    android:background="@drawable/background_button"/>
                 <TextView
                     android:id="@+id/add_reading_height_unit_value"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.25"
-                    android:textStyle="bold"
-                    android:text="@string/add_user_reading_height_unit_value"/>
+                    android:textStyle="bold"/>
             </TableRow>
             <View
                 android:id="@+id/add_reading_note_section_divider"
@@ -318,8 +313,7 @@
                     android:gravity="left|center"
                     android:clickable="false"
                     android:background="@android:color/transparent"
-                    android:textAllCaps="false"
-                    android:text="@string/add_user_reading_pending_weeks_default_value"/>
+                    android:textAllCaps="false"/>
             </TableRow>
             <View style="@style/Divider"/>
             <TableRow

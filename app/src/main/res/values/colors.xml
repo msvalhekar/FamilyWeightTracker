@@ -19,4 +19,7 @@
     <!--<color name="app_social_layout_background">#FEDEEA</color>-->
     <!--<color name="app_social_button_background">#FDA2C4</color>-->
     <!--<color name="app_social_button_text">#FA0E66</color>-->
+
+    <color name="chart_exp_min_color">#009999</color>
+    <color name="chart_exp_max_color">#FF66B2</color>
 </resources>

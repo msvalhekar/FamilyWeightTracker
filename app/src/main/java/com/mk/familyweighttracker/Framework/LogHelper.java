@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.widget.Toast;
 
+import com.mk.familyweighttracker.R;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -50,10 +52,10 @@ public class LogHelper {
                             .putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + logFilePath))
                             .putExtra(Intent.EXTRA_TEXT, emailTextBuilder.toString());
 
-                    currentActivity.startActivity(Intent.createChooser(emailIntent, "Send log"));
+                    currentActivity.startActivity(Intent.createChooser(emailIntent, currentActivity.getString(R.string.log_helper_email_chooser_title)));
 
                 } catch (Throwable t) {
-                    Toast.makeText(currentActivity, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(currentActivity, R.string.error_log_helper_no_email_client_message, Toast.LENGTH_SHORT).show();
                     t.printStackTrace();
                 }
             }
@@ -79,7 +81,7 @@ public class LogHelper {
             fileWriter.flush();
             fileWriter.close();
 
-            zipETrackLogFile(logFilePath);
+            zipTrackerLogFile(logFilePath);
 
         } catch (IOException e) {
             //Utility.logException(Constants.LogTag.SystemInformation, e);
@@ -135,7 +137,7 @@ public class LogHelper {
         }
     }
 
-    private static void zipETrackLogFile(String logFilePath) throws IOException {
+    private static void zipTrackerLogFile(String logFilePath) throws IOException {
         BufferedInputStream bufferedInputStream;
 
         FileOutputStream destinationStream = new FileOutputStream(StorageUtility.getZippedLogFilePath());
