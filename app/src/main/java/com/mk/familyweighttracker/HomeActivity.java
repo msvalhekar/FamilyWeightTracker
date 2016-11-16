@@ -7,17 +7,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
-import android.widget.TextView;
 
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.StorageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
-import com.mk.familyweighttracker.Models.User;
-import com.mk.familyweighttracker.Services.UserService;
-
-import java.util.List;
 
 public class HomeActivity extends TrackerBaseActivity {
 
@@ -43,30 +38,13 @@ public class HomeActivity extends TrackerBaseActivity {
     }
 
     private void initDisclaimerControl() {
-        ((TextView) findViewById(R.id.home_app_disclaimer_ok))
+        findViewById(R.id.home_app_disclaimer_ok)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         startActivity(new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.UsersListActivity.class));
-//                        List<User> users = new UserService().getAll();
-//                        if (users.size() > 0) {
-//                            gotoPregnancyDetailActivity(users.get(0).getId());
-//                        } else {
-//                            gotoAddPregnantUserActivity();
-//                        }
                     }
                 });
-    }
-
-    private void gotoAddPregnantUserActivity() {
-        Intent intent = new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.AddPregnantUserActivity.class);
-        startActivity(intent);
-    }
-
-    private void gotoPregnancyDetailActivity(long userId) {
-        Intent intent = new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.UserDetailActivity.class);
-        intent.putExtra(Constants.ExtraArg.USER_ID, userId);
-        startActivity(intent);
     }
 
     private void initToolbarControl() {

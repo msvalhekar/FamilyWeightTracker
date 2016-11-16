@@ -3,14 +3,12 @@ package com.mk.familyweighttracker.Activities;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,35 +22,22 @@ import android.widget.Toast;
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
-import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
-
 import com.mk.familyweighttracker.Services.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * An activity representing a list of Items. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link UserDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
 public class UsersListActivity extends TrackerBaseActivity {
-
-    public static final String NEW_USER_ID_KEY = "newUserId";
 
     private RecyclerView mRecyclerView;
     private UsersRecyclerViewAdapter usersAdapter;
     private List<User> mUserList = new ArrayList<>();
-    private Bitmap mContactDefaultBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,12 +78,6 @@ public class UsersListActivity extends TrackerBaseActivity {
         }
     }
 
-    private void setReminderNotification(long userId) {
-        User user = new UserService().get(userId);
-        if(user == null || !user.enableReminder)
-            return;
-    }
-
     private void initToolbarControl() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_users_list);
         setSupportActionBar(toolbar);
@@ -129,7 +108,7 @@ public class UsersListActivity extends TrackerBaseActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String selectedUserType = userTypesAdapter.getItem(which);
-                                switchToAddUserActivity(UserType.getUserType(selectedUserType));
+                                gotoAddUserActivityOfType(UserType.getUserType(selectedUserType));
                             }
                         })
                         .create()
@@ -138,7 +117,7 @@ public class UsersListActivity extends TrackerBaseActivity {
         });
     }
 
-    private void switchToAddUserActivity(UserType userType) {
+    private void gotoAddUserActivityOfType(UserType userType) {
         switch (userType) {
             case Pregnancy:
                 Intent intent = new Intent(TrackerApplication.getApp(), AddPregnantUserActivity.class);
