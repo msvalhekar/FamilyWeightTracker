@@ -226,7 +226,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         ((TextView) findViewById(R.id.add_reading_taken_on_lable))
                 .setText(getResources().getText(mUserReadingToProcess.isPrePregnancyReading()
                         ? R.string.add_user_first_reading_lmp_date_label
-                        : R.string.add_user_reading_date_label));
+                        : R.string.reading_measured_date_label));
 
         final Button takenOnView = ((Button) findViewById(R.id.add_reading_taken_on_btn));
         final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -426,7 +426,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
 
     private void initWeightSequenceControl() {
         ((TextView) findViewById(R.id.add_reading_weight_label))
-                .setText(String.format("%s *", getString(R.string.add_user_reading_weight_label)));
+                .setText(String.format("%s *", getString(R.string.weight_label)));
 
         ((TextView) findViewById(R.id.add_reading_weight_unit_value)).setText(mSelectedUser.weightUnit.toString());
 
@@ -476,12 +476,12 @@ public class AddReadingActivity extends TrackerBaseActivity {
             valueFormat = "<font color='blue'>%.2f</font>";
 
         String valueString = String.format(valueFormat, number);
-        return Html.fromHtml(String.format("%s (%s %s)", getString(R.string.user_detail_prepreg_weight_label), valueString, mSelectedUser.weightUnit.toString()));
+        return Html.fromHtml(String.format("%s (%s %s)", getString(R.string.weight_label), valueString, mSelectedUser.weightUnit.toString()));
     }
 
     private void initHeightSequenceControl() {
         ((TextView) findViewById(R.id.add_reading_height_label))
-                .setText(String.format("%s *", getString(R.string.add_user_reading_height_label)));
+                .setText(String.format("%s *", getString(R.string.height_label)));
 
         ((TextView) findViewById(R.id.add_reading_height_unit_value)).setText(mSelectedUser.heightUnit.toString());
 
@@ -531,7 +531,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
             valueFormat = "<font color='blue'>%.2f</font>";
 
         String valueString = String.format(valueFormat, number);
-        return Html.fromHtml(String.format("%s (%s %s)", getString(R.string.user_detail_prepreg_height_label), valueString, mSelectedUser.heightUnit.toString()));
+        return Html.fromHtml(String.format("%s (%s %s)", getString(R.string.height_label), valueString, mSelectedUser.heightUnit.toString()));
     }
 
     private void initHeightUnitControl() {

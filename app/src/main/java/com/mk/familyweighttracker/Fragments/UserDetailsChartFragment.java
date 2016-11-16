@@ -92,7 +92,7 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
 
         if(latestWeekRange != null) {
             ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_actual))
-                    .setText(Html.fromHtml(String.format("%s: %.2f %s", getString(R.string.user_detail_prepreg_weight_label), latestReading.Weight, mUser.weightUnit)));
+                    .setText(Html.fromHtml(String.format("%s: %.2f %s", getString(R.string.weight_label), latestReading.Weight, mUser.weightUnit)));
             ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_min_exp_this_week))
                     .setText(Html.fromHtml(String.format("%s: %.2f", getString(R.string.chart_desc_exp_min_wt_label), latestWeekRange.MinimumWeight)));
             ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_min_exp_40th_week))

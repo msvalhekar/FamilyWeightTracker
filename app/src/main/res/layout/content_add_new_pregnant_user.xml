@@ -39,7 +39,7 @@
                     android:layout_weight="1"
                     android:textAlignment="center"
                     android:textSize="10dp"
-                    android:text="@string/add_user_reading_bump_desc_label"/>
+                    android:text="@string/bump_desc_label"/>
             </LinearLayout>
         </TableRow>
         <TableRow

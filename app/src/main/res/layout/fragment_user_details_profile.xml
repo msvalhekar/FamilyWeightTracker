@@ -159,7 +159,7 @@
                 android:layout_weight="1"
                 android:textStyle="bold"
                 android:gravity="left|center"
-                android:text="@string/user_detail_prepreg_weight_label"/>
+                android:text="@string/weight_label"/>
             <TextView
                 android:id="@+id/view_user_prepreg_weight"
                 android:layout_width="0dp"
@@ -179,7 +179,7 @@
                 android:layout_weight="1"
                 android:textStyle="bold"
                 android:gravity="left|center"
-                android:text="@string/user_detail_prepreg_height_label"/>
+                android:text="@string/height_label"/>
             <TextView
                 android:id="@+id/view_user_prepreg_height"
                 android:layout_width="0dp"

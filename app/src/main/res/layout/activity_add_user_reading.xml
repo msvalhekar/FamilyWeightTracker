@@ -45,21 +45,22 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_gravity="center_vertical">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:textStyle="bold"
-                        android:text="@string/add_user_reading_bump_label"/>
+                        android:text="@string/bump_label"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="left|center"
                         android:textSize="10dp"
-                        android:text="@string/add_user_reading_bump_desc_label"/>
+                        android:text="@string/bump_desc_label"/>
                 </LinearLayout>
 
                 <ImageButton
@@ -81,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textStyle="bold"
-                    android:text="@string/add_user_reading_date_label"/>
+                    android:text="@string/reading_measured_date_label"/>
                 <Button
                     android:id="@+id/add_reading_taken_on_btn"
                     android:layout_width="0dp"
@@ -100,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textStyle="bold"
-                    android:text="@string/add_user_reading_period_label"/>
+                    android:text="@string/reading_period_label"/>
                 <Button
                     android:id="@+id/add_reading_sequence_btn"
                     android:layout_width="0dp"
@@ -129,14 +130,14 @@
                         android:layout_weight="1"
                         android:layout_gravity="left|center"
                         android:textStyle="bold"
-                        android:text="@string/add_user_reading_weight_unit_label"/>
+                        android:text="@string/reading_weight_unit_label"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="left|center"
                         android:textSize="10dp"
-                        android:text="@string/add_user_reading_unit_desc_label"/>
+                        android:text="@string/reading_unit_desc_label"/>
                 </LinearLayout>
                 <RadioGroup
                     android:id="@+id/add_reading_weight_unit_switch"
@@ -150,13 +151,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
-                        android:text="@string/add_user_reading_weight_unit_kg" />
+                        android:text="@string/weight_unit_kg" />
                     <RadioButton
                         android:id="@+id/add_reading_weight_unit_lb"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="false"
-                        android:text="@string/add_user_reading_weight_unit_lbs" />
+                        android:text="@string/weight_unit_lbs" />
                 </RadioGroup>
             </TableRow>
             <TableRow
@@ -169,7 +170,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textStyle="bold"
-                    android:text="@string/add_user_reading_weight_label"/>
+                    android:text="@string/weight_label"/>
                 <Button
                     android:id="@+id/add_reading_weight_btn"
                     android:layout_width="0dp"
@@ -183,8 +184,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.25"
-                    android:textStyle="bold"
-                    android:text="@string/add_user_reading_weight_unit_value"/>
+                    android:textStyle="bold"/>
             </TableRow>
             <View
                 android:id="@+id/add_reading_height_section_divider"
@@ -205,14 +205,14 @@
                         android:layout_weight="1"
                         android:layout_gravity="left|center"
                         android:textStyle="bold"
-                        android:text="@string/add_user_reading_height_unit_label"/>
+                        android:text="@string/reading_height_unit_label"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="left|center"
                         android:textSize="10dp"
-                        android:text="@string/add_user_reading_unit_desc_label"/>
+                        android:text="@string/reading_unit_desc_label"/>
                 </LinearLayout>
                 <RadioGroup
                     android:id="@+id/add_reading_height_unit_switch"
@@ -227,13 +227,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
-                        android:text="@string/add_user_reading_height_unit_cms" />
+                        android:text="@string/height_unit_cms" />
                     <RadioButton
                         android:id="@+id/add_reading_height_unit_inch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="false"
-                        android:text="@string/add_user_reading_height_unit_inches" />
+                        android:text="@string/height_unit_inches" />
                 </RadioGroup>
             </TableRow>
             <TableRow
@@ -246,7 +246,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textStyle="bold"
-                    android:text="@string/add_user_reading_height_label"/>
+                    android:text="@string/height_label"/>
                 <Button
                     android:id="@+id/add_reading_height_btn"
                     android:layout_width="0dp"
@@ -277,11 +277,11 @@
                     android:orientation="horizontal">
                     <EditText
                         android:id="@+id/add_reading_note_edittext"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="left|center"
-                        android:lines="2"
+                        android:lines="3"
                         android:inputType="textMultiLine"
                         android:maxLength="200">
                     </EditText>
@@ -304,7 +304,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textStyle="bold"
-                    android:text="@string/add_user_reading_pending_weeks_label"/>
+                    android:text="@string/reading_pending_weeks_label"/>
                 <Button
                     android:id="@+id/add_reading_week_pending"
                     android:layout_width="0dp"
