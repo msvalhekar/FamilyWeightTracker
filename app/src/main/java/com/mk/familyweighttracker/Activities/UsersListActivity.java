@@ -19,7 +19,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mk.familyweighttracker.Adapter.UserListRecyclerViewAdapter;
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
+import com.mk.familyweighttracker.Enums.UserType;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
@@ -36,8 +38,8 @@ import java.util.List;
 public class UsersListActivity extends TrackerBaseActivity {
 
     private RecyclerView mRecyclerView;
-    private UsersRecyclerViewAdapter usersAdapter;
-    private List<User> mUserList = new ArrayList<>();
+    private UserListRecyclerViewAdapter usersAdapter;
+    private List<User> mUserList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +52,15 @@ public class UsersListActivity extends TrackerBaseActivity {
 
         initAddNewUserControl();
 
-        initUserListControl();
+        mRecyclerView = ((RecyclerView) findViewById(R.id.item_list));
+        assert mRecyclerView != null;
     }
 
     @Override
     protected void onResume(){
         super.onResume();
 
-        onRefreshList();
+        bindUserList();
     }
 
     @Override
@@ -67,13 +70,13 @@ public class UsersListActivity extends TrackerBaseActivity {
         // Check which request we're responding to
         if (requestCode == Constants.RequestCode.ADD_USER) {
             // update the list for new user
-            onRefreshList();
+            resetUserList();
         }
         if (requestCode == Constants.RequestCode.USER_DATA_CHANGED) {
             // update the list for new record
             boolean dataChanged = data.getBooleanExtra(Constants.ExtraArg.IS_DATA_CHANGED, false);
             if(dataChanged) {
-                onRefreshList();
+                resetUserList();
             }
         }
     }
@@ -95,7 +98,8 @@ public class UsersListActivity extends TrackerBaseActivity {
             @Override
             public void onClick(View view) {
                 final ArrayAdapter<String> userTypesAdapter = new ArrayAdapter<String>(UsersListActivity.this, android.R.layout.select_dialog_singlechoice);
-                if(mUserList.size() == 0)
+
+                if (getUsers().size() == 0)
                     userTypesAdapter.add(UserType.Pregnancy.toString());
                 userTypesAdapter.add(UserType.Infant.toString());
                 //        for (UserType userType:UserType.values()){
@@ -129,242 +133,41 @@ public class UsersListActivity extends TrackerBaseActivity {
         }
     }
 
-    private void initUserListControl() {
-        showHideEmptyListControl();
-
-        usersAdapter = new UsersRecyclerViewAdapter();
-
-        mRecyclerView = ((RecyclerView) findViewById(R.id.item_list));
-        assert mRecyclerView != null;
-
-        mRecyclerView.setAdapter(usersAdapter);
-
-        usersAdapter.notifyDataSetChanged();
+    private List<User> getUsers() {
+        if (mUserList == null) {
+            mUserList = new UserService().getAll();
+        }
+        return mUserList;
     }
 
-    private boolean showHideEmptyListControl() {
+    private void resetUserList() {
+        mUserList = null;
+    }
+
+    private void bindUserList() {
+        showHideEmptyListControl();
+
+        usersAdapter = new UserListRecyclerViewAdapter(UsersListActivity.this, getUsers());
+        usersAdapter.setOnItemClickListener(new UserListRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(User user) {
+                Intent intent = new Intent(UsersListActivity.this, UserDetailActivity.class);
+                intent.putExtra(Constants.ExtraArg.USER_ID, user.getId());
+                startActivityForResult(intent, Constants.RequestCode.USER_DATA_CHANGED);
+            }
+        });
+
+        mRecyclerView.setAdapter(usersAdapter);
+        //usersAdapter.notifyDataSetChanged();
+    }
+
+    private void showHideEmptyListControl() {
         findViewById(R.id.empty_view).setVisibility(View.GONE);
 
-        if(mUserList.size() == 0) {
+        if(getUsers().size() == 0) {
             findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
             ((TextView) findViewById(R.id.empty_mesage_title)).setText(R.string.user_readings_not_found_message);
             ((TextView) findViewById(R.id.empty_mesage_description)).setText(R.string.user_readings_add_user_message);
-            return true;
-        }
-        return false;
-    }
-
-    private void onRefreshList() {
-        List<User> latestUsers = new UserService().getAll();
-
-        mUserList.clear();
-        for (User user: latestUsers)
-            mUserList.add(user);
-
-        showHideEmptyListControl();
-
-        usersAdapter.notifyDataSetChanged();
-    }
-
-    enum UserType {
-        Pregnancy ("Pregnancy Weight"),
-        Infant ("Infant Growth");
-
-        final static String PREGNANCY = "Pregnancy Weight";
-        final static String INFANT = "Infant Growth";
-
-        final String value;
-        UserType(String value) {
-            this.value = value;
-        }
-
-        public String toString() {
-            return value;
-        }
-
-        public static UserType getUserType(String value){
-            switch (value) {
-                case PREGNANCY: return Pregnancy;
-                case INFANT: return Infant;
-            }
-            return Pregnancy;
-        }
-    }
-
-    private class UsersRecyclerViewAdapter
-            extends RecyclerView.Adapter<UsersRecyclerViewAdapter.ViewHolder> {
-
-        public UsersRecyclerViewAdapter() {
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.users_list_user_content, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            final User user = mUserList.get(position);
-
-            holder.setUser(user);
-
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), UserDetailActivity.class);
-                    intent.putExtra(Constants.ExtraArg.USER_ID, user.getId());
-                    startActivityForResult(intent, Constants.RequestCode.USER_DATA_CHANGED);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mUserList.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public User mUser;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-            }
-
-            public void setUser(User user)
-            {
-                mUser = user;
-
-                mView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @SuppressLint("NewApi")
-                    @SuppressWarnings("deprecation")
-                    @Override
-                    public void onGlobalLayout() {
-
-                        int imageViewWidth = mView.findViewById(R.id.list_item_image).getWidth();
-                        int viewWidth = mView.getWidth() - imageViewWidth;
-                        int nameViewWidth = viewWidth / 3;
-                        ((TextView) mView.findViewById(R.id.list_item_name)).setWidth(nameViewWidth);
-                        ((TextView) mView.findViewById(R.id.list_item_weight)).setWidth(nameViewWidth);
-                        ((TextView) mView.findViewById(R.id.list_item_height)).setWidth(nameViewWidth);
-
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
-                            mView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        else
-                            mView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    }
-                });
-
-                setUserImageControl();
-                setNameControl();
-                setAgeControl();
-                setWeightControl();
-                setHeightControl();
-                setBmiControl();
-            }
-
-            private void setBmiControl() {
-                TextView bmiView = ((TextView) mView.findViewById(R.id.list_item_bmi));
-                TextView bmiCategoryView = ((TextView) mView.findViewById(R.id.list_item_bmi_category));
-
-                if(Double.isNaN(mUser.getBmi())){
-                    bmiView.setText("");
-                    bmiCategoryView.setText("");
-                    return;
-                }
-
-                bmiView.setText(String.format(getString(R.string.bmi_with_value_label), mUser.getBmiStr()));
-
-                BodyWeightCategory weightCategory = mUser.getWeightCategory();
-                bmiCategoryView.setText(weightCategory.toString());
-
-                if(weightCategory == BodyWeightCategory.UnderWeight) {
-                    bmiCategoryView.setBackgroundColor(Color.rgb(255,255,153));
-                } else if(weightCategory == BodyWeightCategory.Normal) {
-                    bmiCategoryView.setBackgroundColor(Color.rgb(153,255,153));
-                } else if(weightCategory == BodyWeightCategory.OverWeight) {
-                    bmiCategoryView.setBackgroundColor(Color.rgb(255,255,153));
-                } else if(weightCategory == BodyWeightCategory.Obese) {
-                    bmiCategoryView.setBackgroundColor(Color.rgb(255,102,102));
-                }
-            }
-
-            private void setNameControl() {
-                TextView nameView = ((TextView) mView.findViewById(R.id.list_item_name));
-                nameView.setText(mUser.name);
-            }
-
-            private void setAgeControl() {
-                String ageValue = "";
-                if(mUser.dateOfBirth != null) {
-                    ageValue = Utility.calculateAge(mUser.dateOfBirth);
-                }
-                ((TextView) mView.findViewById(R.id.list_item_age)).setText(ageValue);
-            }
-
-            private void setHeightControl() {
-                double currentHeight = 0;
-                String heightValue = "";
-                UserReading latestReading = mUser.getLatestReading();
-                if(latestReading != null) {
-                    currentHeight = latestReading.Height;
-                    heightValue = String.format("%.1f", currentHeight) + " " + mUser.heightUnit;
-                }
-                ((TextView) mView.findViewById(R.id.list_item_height)).setText(heightValue);
-
-                String heightDiffValue = "";
-                TextView heightDiffView = (TextView) mView.findViewById(R.id.list_item_height_diff);
-                if(latestReading != null){
-                    List<UserReading> readings = mUser.getReadings(true);
-                    if(readings.size() > 0) {
-                        UserReading previousReading = readings.get(0);
-                        double diff = currentHeight - previousReading.Height;
-                        heightDiffValue = String.format("(%s%.1f)", (diff > 0) ? "+" : "", diff);
-
-                        if (diff < 0)
-                            heightDiffView.setTextColor(Color.RED);
-                        else
-                            heightDiffView.setTextColor(Color.BLUE);
-                    }
-                }
-                heightDiffView.setText(heightDiffValue);
-            }
-
-            private void setWeightControl() {
-                double currentWeight = 0;
-                String weightValue = "";
-                UserReading latestReading = mUser.getLatestReading();
-                if(latestReading != null) {
-                    currentWeight = latestReading.Weight;
-                    weightValue = String.format("%.2f", currentWeight) + " " + mUser.weightUnit;
-                }
-                ((TextView) mView.findViewById(R.id.list_item_weight)).setText(weightValue);
-
-                String weightDiffValue = "";
-                TextView weightDiffView = (TextView) mView.findViewById(R.id.list_item_weight_diff);
-                if(latestReading != null){
-                    List<UserReading> readings = mUser.getReadings(true);
-                    if(readings.size() > 0) {
-                        UserReading previousReading = readings.get(0);
-                        double diff = currentWeight - previousReading.Weight;
-                        weightDiffValue = String.format("(%s%.2f)", (diff > 0) ? "+" : "", diff);
-
-                        if(diff < 0)
-                            weightDiffView.setTextColor(Color.RED);
-                        else
-                            weightDiffView.setTextColor(Color.BLUE);
-                    }
-                }
-                weightDiffView.setText(weightDiffValue);
-            }
-
-            private void setUserImageControl() {
-                ImageView imageView = (ImageView) mView.findViewById(R.id.list_item_image);
-                imageView.setImageBitmap(mUser.getImageAsBitmap(true));
-            }
         }
     }
 }
