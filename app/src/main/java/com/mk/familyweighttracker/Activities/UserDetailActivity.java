@@ -2,11 +2,8 @@ package com.mk.familyweighttracker.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -14,9 +11,9 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
+import com.mk.familyweighttracker.Adapter.PregnantUserDetailsTabPagerAdapter;
 import com.mk.familyweighttracker.Fragments.UserDetailsProfileFragment;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
@@ -24,7 +21,6 @@ import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.SlidingTabLayout;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
-import com.mk.familyweighttracker.Framework.UserDetailsTabsFactory;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
@@ -34,14 +30,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * An activity representing a list of Items. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link UserDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
 public class UserDetailActivity extends TrackerBaseActivity
         implements OnNewReadingAdded, UserDetailsProfileFragment.OnUserDeleted {
 
@@ -175,7 +163,7 @@ public class UserDetailActivity extends TrackerBaseActivity
 
     private void initDetailTabControl() {
         ViewPager viewPager = ((ViewPager) findViewById(R.id.user_detail_pager));
-        viewPager.setAdapter(new UserDetailsTabPagerAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new PregnantUserDetailsTabPagerAdapter(getSupportFragmentManager()));
 
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
         slidingTabLayout.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the slidingTabLayout Space Evenly in Available width
@@ -194,7 +182,7 @@ public class UserDetailActivity extends TrackerBaseActivity
 
 
     private void initInteractionControl() {
-        ((Button) findViewById(R.id.app_share)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.app_share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -204,7 +192,7 @@ public class UserDetailActivity extends TrackerBaseActivity
             }
         });
 
-        ((Button) findViewById(R.id.app_feedback)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.app_feedback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent feedbackIntent = new Intent(v.getContext(), AppFeedbackActivity.class);
@@ -213,7 +201,7 @@ public class UserDetailActivity extends TrackerBaseActivity
             }
         });
 
-        ((Button) findViewById(R.id.app_rate)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.app_rate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 navigateToAppStore();
@@ -235,28 +223,5 @@ public class UserDetailActivity extends TrackerBaseActivity
         intent.putExtra(Constants.ExtraArg.IS_DATA_CHANGED, mIsDataChanged);
         setResult(Activity.RESULT_OK, intent);
         finish();
-    }
-
-    private class UserDetailsTabPagerAdapter extends FragmentStatePagerAdapter {
-        private int mTabsCount;
-        private Object[] mTabs;
-        private Object[] mTitles;
-
-        public UserDetailsTabPagerAdapter(FragmentManager fm) {
-            super(fm);
-
-            mTabs = UserDetailsTabsFactory.getInstance().getTabs().toArray();
-            mTitles = UserDetailsTabsFactory.getInstance().getTabTitles().toArray();
-            mTabsCount = mTabs.length;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) { return (String)mTitles[position]; }
-
-        @Override
-        public Fragment getItem(int position) { return (Fragment)mTabs[position]; }
-
-        @Override
-        public int getCount() { return mTabsCount; }
     }
 }

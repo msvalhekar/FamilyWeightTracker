@@ -1,10 +1,8 @@
 package com.mk.familyweighttracker.Fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,8 +22,6 @@ import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
-
-import java.io.File;
 
 /**
  * A simple {@link Fragment} subclass.

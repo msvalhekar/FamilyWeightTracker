@@ -1,39 +1,29 @@
 package com.mk.familyweighttracker.Activities;
 
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import com.mk.familyweighttracker.Adapter.UserListRecyclerViewAdapter;
-import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Enums.UserType;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
-import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
-import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class UsersListActivity extends TrackerBaseActivity {
 
