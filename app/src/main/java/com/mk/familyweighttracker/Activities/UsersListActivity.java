@@ -38,7 +38,6 @@ import java.util.List;
 public class UsersListActivity extends TrackerBaseActivity {
 
     private RecyclerView mRecyclerView;
-    private UserListRecyclerViewAdapter usersAdapter;
     private List<User> mUserList;
 
     @Override
@@ -60,25 +59,8 @@ public class UsersListActivity extends TrackerBaseActivity {
     protected void onResume(){
         super.onResume();
 
+        resetUserList();
         bindUserList();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != RESULT_OK) return;
-
-        // Check which request we're responding to
-        if (requestCode == Constants.RequestCode.ADD_USER) {
-            // update the list for new user
-            resetUserList();
-        }
-        if (requestCode == Constants.RequestCode.USER_DATA_CHANGED) {
-            // update the list for new record
-            boolean dataChanged = data.getBooleanExtra(Constants.ExtraArg.IS_DATA_CHANGED, false);
-            if(dataChanged) {
-                resetUserList();
-            }
-        }
     }
 
     private void initToolbarControl() {
@@ -99,12 +81,9 @@ public class UsersListActivity extends TrackerBaseActivity {
             public void onClick(View view) {
                 final ArrayAdapter<String> userTypesAdapter = new ArrayAdapter<String>(UsersListActivity.this, android.R.layout.select_dialog_singlechoice);
 
-                if (getUsers().size() == 0)
-                    userTypesAdapter.add(UserType.Pregnancy.toString());
-                userTypesAdapter.add(UserType.Infant.toString());
-                //        for (UserType userType:UserType.values()){
-                //            userTypesAdapter.add(userType.toString());
-                //        }
+                for (UserType userType:UserType.values()){
+                    userTypesAdapter.add(userType.toString());
+                }
 
                 new AlertDialog.Builder(view.getContext())
                         .setTitle(getString(R.string.add_user_options_title))
@@ -124,11 +103,15 @@ public class UsersListActivity extends TrackerBaseActivity {
     private void gotoAddUserActivityOfType(UserType userType) {
         switch (userType) {
             case Pregnancy:
-                Intent intent = new Intent(TrackerApplication.getApp(), AddPregnantUserActivity.class);
-                startActivityForResult(intent, Constants.RequestCode.ADD_USER);
+                if(getUsers().size() == 0) {
+                    Intent intent = new Intent(TrackerApplication.getApp(), AddPregnantUserActivity.class);
+                    startActivityForResult(intent, Constants.RequestCode.ADD_USER);
+                } else {
+                    Toast.makeText(UsersListActivity.this, "Tracking multiple pregnancies will be available in next Update.", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case Infant:
-                Toast.makeText(UsersListActivity.this, "Will be available in next Update.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UsersListActivity.this, "Tracking Infant growth will be available in next Update.", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -147,7 +130,7 @@ public class UsersListActivity extends TrackerBaseActivity {
     private void bindUserList() {
         showHideEmptyListControl();
 
-        usersAdapter = new UserListRecyclerViewAdapter(UsersListActivity.this, getUsers());
+        UserListRecyclerViewAdapter usersAdapter = new UserListRecyclerViewAdapter(UsersListActivity.this, getUsers());
         usersAdapter.setOnItemClickListener(new UserListRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(User user) {
