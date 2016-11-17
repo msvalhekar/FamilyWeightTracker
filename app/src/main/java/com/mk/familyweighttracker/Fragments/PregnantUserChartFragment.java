@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PregnantUserChartFragment extends Fragment implements OnChartValueSelectedListener, OnNewReadingAdded {
+public class PregnantUserChartFragment extends PregnantUserBaseFragment implements OnChartValueSelectedListener, OnNewReadingAdded {
 
     private long mSelectedUserId;
     private User mUser;
@@ -55,7 +55,7 @@ public class PregnantUserChartFragment extends Fragment implements OnChartValueS
         // Inflate the layout for this fragment
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_chart, container, false);
 
-        mSelectedUserId = getActivity().getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
+        mSelectedUserId = getUserId();
 
         initChartControl();
 

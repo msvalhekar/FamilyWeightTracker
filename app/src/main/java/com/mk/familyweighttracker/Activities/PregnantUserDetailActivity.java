@@ -1,13 +1,11 @@
 package com.mk.familyweighttracker.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +15,6 @@ import com.mk.familyweighttracker.Adapter.PregnantUserTabPagerAdapter;
 import com.mk.familyweighttracker.Fragments.PregnantUserProfileFragment;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
-import com.mk.familyweighttracker.Framework.IUserDataChangeListner;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.SlidingTabLayout;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
@@ -32,7 +29,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class PregnantUserDetailActivity extends TrackerBaseActivity
-        implements OnNewReadingAdded, PregnantUserProfileFragment.OnUserDeleted, IUserDataChangeListner {
+        implements OnNewReadingAdded, PregnantUserProfileFragment.OnUserDeleted {
 
     private long mUserId;
     private User mUser;
@@ -90,10 +87,18 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private User getUser() {
+    public long getUserId() {
+        return getUser().getId();
+    }
+
+    public User getUser() {
         if(mUser == null)
             mUser = new UserService().get(mUserId);
         return mUser;
+    }
+
+    public void onUserDataChange() {
+        mUser = null;
     }
 
     private void saveUserImageIfRequired() {
@@ -215,8 +220,4 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity
                 String.format(Constants.PLAY_STORE_APP_SEARCH_URL, TrackerApplication.getApp().getPackageName());
     }
 
-    @Override
-    public void onUserDataChange() {
-        mUser = null;
-    }
 }

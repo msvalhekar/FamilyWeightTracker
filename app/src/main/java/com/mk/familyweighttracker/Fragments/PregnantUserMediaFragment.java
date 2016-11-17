@@ -26,7 +26,7 @@ import com.mk.familyweighttracker.Services.UserService;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PregnantUserMediaFragment extends Fragment implements OnNewReadingAdded {
+public class PregnantUserMediaFragment extends PregnantUserBaseFragment implements OnNewReadingAdded {
 
     private long mSelectedUserId;
     private User mUser;
@@ -41,8 +41,8 @@ public class PregnantUserMediaFragment extends Fragment implements OnNewReadingA
         // Inflate the layout for this fragment
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_media, container, false);
 
-        mSelectedUserId = getActivity().getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
-        mUser = new UserService().get(mSelectedUserId);
+        mSelectedUserId = getUserId();
+        mUser = getUser();
 
         initActionControls();
 

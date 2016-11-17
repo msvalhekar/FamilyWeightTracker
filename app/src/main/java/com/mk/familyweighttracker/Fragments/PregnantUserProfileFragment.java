@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PregnantUserProfileFragment extends Fragment implements OnNewReadingAdded {
+public class PregnantUserProfileFragment extends PregnantUserBaseFragment implements OnNewReadingAdded {
 
     private User mUser;
     private long mSelectedUserId;
@@ -44,8 +44,8 @@ public class PregnantUserProfileFragment extends Fragment implements OnNewReadin
         // Inflate the layout for this fragment
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_profile, container, false);
 
-        mSelectedUserId = getActivity().getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
-        mUser = new UserService().get(mSelectedUserId);
+        mSelectedUserId = getUserId();
+        mUser = getUser();
 
         initUserDetailsControls();
         initTwinsControls();
@@ -206,9 +206,22 @@ public class PregnantUserProfileFragment extends Fragment implements OnNewReadin
             initTwinsControls();
             initPrePregnancyControls();
             initReminderControls();
-            getActivity().setTitle(mUser.name);
         }
     }
+//
+//    public void onUserDeleted() {
+//        mUser.removeReminder();
+//        new UserService().remove(mSelectedUserId);
+//
+//        Analytic.setData(Constants.AnalyticsCategories.Activity,
+//                Constants.AnalyticsEvents.UserDelete,
+//                String.format(Constants.AnalyticsActions.UserDeleted, mUser.name),
+//                null);
+//
+//        String message = String.format(getString(R.string.user_removed_message), mUser.name);
+//        Toast.makeText(TrackerApplication.getApp(), message, Toast.LENGTH_SHORT).show();
+//        //finish();
+//    }
 
     public interface OnUserDeleted {
         void onUserDeleted();

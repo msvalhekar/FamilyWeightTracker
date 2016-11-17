@@ -37,7 +37,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PregnantUserReadingsFragment extends Fragment implements OnNewReadingAdded {
+public class PregnantUserReadingsFragment extends PregnantUserBaseFragment implements OnNewReadingAdded {
 
     private long mSelectedUserId;
     private User mSelectedUser;
@@ -61,8 +61,8 @@ public class PregnantUserReadingsFragment extends Fragment implements OnNewReadi
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_records, container, false);
 
         mWeekWeightGainRangeList = null;
-        mSelectedUserId = getActivity().getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
-        mSelectedUser = new UserService().get(mSelectedUserId);
+        mSelectedUserId = getUserId();
+        mSelectedUser = getUser();
 
         userReadingList.clear();
         for (UserReading reading: mSelectedUser.getReadings(false))
