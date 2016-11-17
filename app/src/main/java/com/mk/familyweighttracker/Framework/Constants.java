@@ -29,12 +29,10 @@ public class Constants {
         public static final String HomeActivity = "HomeActivity";
         public static final String UsersListActivity = "UsersListActivity";
         public static final String TrackerHelpActivity = "TrackerHelpActivity";
-        public static final String UserMediaActivity = "UserMediaActivity";
         public static final String UserSlideshowActivity = "UserSlideshowActivity";
-        public static final String AddReadingActivity = "AddReadingActivity";
+        public static final String AddPregnancyReadingActivity = "AddPregnancyReadingActivity";
         public static final String AppFeedbackActivity = "AppFeedbackActivity";
         public static final String AddPregnantUserActivity = "AddPregnantUserActivity";
-        public static final String AddFirstReadingActivity = "AddFirstReadingActivity";
     }
 
     public static class ExtraArg {
@@ -75,8 +73,6 @@ public class Constants {
         public static final String UserDetailsChart = "%s -> DetailsChart";
         public static final String UserDetailsMedia = "%s -> DetailsMedia";
         public static final String UserDetailsRecords = "%s -> DetailsRecords";
-        public static final String FirstReadingAdded = "%s -> FirstReadingAdded";
-        public static final String FirstReadingEdited = "%s -> FirstReadingEdited";
         public static final String ReadingAdded = "%s -> ReadingAdded %d";
         public static final String ReadingEdited = "%s -> ReadingEdited %d";
         public static final String ReadingDeleted = "%s -> ReadingDeleted %d";
@@ -88,8 +84,6 @@ public class Constants {
     }
 
     public static class AnalyticsEvents {
-        public static final String HomeActivityCreated = "HomeActivityCreated";
-        public static final String AddFirstReading = "AddFirstReading";
         public static final String AddReading = "AddReading";
         public static final String DeleteReading = "DeleteReading";
         public static final String UserDetailsActivity = "UserDetailsActivity";

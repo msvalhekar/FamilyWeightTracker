@@ -420,7 +420,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             Intent returnIntent = new Intent();
             setResult(Activity.RESULT_OK, returnIntent);
         } else {
-            Intent intent = new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.UserDetailActivity.class);
+            Intent intent = new Intent(TrackerApplication.getApp(), PregnantUserDetailActivity.class);
             intent.putExtra(Constants.ExtraArg.USER_ID, userId);
             startActivity(intent);
         }

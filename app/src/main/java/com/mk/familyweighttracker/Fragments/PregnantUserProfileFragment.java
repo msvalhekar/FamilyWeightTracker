@@ -28,14 +28,14 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserDetailsProfileFragment extends Fragment implements OnNewReadingAdded {
+public class PregnantUserProfileFragment extends Fragment implements OnNewReadingAdded {
 
     private User mUser;
     private long mSelectedUserId;
 
     private View mFragmentView;
 
-    public UserDetailsProfileFragment() {
+    public PregnantUserProfileFragment() {
         // Required empty public constructor
     }
 

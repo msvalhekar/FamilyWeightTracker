@@ -4,21 +4,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.mk.familyweighttracker.Framework.UserDetailsTabsFactory;
+import com.mk.familyweighttracker.Framework.PregnantUserTabsFactory;
 
 /**
  * Created by mvalhekar on 17-11-2016.
  */
-public class PregnantUserDetailsTabPagerAdapter extends FragmentStatePagerAdapter {
+public class PregnantUserTabPagerAdapter extends FragmentStatePagerAdapter {
     private int mTabsCount;
     private Object[] mTabs;
     private Object[] mTitles;
 
-    public PregnantUserDetailsTabPagerAdapter(FragmentManager fm) {
+    public PregnantUserTabPagerAdapter(FragmentManager fm) {
         super(fm);
 
-        mTabs = UserDetailsTabsFactory.getInstance().getTabs().toArray();
-        mTitles = UserDetailsTabsFactory.getInstance().getTabTitles().toArray();
+        mTabs = PregnantUserTabsFactory.getInstance().getTabs().toArray();
+        mTitles = PregnantUserTabsFactory.getInstance().getTabTitles().toArray();
         mTabsCount = mTabs.length;
     }
 

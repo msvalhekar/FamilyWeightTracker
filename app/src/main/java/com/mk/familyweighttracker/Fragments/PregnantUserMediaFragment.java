@@ -26,13 +26,13 @@ import com.mk.familyweighttracker.Services.UserService;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserDetailsMediaFragment extends Fragment implements OnNewReadingAdded {
+public class PregnantUserMediaFragment extends Fragment implements OnNewReadingAdded {
 
     private long mSelectedUserId;
     private User mUser;
     private View mFragmentView;
 
-    public UserDetailsMediaFragment() {
+    public PregnantUserMediaFragment() {
         // Required empty public constructor
     }
 

@@ -52,7 +52,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class AddReadingActivity extends TrackerBaseActivity {
+public class AddPregnancyReadingActivity extends TrackerBaseActivity {
 
     private boolean bEditMode;
     private User mSelectedUser;
@@ -70,7 +70,7 @@ public class AddReadingActivity extends TrackerBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_user_reading);
 
-        Analytic.sendScreenView(Constants.Activities.AddReadingActivity);
+        Analytic.sendScreenView(Constants.Activities.AddPregnancyReadingActivity);
 
         initToolbarControl();
         activityView = findViewById(R.id.add_user_reading_layout);

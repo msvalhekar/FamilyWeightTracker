@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserDetailsChartFragment extends Fragment implements OnChartValueSelectedListener, OnNewReadingAdded {
+public class PregnantUserChartFragment extends Fragment implements OnChartValueSelectedListener, OnNewReadingAdded {
 
     private long mSelectedUserId;
     private User mUser;
@@ -46,7 +46,7 @@ public class UserDetailsChartFragment extends Fragment implements OnChartValueSe
 
     private List<WeekWeightGainRange> mWeightRangeList;
 
-    public UserDetailsChartFragment() {
+    public PregnantUserChartFragment() {
         // Required empty public constructor
     }
 

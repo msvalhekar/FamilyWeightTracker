@@ -10,15 +10,15 @@ import java.util.LinkedHashMap;
 /**
  * Created by mvalhekar on 16-03-2016.
  */
-public class UserDetailsTabsFactory {
-    private static UserDetailsTabsFactory userDetailsTabsFactory;
+public class PregnantUserTabsFactory {
+    private static PregnantUserTabsFactory tabsFactory;
 
-    private UserDetailsTabsFactory() {}
+    private PregnantUserTabsFactory() {}
 
-    public static UserDetailsTabsFactory getInstance() {
-        if(userDetailsTabsFactory == null)
-            userDetailsTabsFactory = new UserDetailsTabsFactory();
-        return userDetailsTabsFactory;
+    public static PregnantUserTabsFactory getInstance() {
+        if(tabsFactory == null)
+            tabsFactory = new PregnantUserTabsFactory();
+        return tabsFactory;
     }
 
     private LinkedHashMap<String, Fragment> _homeTabs;
@@ -27,10 +27,10 @@ public class UserDetailsTabsFactory {
         if(_homeTabs == null) {
             _homeTabs = new LinkedHashMap<>();
 
-            _homeTabs.put("Profile", new UserDetailsProfileFragment());
-            _homeTabs.put("Readings", new UserDetailsRecordsFragment());
-            _homeTabs.put("Trend", new UserDetailsChartFragment());
-            _homeTabs.put("MWP", new UserDetailsMediaFragment());
+            _homeTabs.put("Profile", new PregnantUserProfileFragment());
+            _homeTabs.put("Readings", new PregnantUserReadingsFragment());
+            _homeTabs.put("Trend", new PregnantUserChartFragment());
+            _homeTabs.put("MWP", new PregnantUserMediaFragment());
         }
         return _homeTabs;
     }

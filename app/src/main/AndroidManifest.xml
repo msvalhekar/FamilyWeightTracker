@@ -81,7 +81,7 @@
                 android:value=".HomeActivity" />
         </activity>
         <activity
-            android:name=".Activities.UserDetailActivity"
+            android:name=".Activities.PregnantUserDetailActivity"
             android:label="User Details"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -94,7 +94,7 @@
             android:theme="@style/splashScreenTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.UserDetailActivity" />
+                android:value=".Activities.PregnantUserDetailActivity" />
         </activity>
         <activity
             android:name=".Activities.AppFeedbackActivity"
@@ -102,7 +102,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.UserDetailActivity" />
+                android:value=".Activities.PregnantUserDetailActivity" />
         </activity>
         <activity
             android:name=".Activities.AddPregnantUserActivity"
@@ -113,7 +113,7 @@
                 android:value=".Activities.UsersListActivity" />
         </activity>
         <activity
-            android:name=".Activities.AddReadingActivity"
+            android:name=".Activities.AddPregnancyReadingActivity"
             android:label="@string/title_activity_add_user_reading"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

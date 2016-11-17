@@ -13,8 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.mk.familyweighttracker.Adapter.PregnantUserDetailsTabPagerAdapter;
-import com.mk.familyweighttracker.Fragments.UserDetailsProfileFragment;
+import com.mk.familyweighttracker.Adapter.PregnantUserTabPagerAdapter;
+import com.mk.familyweighttracker.Fragments.PregnantUserProfileFragment;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
@@ -30,8 +30,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-public class UserDetailActivity extends TrackerBaseActivity
-        implements OnNewReadingAdded, UserDetailsProfileFragment.OnUserDeleted {
+public class PregnantUserDetailActivity extends TrackerBaseActivity
+        implements OnNewReadingAdded, PregnantUserProfileFragment.OnUserDeleted {
 
     private long mUserId;
     private User mUser;
@@ -163,7 +163,7 @@ public class UserDetailActivity extends TrackerBaseActivity
 
     private void initDetailTabControl() {
         ViewPager viewPager = ((ViewPager) findViewById(R.id.user_detail_pager));
-        viewPager.setAdapter(new PregnantUserDetailsTabPagerAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new PregnantUserTabPagerAdapter(getSupportFragmentManager()));
 
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
         slidingTabLayout.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the slidingTabLayout Space Evenly in Available width

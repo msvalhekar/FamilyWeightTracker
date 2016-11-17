@@ -18,8 +18,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mk.familyweighttracker.Activities.AddPregnancyReadingActivity;
 import com.mk.familyweighttracker.Activities.AddPregnantUserActivity;
-import com.mk.familyweighttracker.Activities.AddReadingActivity;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
@@ -37,7 +37,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserDetailsRecordsFragment extends Fragment implements OnNewReadingAdded {
+public class PregnantUserReadingsFragment extends Fragment implements OnNewReadingAdded {
 
     private long mSelectedUserId;
     private User mSelectedUser;
@@ -50,7 +50,7 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
     private UserReadingRecyclerViewAdapter readingAdapter;
     private boolean bFirstReadingChanged;
 
-    public UserDetailsRecordsFragment() {
+    public PregnantUserReadingsFragment() {
         // Required empty public constructor
     }
 
@@ -161,14 +161,14 @@ public class UserDetailsRecordsFragment extends Fragment implements OnNewReading
     }
 
     private void gotoEditReading(long readingId) {
-        Intent intent = new Intent(getContext(), AddReadingActivity.class);
+        Intent intent = new Intent(getContext(), AddPregnancyReadingActivity.class);
         intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
         intent.putExtra(Constants.ExtraArg.EDIT_READING_ID, readingId);
         startActivityForResult(intent, Constants.RequestCode.EDIT_READING);
     }
 
     private void gotoAddReading() {
-        Intent intent = new Intent(getContext(), AddReadingActivity.class);
+        Intent intent = new Intent(getContext(), AddPregnancyReadingActivity.class);
         intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
         startActivityForResult(intent, Constants.RequestCode.ADD_READING);
     }

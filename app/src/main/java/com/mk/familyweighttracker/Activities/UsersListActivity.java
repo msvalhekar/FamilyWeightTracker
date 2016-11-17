@@ -124,7 +124,7 @@ public class UsersListActivity extends TrackerBaseActivity {
         usersAdapter.setOnItemClickListener(new UserListRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(User user) {
-                Intent intent = new Intent(UsersListActivity.this, UserDetailActivity.class);
+                Intent intent = new Intent(UsersListActivity.this, PregnantUserDetailActivity.class);
                 intent.putExtra(Constants.ExtraArg.USER_ID, user.getId());
                 startActivityForResult(intent, Constants.RequestCode.USER_DATA_CHANGED);
             }
