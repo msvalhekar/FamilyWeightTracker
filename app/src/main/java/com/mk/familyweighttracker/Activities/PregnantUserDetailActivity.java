@@ -17,6 +17,7 @@ import com.mk.familyweighttracker.Adapter.PregnantUserTabPagerAdapter;
 import com.mk.familyweighttracker.Fragments.PregnantUserProfileFragment;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.IUserDataChangeListner;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.SlidingTabLayout;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
@@ -31,11 +32,10 @@ import java.io.IOException;
 import java.util.List;
 
 public class PregnantUserDetailActivity extends TrackerBaseActivity
-        implements OnNewReadingAdded, PregnantUserProfileFragment.OnUserDeleted {
+        implements OnNewReadingAdded, PregnantUserProfileFragment.OnUserDeleted, IUserDataChangeListner {
 
     private long mUserId;
     private User mUser;
-    private boolean mIsDataChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +44,14 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity
         setTitle(getString(R.string.user_detail_activity_title));
 
         mUserId = getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
-        mUser = new UserService().get(mUserId);
+        if(getUser() == null) {
+            Toast.makeText(PregnantUserDetailActivity.this, "User does not exist, try again.", Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,
                 Constants.AnalyticsEvents.UserDetailsActivity,
-                String.format(Constants.AnalyticsActions.UserDetailsLoaded, mUser.name),
+                String.format(Constants.AnalyticsActions.UserDetailsLoaded, getUser().name),
                 null);
 
         initToolbarControl();
@@ -70,7 +73,7 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                informDataChangedAndFinish();
+                finish();
                 break;
 
 //            case R.id.user_detail_help:
@@ -87,22 +90,29 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity
         return super.onOptionsItemSelected(item);
     }
 
+    private User getUser() {
+        if(mUser == null)
+            mUser = new UserService().get(mUserId);
+        return mUser;
+    }
+
     private void saveUserImageIfRequired() {
-        if(mUser.imageBytes != null) {
-            try {
-                FileOutputStream outputStream = new FileOutputStream(mUser.getImagePath());
-                outputStream.write(mUser.imageBytes, 0, mUser.imageBytes.length);
-                outputStream.flush();
-                outputStream.close();
+        User user = getUser();
+        if(user == null || user.imageBytes == null)
+            return;
 
-                mUser.imageBytes = null;
-                new UserService().add(mUser);
+        try {
+            FileOutputStream outputStream = new FileOutputStream(user.getImagePath());
+            outputStream.write(user.imageBytes, 0, user.imageBytes.length);
+            outputStream.flush();
+            outputStream.close();
 
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            user.imageBytes = null;
+            new UserService().add(user);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -114,7 +124,6 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity
 
     @Override
     public void onNewReadingAdded() {
-        mIsDataChanged = true;
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
         for (Fragment fragment: fragments) {
             if(fragment instanceof OnNewReadingAdded &&
@@ -126,8 +135,6 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity
 
     @Override
     public void onUserDeleted() {
-        mIsDataChanged = true;
-
         mUser.removeReminder();
         new UserService().remove(mUserId);
 
@@ -136,19 +143,10 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity
                 String.format(Constants.AnalyticsActions.UserDeleted, mUser.name),
                 null);
 
-        informDataChangedAndFinish();
-
         String message = String.format(getString(R.string.user_removed_message), mUser.name);
         Toast.makeText(TrackerApplication.getApp(), message, Toast.LENGTH_SHORT).show();
-    }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            informDataChangedAndFinish();
-        }
-        return super.onKeyDown(keyCode, event);
+        finish();
     }
 
     private void initToolbarControl() {
@@ -179,7 +177,6 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity
         // Setting the ViewPager For the SlidingTabsLayout
         slidingTabLayout.setViewPager(viewPager);
     }
-
 
     private void initInteractionControl() {
         findViewById(R.id.app_share).setOnClickListener(new View.OnClickListener() {
@@ -218,10 +215,8 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity
                 String.format(Constants.PLAY_STORE_APP_SEARCH_URL, TrackerApplication.getApp().getPackageName());
     }
 
-    private void informDataChangedAndFinish() {
-        Intent intent = new Intent();
-        intent.putExtra(Constants.ExtraArg.IS_DATA_CHANGED, mIsDataChanged);
-        setResult(Activity.RESULT_OK, intent);
-        finish();
+    @Override
+    public void onUserDataChange() {
+        mUser = null;
     }
 }
