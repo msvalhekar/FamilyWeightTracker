@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -14,23 +13,19 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Activities.AddPregnancyReadingActivity;
 import com.mk.familyweighttracker.Activities.AddPregnantUserActivity;
+import com.mk.familyweighttracker.Adapter.PregnantUserReadingAdapter;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
-import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
-import com.mk.familyweighttracker.Models.WeekWeightGainRange;
 import com.mk.familyweighttracker.R;
-import com.mk.familyweighttracker.Services.PregnancyService;
 import com.mk.familyweighttracker.Services.UserService;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,16 +34,10 @@ import java.util.List;
  */
 public class PregnantUserReadingsFragment extends PregnantUserBaseFragment implements OnNewReadingAdded {
 
-    private long mSelectedUserId;
-    private User mSelectedUser;
-
     private List<UserReading> userReadingList = new ArrayList<>();
-    List<WeekWeightGainRange> mWeekWeightGainRangeList;
 
     private View mFragmentView;
     private RecyclerView mRecyclerView;
-    private UserReadingRecyclerViewAdapter readingAdapter;
-    private boolean bFirstReadingChanged;
 
     public PregnantUserReadingsFragment() {
         // Required empty public constructor
@@ -60,12 +49,8 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment imple
         // Inflate the layout for this fragment
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_records, container, false);
 
-        mWeekWeightGainRangeList = null;
-        mSelectedUserId = getUserId();
-        mSelectedUser = getUser();
-
         userReadingList.clear();
-        for (UserReading reading: mSelectedUser.getReadings(false))
+        for (UserReading reading: getUser().getReadings(false))
             userReadingList.add(reading);
 
         initAddUserReadingControl();
@@ -74,10 +59,19 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment imple
 
         Analytic.setData(Constants.AnalyticsCategories.Fragment,
                 Constants.AnalyticsEvents.UserDetailsRecords,
-                String.format(Constants.AnalyticsActions.UserDetailsRecords, mSelectedUser.name),
+                String.format(Constants.AnalyticsActions.UserDetailsRecords, getUser().name),
                 null);
 
+        mRecyclerView = ((RecyclerView) mFragmentView.findViewById(R.id.user_record_list));
+
         return mFragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        bindReadingList();
     }
 
     private void initAddUserReadingControl() {
@@ -85,7 +79,13 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment imple
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                if (!mSelectedUser.maxReadingsReached()) {
+                if (getUser().maxReadingsReached()) {
+                    Toast.makeText(view.getContext(),
+                            R.string.Maximum40WeeksDataSupportedMessage,
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+
 //                    // TODO: 31-10-2016 show dialog with 0 and 1-40 and 41 readings and purpose
 //                    // if not shown already - sharedPreference
 //
@@ -115,66 +115,60 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment imple
 //                            })
 //                            .create()
 //                            .show();
+                if (promptIfDeliveryDateNotSet(view.getContext()))
+                    return;
 
-                    if (promptIfDeliveryDateNotSet(view.getContext()))
-                        return;
+                if (showDialogIfConflictingReading(view.getContext()))
+                    return;
 
-                    if (showDialogIfConflictingReading(view.getContext()))
-                        return;
-
-                    gotoAddReading();
-                } else {
-                    Toast.makeText(view.getContext(),
-                            R.string.Maximum40WeeksDataSupportedMessage,
-                            Toast.LENGTH_LONG).show();
-                }
+                gotoAddReading();
             }
         });
     }
 
     private boolean showDialogIfConflictingReading(Context context) {
-        long estimatedSequence = mSelectedUser.getEstimatedSequence();
+        long estimatedSequence = getUser().getEstimatedSequence();
         final UserReading reading = new UserService().getReadingBySequence(estimatedSequence);
-        if (reading != null) {
-            String messageFormat = getResources().getString(R.string.add_conflicting_week_message);
+        if (reading == null)
+            return false;
 
-            new AlertDialog.Builder(context)
-                    .setTitle(R.string.add_conflicting_week_title)
-                    .setMessage(String.format(messageFormat, reading.Sequence))
-                    .setPositiveButton(context.getString(R.string.add_conflicting_week_positive_action_label), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            gotoEditReading(reading.Id);
-                        }
-                    })
-                    .setNegativeButton(context.getString(R.string.add_conflicting_week_negative_action_label), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            gotoAddReading();
-                        }
-                    })
-                    .create()
-                    .show();
-            return true;
-        }
-        return false;
+        String messageFormat = getResources().getString(R.string.add_conflicting_week_message);
+
+        new AlertDialog.Builder(context)
+                .setTitle(R.string.add_conflicting_week_title)
+                .setMessage(String.format(messageFormat, reading.Sequence))
+                .setPositiveButton(context.getString(R.string.add_conflicting_week_positive_action_label), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        gotoEditReading(reading.Id);
+                    }
+                })
+                .setNegativeButton(context.getString(R.string.add_conflicting_week_negative_action_label), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        gotoAddReading();
+                    }
+                })
+                .create()
+                .show();
+        return true;
     }
 
     private void gotoEditReading(long readingId) {
         Intent intent = new Intent(getContext(), AddPregnancyReadingActivity.class);
-        intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
+        intent.putExtra(Constants.ExtraArg.USER_ID, getUserId());
         intent.putExtra(Constants.ExtraArg.EDIT_READING_ID, readingId);
         startActivityForResult(intent, Constants.RequestCode.EDIT_READING);
     }
 
     private void gotoAddReading() {
         Intent intent = new Intent(getContext(), AddPregnancyReadingActivity.class);
-        intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
+        intent.putExtra(Constants.ExtraArg.USER_ID, getUserId());
         startActivityForResult(intent, Constants.RequestCode.ADD_READING);
     }
 
     private boolean promptIfDeliveryDateNotSet(final Context context) {
-        if (mSelectedUser.deliveryDueDate != null)
+        if (getUser().deliveryDueDate != null)
             return false;
 
         new AlertDialog.Builder(context)
@@ -184,7 +178,7 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment imple
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(context, AddPregnantUserActivity.class);
-                        intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
+                        intent.putExtra(Constants.ExtraArg.USER_ID, getUserId());
                         startActivityForResult(intent, Constants.RequestCode.EDIT_USER);
                     }
                 })
@@ -193,37 +187,44 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment imple
         return true;
     }
 
-    private boolean mIsOriginator = false;
+    //// TODO: 18-11-2016 take these two methods i.e. INewReadingAdded
     @Override
     public boolean isOriginator() {
-        return mIsOriginator;
+        return true;
     }
 
     @Override
     public void onNewReadingAdded() {
-        mSelectedUser = new UserService().get(mSelectedUserId);
+    }
 
-        List<UserReading> latestReadings = mSelectedUser.getReadings(false);
-        int i=0;
-        for (; i< userReadingList.size(); i++) {
-            if (userReadingList.get(i).Sequence != latestReadings.get(i).Sequence) {
-                break;
+    private void bindReadingList() {
+        showHideEmptyListControl();
+
+        PregnantUserReadingAdapter adapter = new PregnantUserReadingAdapter(getActivity(), getUser());
+        adapter.setOnItemClickListener(new PregnantUserReadingAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(long readingId) {
+                gotoEditReading(readingId);
             }
-        }
-        userReadingList.add(i, latestReadings.get(i));
-        readingAdapter.notifyDataSetChanged();
+        });
 
+        mRecyclerView.setAdapter(adapter);
+        //usersAdapter.notifyDataSetChanged();
+    }
+
+    private void showHideEmptyListControl() {
         mFragmentView.findViewById(R.id.empty_view).setVisibility(View.GONE);
-        mFragmentView.findViewById(R.id.user_records_list_record_content_help).setVisibility(View.VISIBLE);
+
+        if(userReadingList.size() == 0) {
+            mFragmentView.findViewById(R.id.user_records_list_record_content_help).setVisibility(View.GONE);
+
+            mFragmentView.findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
+            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_title)).setText(R.string.user_readings_not_found_message);
+            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_description)).setText(R.string.user_readings_add_reading_message);
+        }
     }
 
     private void initReadingListControl() {
-
-        readingAdapter = new UserReadingRecyclerViewAdapter();
-        mRecyclerView = ((RecyclerView) mFragmentView.findViewById(R.id.user_record_list));
-        //mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setAdapter(readingAdapter);
-        readingAdapter.notifyDataSetChanged();
 
         mFragmentView.findViewById(R.id.card_view)
                 .setOnClickListener(new View.OnClickListener() {
@@ -237,20 +238,11 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment imple
 
                         Analytic.setData(Constants.AnalyticsCategories.Activity,
                                 Constants.AnalyticsEvents.UserReadingHelp,
-                                String.format(Constants.AnalyticsActions.ShowUserReadingHelp, mSelectedUser.name),
+                                String.format(Constants.AnalyticsActions.ShowUserReadingHelp, getUser().name),
                                 null);
 
                     }
                 });
-
-        mFragmentView.findViewById(R.id.empty_view).setVisibility(View.GONE);
-        if(userReadingList.size() == 0) {
-            mFragmentView.findViewById(R.id.user_records_list_record_content_help).setVisibility(View.GONE);
-
-            mFragmentView.findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
-            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_title)).setText(R.string.user_readings_not_found_message);
-            ((TextView) mFragmentView.findViewById(R.id.empty_mesage_description)).setText(R.string.user_readings_add_reading_message);
-        }
     }
 
     private String getLegendMessage() {
@@ -283,205 +275,17 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment imple
         return builder.toString();
     }
 
-    private void setWeightGainRangeFor() {
-        if (mWeekWeightGainRangeList != null)
-            return;
-
-        double baseWeight = mSelectedUser.getStartingWeight();
-        if(baseWeight == 0) return;
-
-        mWeekWeightGainRangeList = new PregnancyService()
-            .getWeightGainTableFor(baseWeight, mSelectedUser.getWeightCategory(), mSelectedUser.weightUnit, mSelectedUser.haveTwins);
-    }
-
-    private WeekWeightGainRange getWeightGainTableFor(long weekNumber) {
-        setWeightGainRangeFor();
-
-        if(mWeekWeightGainRangeList == null)
-            return null;
-
-        for (WeekWeightGainRange record: mWeekWeightGainRangeList) {
-            if(record.WeekNumber == weekNumber)
-                return new WeekWeightGainRange( record.WeekNumber, record.MinimumWeight, record.MaximumWeight);
-        }
-        return null;
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Make sure the request was successful
         if (resultCode != Activity.RESULT_OK)
             return;
 
-        if(requestCode == Constants.RequestCode.ADD_READING) {
-            onNewReadingAdded();
-
-            mIsOriginator = true;
-            ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
-            mIsOriginator = false;
-        }
-        else if(requestCode == Constants.RequestCode.EDIT_READING) {
-            if(bFirstReadingChanged) {
-                mWeekWeightGainRangeList = null;
-                bFirstReadingChanged = false;
-            }
-
-            mSelectedUser = new UserService().get(mSelectedUserId);
-
-            userReadingList.clear();
-            List<UserReading> latestReadings = mSelectedUser.getReadings(false);
-            for (int i=0; i< latestReadings.size(); i++) {
-                userReadingList.add(latestReadings.get(i));
-            }
-            readingAdapter.notifyDataSetChanged();
-
-            mIsOriginator = true;
-            ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
-            mIsOriginator = false;
-        }
-    }
-
-    private class UserReadingRecyclerViewAdapter
-            extends RecyclerView.Adapter<UserReadingRecyclerViewAdapter.ViewHolder> {
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.user_records_list_record_content, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            final UserReading reading = userReadingList.get(position);
-            holder.setReading(reading);
-        }
-
-        @Override
-        public int getItemCount() {
-            return userReadingList.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public UserReading mUserReading;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-            }
-
-            public void setReading(UserReading reading)
-            {
-                mUserReading = reading;
-
-                View sectionView = mView.findViewById(R.id.user_record_for_extra_section);
-                sectionView.setVisibility(View.GONE);
-
-                if(mUserReading.isPrePregnancyReading()) {
-                    sectionView.setVisibility(View.VISIBLE);
-                    ((TextView) mView.findViewById(R.id.record_item_extra_message))
-                            .setText(R.string.pre_pregnancy_label);
-                } else if(mUserReading.isDeliveryReading()) {
-                    sectionView.setVisibility(View.VISIBLE);
-                    ((TextView) mView.findViewById(R.id.record_item_extra_message))
-                            .setText(R.string.delivery_label);
-                }
-
-                setPeriodControl();
-                setActualWeightControl();
-                setExpectedWeightControl();
-                setImageControl();
-                setViewControl();
-            }
-
-            private void setExpectedWeightControl() {
-                WeekWeightGainRange weekWeightGainRange = getWeightGainTableFor(mUserReading.Sequence);
-
-                if(weekWeightGainRange == null) return;
-
-                ((TextView) mView.findViewById(R.id.record_item_weight_exp_min))
-                        .setText(String.format("%.2f", weekWeightGainRange.MinimumWeight));
-
-                double diff = mUserReading.Weight - weekWeightGainRange.MinimumWeight;
-                String diffSign = "";
-                int diffColor = 1;
-                if(diff < 0) {
-                    diffColor = Color.RED;
-                } else if(diff > 0) {
-                    diffSign = "+";
-                    diffColor = Color.BLUE;
-                }
-                TextView weightDiffView = ((TextView) mView.findViewById(R.id.record_item_weight_exp_min_diff));
-                weightDiffView.setText(String.format("(%s%.2f)", diffSign, diff));
-                if(diff != 0)
-                    weightDiffView.setTextColor(diffColor);
-
-                ((TextView) mView.findViewById(R.id.record_item_weight_exp_max))
-                        .setText(String.format("%.2f", weekWeightGainRange.MaximumWeight));
-
-                double maxExpWtdiff = mUserReading.Weight - weekWeightGainRange.MaximumWeight;
-                String maxExpWtDiffSign = "";
-                int maxExpWtDiffColor = 1;
-                if(maxExpWtdiff < 0) {
-                    maxExpWtDiffColor = Color.BLUE;
-                } else if(maxExpWtdiff > 0){
-                    maxExpWtDiffSign = "+";
-                    maxExpWtDiffColor = Color.RED;
-                }
-                TextView maxExpWeightDiffView = ((TextView) mView.findViewById(R.id.record_item_weight_exp_max_diff));
-                maxExpWeightDiffView.setText(String.format("(%s%.2f)", maxExpWtDiffSign, maxExpWtdiff));
-                if(maxExpWtdiff != 0)
-                    maxExpWeightDiffView.setTextColor(maxExpWtDiffColor);
-            }
-
-            private void setActualWeightControl() {
-                ((TextView) mView.findViewById(R.id.record_item_weight))
-                        .setText(String.format("%.2f", mUserReading.Weight));
-
-                UserReading previousReading = mSelectedUser.findReadingBefore(mUserReading.Sequence);
-                if(previousReading != null) {
-                    double diff = mUserReading.Weight - previousReading.Weight;
-                    String diffSign = "";
-                    int diffColor = 1;
-                    if (diff < 0) {
-                        diffColor = Color.RED;
-                    } else if (diff > 0) {
-                        diffSign = "+";
-                        diffColor = Color.BLUE;
-                    }
-                    TextView weightDiffView = ((TextView) mView.findViewById(R.id.record_item_weight_diff));
-                    weightDiffView.setText(String.format("(%s%.2f)", diffSign, diff));
-                    if (diff != 0)
-                        weightDiffView.setTextColor(diffColor);
-                }
-            }
-
-            private void setPeriodControl() {
-                ((TextView) mView.findViewById(R.id.record_item_period_no))
-                        .setText(String.format("%s %02d", mSelectedUser.trackingPeriod, mUserReading.Sequence));
-
-                SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd-MMM");
-                ((TextView) mView.findViewById(R.id.record_item_taken_on))
-                        .setText(dateFormat.format(mUserReading.TakenOn));
-            }
-
-            private void setImageControl() {
-                ImageButton button = ((ImageButton) mView.findViewById(R.id.user_record_image_button));
-                button.setImageBitmap(mUserReading.getImageAsBitmap(true));
-            }
-
-            private void setViewControl() {
-                mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(mUserReading.isPrePregnancyReading()) {
-                            bFirstReadingChanged = true;
-                        }
-                        gotoEditReading(mUserReading.Id);
-                    }
-                });
-            }
+        switch (requestCode) {
+            case Constants.RequestCode.ADD_READING:
+            case Constants.RequestCode.EDIT_READING:
+                onUserDataChange();
+                break;
         }
     }
 }
