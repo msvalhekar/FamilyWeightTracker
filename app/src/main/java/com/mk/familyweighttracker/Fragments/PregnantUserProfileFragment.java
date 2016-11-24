@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.mk.familyweighttracker.Activities.AddPregnantUserActivity;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
-import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.R;
@@ -28,7 +27,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PregnantUserProfileFragment extends PregnantUserBaseFragment implements OnNewReadingAdded {
+public class PregnantUserProfileFragment extends PregnantUserBaseFragment {
 
     private View mFragmentView;
 
@@ -72,15 +71,6 @@ public class PregnantUserProfileFragment extends PregnantUserBaseFragment implem
             ((TextView) mFragmentView.findViewById(R.id.view_user_delivery_remaining))
                     .setText(getUser().getDeliveryRemainingStr());
         }
-    }
-
-    @Override
-    public boolean isOriginator() {
-        return false;
-    }
-
-    @Override
-    public void onNewReadingAdded() {
     }
 
     private void initUserDetailsControls() {

@@ -82,7 +82,7 @@
         </activity>
         <activity
             android:name=".Activities.PregnantUserDetailActivity"
-            android:label="User Details"
+            android:label="@string/user_detail_activity_title"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -19,16 +19,11 @@ import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
-import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
-import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.Models.WeekWeightGainRange;
 import com.mk.familyweighttracker.R;
-import com.mk.familyweighttracker.Services.PregnancyService;
-import com.mk.familyweighttracker.Services.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +31,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PregnantUserChartFragment extends PregnantUserBaseFragment implements OnChartValueSelectedListener, OnNewReadingAdded {
+public class PregnantUserChartFragment extends PregnantUserBaseFragment implements OnChartValueSelectedListener {
 
     private View mFragmentView;
     private LineChart mLineChart;
@@ -51,8 +46,6 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_chart, container, false);
 
         initChartControl();
-
-        onNewReadingAdded();
 
         Analytic.setData(Constants.AnalyticsCategories.Fragment,
                 Constants.AnalyticsEvents.UserDetailsChart,
@@ -182,7 +175,7 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
         lineDataSet.setLineWidth(2f);
         lineDataSet.setDrawValues(false);
 
-        int color = isMinimum ? R.color.chart_exp_min_color : R.color.chart_exp_max_color;
+        int color = isMinimum ? Color.rgb(0, 153, 153) : Color.rgb(255, 102, 178);
         lineDataSet.setColor(color);
         return lineDataSet;
     }
@@ -217,14 +210,5 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
 
     @Override
     public void onNothingSelected() {
-    }
-
-    @Override
-    public boolean isOriginator() {
-        return false;
-    }
-
-    @Override
-    public void onNewReadingAdded() {
     }
 }

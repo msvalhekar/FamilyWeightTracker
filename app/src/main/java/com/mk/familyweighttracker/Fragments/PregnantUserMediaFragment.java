@@ -15,21 +15,16 @@ import android.widget.Toast;
 
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
-import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.PreferenceHelper;
 import com.mk.familyweighttracker.Framework.StringHelper;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
-import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
-import com.mk.familyweighttracker.Services.UserService;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PregnantUserMediaFragment extends PregnantUserBaseFragment implements OnNewReadingAdded {
+public class PregnantUserMediaFragment extends PregnantUserBaseFragment {
 
-    private long mSelectedUserId;
-    private User mUser;
     private View mFragmentView;
 
     public PregnantUserMediaFragment() {
@@ -41,14 +36,11 @@ public class PregnantUserMediaFragment extends PregnantUserBaseFragment implemen
         // Inflate the layout for this fragment
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_media, container, false);
 
-        mSelectedUserId = getUserId();
-        mUser = getUser();
-
         initActionControls();
 
         Analytic.setData(Constants.AnalyticsCategories.Fragment,
                 Constants.AnalyticsEvents.UserDetailsMedia,
-                String.format(Constants.AnalyticsActions.UserDetailsMedia, mUser.name),
+                String.format(Constants.AnalyticsActions.UserDetailsMedia, getUser().name),
                 null);
 
         return mFragmentView;
@@ -74,12 +66,12 @@ public class PregnantUserMediaFragment extends PregnantUserBaseFragment implemen
             .setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mUser.getReadingsCount() == 0) {
+                    if (getUser().getReadingsCount() == 0) {
                         Toast.makeText(v.getContext(), R.string.user_readings_not_found_message, Toast.LENGTH_SHORT).show();
                         return;
                     }
                     Intent intent = new Intent(TrackerApplication.getApp(), com.mk.familyweighttracker.Activities.UserSlideshowActivity.class);
-                    intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
+                    intent.putExtra(Constants.ExtraArg.USER_ID, getUserId());
                     startActivity(intent);
                 }
             });
@@ -115,19 +107,6 @@ public class PregnantUserMediaFragment extends PregnantUserBaseFragment implemen
                     Toast.makeText(v.getContext(), "Share", Toast.LENGTH_SHORT).show();
                 }
             });
-    }
-
-    private boolean mIsOriginator = false;
-
-    @Override
-    public boolean isOriginator() {
-        return mIsOriginator;
-    }
-
-    @Override
-    public void onNewReadingAdded() {
-        mUser = new UserService().get(mSelectedUserId);
-        if(mUser.getReadingsCount() == 0) return;
     }
 
     private void updateAudioTextControl(Uri audioUri) {

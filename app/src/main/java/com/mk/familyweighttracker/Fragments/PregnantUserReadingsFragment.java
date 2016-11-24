@@ -21,7 +21,6 @@ import com.mk.familyweighttracker.Activities.AddPregnantUserActivity;
 import com.mk.familyweighttracker.Adapter.PregnantUserReadingAdapter;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
-import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
@@ -29,7 +28,7 @@ import com.mk.familyweighttracker.Services.UserService;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PregnantUserReadingsFragment extends PregnantUserBaseFragment implements OnNewReadingAdded {
+public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
 
     private View mFragmentView;
     private RecyclerView mRecyclerView;
@@ -176,16 +175,6 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment imple
                 .create()
                 .show();
         return true;
-    }
-
-    //// TODO: 18-11-2016 take these two methods i.e. INewReadingAdded
-    @Override
-    public boolean isOriginator() {
-        return true;
-    }
-
-    @Override
-    public void onNewReadingAdded() {
     }
 
     private void bindReadingList() {

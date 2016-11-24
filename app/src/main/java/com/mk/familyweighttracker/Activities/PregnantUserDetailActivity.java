@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.mk.familyweighttracker.Adapter.PregnantUserTabPagerAdapter;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
-import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
 import com.mk.familyweighttracker.Framework.SlidingTabLayout;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
@@ -28,7 +27,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-public class PregnantUserDetailActivity extends TrackerBaseActivity implements OnNewReadingAdded {
+public class PregnantUserDetailActivity extends TrackerBaseActivity {
 
     private long mUserId;
     private User mUser;
@@ -38,7 +37,6 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity implements O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
-        setTitle(getString(R.string.user_detail_activity_title));
 
         mUserId = getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
         if(getUser() == null) {
@@ -122,23 +120,6 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity implements O
         }
     }
 
-    private boolean mIsOriginator = false;
-    @Override
-    public boolean isOriginator() {
-        return mIsOriginator;
-    }
-
-    @Override
-    public void onNewReadingAdded() {
-//        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-//        for (Fragment fragment: fragments) {
-//            if(fragment instanceof OnNewReadingAdded &&
-//                ((OnNewReadingAdded) fragment).isOriginator() == false) {
-//                    ((OnNewReadingAdded) fragment).onNewReadingAdded();
-//            }
-//        }
-    }
-
     private void initToolbarControl() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_user_detail);
         setSupportActionBar(toolbar);
@@ -217,6 +198,8 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity implements O
     }
 
     public WeekWeightGainRange getPregnancyWeightGainRangeFor(long weekNumber) {
+        getWeightGainRange();
+
         if(mWeekWeightGainRangeList == null)
             return null;
 
