@@ -1,11 +1,15 @@
 package com.mk.familyweighttracker.Framework;
 
+import com.google.android.gms.analytics.Tracker;
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.WeightUnit;
+import com.mk.familyweighttracker.R;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -17,6 +21,17 @@ public class Utility {
     public static final double CENTIMETERS_PER_METER = 100;
     public static final double CENTIMETERS_PER_INCH = 2.54;
     public static final long WEEK_INTERVAL_MILLIS = 7 * 24 * 60 * 60 * 1000;
+
+    public static List<String> getWeekDays() {
+        return Arrays.asList(
+                getResourceString(R.string.WEEK_DAY_SUNDAY),
+                getResourceString(R.string.WEEK_DAY_MONDAY),
+                getResourceString(R.string.WEEK_DAY_TUESDAY),
+                getResourceString(R.string.WEEK_DAY_WEDNESDAY),
+                getResourceString(R.string.WEEK_DAY_THURSDAY),
+                getResourceString(R.string.WEEK_DAY_FRIDAY),
+                getResourceString(R.string.WEEK_DAY_SATURDAY));
+    }
 
     public static double convertWeightTo(double weight, WeightUnit toUnit) {
         if(toUnit == WeightUnit.kg)

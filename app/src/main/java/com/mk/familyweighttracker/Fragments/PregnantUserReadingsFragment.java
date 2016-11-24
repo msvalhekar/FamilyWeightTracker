@@ -26,15 +26,10 @@ import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * A simple {@link Fragment} subclass.
  */
 public class PregnantUserReadingsFragment extends PregnantUserBaseFragment implements OnNewReadingAdded {
-
-    private List<UserReading> userReadingList = new ArrayList<>();
 
     private View mFragmentView;
     private RecyclerView mRecyclerView;
@@ -48,10 +43,6 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment imple
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_records, container, false);
-
-        userReadingList.clear();
-        for (UserReading reading: getUser().getReadings(false))
-            userReadingList.add(reading);
 
         initAddUserReadingControl();
 
@@ -215,7 +206,7 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment imple
     private void showHideEmptyListControl() {
         mFragmentView.findViewById(R.id.empty_view).setVisibility(View.GONE);
 
-        if(userReadingList.size() == 0) {
+        if(getUser().getReadingsCount() == 0) {
             mFragmentView.findViewById(R.id.user_records_list_record_content_help).setVisibility(View.GONE);
 
             mFragmentView.findViewById(R.id.empty_view).setVisibility(View.VISIBLE);

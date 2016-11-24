@@ -46,6 +46,7 @@
             android:layout_weight="1"
             android:layout_marginBottom="5dp">
             <TextView
+                android:id="@+id/add_user_name_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -113,6 +114,7 @@
             android:layout_weight="1"
             android:layout_marginBottom="5dp">
             <TextView
+                android:id="@+id/add_user_delivery_due_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

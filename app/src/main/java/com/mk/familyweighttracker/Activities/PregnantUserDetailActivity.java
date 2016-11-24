@@ -28,8 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-public class PregnantUserDetailActivity extends TrackerBaseActivity
-        implements OnNewReadingAdded, PregnantUserProfileFragment.OnUserDeleted {
+public class PregnantUserDetailActivity extends TrackerBaseActivity implements OnNewReadingAdded {
 
     private long mUserId;
     private User mUser;
@@ -138,22 +137,6 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity
         }
     }
 
-    @Override
-    public void onUserDeleted() {
-        mUser.removeReminder();
-        new UserService().remove(mUserId);
-
-        Analytic.setData(Constants.AnalyticsCategories.Activity,
-                Constants.AnalyticsEvents.UserDelete,
-                String.format(Constants.AnalyticsActions.UserDeleted, mUser.name),
-                null);
-
-        String message = String.format(getString(R.string.user_removed_message), mUser.name);
-        Toast.makeText(TrackerApplication.getApp(), message, Toast.LENGTH_SHORT).show();
-
-        finish();
-    }
-
     private void initToolbarControl() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_user_detail);
         setSupportActionBar(toolbar);
@@ -219,5 +202,4 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity
                 "\n\n" +
                 String.format(Constants.PLAY_STORE_APP_SEARCH_URL, TrackerApplication.getApp().getPackageName());
     }
-
 }

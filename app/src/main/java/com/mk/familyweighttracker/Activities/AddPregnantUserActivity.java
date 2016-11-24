@@ -33,6 +33,7 @@ import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Framework.StorageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
+import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
@@ -73,6 +74,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         initToolbarControl();
 
         findAllControls();
+        markControlsMandatory();
 
         mIsEditMode = true;
         mSelectedUserId = getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
@@ -111,6 +113,13 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         mReminderDaySectionView = findViewById(R.id.add_user_reminder_day_section);
         mReminderTimeSectionView = findViewById(R.id.add_user_reminder_time_section);
         mReminderTimeButton = ((Button) findViewById(R.id.add_user_reminder_time_button));
+    }
+
+    private void markControlsMandatory() {
+        TextView nameLabel = ((TextView) findViewById(R.id.add_user_name_label));
+        TextView dddLabel = ((TextView) findViewById(R.id.add_user_delivery_due_label));
+        nameLabel.setText(nameLabel.getText() + " *");
+        dddLabel.setText(dddLabel.getText() + " *");
     }
 
     @Override
@@ -240,14 +249,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     private void initDayOfReminderControl() {
         mReminderDaySectionView.setVisibility(mUser.enableReminder ? View.VISIBLE : View.GONE);
 
-        final List<String> days = Arrays.asList(
-                getString(R.string.WEEK_DAY_SUNDAY),
-                getString(R.string.WEEK_DAY_MONDAY),
-                getString(R.string.WEEK_DAY_TUESDAY),
-                getString(R.string.WEEK_DAY_WEDNESDAY),
-                getString(R.string.WEEK_DAY_THURSDAY),
-                getString(R.string.WEEK_DAY_FRIDAY),
-                getString(R.string.WEEK_DAY_SATURDAY));
+        final List<String> days = Utility.getWeekDays();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, days);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

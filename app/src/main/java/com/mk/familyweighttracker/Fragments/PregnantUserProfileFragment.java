@@ -12,26 +12,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mk.familyweighttracker.Activities.AddPregnantUserActivity;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
+import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.Utility;
-import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class PregnantUserProfileFragment extends PregnantUserBaseFragment implements OnNewReadingAdded {
-
-    private User mUser;
-    private long mSelectedUserId;
 
     private View mFragmentView;
 
@@ -44,57 +41,56 @@ public class PregnantUserProfileFragment extends PregnantUserBaseFragment implem
         // Inflate the layout for this fragment
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_profile, container, false);
 
-        mSelectedUserId = getUserId();
-        mUser = getUser();
+        initActionControls();
+
+        Analytic.setData(Constants.AnalyticsCategories.Fragment,
+                Constants.AnalyticsEvents.UserDetailsProfile,
+                String.format(Constants.AnalyticsActions.UserDetailsProfile, getUser().name),
+                null);
+
+        return mFragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
         initUserDetailsControls();
         initTwinsControls();
         initDeliveryDueDateControls();
         initPrePregnancyControls();
         initReminderControls();
-        initActionControls();
-
-        Analytic.setData(Constants.AnalyticsCategories.Fragment,
-                Constants.AnalyticsEvents.UserDetailsProfile,
-                String.format(Constants.AnalyticsActions.UserDetailsProfile, mUser.name),
-                null);
-
-        return mFragmentView;
     }
 
     private void initDeliveryDueDateControls() {
         ((TextView) mFragmentView.findViewById(R.id.view_user_delivery_due_date))
-                .setText(mUser.getDeliveryDueDateStr());
+                .setText(getUser().getDeliveryDueDateStr());
 
         mFragmentView.findViewById(R.id.view_user_delivery_remaining_section).setVisibility(View.GONE);
-        if(mUser.deliveryDueDate != null) {
+        if(getUser().deliveryDueDate != null) {
             mFragmentView.findViewById(R.id.view_user_delivery_remaining_section).setVisibility(View.VISIBLE);
             ((TextView) mFragmentView.findViewById(R.id.view_user_delivery_remaining))
-                    .setText(mUser.getDeliveryRemainingStr());
+                    .setText(getUser().getDeliveryRemainingStr());
         }
     }
 
-    boolean mIsOriginator = false;
     @Override
     public boolean isOriginator() {
-        return mIsOriginator;
+        return false;
     }
 
     @Override
     public void onNewReadingAdded() {
-        mUser = new UserService().get(mSelectedUserId);
-        initPrePregnancyControls();
     }
 
     private void initUserDetailsControls() {
-        ((ImageButton) mFragmentView.findViewById(R.id.view_user_image_button)).setImageBitmap(mUser.getImageAsBitmap(true));
+        ((ImageButton) mFragmentView.findViewById(R.id.view_user_image_button)).setImageBitmap(getUser().getImageAsBitmap(true));
 
-        ((TextView) mFragmentView.findViewById(R.id.view_user_name))
-            .setText(mUser.name);
+        ((TextView) mFragmentView.findViewById(R.id.view_user_name)).setText(getUser().name);
 
-        if(mUser.dateOfBirth != null) {
+        if(getUser().dateOfBirth != null) {
             ((TextView) mFragmentView.findViewById(R.id.view_user_dob))
-                    .setText(String.format("%s (%s)", mUser.getDateOfBirthStr(), Utility.calculateAge(mUser.dateOfBirth)));
+                    .setText(String.format("%s (%s)", getUser().getDateOfBirthStr(), Utility.calculateAge(getUser().dateOfBirth)));
         }
     }
 
@@ -107,7 +103,7 @@ public class PregnantUserProfileFragment extends PregnantUserBaseFragment implem
         mFragmentView.findViewById(R.id.view_user_pre_pregnancy_bmi_section).setVisibility(View.GONE);
         mFragmentView.findViewById(R.id.view_user_pre_pregnancy_lmp_section).setVisibility(View.GONE);
 
-        if(mUser.getReadingsCount() > 0) {
+        if(getUser().getReadingsCount() > 0) {
 
             mFragmentView.findViewById(R.id.view_user_pre_pregnancy_divider).setVisibility(View.VISIBLE);
             mFragmentView.findViewById(R.id.view_user_pre_pregnancy_section).setVisibility(View.VISIBLE);
@@ -117,39 +113,33 @@ public class PregnantUserProfileFragment extends PregnantUserBaseFragment implem
             mFragmentView.findViewById(R.id.view_user_pre_pregnancy_lmp_section).setVisibility(View.VISIBLE);
 
             ((TextView) mFragmentView.findViewById(R.id.view_user_prepreg_weight))
-                    .setText(mUser.getStartingWeightStr());
+                    .setText(getUser().getStartingWeightStr());
 
             ((TextView) mFragmentView.findViewById(R.id.view_user_prepreg_height))
-                    .setText(mUser.getStartingHeightStr());
+                    .setText(getUser().getStartingHeightStr());
 
             ((TextView) mFragmentView.findViewById(R.id.view_user_prepreg_bmi))
-                    .setText(String.format("%s - %s", mUser.getBmiStr(), mUser.getWeightCategory().toString()));
+                    .setText(String.format("%s - %s", getUser().getBmiStr(), getUser().getWeightCategory().toString()));
 
             ((TextView) mFragmentView.findViewById(R.id.view_user_prepreg_lmp))
-                    .setText(mUser.getLastMenstrualPeriodStr());
+                    .setText(getUser().getLastMenstrualPeriodStr());
         }
     }
 
     private void initTwinsControls() {
-        String message = getResources().getString(
-                mUser.haveTwins ? R.string.yes_label : R.string.no_label);
-
-        ((TextView) mFragmentView.findViewById(R.id.view_user_delivery_twins))
-                .setText(message);
+        String message = getResources().getString(getUser().haveTwins ? R.string.yes_label : R.string.no_label);
+        ((TextView) mFragmentView.findViewById(R.id.view_user_delivery_twins)).setText(message);
     }
 
     private void initReminderControls() {
         ((TextView) mFragmentView.findViewById(R.id.view_user_reminder_day)).setText(R.string.value_not_set_message);
-        if(mUser.enableReminder) {
-            final List<String> days = Arrays.asList(
-                    getString(R.string.WEEK_DAY_SUNDAY),
-                    getString(R.string.WEEK_DAY_MONDAY),
-                    getString(R.string.WEEK_DAY_TUESDAY),
-                    getString(R.string.WEEK_DAY_WEDNESDAY),
-                    getString(R.string.WEEK_DAY_THURSDAY),
-                    getString(R.string.WEEK_DAY_FRIDAY),
-                    getString(R.string.WEEK_DAY_SATURDAY));
-            String reminderText = String.format("%02d:%02d %s %s", mUser.reminderHour, mUser.reminderMinute, getString(R.string.profile_reminder_message), days.get(mUser.reminderDay));
+        if(getUser().enableReminder) {
+            final List<String> days = Utility.getWeekDays();
+            String reminderText = String.format("%02d:%02d %s %s",
+                    getUser().reminderHour,
+                    getUser().reminderMinute,
+                    getString(R.string.profile_reminder_message),
+                    days.get(getUser().reminderDay));
             ((TextView) mFragmentView.findViewById(R.id.view_user_reminder_day)).setText(reminderText);
         }
     }
@@ -165,7 +155,7 @@ public class PregnantUserProfileFragment extends PregnantUserBaseFragment implem
                         .setPositiveButton(getString(R.string.yes_label), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                ((OnUserDeleted) getActivity()).onUserDeleted();
+                                onUserDelete();
                             }
                         })
                         .setNegativeButton(getString(R.string.no_label), null)
@@ -178,10 +168,25 @@ public class PregnantUserProfileFragment extends PregnantUserBaseFragment implem
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), AddPregnantUserActivity.class);
-                intent.putExtra(Constants.ExtraArg.USER_ID, mSelectedUserId);
+                intent.putExtra(Constants.ExtraArg.USER_ID, getUserId());
                 startActivityForResult(intent, Constants.RequestCode.EDIT_USER);
             }
         });
+    }
+
+    private void onUserDelete() {
+        getUser().removeReminder();
+        new UserService().remove(getUserId());
+
+        Analytic.setData(Constants.AnalyticsCategories.Activity,
+                Constants.AnalyticsEvents.UserDelete,
+                String.format(Constants.AnalyticsActions.UserDeleted, getUser().name),
+                null);
+
+        String message = String.format(getString(R.string.user_removed_message), getUser().name);
+        Toast.makeText(TrackerApplication.getApp(), message, Toast.LENGTH_SHORT).show();
+
+        getActivity().finish();
     }
 
     @Override
@@ -190,40 +195,11 @@ public class PregnantUserProfileFragment extends PregnantUserBaseFragment implem
         // Check which request we're responding to
         if(resultCode != Activity.RESULT_OK) return;
 
-        if(requestCode == Constants.RequestCode.ADD_READING) {
-            mUser = new UserService().get(mSelectedUserId);
-            initPrePregnancyControls();
-
-            mIsOriginator = true;
-            ((OnNewReadingAdded) getActivity()).onNewReadingAdded();
-            mIsOriginator = false;
+        switch (requestCode) {
+            case Constants.RequestCode.ADD_READING:
+            case Constants.RequestCode.EDIT_USER:
+                onUserDataChange();
+                break;
         }
-
-        if(requestCode == Constants.RequestCode.EDIT_USER) {
-            // todo: refresh usersList
-            mUser = new UserService().get(mSelectedUserId);
-            initUserDetailsControls();
-            initTwinsControls();
-            initPrePregnancyControls();
-            initReminderControls();
-        }
-    }
-//
-//    public void onUserDeleted() {
-//        mUser.removeReminder();
-//        new UserService().remove(mSelectedUserId);
-//
-//        Analytic.setData(Constants.AnalyticsCategories.Activity,
-//                Constants.AnalyticsEvents.UserDelete,
-//                String.format(Constants.AnalyticsActions.UserDeleted, mUser.name),
-//                null);
-//
-//        String message = String.format(getString(R.string.user_removed_message), mUser.name);
-//        Toast.makeText(TrackerApplication.getApp(), message, Toast.LENGTH_SHORT).show();
-//        //finish();
-//    }
-
-    public interface OnUserDeleted {
-        void onUserDeleted();
     }
 }
