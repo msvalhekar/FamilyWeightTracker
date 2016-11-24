@@ -1,6 +1,5 @@
 package com.mk.familyweighttracker.Framework;
 
-import com.google.android.gms.analytics.Tracker;
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.R;

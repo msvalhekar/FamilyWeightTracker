@@ -191,7 +191,7 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment imple
     private void bindReadingList() {
         showHideEmptyListControl();
 
-        PregnantUserReadingAdapter adapter = new PregnantUserReadingAdapter(getActivity(), getUser());
+        PregnantUserReadingAdapter adapter = new PregnantUserReadingAdapter(this, getUser());
         adapter.setOnItemClickListener(new PregnantUserReadingAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(long readingId) {

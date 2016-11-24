@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.mk.familyweighttracker.Fragments.PregnantUserReadingsFragment;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.Models.WeekWeightGainRange;
@@ -23,37 +24,14 @@ import java.util.List;
  */
 public class PregnantUserReadingAdapter extends RecyclerView.Adapter<PregnantUserReadingAdapter.ViewHolder> {
 
-    private Context mContext;
+    PregnantUserReadingsFragment mFragment;
     private User mUser;
     private List<UserReading> mReadingList;
-    List<WeekWeightGainRange> mWeekWeightGainRangeList;
 
-    public PregnantUserReadingAdapter(Context context, User user) {
-        mContext = context;
+    public PregnantUserReadingAdapter(PregnantUserReadingsFragment fragment, User user) {
+        mFragment = fragment;
         mUser = user;
         mReadingList = user.getReadings(true);
-
-        setWeightGainRange();
-    }
-
-    private void setWeightGainRange() {
-        double baseWeight = mUser.getStartingWeight();
-        if(baseWeight == 0) return;
-
-        mWeekWeightGainRangeList = new PregnancyService()
-                .getWeightGainTableFor(baseWeight, mUser.getWeightCategory(), mUser.weightUnit, mUser.haveTwins);
-    }
-
-    private WeekWeightGainRange getWeightGainRangeFor(long weekNumber) {
-        if(mWeekWeightGainRangeList == null)
-            return null;
-
-        for (WeekWeightGainRange range: mWeekWeightGainRangeList) {
-            if(range.WeekNumber == weekNumber) {
-                return range;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -113,7 +91,7 @@ public class PregnantUserReadingAdapter extends RecyclerView.Adapter<PregnantUse
         }
 
         private void setExpectedWeightControl() {
-            WeekWeightGainRange weekWeightGainRange = getWeightGainRangeFor(mUserReading.Sequence);
+            WeekWeightGainRange weekWeightGainRange = mFragment.getWeightGainRangeFor(mUserReading.Sequence);
 
             if (weekWeightGainRange == null) return;
 

@@ -38,13 +38,8 @@ import java.util.List;
  */
 public class PregnantUserChartFragment extends PregnantUserBaseFragment implements OnChartValueSelectedListener, OnNewReadingAdded {
 
-    private long mSelectedUserId;
-    private User mUser;
     private View mFragmentView;
     private LineChart mLineChart;
-    private PregnancyService mPregnancyService = new PregnancyService();
-
-    private List<WeekWeightGainRange> mWeightRangeList;
 
     public PregnantUserChartFragment() {
         // Required empty public constructor
@@ -55,24 +50,33 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
         // Inflate the layout for this fragment
         mFragmentView = inflater.inflate(R.layout.fragment_user_details_chart, container, false);
 
-        mSelectedUserId = getUserId();
-
         initChartControl();
 
         onNewReadingAdded();
 
         Analytic.setData(Constants.AnalyticsCategories.Fragment,
                 Constants.AnalyticsEvents.UserDetailsChart,
-                String.format(Constants.AnalyticsActions.UserDetailsChart, mUser.name),
+                String.format(Constants.AnalyticsActions.UserDetailsChart, getUser().name),
                 null);
 
         return mFragmentView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(getUser().getReadingsCount() == 0)
+            return;
+
+        setChartDescriptionControl();
+        loadChartDataForPregnancy();
+    }
+
     private void setChartDescriptionControl() {
         mFragmentView.findViewById(R.id.user_detail_chart_description_section).setVisibility(View.VISIBLE);
 
-        UserReading latestReading = mUser.getLatestReading();
+        UserReading latestReading = getUser().getLatestReading();
 
         ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_week_no))
                 .setText(String.format(getString(R.string.chart_desc_current_week_label), latestReading.Sequence));
@@ -81,9 +85,11 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
         ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_exp_40th_week))
                 .setText(R.string.chart_desc_40th_week_label);
 
-        WeekWeightGainRange fortiethWeekRange = mWeightRangeList.get(mWeightRangeList.size()-1);
+        List<WeekWeightGainRange> weightGainRange = getWeightGainRange();
+
+        WeekWeightGainRange fortiethWeekRange = weightGainRange.get(weightGainRange.size()-1);
         WeekWeightGainRange latestWeekRange = null;
-        for(WeekWeightGainRange range: mWeightRangeList) {
+        for(WeekWeightGainRange range: weightGainRange) {
             if(range.WeekNumber == latestReading.Sequence) {
                 latestWeekRange = range;
                 break;
@@ -92,7 +98,7 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
 
         if(latestWeekRange != null) {
             ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_actual))
-                    .setText(Html.fromHtml(String.format("%s: %.2f %s", getString(R.string.weight_label), latestReading.Weight, mUser.weightUnit)));
+                    .setText(Html.fromHtml(String.format("%s: %.2f %s", getString(R.string.weight_label), latestReading.Weight, getUser().weightUnit)));
             ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_min_exp_this_week))
                     .setText(Html.fromHtml(String.format("%s: %.2f", getString(R.string.chart_desc_exp_min_wt_label), latestWeekRange.MinimumWeight)));
             ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_weight_min_exp_40th_week))
@@ -144,13 +150,14 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
 
     private void loadChartDataForPregnancy() {
         mLineChart.resetTracking();
+        List<WeekWeightGainRange> weightGainRange = getWeightGainRange();
 
-        List<String> xVals = getXaxisValues(mWeightRangeList.size());
+        List<String> xVals = getXaxisValues(weightGainRange.size());
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-        dataSets.add(getUserWeightValues(mUser.getReadings(true)));
-        dataSets.add(getWeightRangeValues(mWeightRangeList, true));
-        dataSets.add(getWeightRangeValues(mWeightRangeList, false));
+        dataSets.add(getUserWeightValues(getUser().getReadings(true)));
+        dataSets.add(getWeightRangeValues(weightGainRange, true));
+        dataSets.add(getWeightRangeValues(weightGainRange, false));
 
         // make the first DataSet dashed
         //((LineDataSet) dataSets.get(0)).enableDashedLine(10, 10, 0);
@@ -183,14 +190,10 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
     private ILineDataSet getUserWeightValues(List<UserReading> userReadings) {
         ArrayList<Entry> values = new ArrayList<Entry>();
 
-        int index = 0;
         for (UserReading reading: userReadings) {
             if(!reading.isDeliveryReading())
                 values.add(new Entry((float) reading.Weight, (int) reading.Sequence));
         }
-//        if(values.size() == User.MAXIMUM_READINGS_COUNT) {
-//            values.remove(values.size()-1);
-//        }
 
         LineDataSet lineDataSet = new LineDataSet(values, getString(R.string.chart_actual_weight_legend));
         lineDataSet.setLineWidth(5f);
@@ -216,21 +219,12 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
     public void onNothingSelected() {
     }
 
-    private boolean mIsOriginator = false;
     @Override
     public boolean isOriginator() {
-        return mIsOriginator;
+        return false;
     }
 
     @Override
     public void onNewReadingAdded() {
-        mUser = new UserService().get(mSelectedUserId);
-        if(mUser.getReadingsCount() == 0) return;
-
-        BodyWeightCategory weightCategory = mUser.getWeightCategory();
-        mWeightRangeList = mPregnancyService.getWeightGainTableFor(mUser.getStartingWeight(), weightCategory, mUser.weightUnit, mUser.haveTwins);
-
-        loadChartDataForPregnancy();
-        setChartDescriptionControl();
     }
 }

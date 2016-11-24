@@ -2,7 +2,6 @@ package com.mk.familyweighttracker.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Adapter.PregnantUserTabPagerAdapter;
-import com.mk.familyweighttracker.Fragments.PregnantUserProfileFragment;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.OnNewReadingAdded;
@@ -20,7 +18,9 @@ import com.mk.familyweighttracker.Framework.SlidingTabLayout;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
+import com.mk.familyweighttracker.Models.WeekWeightGainRange;
 import com.mk.familyweighttracker.R;
+import com.mk.familyweighttracker.Services.PregnancyService;
 import com.mk.familyweighttracker.Services.UserService;
 
 import java.io.FileNotFoundException;
@@ -32,6 +32,7 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity implements O
 
     private long mUserId;
     private User mUser;
+    List<WeekWeightGainRange> mWeekWeightGainRangeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,7 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity implements O
 
     public void onUserDataChange() {
         mUser = null;
+        mWeekWeightGainRangeList = null;
     }
 
     private void saveUserImageIfRequired() {
@@ -128,13 +130,13 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity implements O
 
     @Override
     public void onNewReadingAdded() {
-        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        for (Fragment fragment: fragments) {
-            if(fragment instanceof OnNewReadingAdded &&
-                ((OnNewReadingAdded) fragment).isOriginator() == false) {
-                    ((OnNewReadingAdded) fragment).onNewReadingAdded();
-            }
-        }
+//        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+//        for (Fragment fragment: fragments) {
+//            if(fragment instanceof OnNewReadingAdded &&
+//                ((OnNewReadingAdded) fragment).isOriginator() == false) {
+//                    ((OnNewReadingAdded) fragment).onNewReadingAdded();
+//            }
+//        }
     }
 
     private void initToolbarControl() {
@@ -201,5 +203,28 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity implements O
                 getString(R.string.app_share_line_4) +
                 "\n\n" +
                 String.format(Constants.PLAY_STORE_APP_SEARCH_URL, TrackerApplication.getApp().getPackageName());
+    }
+
+    public List<WeekWeightGainRange> getWeightGainRange() {
+        if(mWeekWeightGainRangeList == null) {
+            double baseWeight = getUser().getStartingWeight();
+            if (baseWeight == 0) return null;
+
+            mWeekWeightGainRangeList = new PregnancyService()
+                    .getWeightGainTableFor(baseWeight, getUser().getWeightCategory(), getUser().weightUnit, getUser().haveTwins);
+        }
+        return mWeekWeightGainRangeList;
+    }
+
+    public WeekWeightGainRange getPregnancyWeightGainRangeFor(long weekNumber) {
+        if(mWeekWeightGainRangeList == null)
+            return null;
+
+        for (WeekWeightGainRange range: mWeekWeightGainRangeList) {
+            if(range.WeekNumber == weekNumber) {
+                return range;
+            }
+        }
+        return null;
     }
 }

@@ -30,7 +30,7 @@ public class PregnantUserTabsFactory {
             _homeTabs.put("Profile", new PregnantUserProfileFragment());
             _homeTabs.put("Readings", new PregnantUserReadingsFragment());
             _homeTabs.put("Trend", new PregnantUserChartFragment());
-            _homeTabs.put("MWP", new PregnantUserMediaFragment());
+            _homeTabs.put("M.W.P", new PregnantUserMediaFragment());
         }
         return _homeTabs;
     }
