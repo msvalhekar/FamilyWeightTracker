@@ -46,8 +46,6 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_user_detail);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getUser().name);
-        getSupportActionBar().setSubtitle(R.string.user_detail_activity_title);
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,
                 Constants.AnalyticsEvents.UserDetailsActivity,
@@ -59,6 +57,14 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity {
         initDetailTabControl();
 
         saveUserImageIfRequired();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getSupportActionBar().setTitle(getUser().name);
+        getSupportActionBar().setSubtitle(R.string.user_detail_activity_title);
     }
 
     @Override
