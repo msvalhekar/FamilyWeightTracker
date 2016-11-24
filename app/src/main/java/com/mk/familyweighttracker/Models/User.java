@@ -38,6 +38,7 @@ public class User {
 
     public static int MAXIMUM_READINGS_COUNT = 42;
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+    public static String ImageNameFormat = "u%d.jpg";
 
     private long mId;
 
@@ -222,17 +223,9 @@ public class User {
         return new PregnancyService().getWeightCategory(getBmi());
     }
 
-    public long getNextWeekSequence() {
-        UserReading prepregReading = getPrepregnancyReading();
-        if(prepregReading == null) return 0;
-
-        long timeDiff = new Date().getTime() - prepregReading.TakenOn.getTime();
-        long daysDiff = TimeUnit.DAYS.toDays(timeDiff);
-        return daysDiff / 7;
-    }
-
     public String getImagePath() {
-        return String.format("%s/user.jpg", StorageUtility.getImagesDirectory());
+        String imageName = String.format(ImageNameFormat, getId());
+        return String.format("%s/%s", StorageUtility.getImagesDirectory(), imageName);
     }
 
     public Bitmap getImageAsBitmap(boolean circular){

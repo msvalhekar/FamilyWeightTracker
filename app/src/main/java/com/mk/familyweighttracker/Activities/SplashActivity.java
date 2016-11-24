@@ -1,7 +1,6 @@
 package com.mk.familyweighttracker.Activities;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 
 import com.mk.familyweighttracker.Framework.AppVersion;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.DataMigratorTask;
 import com.mk.familyweighttracker.Framework.PreferenceHelper;
 import com.mk.familyweighttracker.Framework.StringHelper;
 import com.mk.familyweighttracker.Framework.SystemInformation;
@@ -34,8 +34,6 @@ import java.util.TimerTask;
  */
 public class SplashActivity extends TrackerBaseActivity {
 
-    private boolean eligibleToCheckVersionOnPlayStore;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.splashScreenTheme);
@@ -47,6 +45,8 @@ public class SplashActivity extends TrackerBaseActivity {
         ProgressBar progressBar = ((ProgressBar) findViewById(R.id.splash_progress_bar));
 
         initAppVersionControl();
+
+        new DataMigratorTask().execute();
 
         setLastUpdateCheckedDateForFirstTime();
 
@@ -68,12 +68,8 @@ public class SplashActivity extends TrackerBaseActivity {
 
     private void initAppVersionControl() {
         TextView versionTv = (TextView) findViewById(R.id.splash_vesion_text);
-        String appVersion = "";
-        try {
-            appVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
+        String appVersion = SystemInformation.getAppVersionName();
+
         if(StringHelper.isNullOrEmpty(appVersion)) {
             versionTv.setVisibility(View.GONE);
         } else {

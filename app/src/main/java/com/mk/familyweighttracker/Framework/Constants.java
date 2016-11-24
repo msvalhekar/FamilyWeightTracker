@@ -23,6 +23,7 @@ public class Constants {
     public static class SharedPreference {
         public static final String SelectedBackgroundAudio = "SelectedBackgroundAudio";
         public static final String AppMarketLastUpdateCheckedOn = "AppMarketLastUpdateCheckedOn";
+        public static final String LastRunMigration = "LastRunMigration";
     }
 
     public static class Activities {
