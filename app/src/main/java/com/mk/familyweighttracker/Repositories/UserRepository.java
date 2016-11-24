@@ -33,8 +33,8 @@ public class UserRepository {
         return readingModel.mapToUserReading();
     }
 
-    public UserReading getUserReadingBySequence(long sequence) {
-        UserReadingModel readingModel = UserReadingModel.getBySequence(sequence);
+    public UserReading getUserReadingBySequence(long userId, long sequence) {
+        UserReadingModel readingModel = UserReadingModel.getBySequence(userId, sequence);
         if(readingModel == null) return null;
         return readingModel.mapToUserReading();
     }

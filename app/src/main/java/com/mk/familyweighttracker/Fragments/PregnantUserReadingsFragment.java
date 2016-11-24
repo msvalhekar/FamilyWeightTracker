@@ -118,7 +118,7 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
 
     private boolean showDialogIfConflictingReading(Context context) {
         long estimatedSequence = getUser().getEstimatedSequence();
-        final UserReading reading = new UserService().getReadingBySequence(estimatedSequence);
+        final UserReading reading = new UserService().getReadingBySequence(getUserId(), estimatedSequence);
         if (reading == null)
             return false;
 

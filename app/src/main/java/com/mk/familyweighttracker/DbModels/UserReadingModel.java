@@ -48,10 +48,10 @@ public class UserReadingModel extends Model {
                 .executeSingle();
     }
 
-    public static UserReadingModel getBySequence(long sequence) {
+    public static UserReadingModel getBySequence(long userId, long sequence) {
         return new Select()
                 .from(UserReadingModel.class)
-                .where("Sequence = ?", sequence)
+                .where("Sequence = ? AND User = ?", sequence, userId)
                 .executeSingle();
     }
 
@@ -95,6 +95,7 @@ public class UserReadingModel extends Model {
         return new JSONObject()
                 .put("createdOn", CreatedOn.getTime())
                 .put("takenOn", TakenOn.getTime())
+                .put("usrNm", User.name)
                 .put("seq", Sequence)
                 .put("wt", Weight)
                 .put("ht", Height)
@@ -105,6 +106,7 @@ public class UserReadingModel extends Model {
         UserReadingModel reading = new UserReadingModel();
         reading.CreatedOn = new Date(readingJSON.getLong("createdOn"));
         reading.TakenOn = new Date(readingJSON.getLong("takenOn"));
+        reading.User = UserModel.get(readingJSON.getLong("usrNm"));
         reading.Sequence = readingJSON.getLong("seq");
         reading.Weight = readingJSON.getDouble("wt");
         reading.Height = readingJSON.getDouble("ht");

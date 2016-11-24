@@ -93,12 +93,8 @@ public class UsersListActivity extends TrackerBaseActivity {
     private void gotoAddUserActivityOfType(UserType userType) {
         switch (userType) {
             case Pregnancy:
-                if(getUsers().size() == 0) {
-                    Intent intent = new Intent(TrackerApplication.getApp(), AddPregnantUserActivity.class);
-                    startActivityForResult(intent, Constants.RequestCode.ADD_USER);
-                } else {
-                    Toast.makeText(UsersListActivity.this, "Tracking multiple pregnancies will be available in next Update.", Toast.LENGTH_SHORT).show();
-                }
+                Intent intent = new Intent(TrackerApplication.getApp(), AddPregnantUserActivity.class);
+                startActivityForResult(intent, Constants.RequestCode.ADD_USER);
                 break;
             case Infant:
                 Toast.makeText(UsersListActivity.this, "Tracking Infant growth will be available in next Update.", Toast.LENGTH_SHORT).show();

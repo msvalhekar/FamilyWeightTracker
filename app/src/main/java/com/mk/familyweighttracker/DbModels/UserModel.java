@@ -23,7 +23,7 @@ import java.util.List;
 public class UserModel extends Model {
 
     @Column(name = "Name")
-    private String name;
+    public String name;
 
     @Column(name = "ImageBytes")
     private byte[] imageBytes;

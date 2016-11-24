@@ -35,8 +35,8 @@ public class UserService {
         return userRepository.getUserReading(readingId);
     }
 
-    public UserReading getReadingBySequence(long sequence) {
-        return userRepository.getUserReadingBySequence(sequence);
+    public UserReading getReadingBySequence(long userId, long sequence) {
+        return userRepository.getUserReadingBySequence(userId, sequence);
     }
 
     public Boolean isAlreadyAdded(String name) {

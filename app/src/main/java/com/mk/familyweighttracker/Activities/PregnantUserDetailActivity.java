@@ -44,6 +44,11 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity {
             finish();
         }
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_user_detail);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getUser().name);
+        getSupportActionBar().setSubtitle(R.string.user_detail_activity_title);
+
         Analytic.setData(Constants.AnalyticsCategories.Activity,
                 Constants.AnalyticsEvents.UserDetailsActivity,
                 String.format(Constants.AnalyticsActions.UserDetailsLoaded, getUser().name),
