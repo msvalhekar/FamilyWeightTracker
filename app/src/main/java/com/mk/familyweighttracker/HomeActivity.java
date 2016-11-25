@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.PermissionChecker;
 import com.mk.familyweighttracker.Framework.StorageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
@@ -28,6 +29,12 @@ public class HomeActivity extends TrackerBaseActivity {
 
         initToolbarControl();
         initDisclaimerControl();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        PermissionChecker.getInstance().requestPermissions(this);
     }
 
     @Override
