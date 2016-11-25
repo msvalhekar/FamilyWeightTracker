@@ -98,7 +98,7 @@
     <string name="home_app_introduction_message">Smart and Simple. \nCapture special pregnancy moments. \nExperience \'My Wonderful Pregnancy\'.</string>
     <string name="home_app_disclaimer_label">Disclaimer</string>
     <string name="home_app_disclaimer_message">This App is for making user\'s pregnancy a wonderful experience by making use of information and data that user provide in the App. The calculations are indicative and may vary from person to person. App is not approved or sponsored by medical professionals. Always raise any and all questions or concerns about your pregnancy with your doctor. App do not share user\'s personal data outside of this app.</string>
-    <string name="notification_title">Pregnancy weekly weight</string>
+    <string name="notification_title">Pregnancy reading - %s</string>
     <string name="notification_message">Touch to record week %d pregnancy weight.</string>
     <string name="delivery_due_date_label">Delivery Due Date</string>
     <string name="delivery_have_twins_label">Pregnant with twins?</string>

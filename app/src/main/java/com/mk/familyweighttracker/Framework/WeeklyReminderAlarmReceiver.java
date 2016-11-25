@@ -50,7 +50,7 @@ public class WeeklyReminderAlarmReceiver extends BroadcastReceiver {
         long nextSequence = latestReading != null ? latestReading.Sequence +1 : 0;
 
         PushNotification pushNotification = new PushNotification();
-        pushNotification.title = _context.getString(R.string.notification_title);
+        pushNotification.title = String.format(_context.getString(R.string.notification_title), user.name);
         pushNotification.message = String.format(_context.getString(R.string.notification_message), nextSequence);
         pushNotification.context = _context;
         pushNotification.requestCode = (int)user.getId();
