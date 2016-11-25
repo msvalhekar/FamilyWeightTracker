@@ -35,6 +35,7 @@ public class TrackerApplication extends com.activeandroid.app.Application {
             @Override
             public void uncaughtException(Thread thread, Throwable e) {
                 e.printStackTrace(); // not all Android versions will print the stack trace automatically
+                Crashlytics.logException(e);
 
 //                Intent intent = new Intent ();
 //                intent.setAction("com.mk.familyweighttracker.Framework.SEND_LOG");
