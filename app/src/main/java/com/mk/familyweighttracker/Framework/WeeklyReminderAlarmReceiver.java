@@ -46,12 +46,9 @@ public class WeeklyReminderAlarmReceiver extends BroadcastReceiver {
         User user = new UserService().get(userId);
         if(user == null || !user.enableReminder) return;
 
-        UserReading latestReading = user.getLatestReading();
-        long nextSequence = latestReading != null ? latestReading.Sequence +1 : 0;
-
         PushNotification pushNotification = new PushNotification();
         pushNotification.title = String.format(_context.getString(R.string.notification_title), user.name);
-        pushNotification.message = String.format(_context.getString(R.string.notification_message), nextSequence);
+        pushNotification.message = String.format(_context.getString(R.string.notification_message), user.getEstimatedSequence());
         pushNotification.context = _context;
         pushNotification.requestCode = (int)user.getId();
         NotificationCenter.showNotification(pushNotification);
