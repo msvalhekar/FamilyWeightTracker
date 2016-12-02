@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Enums.HeightUnit;
+import com.mk.familyweighttracker.Enums.PregnancyReadingType;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
@@ -83,40 +84,38 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
 
         if(mUserReadingToProcess != null) {
             bEditMode = true;
-            int messageId = R.string.EditReadingMessage;
-            if(mUserReadingToProcess.isPrePregnancyReading()) {
-                messageId = R.string.EditPrePregnancyReadingMessage;
-            } else if(mUserReadingToProcess.isDeliveryReading()) {
-                messageId = R.string.EditDeliveryReadingMessage;
-            }
-            setTitle(getString(messageId));
             findViewById(R.id.add_reading_delete_button).setVisibility(View.VISIBLE);
         } else {
             bEditMode = false;
             findViewById(R.id.add_reading_delete_button).setVisibility(View.GONE);
-            UserReading previousReading = mSelectedUser.getLatestReading();
+
+            long sequence = getSequenceFor();
+            if(mSelectedUser.isPregnant() && sequence >= User.MAXIMUM_READINGS_COUNT) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Error Adding reading")
+                        .setMessage(String.format(getResources().getString(R.string.SuggestReadingBeyondDeliveryDueDateMessage), sequence))
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                        .create()
+                        .show();
+                return;
+            }
 
             mUserReadingToProcess = new UserReading();
             mUserReadingToProcess.UserId = userId;
             mUserReadingToProcess.TakenOn = new Date();
-            mUserReadingToProcess.Sequence = mSelectedUser.getNextAvailableSequence();
-            if(mUserReadingToProcess.Sequence == User.MAXIMUM_READINGS_COUNT) {
-                Toast.makeText(this, R.string.Maximum40WeeksDataSupportedMessage, Toast.LENGTH_LONG).show();
-                return;
-            }
-            mUserReadingToProcess.Weight = UserReading.DEFAULT_BASE_WEIGHT;
-            mUserReadingToProcess.Height = UserReading.DEFAULT_BASE_HEIGHT;
+            mUserReadingToProcess.Sequence = sequence;
+            mUserReadingToProcess.Weight = mSelectedUser.getDefaultBaseWeight();
+            mUserReadingToProcess.Height = mSelectedUser.getDefaultBaseHeight();
+            UserReading previousReading = mSelectedUser.getLatestReading();
             if(previousReading != null) {
                 mUserReadingToProcess.Weight = previousReading.Weight;
                 mUserReadingToProcess.Height = previousReading.Height;
             }
-            int messageId = R.string.AddReadingMessage;
-            if(mUserReadingToProcess.isPrePregnancyReading()) {
-                messageId = R.string.AddPrePregnancyReadingMessage;
-            } else if(mUserReadingToProcess.isDeliveryReading()) {
-                messageId = R.string.AddDeliveryReadingMessage;
-            }
-            setTitle(getString(messageId));
         }
 
         initImageButtonControl();
@@ -129,6 +128,30 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
         initHeightSequenceControl();
         initMissingReadingsControl();
         initActionButtonControls();
+        setTitle();
+    }
+
+    private long getSequenceFor() {
+        String readyTypeValue = getIntent().getStringExtra(Constants.ExtraArg.ADD_READING_TYPE);
+        PregnancyReadingType readingType = PregnancyReadingType.getType(readyTypeValue);
+        if (readingType == PregnancyReadingType.PrePregnancy)
+            return 0;
+        if (readingType == PregnancyReadingType.Delivery)
+            return 41;
+
+        return mSelectedUser.getNextAvailableSequence();
+    }
+
+    private void setTitle() {
+        int messageId = bEditMode ? R.string.EditReadingMessage : R.string.AddReadingMessage;
+        if(mSelectedUser.isPregnant()) {
+            if (mUserReadingToProcess.isPrePregnancyReading()) {
+                messageId = bEditMode ? R.string.EditPrePregnancyReadingMessage : R.string.AddPrePregnancyReadingMessage;
+            } else if (mUserReadingToProcess.isDeliveryReading()) {
+                messageId = bEditMode ? R.string.EditDeliveryReadingMessage : R.string.AddDeliveryReadingMessage;
+            }
+        }
+        setTitle(getString(messageId));
     }
 
     @Override
@@ -288,13 +311,15 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
         final Button seqButton = ((Button) findViewById(R.id.add_reading_sequence_btn));
         seqButton.setText(String.valueOf(mUserReadingToProcess.Sequence));
 
-        boolean nonEditable = bEditMode || mUserReadingToProcess.isPrePregnancyReading();
-        seqButton.setClickable(!nonEditable);
-        if(nonEditable) return;
-
         seqButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean nonEditable = bEditMode || mUserReadingToProcess.isPrePregnancyReading();
+                if(nonEditable) {
+                    Toast.makeText(AddPregnancyReadingActivity.this, "Week number cannot be changed in Edit mode.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 NumberPicker sequencePicker = getWeekSequenceControl();
                 int indexOfNextSequence = Arrays.asList(sequencePicker.getDisplayedValues())
                         .indexOf(String.valueOf(mUserReadingToProcess.Sequence));
@@ -322,6 +347,7 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mUserReadingToProcess.Sequence = mNewSequenceValue;
+                                setTitle();
                                 ((Button) findViewById(R.id.add_reading_sequence_btn))
                                         .setText(String.valueOf(mUserReadingToProcess.Sequence));
                             }

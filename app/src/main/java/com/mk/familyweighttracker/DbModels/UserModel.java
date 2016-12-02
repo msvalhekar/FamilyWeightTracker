@@ -6,6 +6,7 @@ import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
+import com.mk.familyweighttracker.Enums.UserType;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Models.User;
 
@@ -60,6 +61,9 @@ public class UserModel extends Model {
 
     @Column(name = "DeliveryDueDate")
     private Date deliveryDueDate;
+
+    @Column(name = "Type")
+    private UserType type;
 
     public List<UserReadingModel> getReadings() {
         return getMany(UserReadingModel.class, "User");
@@ -123,6 +127,7 @@ public class UserModel extends Model {
         user.reminderDay = this.reminderDay;
         user.reminderHour = this.reminderHour;
         user.reminderMinute = this.reminderMinute;
+        user.type = this.type;
 
         for (UserReadingModel reading: getReadings()) {
             user.addReading(reading.mapToUserReading());
@@ -150,6 +155,7 @@ public class UserModel extends Model {
         userModel.reminderDay = user.reminderDay;
         userModel.reminderHour = user.reminderHour;
         userModel.reminderMinute = user.reminderMinute;
+        userModel.type = user.type;
         return userModel;
     }
 
@@ -173,6 +179,7 @@ public class UserModel extends Model {
                 .put("ddd", deliveryDueDate == null ? 0 : deliveryDueDate.getTime())
                 .put("isMale", isMale)
                 .put("trackPeriod", trackingPeriod)
+                .put("type", type)
                 .put("wtUnit", weightUnit)
                 .put("htUnit", heightUnit)
                 .put("twins", haveTwins)
@@ -191,6 +198,7 @@ public class UserModel extends Model {
         user.deliveryDueDate = userJSON.getLong("ddd") == 0 ? null : new Date(userJSON.getLong("ddd"));
         user.isMale = userJSON.getBoolean("isMale");
         user.trackingPeriod = TrackingPeriod.valueOf(userJSON.getString("trackPeriod"));
+        user.type = UserType.valueOf(userJSON.getString("type"));
         user.weightUnit = WeightUnit.valueOf(userJSON.getString("wtUnit"));
         user.heightUnit = HeightUnit.valueOf(userJSON.getString("htUnit"));
         user.haveTwins = userJSON.getBoolean("twins");

@@ -8,7 +8,6 @@ import android.os.Vibrator;
 import com.activeandroid.ActiveAndroid;
 import com.mk.familyweighttracker.Models.PushNotification;
 import com.mk.familyweighttracker.Models.User;
-import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
@@ -47,8 +46,11 @@ public class WeeklyReminderAlarmReceiver extends BroadcastReceiver {
         if(user == null || !user.enableReminder) return;
 
         PushNotification pushNotification = new PushNotification();
-        pushNotification.title = String.format(_context.getString(R.string.notification_title), user.name);
-        pushNotification.message = String.format(_context.getString(R.string.notification_message), user.getEstimatedSequence());
+        String titleFormat = _context.getString(user.isPregnant() ? R.string.notification_pregnancy_title : R.string.notification_infant_title);
+        String messageFormat = _context.getString(user.isPregnant() ? R.string.notification_pregnancy_message : R.string.notification_infant_message);
+
+        pushNotification.title = String.format(titleFormat, user.name);
+        pushNotification.message = String.format(messageFormat, user.getEstimatedSequence());
         pushNotification.context = _context;
         pushNotification.requestCode = (int)user.getId();
         NotificationCenter.showNotification(pushNotification);

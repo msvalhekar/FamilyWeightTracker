@@ -62,6 +62,13 @@ public class PregnantUserProfileFragment extends PregnantUserBaseFragment {
     }
 
     private void initDeliveryDueDateControls() {
+        if(!getUser().isPregnant()) {
+            mFragmentView.findViewById(R.id.view_user_delivery_section_divider).setVisibility(View.GONE);
+            mFragmentView.findViewById(R.id.view_user_delivery_due_date_section).setVisibility(View.GONE);
+            mFragmentView.findViewById(R.id.view_user_delivery_remaining_section).setVisibility(View.GONE);
+            return;
+        }
+
         ((TextView) mFragmentView.findViewById(R.id.view_user_delivery_due_date))
                 .setText(getUser().getDeliveryDueDateStr());
 
@@ -93,7 +100,7 @@ public class PregnantUserProfileFragment extends PregnantUserBaseFragment {
         mFragmentView.findViewById(R.id.view_user_pre_pregnancy_bmi_section).setVisibility(View.GONE);
         mFragmentView.findViewById(R.id.view_user_pre_pregnancy_lmp_section).setVisibility(View.GONE);
 
-        if(getUser().getReadingsCount() > 0) {
+        if(getUser().isPregnant() && getUser().getReadingsCount() > 0) {
 
             mFragmentView.findViewById(R.id.view_user_pre_pregnancy_divider).setVisibility(View.VISIBLE);
             mFragmentView.findViewById(R.id.view_user_pre_pregnancy_section).setVisibility(View.VISIBLE);
@@ -117,14 +124,23 @@ public class PregnantUserProfileFragment extends PregnantUserBaseFragment {
     }
 
     private void initTwinsControls() {
+        if(!getUser().isPregnant()) {
+            mFragmentView.findViewById(R.id.view_user_delivery_twins_section).setVisibility(View.GONE);
+            return;
+        }
         String message = getResources().getString(getUser().haveTwins ? R.string.yes_label : R.string.no_label);
         ((TextView) mFragmentView.findViewById(R.id.view_user_delivery_twins)).setText(message);
     }
 
     private void initReminderControls() {
+        ((TextView) mFragmentView.findViewById(R.id.view_user_reminder_day_label))
+                .setText(getUser().isPregnant()
+                        ? R.string.user_details_weekly_reminder_text
+                        : R.string.user_details_monthly_reminder_text);
+
         ((TextView) mFragmentView.findViewById(R.id.view_user_reminder_day)).setText(R.string.value_not_set_message);
         if(getUser().enableReminder) {
-            final List<String> days = Utility.getWeekDays();
+            final List<String> days = getUser().isPregnant() ? Utility.getWeekDays() : Utility.getMonthDays();
             String reminderText = String.format("%02d:%02d %s %s",
                     getUser().reminderHour,
                     getUser().reminderMinute,

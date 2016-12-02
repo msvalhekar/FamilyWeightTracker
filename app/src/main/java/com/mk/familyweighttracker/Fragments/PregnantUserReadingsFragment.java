@@ -13,17 +13,24 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Activities.AddPregnancyReadingActivity;
 import com.mk.familyweighttracker.Activities.AddPregnantUserActivity;
+import com.mk.familyweighttracker.Adapter.InfantUserReadingAdapter;
 import com.mk.familyweighttracker.Adapter.PregnantUserReadingAdapter;
+import com.mk.familyweighttracker.Enums.PregnancyReadingType;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
+
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,49 +76,20 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                if (getUser().maxReadingsReached()) {
-                    Toast.makeText(view.getContext(),
-                            R.string.Maximum40WeeksDataSupportedMessage,
-                            Toast.LENGTH_LONG).show();
-                    return;
+                if (getUser().isPregnant()) {
+                    if (promptIfDeliveryDateNotSet(view.getContext())) {
+                        return;
+                    }
+
+                    if (getUser().maxReadingsReached()) {
+                        Toast.makeText(view.getContext(),
+                                R.string.Maximum40WeeksDataSupportedMessage,
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    setReadingTypes(view);
                 }
-
-//                    // TODO: 31-10-2016 show dialog with 0 and 1-40 and 41 readings and purpose
-//                    // if not shown already - sharedPreference
-//
-//                    LinearLayout linearLayout = new LinearLayout(view.getContext());
-//                    linearLayout.setOrientation(LinearLayout.VERTICAL);
-//                    TableLayout tableLayout = new TableLayout(view.getContext());
-//                    tableLayout.setOrientation(LinearLayout.HORIZONTAL);
-//                    TableRow tableRow = new TableRow(view.getContext());
-//                    TextView weekNumberView = new TextView(view.getContext());
-//                    weekNumberView.setText("Week Number");
-//                    tableRow.addView(weekNumberView);
-//                    tableLayout.addView(tableRow);
-//                    linearLayout.addView(tableLayout);
-//                    //View typesView = mFragmentView.findViewById(R.id.pregnancy_reading_types);
-//                    //((ViewGroup) typesView.getParent()).removeView(typesView);
-//                    new AlertDialog.Builder(view.getContext())
-//                            .setTitle("Pregnancy Reading Types")
-//                            //.setCancelable(false)
-//                            //.setView(R.id.pregnancy_reading_types)
-//                            //.setView(typesView)
-//                            .setView(linearLayout)
-//                            .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    Toast.makeText(view.getContext(), "reading types shown", Toast.LENGTH_SHORT).show();
-//                                }
-//                            })
-//                            .create()
-//                            .show();
-                if (promptIfDeliveryDateNotSet(view.getContext()))
-                    return;
-
-                if (showDialogIfConflictingReading(view.getContext()))
-                    return;
-
-                gotoAddReading();
             }
         });
     }
@@ -136,7 +114,7 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
                 .setNegativeButton(context.getString(R.string.add_conflicting_week_negative_action_label), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        gotoAddReading();
+                        gotoAddReading(PregnancyReadingType.Pregnancy);
                     }
                 })
                 .create()
@@ -144,17 +122,69 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
         return true;
     }
 
+    private void setReadingTypes(View view) {
+        ArrayAdapter<PregnancyReadingType> adapter = new ArrayAdapter<>(
+                view.getContext(),
+                android.R.layout.simple_list_item_single_choice,
+                Arrays.asList(PregnancyReadingType.values()));
+
+        ListView readingTypesListView = new ListView(view.getContext());
+        readingTypesListView.setAdapter(adapter);
+
+        final AlertDialog dialog = new AlertDialog.Builder(view.getContext())
+                .setTitle(getResources().getString(R.string.add_reading_type_title))
+                .setView(readingTypesListView)
+                .create();
+
+        readingTypesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                PregnancyReadingType type = (PregnancyReadingType)((ListView) parent).getAdapter().getItem(position);
+                switch (type) {
+                    case PrePregnancy:
+                        if(getUser().getPrepregnancyReading() != null) {
+                            Toast.makeText(view.getContext(), R.string.add_reading_prepregnancy_exists_message, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        break;
+                    case Pregnancy:
+                        if (showDialogIfConflictingReading(view.getContext())) {
+                            dialog.dismiss();
+                            return;
+                        }
+                    case Delivery:
+                        if(getUser().getDeliveryReading() != null) {
+                            Toast.makeText(view.getContext(), R.string.add_reading_delivery_exists_message, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        break;
+                }
+                gotoAddReading(type);
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
     private void gotoEditReading(long readingId) {
-        Intent intent = new Intent(getContext(), AddPregnancyReadingActivity.class);
+        Intent intent = getReadingActivityIntent();
         intent.putExtra(Constants.ExtraArg.USER_ID, getUserId());
         intent.putExtra(Constants.ExtraArg.EDIT_READING_ID, readingId);
         startActivityForResult(intent, Constants.RequestCode.EDIT_READING);
     }
 
-    private void gotoAddReading() {
-        Intent intent = new Intent(getContext(), AddPregnancyReadingActivity.class);
+    private void gotoAddReading(PregnancyReadingType type) {
+        Intent intent = getReadingActivityIntent();
         intent.putExtra(Constants.ExtraArg.USER_ID, getUserId());
+        intent.putExtra(Constants.ExtraArg.ADD_READING_TYPE, type.toString());
         startActivityForResult(intent, Constants.RequestCode.ADD_READING);
+    }
+
+    private Intent getReadingActivityIntent() {
+        return new Intent(getContext(), AddPregnancyReadingActivity.class);
+//        return new Intent(getContext(), getUser().isPregnant()
+//                ? AddPregnancyReadingActivity.class
+//                : AddInfantReadingActivity.class);
     }
 
     private boolean promptIfDeliveryDateNotSet(final Context context) {
@@ -180,15 +210,27 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
     private void bindReadingList() {
         showHideEmptyListControl();
 
-        PregnantUserReadingAdapter adapter = new PregnantUserReadingAdapter(this, getUser());
-        adapter.setOnItemClickListener(new PregnantUserReadingAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(long readingId) {
-                gotoEditReading(readingId);
-            }
-        });
+        if(getUser().isPregnant()) {
+            PregnantUserReadingAdapter adapter = new PregnantUserReadingAdapter(this, getUser());
+            adapter.setOnItemClickListener(new PregnantUserReadingAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(long readingId) {
+                    gotoEditReading(readingId);
+                }
+            });
 
-        mRecyclerView.setAdapter(adapter);
+            mRecyclerView.setAdapter(adapter);
+        } else {
+            InfantUserReadingAdapter adapter = new InfantUserReadingAdapter(this, getUser());
+            adapter.setOnItemClickListener(new InfantUserReadingAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(long readingId) {
+                    gotoEditReading(readingId);
+                }
+            });
+
+            mRecyclerView.setAdapter(adapter);
+        }
         //usersAdapter.notifyDataSetChanged();
     }
 

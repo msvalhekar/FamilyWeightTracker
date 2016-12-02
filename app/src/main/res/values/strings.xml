@@ -15,6 +15,7 @@
     <string name="add_user_first_reading_lmp_date_label">Last Menstrual Period *</string>
     <string name="bump_label">Bump photo</string>
     <string name="bump_desc_label">Tap to change photo</string>
+    <string name="gender_desc_label">Tap to change gender</string>
     <string name="reading_measured_date_label">Measured on</string>
     <string name="reading_period_label">Week *</string>
     <string name="reading_pending_weeks_label">Missing readings</string>
@@ -73,6 +74,7 @@
     <string name="WeekNumberMessage">Week Number</string>
     <string name="WeeksMessage">week(s)</string>
     <string name="Maximum40WeeksDataSupportedMessage">App supports only 40 weeks of pregnancy readings, additional readings cannot be added.</string>
+    <string name="SuggestReadingBeyondDeliveryDueDateMessage">Suggested week is %d, App supports only 40 weeks of pregnancy.\nCorrect delivery due date, if delivery delayed.</string>
 
     <string name="menu_user_detail_media">Media</string>
     <string name="user_media_slideshow_label">Preview</string>
@@ -98,8 +100,10 @@
     <string name="home_app_introduction_message">Smart and Simple. \nCapture special pregnancy moments. \nExperience \'My Wonderful Pregnancy\'.</string>
     <string name="home_app_disclaimer_label">Disclaimer</string>
     <string name="home_app_disclaimer_message">This App is for making user\'s pregnancy a wonderful experience by making use of information and data that user provide in the App. The calculations are indicative and may vary from person to person. App is not approved or sponsored by medical professionals. Always raise any and all questions or concerns about your pregnancy with your doctor. App do not share user\'s personal data outside of this app.</string>
-    <string name="notification_title">%s - Pregnancy reading</string>
-    <string name="notification_message">Touch to record week %d pregnancy weight.</string>
+    <string name="notification_pregnancy_title">%s - Pregnancy weight reading</string>
+    <string name="notification_infant_title">%s - Infant growth reading</string>
+    <string name="notification_pregnancy_message">Touch to record %d week pregnancy weight.</string>
+    <string name="notification_infant_message">Touch to record %d month growth.</string>
     <string name="delivery_due_date_label">Delivery Due Date</string>
     <string name="delivery_have_twins_label">Pregnant with twins?</string>
     <string name="delivery_remaining_days_label">Remaining</string>
@@ -107,12 +111,16 @@
     <string name="delete_user_warning_title">Remove User?</string>
     <string name="value_not_set_message">Not set</string>
 
-    <string name="add_user_reminder_text">Remind Weekly?</string>
+    <string name="add_user_weekly_reminder_text">Remind Weekly?</string>
+    <string name="add_user_monthly_reminder_text">Remind Monthly?</string>
     <string name="add_user_name_text">Name</string>
     <string name="add_user_dob_text">Date Of Birth</string>
+    <string name="add_user_gender_text">Gender</string>
     <string name="add_user_reminder_dow_text">Day of Week</string>
+    <string name="add_user_reminder_dom_text">Day of Month</string>
     <string name="add_user_reminder_tod_text">Time of Day</string>
-    <string name="user_details_reminder_text">Weekly Reminder</string>
+    <string name="user_details_weekly_reminder_text">Weekly Reminder</string>
+    <string name="user_details_monthly_reminder_text">Monthly Reminder</string>
     <string name="user_detail_prepreg_summary_label">Pre Pregnancy Summary</string>
     <string name="user_detail_prepreg_bmi_label">BMI - Category</string>
     <string name="user_detail_prepreg_lmp_label">Last Menstrual Period</string>
@@ -141,6 +149,8 @@
     <string name="cancel_label">Cancel</string>
     <string name="got_it_label">Got it</string>
     <string name="send_label">Send</string>
+    <string name="boy_label">Boy</string>
+    <string name="girl_label">Girl</string>
 
     <string name="WEEK_DAY_SUNDAY">Sunday</string>
     <string name="WEEK_DAY_MONDAY">Monday</string>
@@ -149,6 +159,37 @@
     <string name="WEEK_DAY_THURSDAY">Thursday</string>
     <string name="WEEK_DAY_FRIDAY">Friday</string>
     <string name="WEEK_DAY_SATURDAY">Saturday</string>
+
+    <string name="MONTH_DAY_1">1st</string>
+    <string name="MONTH_DAY_2">2nd</string>
+    <string name="MONTH_DAY_3">3rd</string>
+    <string name="MONTH_DAY_4">4th</string>
+    <string name="MONTH_DAY_5">5th</string>
+    <string name="MONTH_DAY_6">6th</string>
+    <string name="MONTH_DAY_7">7th</string>
+    <string name="MONTH_DAY_8">8th</string>
+    <string name="MONTH_DAY_9">9th</string>
+    <string name="MONTH_DAY_10">10th</string>
+    <string name="MONTH_DAY_11">11th</string>
+    <string name="MONTH_DAY_12">12th</string>
+    <string name="MONTH_DAY_13">13th</string>
+    <string name="MONTH_DAY_14">14th</string>
+    <string name="MONTH_DAY_15">15th</string>
+    <string name="MONTH_DAY_16">16th</string>
+    <string name="MONTH_DAY_17">17th</string>
+    <string name="MONTH_DAY_18">18th</string>
+    <string name="MONTH_DAY_19">19th</string>
+    <string name="MONTH_DAY_20">20th</string>
+    <string name="MONTH_DAY_21">21st</string>
+    <string name="MONTH_DAY_22">22nd</string>
+    <string name="MONTH_DAY_23">23rd</string>
+    <string name="MONTH_DAY_24">24th</string>
+    <string name="MONTH_DAY_25">25th</string>
+    <string name="MONTH_DAY_26">26th</string>
+    <string name="MONTH_DAY_27">27th</string>
+    <string name="MONTH_DAY_28">28th</string>
+    <string name="MONTH_DAY_29">29th</string>
+    <string name="MONTH_DAY_30">30th</string>
 
     <string name="error_user_name_used_message">This name is already used, try different</string>
     <string name="error_field_required_message">Required</string>
@@ -172,4 +213,7 @@
     <string name="log_helper_email_chooser_title">Send log</string>
     <string name="feedback_max_length_label">max 500</string>
     <string name="button_due_date_action_lable">SET NOW</string>
+    <string name="add_reading_type_title">Select Reading Type</string>
+    <string name="add_reading_prepregnancy_exists_message">Pre-pregnancy reading is already added.</string>
+    <string name="add_reading_delivery_exists_message">Delivery reading is already added.</string>
 </resources>

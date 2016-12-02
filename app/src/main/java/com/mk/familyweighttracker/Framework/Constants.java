@@ -38,7 +38,8 @@ public class Constants {
 
     public static class ExtraArg {
         public static final String USER_ID = "user_id";
-        public static final String IS_DATA_CHANGED = "IsDataChanged";
+        public static final String ADD_USER_TYPE = "AddUserType";
+        public static final String ADD_READING_TYPE = "AddReadingType";
         public static final String EDIT_READING_ID = "EditReadingId";
         public static final String PROMPT_FOR_UPGRADE = "PromptForUpgrade";
     }

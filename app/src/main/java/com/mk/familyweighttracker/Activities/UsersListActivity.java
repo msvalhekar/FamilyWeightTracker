@@ -71,7 +71,7 @@ public class UsersListActivity extends TrackerBaseActivity {
             public void onClick(View view) {
                 final ArrayAdapter<String> userTypesAdapter = new ArrayAdapter<String>(UsersListActivity.this, android.R.layout.select_dialog_singlechoice);
 
-                for (UserType userType:UserType.values()){
+                for (UserType userType : UserType.values()) {
                     userTypesAdapter.add(userType.toString());
                 }
 
@@ -93,11 +93,10 @@ public class UsersListActivity extends TrackerBaseActivity {
     private void gotoAddUserActivityOfType(UserType userType) {
         switch (userType) {
             case Pregnancy:
-                Intent intent = new Intent(TrackerApplication.getApp(), AddPregnantUserActivity.class);
-                startActivityForResult(intent, Constants.RequestCode.ADD_USER);
-                break;
             case Infant:
-                Toast.makeText(UsersListActivity.this, "Tracking Infant growth will be available in next Update.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(TrackerApplication.getApp(), AddPregnantUserActivity.class);
+                intent.putExtra(Constants.ExtraArg.ADD_USER_TYPE, userType.toString());
+                startActivityForResult(intent, Constants.RequestCode.ADD_USER);
                 break;
         }
     }

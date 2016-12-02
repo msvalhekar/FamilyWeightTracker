@@ -1,8 +1,11 @@
 package com.mk.familyweighttracker.Services;
 
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
+import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.WeightUnit;
+import com.mk.familyweighttracker.Models.MonthGrowthRange;
 import com.mk.familyweighttracker.Models.WeekWeightGainRange;
+import com.mk.familyweighttracker.Repositories.InfantRepository;
 import com.mk.familyweighttracker.Repositories.PregnancyRepository;
 
 import java.util.ArrayList;
@@ -13,13 +16,14 @@ import java.util.List;
  */
 public class PregnancyService {
 
-    private PregnancyRepository repository = new PregnancyRepository();
+    private PregnancyRepository pregnancyRepository = new PregnancyRepository();
+    private InfantRepository infantRepository = new InfantRepository();
 
     public PregnancyService() {
     }
 
     public List<WeekWeightGainRange> getWeightGainTableFor(double baseWeight, BodyWeightCategory category, WeightUnit weightUnit, boolean forTwins) {
-        List<WeekWeightGainRange> records = repository.createWeightGainTableFor(category, weightUnit, forTwins);
+        List<WeekWeightGainRange> records = pregnancyRepository.createWeightGainTableFor(category, weightUnit, forTwins);
 
         List<WeekWeightGainRange> recordsToReturn = new ArrayList<>();
         for (WeekWeightGainRange record: records) {
@@ -31,6 +35,10 @@ public class PregnancyService {
         return recordsToReturn;
     }
 
+    public List<MonthGrowthRange> getMonthGrowthRangeTableFor(boolean forBoy, WeightUnit weightUnit, HeightUnit heightUnit, HeightUnit headCirUnit) {
+        return infantRepository.createMonthGrowthRangeTableFor(forBoy, weightUnit, heightUnit, headCirUnit);
+    }
+
     // BMI = (wt in kg) / squareOf(height in meters)
     public double calculateBmi(double heightInMeter, double weightInKg) {
         if(heightInMeter < 0) return 0;
@@ -39,6 +47,6 @@ public class PregnancyService {
     }
 
     public BodyWeightCategory getWeightCategory(double bmi) {
-        return repository.getWeightCategory(bmi);
+        return pregnancyRepository.getWeightCategory(bmi);
     }
 }

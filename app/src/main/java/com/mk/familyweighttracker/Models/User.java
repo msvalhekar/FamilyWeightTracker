@@ -12,6 +12,7 @@ import android.util.Log;
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
+import com.mk.familyweighttracker.Enums.UserType;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.WeeklyReminderAlarmReceiver;
 import com.mk.familyweighttracker.Framework.Constants;
@@ -50,11 +51,13 @@ public class User {
     public TrackingPeriod trackingPeriod;
     public WeightUnit weightUnit;
     public HeightUnit heightUnit;
+    public HeightUnit headCircumUnit;
     public boolean haveTwins;
     public boolean enableReminder;
     public int reminderDay;
     public int reminderHour;
     public int reminderMinute;
+    public UserType type;
 
     private List<UserReading> mReadings;
 
@@ -73,8 +76,20 @@ public class User {
         return 0;
     }
 
+    public double getDefaultBaseWeight() {
+        return isPregnant() ? UserReading.DEFAULT_PREGNANCY_BASE_WEIGHT : UserReading.DEFAULT_INFANT_BASE_WEIGHT;
+    }
+
+    public double getDefaultBaseHeight() {
+        return isPregnant() ? UserReading.DEFAULT_PREGNANCY_BASE_HEIGHT : UserReading.DEFAULT_INFANT_BASE_HEIGHT;
+    }
+
     public boolean maxReadingsReached() {
         return getReadingsCount() >= MAXIMUM_READINGS_COUNT || getDeliveryReading() != null;
+    }
+
+    public boolean isPregnant() {
+        return type == UserType.Pregnancy;
     }
 
     public String getDateOfBirthStr() {
@@ -215,6 +230,11 @@ public class User {
         return null;
     }
 
+    public int getAgeMonth() {
+        long days = Utility.calculateDateDiff(dateOfBirth);
+        return (int)(days / Utility.DAYS_PER_MONTH);
+    }
+
     public double getBmi() {
         return new PregnancyService().calculateBmi(getHeightInMeter(), getWeightInKg());
     }
@@ -233,7 +253,10 @@ public class User {
         if (bitmap != null)
             return circular ? ImageUtility.getCircularBitmap(bitmap) : bitmap;
 
-        bitmap = BitmapFactory.decodeResource(TrackerApplication.getApp().getResources(), R.drawable.splash);
+        bitmap = BitmapFactory.decodeResource(TrackerApplication.getApp().getResources(),
+                isPregnant()
+                        ? R.drawable.splash
+                        : isMale ? R.drawable.boy : R.drawable.girl);
         return circular ? ImageUtility.getCircularBitmap(bitmap) : bitmap;
     }
 
@@ -244,7 +267,7 @@ public class User {
             return;
         }
 
-        Date nextAlarmDate = Utility.getInitialDateOfReminder(reminderDay + 1, reminderHour, reminderMinute);
+        Date nextAlarmDate = Utility.getInitialDateOfReminder(isPregnant(), reminderDay + 1, reminderHour, reminderMinute);
 
         Log.i(Constants.LogTag.App, String.format("%s: Set reminder for '%s' to '%s'", Constants.LogTag.User, name, nextAlarmDate.toString()));
 
@@ -254,7 +277,11 @@ public class User {
         PendingIntent pendingIntent = getPendingIntent(context);
 
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, nextAlarmDateTime.getTimeInMillis(), Utility.WEEK_INTERVAL_MILLIS, pendingIntent);
+        alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                nextAlarmDateTime.getTimeInMillis(),
+                isPregnant() ? Utility.WEEK_INTERVAL_MILLIS : Utility.WEEK_INTERVAL_MILLIS,
+                pendingIntent);
     }
 
     public void removeReminder() {
@@ -277,16 +304,26 @@ public class User {
     }
 
     public long getEstimatedSequence() {
-        if(deliveryDueDate == null)
-            return -1;
+        if (isPregnant()) {
+            if (deliveryDueDate == null)
+                return -1;
 
-        if(getPrepregnancyReading() == null)
-            return 0;
+            if (getPrepregnancyReading() == null)
+                return 0;
 
-        long days = Utility.calculateDateDiff(deliveryDueDate);
-        long remainingWeeks = days / 7;
-        long estSeq = 40 - remainingWeeks;
-        return estSeq < 0 ? 0 : estSeq;
+            long days = Utility.calculateDateDiff(deliveryDueDate);
+            long remainingWeeks = days / 7;
+            long estSeq = 40 - remainingWeeks;
+            return estSeq < 0 ? 0 : estSeq;
+        } else {
+            Date now = new Date();
+            if (dateOfBirth == null || now.before(dateOfBirth))
+                return -1;
+
+            long days = Utility.calculateDateDiff(dateOfBirth, now);
+            long estSeq = days / 30;
+            return estSeq;
+        }
     }
 
     public long getNextAvailableSequence() {

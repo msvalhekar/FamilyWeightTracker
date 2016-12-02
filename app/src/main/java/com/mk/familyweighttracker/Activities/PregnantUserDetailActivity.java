@@ -16,15 +16,13 @@ import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.SlidingTabLayout;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
+import com.mk.familyweighttracker.Models.MonthGrowthRange;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.WeekWeightGainRange;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.PregnancyService;
 import com.mk.familyweighttracker.Services.UserService;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 
 public class PregnantUserDetailActivity extends TrackerBaseActivity {
@@ -32,6 +30,7 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity {
     private long mUserId;
     private User mUser;
     List<WeekWeightGainRange> mWeekWeightGainRangeList;
+    List<MonthGrowthRange> mMonthGrowthRangeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +54,6 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity {
         initToolbarControl();
         initInteractionControl();
         initDetailTabControl();
-
-        saveUserImageIfRequired();
     }
 
     @Override
@@ -64,7 +61,8 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity {
         super.onResume();
 
         getSupportActionBar().setTitle(getUser().name);
-        getSupportActionBar().setSubtitle(R.string.user_detail_activity_title);
+        if(getUser().isPregnant())
+            getSupportActionBar().setSubtitle(R.string.user_detail_activity_title);
     }
 
     @Override
@@ -109,26 +107,7 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity {
     public void onUserDataChange() {
         mUser = null;
         mWeekWeightGainRangeList = null;
-    }
-
-    private void saveUserImageIfRequired() {
-        User user = getUser();
-        if(user == null || user.imageBytes == null)
-            return;
-
-        try {
-            FileOutputStream outputStream = new FileOutputStream(user.getImagePath());
-            outputStream.write(user.imageBytes, 0, user.imageBytes.length);
-            outputStream.flush();
-            outputStream.close();
-
-            user.imageBytes = null;
-            new UserService().add(user);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mMonthGrowthRangeList = null;
     }
 
     private void initToolbarControl() {
@@ -143,7 +122,7 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity {
 
     private void initDetailTabControl() {
         ViewPager viewPager = ((ViewPager) findViewById(R.id.user_detail_pager));
-        viewPager.setAdapter(new PregnantUserTabPagerAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new PregnantUserTabPagerAdapter(getSupportFragmentManager(), getUser().type));
 
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
         slidingTabLayout.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the slidingTabLayout Space Evenly in Available width
@@ -197,25 +176,55 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity {
                 String.format(Constants.PLAY_STORE_APP_SEARCH_URL, TrackerApplication.getApp().getPackageName());
     }
 
-    public List<WeekWeightGainRange> getWeightGainRange() {
+    public List<WeekWeightGainRange> getWeightGainRangeTable() {
         if(mWeekWeightGainRangeList == null) {
             double baseWeight = getUser().getStartingWeight();
             if (baseWeight == 0) return null;
 
-            mWeekWeightGainRangeList = new PregnancyService()
-                    .getWeightGainTableFor(baseWeight, getUser().getWeightCategory(), getUser().weightUnit, getUser().haveTwins);
+            if(getUser().isPregnant()) {
+                mWeekWeightGainRangeList = new PregnancyService().getWeightGainTableFor(
+                        baseWeight,
+                        getUser().getWeightCategory(),
+                        getUser().weightUnit,
+                        getUser().haveTwins);
+            }
         }
         return mWeekWeightGainRangeList;
     }
 
     public WeekWeightGainRange getPregnancyWeightGainRangeFor(long weekNumber) {
-        getWeightGainRange();
+        getWeightGainRangeTable();
 
         if(mWeekWeightGainRangeList == null)
             return null;
 
         for (WeekWeightGainRange range: mWeekWeightGainRangeList) {
             if(range.WeekNumber == weekNumber) {
+                return range;
+            }
+        }
+        return null;
+    }
+
+    public List<MonthGrowthRange> getMonthGrowthRangeTable() {
+        if(mMonthGrowthRangeList == null) {
+                mMonthGrowthRangeList = new PregnancyService().getMonthGrowthRangeTableFor(
+                        getUser().isMale,
+                        getUser().weightUnit,
+                        getUser().heightUnit,
+                        getUser().headCircumUnit);
+            }
+        return mMonthGrowthRangeList;
+    }
+
+    public MonthGrowthRange getInfantMonthGrowthRangeFor(long monthNumber) {
+        getMonthGrowthRangeTable();
+
+        if(mMonthGrowthRangeList == null)
+            return null;
+
+        for (MonthGrowthRange range: mMonthGrowthRangeList) {
+            if(range.MonthNumber == monthNumber) {
                 return range;
             }
         }

@@ -7,6 +7,7 @@ import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Framework.StorageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.R;
+import com.mk.familyweighttracker.Services.UserService;
 
 import java.util.Date;
 
@@ -14,8 +15,10 @@ import java.util.Date;
  * Created by mvalhekar on 26-03-2016.
  */
 public class UserReading {
-    public static double DEFAULT_BASE_WEIGHT = 60.0;
-    public static double DEFAULT_BASE_HEIGHT = 160.0;
+    public static double DEFAULT_PREGNANCY_BASE_WEIGHT = 60.0;
+    public static double DEFAULT_PREGNANCY_BASE_HEIGHT = 160.0;
+    public static double DEFAULT_INFANT_BASE_WEIGHT = 2.5;
+    public static double DEFAULT_INFANT_BASE_HEIGHT = 50.0;
     public static String ImageNameFormat = "u%d_w%d.jpg";
 
     public long Id;
@@ -64,8 +67,17 @@ public class UserReading {
         }
 
         if (bitmap == null)
-            bitmap = BitmapFactory.decodeResource(TrackerApplication.getApp().getResources(), R.drawable.weekly);
+            bitmap = BitmapFactory.decodeResource(
+                    TrackerApplication.getApp().getResources(),
+                    getUser().isPregnant() ? R.drawable.weekly : getUser().isMale ? R.drawable.boy : R.drawable.girl);
 
         return circular ? ImageUtility.getCircularBitmap(bitmap) : bitmap;
+    }
+
+    private User mUser;
+    private User getUser() {
+        if(mUser == null)
+            mUser = new UserService().get(UserId);
+        return mUser;
     }
 }

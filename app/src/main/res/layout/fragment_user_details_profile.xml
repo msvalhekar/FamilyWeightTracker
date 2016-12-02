@@ -118,12 +118,13 @@
             android:id="@+id/view_user_reminder_day_section"
             >
             <TextView
+                android:id="@+id/view_user_reminder_day_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
                 android:gravity="left|center"
-                android:text="@string/user_details_reminder_text"/>
+                android:text="@string/user_details_weekly_reminder_text"/>
             <TextView
                 android:id="@+id/view_user_reminder_day"
                 android:layout_width="0dp"

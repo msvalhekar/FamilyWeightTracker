@@ -57,14 +57,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:inputType="textCapWords"
                 android:singleLine="true"
                 android:maxLength="15"
                 android:hint="(nick name)"/>
         </TableRow>
         <TableRow
+            android:id="@+id/add_user_dob_section"
             android:layout_weight="1"
             android:layout_marginBottom="5dp">
             <TextView
+                android:id="@+id/add_user_dob_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -79,6 +82,40 @@
                 android:paddingLeft="10dp"
                 android:background="@drawable/background_button"
                 android:text="dd/mm/yyyy" />
+        </TableRow>
+        <TableRow
+            android:id="@+id/add_user_gender_section"
+            android:layout_weight="1"
+            android:layout_marginBottom="5dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical">
+                <TextView
+                    android:id="@+id/add_user_gender_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:text="@string/add_user_gender_text"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textSize="10dp"
+                    android:text="@string/gender_desc_label"/>
+            </LinearLayout>
+            <ToggleButton
+                android:id="@+id/add_user_gender_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:drawableLeft="@drawable/gender_selector"
+                android:textOff=""
+                android:textOn="" />
         </TableRow>
         <View
             android:id="@+id/add_user_delivery_section_divider"
@@ -135,12 +172,13 @@
             android:layout_weight="1"
             android:layout_marginBottom="5dp">
             <TextView
+                android:id="@+id/add_user_remind_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
                 android:layout_gravity="center"
-                android:text="@string/add_user_reminder_text"/>
+                android:text="@string/add_user_weekly_reminder_text"/>
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/add_user_remind_checkbox"
                 android:layout_width="0dp"
@@ -161,6 +199,7 @@
             android:layout_weight="1"
             android:layout_marginBottom="5dp">
             <TextView
+                android:id="@+id/add_user_reminder_day_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

@@ -2,6 +2,7 @@ package com.mk.familyweighttracker.Framework;
 
 import android.support.v4.app.Fragment;
 
+import com.mk.familyweighttracker.Enums.UserType;
 import com.mk.familyweighttracker.Fragments.*;
 
 import java.util.Collection;
@@ -11,14 +12,10 @@ import java.util.LinkedHashMap;
  * Created by mvalhekar on 16-03-2016.
  */
 public class PregnantUserTabsFactory {
-    private static PregnantUserTabsFactory tabsFactory;
+    private UserType userType;
 
-    private PregnantUserTabsFactory() {}
-
-    public static PregnantUserTabsFactory getInstance() {
-        if(tabsFactory == null)
-            tabsFactory = new PregnantUserTabsFactory();
-        return tabsFactory;
+    public PregnantUserTabsFactory(UserType userType) {
+        this.userType = userType;
     }
 
     private LinkedHashMap<String, Fragment> _homeTabs;
@@ -29,8 +26,10 @@ public class PregnantUserTabsFactory {
 
             _homeTabs.put("Profile", new PregnantUserProfileFragment());
             _homeTabs.put("Readings", new PregnantUserReadingsFragment());
-            _homeTabs.put("Trend", new PregnantUserChartFragment());
-            _homeTabs.put("M.W.P", new PregnantUserMediaFragment());
+            //_homeTabs.put("Trend", new PregnantUserChartFragment());
+
+            String mediaLabel = userType == UserType.Pregnancy ? "M.W.P" : "Fun";
+            //_homeTabs.put(mediaLabel, new PregnantUserMediaFragment());
         }
         return _homeTabs;
     }

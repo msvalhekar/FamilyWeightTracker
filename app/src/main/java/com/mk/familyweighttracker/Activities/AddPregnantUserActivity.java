@@ -23,9 +23,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
+import com.mk.familyweighttracker.Enums.UserType;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
@@ -41,7 +43,6 @@ import com.mk.familyweighttracker.Services.UserService;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -51,6 +52,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
 
     public static final String ERROR_FIELD_KEY_NAME = "Name";
     public static final String ERROR_FIELD_KEY_DUE_DATE = "DDD";
+    public static final String ERROR_FIELD_KEY_BIRTH_DATE = "DOB";
 
     private User mUser;
     private long mSelectedUserId;
@@ -59,6 +61,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
 
     private ImageButton mImageButton;
     private EditText mNameText;
+    private Button mBirthDateButton;
     private Button mDeliveryDueDateButton;
     private View mReminderDaySectionView;
     private View mReminderTimeSectionView;
@@ -74,10 +77,10 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         initToolbarControl();
 
         findAllControls();
-        markControlsMandatory();
 
         mIsEditMode = true;
         mSelectedUserId = getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
+
         mUser = new UserService().get(mSelectedUserId);
 
         if(mUser == null) {
@@ -93,15 +96,20 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             mUser.reminderMinute = 0;
             mUser.weightUnit = WeightUnit.kg;
             mUser.heightUnit = HeightUnit.cm;
+
+            String userType = getIntent().getStringExtra(Constants.ExtraArg.ADD_USER_TYPE);
+            mUser.type = UserType.getUserType(userType);
         }
 
         initImageButtonControl();
         initNameControl();
         initDateOfBirthControl();
+        initGenderControl();
         initTwinsControl();
         initReminderControl();
         initDeliveryDueDateControl();
         initActionButtonControls();
+        markControlsMandatory();
 
         setTitle(mIsEditMode ? R.string.edit_label : R.string.add_label);
     }
@@ -109,6 +117,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     private void findAllControls() {
         mImageButton = ((ImageButton) findViewById(R.id.add_user_image_button));
         mNameText = ((EditText) findViewById(R.id.add_user_name_edit_text));
+        mBirthDateButton = ((Button) findViewById(R.id.add_user_dob_button));
         mDeliveryDueDateButton = ((Button) findViewById(R.id.add_user_delivery_due_button));
         mReminderDaySectionView = findViewById(R.id.add_user_reminder_day_section);
         mReminderTimeSectionView = findViewById(R.id.add_user_reminder_time_section);
@@ -118,8 +127,15 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     private void markControlsMandatory() {
         TextView nameLabel = ((TextView) findViewById(R.id.add_user_name_label));
         TextView dddLabel = ((TextView) findViewById(R.id.add_user_delivery_due_label));
+        TextView dobLabel = ((TextView) findViewById(R.id.add_user_dob_label));
+
         nameLabel.setText(nameLabel.getText() + " *");
-        dddLabel.setText(dddLabel.getText() + " *");
+
+        if(mUser.isPregnant()) {
+            dddLabel.setText(dddLabel.getText() + " *");
+        } else {
+            dobLabel.setText(dobLabel.getText() + " *");
+        }
     }
 
     @Override
@@ -184,7 +200,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                 final Calendar calendar = Calendar.getInstance();
                 calendar.setTime(mUser.dateOfBirth == null ? new Date() : mUser.dateOfBirth);
 
-                new DatePickerDialog(v.getContext(),
+                DatePickerDialog dialog = new DatePickerDialog(v.getContext(),
                         new DatePickerDialog.OnDateSetListener() {
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                 Calendar newDate = Calendar.getInstance();
@@ -196,13 +212,35 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                         },
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH))
-                        .show();
+                        calendar.get(Calendar.DAY_OF_MONTH));
+                dialog.getDatePicker().setMaxDate(new Date().getTime());
+                dialog.show();
             }
         });
     }
 
+    private void initGenderControl() {
+        if(mUser.isPregnant()) {
+            findViewById(R.id.add_user_gender_section).setVisibility(View.GONE);
+            return;
+        }
+
+        ToggleButton genderButton = ((ToggleButton) findViewById(R.id.add_user_gender_button));
+        genderButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mUser.isMale = isChecked;
+            }
+        });
+        genderButton.setChecked(mUser.isMale);
+    }
+
     private void initTwinsControl() {
+        if(!mUser.isPregnant()) {
+            findViewById(R.id.add_user_delivery_twins_section).setVisibility(View.GONE);
+            return;
+        }
+
         android.support.v7.widget.SwitchCompat haveTwinsCkBox = ((SwitchCompat) findViewById(R.id.add_user_have_twins_checkbox));
         haveTwinsCkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -220,6 +258,14 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     }
 
     private void initReminderControl() {
+        ((TextView) findViewById(R.id.add_user_remind_label)).setText(mUser.isPregnant()
+                ? R.string.add_user_weekly_reminder_text
+                : R.string.add_user_monthly_reminder_text);
+
+        ((TextView) findViewById(R.id.add_user_reminder_day_label)).setText(mUser.isPregnant()
+                ? R.string.add_user_reminder_dow_text
+                : R.string.add_user_reminder_dom_text);
+
         android.support.v7.widget.SwitchCompat enableReminderCkBox
                 = ((SwitchCompat) findViewById(R.id.add_user_remind_checkbox));
 
@@ -249,14 +295,14 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     private void initDayOfReminderControl() {
         mReminderDaySectionView.setVisibility(mUser.enableReminder ? View.VISIBLE : View.GONE);
 
-        final List<String> days = Utility.getWeekDays();
+        final List<String> days = mUser.isPregnant() ? Utility.getWeekDays() : Utility.getMonthDays();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, days);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+        final Button reminderDayButton = ((Button) findViewById(R.id.add_user_reminder_day_button));
         final android.support.v7.widget.AppCompatSpinner reminderDaySpinner
                 = ((AppCompatSpinner) findViewById(R.id.add_user_reminder_day_spinner));
-        final Button reminderDayButton = ((Button) findViewById(R.id.add_user_reminder_day_button));
 
         reminderDaySpinner.setAdapter(adapter);
 
@@ -311,6 +357,12 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     }
 
     private void initDeliveryDueDateControl() {
+        if(!mUser.isPregnant()) {
+            findViewById(R.id.add_user_delivery_section_divider).setVisibility(View.GONE);
+            findViewById(R.id.add_user_delivery_due_section).setVisibility(View.GONE);
+            return;
+        }
+
         mDeliveryDueDateButton.setText(mUser.getDeliveryDueDateStr());
 
         mDeliveryDueDateButton.setOnClickListener(new View.OnClickListener() {
@@ -369,6 +421,10 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                     mDeliveryDueDateButton.setError(errors.get(key).get(0));
                     mDeliveryDueDateButton.requestFocus();
                     break;
+                } else if (key == ERROR_FIELD_KEY_BIRTH_DATE) {
+                    mBirthDateButton.setError(errors.get(key).get(0));
+                    mBirthDateButton.requestFocus();
+                    break;
                 }
             }
             return;
@@ -380,6 +436,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     private void resetErrors() {
         // Reset errors.
         mNameText.setError(null);
+        mBirthDateButton.setError(null);
         mDeliveryDueDateButton.setError(null);
     }
 
@@ -403,10 +460,15 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         if(nameErrors.size() > 0)
             errors.put(ERROR_FIELD_KEY_NAME, nameErrors);
 
-        if(mUser.deliveryDueDate == null) {
+        if(mUser.isPregnant() && mUser.deliveryDueDate == null) {
             ArrayList<String> deliverDateErrors = new ArrayList<>();
             deliverDateErrors.add(getString(R.string.error_field_required_message));
             errors.put(ERROR_FIELD_KEY_DUE_DATE, deliverDateErrors);
+        }
+        if(!mUser.isPregnant() && mUser.dateOfBirth == null) {
+            ArrayList<String> dobErrors = new ArrayList<>();
+            dobErrors.add(getString(R.string.error_field_required_message));
+            errors.put(ERROR_FIELD_KEY_BIRTH_DATE, dobErrors);
         }
         return errors;
     }

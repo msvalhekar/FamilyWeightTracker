@@ -78,7 +78,7 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
         ((TextView) mFragmentView.findViewById(R.id.user_detail_chart_description_exp_40th_week))
                 .setText(R.string.chart_desc_40th_week_label);
 
-        List<WeekWeightGainRange> weightGainRange = getWeightGainRange();
+        List<WeekWeightGainRange> weightGainRange = getWeightGainRangeTable();
 
         WeekWeightGainRange fortiethWeekRange = weightGainRange.get(weightGainRange.size()-1);
         WeekWeightGainRange latestWeekRange = null;
@@ -143,7 +143,7 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
 
     private void loadChartDataForPregnancy() {
         mLineChart.resetTracking();
-        List<WeekWeightGainRange> weightGainRange = getWeightGainRange();
+        List<WeekWeightGainRange> weightGainRange = getWeightGainRangeTable();
 
         List<String> xVals = getXaxisValues(weightGainRange.size());
 
