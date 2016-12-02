@@ -22,22 +22,24 @@ import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.PregnancyService;
+import com.mk.familyweighttracker.Services.UserService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by mvalhekar on 25-03-2016.
  */
 public class User {
 
-    public static int MAXIMUM_READINGS_COUNT = 42;
+    public static int MAXIMUM_PREGNANCY_READINGS_COUNT = 42;
+    public static int MAXIMUM_INFANT_READINGS_COUNT = 36;
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
     public static String ImageNameFormat = "u%d.jpg";
 
@@ -61,9 +63,24 @@ public class User {
 
     private List<UserReading> mReadings;
 
+    public User() {
+        mId = generateId();
+        mReadings = new ArrayList<>();
+    }
+
     public User(long id) {
         mId = id;
         mReadings = new ArrayList<>();
+    }
+
+    private long generateId() {
+        UserService service = new UserService();
+        List<Long> userIds = new ArrayList<>();
+        for (User user : service.getAll()) {
+            userIds.add(user.getId());
+        }
+        Collections.sort(userIds);
+        return userIds.get(userIds.size()-1)+1;
     }
 
     public long getId() {
@@ -84,8 +101,15 @@ public class User {
         return isPregnant() ? UserReading.DEFAULT_PREGNANCY_BASE_HEIGHT : UserReading.DEFAULT_INFANT_BASE_HEIGHT;
     }
 
+    public double getDefaultBaseHeadCircum() {
+        return isPregnant() ? UserReading.DEFAULT_PREGNANCY_BASE_HEADCIRCUM : UserReading.DEFAULT_INFANT_BASE_HEADCIRCUM;
+    }
+
     public boolean maxReadingsReached() {
-        return getReadingsCount() >= MAXIMUM_READINGS_COUNT || getDeliveryReading() != null;
+        if(isPregnant())
+            return getReadingsCount() >= MAXIMUM_PREGNANCY_READINGS_COUNT || getDeliveryReading() != null;
+
+        return getReadingsCount() >= MAXIMUM_INFANT_READINGS_COUNT;
     }
 
     public boolean isPregnant() {
@@ -319,6 +343,9 @@ public class User {
             Date now = new Date();
             if (dateOfBirth == null || now.before(dateOfBirth))
                 return -1;
+
+            if (getPrepregnancyReading() == null)
+                return 0;
 
             long days = Utility.calculateDateDiff(dateOfBirth, now);
             long estSeq = days / 30;

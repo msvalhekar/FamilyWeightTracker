@@ -83,12 +83,21 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
 
                     if (getUser().maxReadingsReached()) {
                         Toast.makeText(view.getContext(),
-                                R.string.Maximum40WeeksDataSupportedMessage,
+                                R.string.MaximumNWeeksDataSupportedMessage,
                                 Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     setReadingTypes(view);
+                } else {
+                    if (getUser().maxReadingsReached()) {
+                        Toast.makeText(view.getContext(),
+                                R.string.MaximumNMonthsDataSupportedMessage,
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    gotoAddReading(null);
                 }
             }
         });
@@ -148,6 +157,10 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
                         }
                         break;
                     case Pregnancy:
+                        if(getUser().getPrepregnancyReading() == null) {
+                            Toast.makeText(view.getContext(), R.string.add_reading_prepregnancy_must_exist_message, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         if (showDialogIfConflictingReading(view.getContext())) {
                             dialog.dismiss();
                             return;
@@ -176,7 +189,7 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
     private void gotoAddReading(PregnancyReadingType type) {
         Intent intent = getReadingActivityIntent();
         intent.putExtra(Constants.ExtraArg.USER_ID, getUserId());
-        intent.putExtra(Constants.ExtraArg.ADD_READING_TYPE, type.toString());
+        intent.putExtra(Constants.ExtraArg.ADD_READING_TYPE, type == null ? "" : type.toString());
         startActivityForResult(intent, Constants.RequestCode.ADD_READING);
     }
 

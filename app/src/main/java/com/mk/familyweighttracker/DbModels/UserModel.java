@@ -44,6 +44,9 @@ public class UserModel extends Model {
     @Column(name = "HeightUnit")
     private HeightUnit heightUnit;
 
+    @Column(name = "HeadCircumUnit")
+    private HeightUnit headCircumUnit;
+
     @Column(name = "HaveTwins")
     private boolean haveTwins;
 
@@ -122,6 +125,7 @@ public class UserModel extends Model {
         user.trackingPeriod = this.trackingPeriod;
         user.weightUnit = this.weightUnit;
         user.heightUnit = this.heightUnit;
+        user.headCircumUnit = this.headCircumUnit;
         user.haveTwins = this.haveTwins;
         user.enableReminder = this.enableReminder;
         user.reminderDay = this.reminderDay;
@@ -150,6 +154,7 @@ public class UserModel extends Model {
         userModel.trackingPeriod = user.trackingPeriod;
         userModel.weightUnit = user.weightUnit;
         userModel.heightUnit = user.heightUnit;
+        userModel.headCircumUnit = user.headCircumUnit;
         userModel.haveTwins = user.haveTwins;
         userModel.enableReminder = user.enableReminder;
         userModel.reminderDay = user.reminderDay;
@@ -159,10 +164,11 @@ public class UserModel extends Model {
         return userModel;
     }
 
-    public static void updateUnits(long userId, WeightUnit weightUnit, HeightUnit heightUnit) {
+    public static void updateUnits(long userId, WeightUnit weightUnit, HeightUnit heightUnit, HeightUnit headCircumUnit) {
         UserModel userModel = UserModel.get(userId);
         userModel.weightUnit = weightUnit;
         userModel.heightUnit = heightUnit;
+        userModel.headCircumUnit = headCircumUnit;
         userModel.save();
     }
 
@@ -182,6 +188,7 @@ public class UserModel extends Model {
                 .put("type", type)
                 .put("wtUnit", weightUnit)
                 .put("htUnit", heightUnit)
+                .put("hcUnit", headCircumUnit)
                 .put("twins", haveTwins)
                 .put("reminder", enableReminder)
                 .put("remDay", reminderDay)
@@ -201,6 +208,7 @@ public class UserModel extends Model {
         user.type = UserType.valueOf(userJSON.getString("type"));
         user.weightUnit = WeightUnit.valueOf(userJSON.getString("wtUnit"));
         user.heightUnit = HeightUnit.valueOf(userJSON.getString("htUnit"));
+        user.headCircumUnit = HeightUnit.valueOf(userJSON.getString("hcUnit"));
         user.haveTwins = userJSON.getBoolean("twins");
         user.enableReminder = userJSON.getBoolean("reminder");
         user.reminderDay = userJSON.getInt("remDay");

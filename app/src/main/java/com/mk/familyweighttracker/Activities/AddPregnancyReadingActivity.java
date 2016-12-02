@@ -37,6 +37,7 @@ import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Framework.StorageUtility;
+import com.mk.familyweighttracker.Framework.StringHelper;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
@@ -90,11 +91,18 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
             findViewById(R.id.add_reading_delete_button).setVisibility(View.GONE);
 
             long sequence = getSequenceFor();
-            if(mSelectedUser.isPregnant() && sequence >= User.MAXIMUM_READINGS_COUNT) {
+            if(( mSelectedUser.isPregnant() && sequence >= User.MAXIMUM_PREGNANCY_READINGS_COUNT) ||
+               (!mSelectedUser.isPregnant() && sequence >= User.MAXIMUM_INFANT_READINGS_COUNT)) {
+
+                String errorMessage = String.format(getResources().getString(R.string.SuggestReadingBeyondSupportedDataMessage), sequence);
+
+                if(mSelectedUser.isPregnant() && sequence >= User.MAXIMUM_PREGNANCY_READINGS_COUNT) {
+                    errorMessage = String.format(getResources().getString(R.string.SuggestReadingBeyondDeliveryDueDateMessage), sequence);
+                }
                 new AlertDialog.Builder(this)
-                        .setTitle("Error Adding reading")
-                        .setMessage(String.format(getResources().getString(R.string.SuggestReadingBeyondDeliveryDueDateMessage), sequence))
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setTitle(getString(R.string.add_reading_error_message))
+                        .setMessage(errorMessage)
+                        .setPositiveButton(R.string.ok_label, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 finish();
@@ -111,10 +119,12 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
             mUserReadingToProcess.Sequence = sequence;
             mUserReadingToProcess.Weight = mSelectedUser.getDefaultBaseWeight();
             mUserReadingToProcess.Height = mSelectedUser.getDefaultBaseHeight();
+            mUserReadingToProcess.HeadCircumference = mSelectedUser.getDefaultBaseHeadCircum();
             UserReading previousReading = mSelectedUser.getLatestReading();
             if(previousReading != null) {
                 mUserReadingToProcess.Weight = previousReading.Weight;
                 mUserReadingToProcess.Height = previousReading.Height;
+                mUserReadingToProcess.HeadCircumference = previousReading.HeadCircumference;
             }
         }
 
@@ -122,10 +132,12 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
         initNoteControl();
         initMeasuredOnDateControl();
         initWeekSequenceControl();
-        initWeightSequenceControl();
         initWeightUnitControl();
+        initWeightSequenceControl();
         initHeightUnitControl();
         initHeightSequenceControl();
+        initHeadCircumUnitControl();
+        initHeadCircumSequenceControl();
         initMissingReadingsControl();
         initActionButtonControls();
         setTitle();
@@ -133,12 +145,13 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
 
     private long getSequenceFor() {
         String readyTypeValue = getIntent().getStringExtra(Constants.ExtraArg.ADD_READING_TYPE);
-        PregnancyReadingType readingType = PregnancyReadingType.getType(readyTypeValue);
-        if (readingType == PregnancyReadingType.PrePregnancy)
-            return 0;
-        if (readingType == PregnancyReadingType.Delivery)
-            return 41;
-
+        if(!StringHelper.isNullOrEmpty(readyTypeValue)) {
+            PregnancyReadingType readingType = PregnancyReadingType.getType(readyTypeValue);
+            if (readingType == PregnancyReadingType.PrePregnancy)
+                return 0;
+            if (readingType == PregnancyReadingType.Delivery)
+                return 41;
+        }
         return mSelectedUser.getNextAvailableSequence();
     }
 
@@ -207,7 +220,7 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (mUserReadingToProcess.isPrePregnancyReading()) {
+                        if (mSelectedUser.isPregnant() && mUserReadingToProcess.isPrePregnancyReading()) {
                             new AlertDialog.Builder(v.getContext())
                                     .setTitle(getString(R.string.PrePregnancyReadingRemovalError))
                                     .setMessage(getString(R.string.PrePregnancyReadingRemovalErrorMessage))
@@ -247,7 +260,7 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
 
     private void initMeasuredOnDateControl() {
         ((TextView) findViewById(R.id.add_reading_taken_on_lable))
-                .setText(getResources().getText(mUserReadingToProcess.isPrePregnancyReading()
+                .setText(getResources().getText(mSelectedUser.isPregnant() && mUserReadingToProcess.isPrePregnancyReading()
                         ? R.string.add_user_first_reading_lmp_date_label
                         : R.string.reading_measured_date_label));
 
@@ -315,8 +328,12 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
             @Override
             public void onClick(View v) {
                 boolean nonEditable = bEditMode || mUserReadingToProcess.isPrePregnancyReading();
-                if(nonEditable) {
-                    Toast.makeText(AddPregnancyReadingActivity.this, "Week number cannot be changed in Edit mode.", Toast.LENGTH_SHORT).show();
+                if (nonEditable) {
+                    Toast.makeText(
+                            AddPregnancyReadingActivity.this,
+                            mSelectedUser.isPregnant() ? R.string.add_reading_cannot_edit_week_error : R.string.add_reading_cannot_edit_month_error,
+                            Toast.LENGTH_SHORT)
+                            .show();
                     return;
                 }
 
@@ -342,7 +359,7 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
                 AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
                         .setView(layout)
                         .setCancelable(false)
-                        .setMessage(getString(R.string.WeekNumberMessage))
+                        .setMessage(getString(mSelectedUser.isPregnant() ? R.string.WeekNumberMessage : R.string.MonthNumberMessage))
                         .setPositiveButton(R.string.set_label, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -368,7 +385,7 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
         picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         long startFrom = 1;
-        long endAt = User.MAXIMUM_READINGS_COUNT;
+        long endAt = mSelectedUser.isPregnant() ? User.MAXIMUM_PREGNANCY_READINGS_COUNT : User.MAXIMUM_INFANT_READINGS_COUNT;
         final long incrementFactor = 1;
 
         List<UserReading> readings = mSelectedUser.getReadings(true);
@@ -421,13 +438,16 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
             findViewById(R.id.add_user_pending_readings_section).setVisibility(View.VISIBLE);
 
             ((TextView) findViewById(R.id.add_reading_week_pending))
-                    .setText(String.format("%s %s", TextUtils.join(", ", pendingItems), getString(R.string.WeeksMessage)));
+                    .setText(String.format("%s %s",
+                            TextUtils.join(", ", pendingItems),
+                            getString(mSelectedUser.isPregnant() ? R.string.WeeksMessage : R.string.MonthsMessage)));
         }
     }
 
     private void initWeightUnitControl() {
         findViewById(R.id.add_reading_weight_section_divider).setVisibility(View.GONE);
         findViewById(R.id.add_reading_weight_unit_section).setVisibility(View.GONE);
+
         if(!mUserReadingToProcess.isPrePregnancyReading()) return;
 
         if(mSelectedUser.getReadingsCount() > 1) return; // dont allow to change unit if other readings are added
@@ -505,6 +525,34 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
         return Html.fromHtml(String.format("%s (%s %s)", getString(R.string.weight_label), valueString, mSelectedUser.weightUnit.toString()));
     }
 
+    private void initHeightUnitControl() {
+        findViewById(R.id.add_reading_height_section_divider).setVisibility(View.GONE);
+        findViewById(R.id.add_reading_note_section_divider).setVisibility(View.GONE);
+        findViewById(R.id.add_reading_height_unit_section).setVisibility(View.GONE);
+
+        if(!mUserReadingToProcess.isPrePregnancyReading()) return;
+
+        if(mSelectedUser.getReadingsCount() > 1) return; // dont allow to change unit if other readings are added
+
+        findViewById(R.id.add_reading_height_section_divider).setVisibility(View.VISIBLE);
+        findViewById(R.id.add_reading_note_section_divider).setVisibility(View.VISIBLE);
+        findViewById(R.id.add_reading_height_unit_section).setVisibility(View.VISIBLE);
+
+        ((RadioGroup) activityView.findViewById(R.id.add_reading_height_unit_switch))
+                .setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        boolean isHeightUnitCm = (checkedId == R.id.add_reading_height_unit_cm);
+                        mSelectedUser.heightUnit = isHeightUnitCm ? HeightUnit.cm : HeightUnit.inch;
+                        ((TextView) findViewById(R.id.add_reading_height_unit_value)).setText(mSelectedUser.heightUnit.toString());
+                    }
+                });
+
+        ((RadioButton) activityView
+                .findViewById(mSelectedUser.heightUnit == HeightUnit.inch ? R.id.add_reading_height_unit_inch : R.id.add_reading_height_unit_cm))
+                .setChecked(true);
+    }
+
     private void initHeightSequenceControl() {
         ((TextView) findViewById(R.id.add_reading_height_label))
                 .setText(String.format("%s *", getString(R.string.height_label)));
@@ -560,36 +608,100 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
         return Html.fromHtml(String.format("%s (%s %s)", getString(R.string.height_label), valueString, mSelectedUser.heightUnit.toString()));
     }
 
-    private void initHeightUnitControl() {
-        findViewById(R.id.add_reading_height_section_divider).setVisibility(View.GONE);
-        findViewById(R.id.add_reading_note_section_divider).setVisibility(View.GONE);
-        findViewById(R.id.add_reading_height_unit_section).setVisibility(View.GONE);
+    private void initHeadCircumUnitControl() {
+        findViewById(R.id.add_reading_head_circum_section_divider).setVisibility(View.GONE);
+        //findViewById(R.id.add_reading_note_section_divider).setVisibility(View.GONE);
+        findViewById(R.id.add_reading_head_circum_unit_section).setVisibility(View.GONE);
+
+        if(mSelectedUser.isPregnant()) return;
+
         if(!mUserReadingToProcess.isPrePregnancyReading()) return;
 
         if(mSelectedUser.getReadingsCount() > 1) return; // dont allow to change unit if other readings are added
 
-        findViewById(R.id.add_reading_height_section_divider).setVisibility(View.VISIBLE);
-        findViewById(R.id.add_reading_note_section_divider).setVisibility(View.VISIBLE);
-        findViewById(R.id.add_reading_height_unit_section).setVisibility(View.VISIBLE);
+        findViewById(R.id.add_reading_head_circum_section_divider).setVisibility(View.VISIBLE);
+        //findViewById(R.id.add_reading_note_section_divider).setVisibility(View.VISIBLE);
+        findViewById(R.id.add_reading_head_circum_unit_section).setVisibility(View.VISIBLE);
 
-        ((RadioGroup) activityView.findViewById(R.id.add_reading_height_unit_switch))
+        ((RadioGroup) activityView.findViewById(R.id.add_reading_head_circum_unit_switch))
                 .setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        boolean isHeightUnitCm = (checkedId == R.id.add_reading_height_unit_cm);
-                        mSelectedUser.heightUnit = isHeightUnitCm ? HeightUnit.cm : HeightUnit.inch;
-                        ((TextView) findViewById(R.id.add_reading_height_unit_value)).setText(mSelectedUser.heightUnit.toString());
+                        boolean isHeadCircumUnitCm = (checkedId == R.id.add_reading_head_circum_unit_cm);
+                        mSelectedUser.headCircumUnit = isHeadCircumUnitCm ? HeightUnit.cm : HeightUnit.inch;
+                        ((TextView) findViewById(R.id.add_reading_head_circum_unit_value)).setText(mSelectedUser.headCircumUnit.toString());
                     }
                 });
 
         ((RadioButton) activityView
-                .findViewById(mSelectedUser.heightUnit == HeightUnit.inch ? R.id.add_reading_height_unit_inch : R.id.add_reading_height_unit_cm))
+                .findViewById(mSelectedUser.headCircumUnit == HeightUnit.inch ? R.id.add_reading_head_circum_unit_inch : R.id.add_reading_head_circum_unit_cm))
                 .setChecked(true);
+    }
+
+    private void initHeadCircumSequenceControl() {
+        findViewById(R.id.add_reading_head_circum_section).setVisibility(View.GONE);
+
+        if(mSelectedUser.isPregnant()) return;
+
+        findViewById(R.id.add_reading_head_circum_section).setVisibility(View.VISIBLE);
+
+        ((TextView) findViewById(R.id.add_reading_head_circum_label))
+                .setText(String.format("%s *", getString(R.string.head_circum_label)));
+
+        ((TextView) findViewById(R.id.add_reading_head_circum_unit_value)).setText(mSelectedUser.headCircumUnit.toString());
+
+        final Button buttonView = ((Button) findViewById(R.id.add_reading_head_circum_btn));
+        buttonView.setText(String.format("%.2f", mUserReadingToProcess.HeadCircumference));
+
+        buttonView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final NumericPickerView layout = new NumericPickerView(v.getContext());
+                layout.setNumber(mUserReadingToProcess.HeadCircumference);
+
+                AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
+                        .setView(layout)
+                        .setCancelable(false)
+                        .setMessage(getHeadCircumDialogTitle(false, layout.getNumber()))
+                        .setPositiveButton(getString(R.string.set_label), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mUserReadingToProcess.HeadCircumference = layout.getNumber();
+                                ((Button) findViewById(R.id.add_reading_head_circum_btn))
+                                        .setText(String.format("%.2f", mUserReadingToProcess.HeadCircumference));
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.cancel_label), null)
+                        .create();
+                alertDialog.show();
+
+                final TextView dialogTitleView = (TextView) alertDialog.findViewById(android.R.id.message);
+                if (dialogTitleView != null) {
+                    dialogTitleView.setGravity(Gravity.CENTER);
+
+                    layout.setOnValueChangedListener(new NumericPickerView.OnValueChangeListener() {
+                        @Override
+                        public void onValueChange() {
+                            dialogTitleView.setText(getHeadCircumDialogTitle(true, layout.getNumber()));
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private Spanned getHeadCircumDialogTitle(Boolean isModified, double number) {
+        String valueFormat = "%.2f";
+        if(isModified)
+            valueFormat = "<font color='blue'>%.2f</font>";
+
+        String valueString = String.format(valueFormat, number);
+        return Html.fromHtml(String.format("%s (%s %s)", getString(R.string.head_circum_label), valueString, mSelectedUser.headCircumUnit.toString()));
     }
 
     private void onAddReading() {
         if(mUserReadingToProcess.isPrePregnancyReading()) {
-            new UserService().updateUnits(mSelectedUser.getId(), mSelectedUser.weightUnit, mSelectedUser.heightUnit);
+            new UserService().updateUnits(mSelectedUser.getId(), mSelectedUser.weightUnit, mSelectedUser.heightUnit, mSelectedUser.headCircumUnit);
         }
 
         updateNote();
@@ -600,7 +712,9 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
 
-        String message = String.format(getString(R.string.WeekNReadingSavedMessage), mUserReadingToProcess.Sequence);
+        String message = String.format(
+                getString(mSelectedUser.isPregnant() ? R.string.WeekNReadingSavedMessage : R.string.MonthNReadingSavedMessage),
+                mUserReadingToProcess.Sequence);
         Toast.makeText(TrackerApplication.getApp(), message, Toast.LENGTH_SHORT).show();
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,
@@ -628,7 +742,9 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
 
-        String message = String.format(getString(R.string.WeekNReadingRemovedMessage), mUserReadingToProcess.Sequence);
+        String message = String.format(
+                getString(mSelectedUser.isPregnant() ? R.string.WeekNReadingRemovedMessage : R.string.MonthNReadingRemovedMessage),
+                mUserReadingToProcess.Sequence);
         Toast.makeText(TrackerApplication.getApp(), message, Toast.LENGTH_SHORT).show();
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,

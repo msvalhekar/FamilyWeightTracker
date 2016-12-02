@@ -86,7 +86,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         if(mUser == null) {
             mIsEditMode = false;
 
-            mUser = new User(0);
+            mUser = new User();
             mUser.isMale = false;
             mUser.trackingPeriod = TrackingPeriod.Week;
             mUser.haveTwins = false;
@@ -96,6 +96,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             mUser.reminderMinute = 0;
             mUser.weightUnit = WeightUnit.kg;
             mUser.heightUnit = HeightUnit.cm;
+            mUser.headCircumUnit = HeightUnit.cm;
 
             String userType = getIntent().getStringExtra(Constants.ExtraArg.ADD_USER_TYPE);
             mUser.type = UserType.getUserType(userType);

@@ -265,6 +265,83 @@
                     android:textStyle="bold"/>
             </TableRow>
             <View
+                android:id="@+id/add_reading_head_circum_section_divider"
+                style="@style/Divider"/>
+            <TableRow
+                android:id="@+id/add_reading_head_circum_unit_section"
+                android:layout_weight="1"
+                android:layout_marginBottom="5dp">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/add_reading_head_circum_unit_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="left|center"
+                        android:textStyle="bold"
+                        android:text="@string/reading_head_circum_unit_label"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="left|center"
+                        android:textSize="10dp"
+                        android:text="@string/reading_unit_desc_label"/>
+                </LinearLayout>
+                <RadioGroup
+                    android:id="@+id/add_reading_head_circum_unit_switch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left|center"
+                    android:orientation="horizontal"
+                    >
+                    <RadioButton
+                        android:id="@+id/add_reading_head_circum_unit_cm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/height_unit_cms" />
+                    <RadioButton
+                        android:id="@+id/add_reading_head_circum_unit_inch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="@string/height_unit_inches" />
+                </RadioGroup>
+            </TableRow>
+            <TableRow
+                android:id="@+id/add_reading_head_circum_section"
+                android:layout_weight="1"
+                android:layout_marginBottom="5dp">
+                <TextView
+                    android:id="@+id/add_reading_head_circum_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:text="@string/height_label"/>
+                <Button
+                    android:id="@+id/add_reading_head_circum_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.75"
+                    android:gravity="left|center"
+                    android:paddingLeft="10dp"
+                    android:background="@drawable/background_button"/>
+                <TextView
+                    android:id="@+id/add_reading_head_circum_unit_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    android:paddingLeft="5dp"
+                    android:textStyle="bold"/>
+            </TableRow>
+            <View
                 android:id="@+id/add_reading_note_section_divider"
                 style="@style/Divider"/>
             <TableRow

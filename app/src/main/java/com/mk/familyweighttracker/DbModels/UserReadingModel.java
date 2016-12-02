@@ -32,6 +32,9 @@ public class UserReadingModel extends Model {
     @Column(name = "Height")
     public double Height;
 
+    @Column(name = "HeadCircum")
+    public double HeadCircum;
+
     @Column(name = "TakenOn")
     public Date TakenOn;
 
@@ -66,6 +69,7 @@ public class UserReadingModel extends Model {
         readingModel.Sequence = reading.Sequence;
         readingModel.Weight = reading.Weight;
         readingModel.Height = reading.Height;
+        readingModel.HeadCircum = reading.HeadCircumference;
         readingModel.TakenOn = reading.TakenOn;
         readingModel.Note = reading.Note;
         readingModel.CreatedOn = new Date();
@@ -88,7 +92,7 @@ public class UserReadingModel extends Model {
     }
 
     public UserReading mapToUserReading() {
-        return new UserReading(this.getId(), this.User.getId(), this.Sequence, this.Weight, this.Height, this.Note, this.TakenOn);
+        return new UserReading(this.getId(), this.User.getId(), this.Sequence, this.Weight, this.Height, this.HeadCircum, this.Note, this.TakenOn);
     }
 
     public JSONObject toJSON() throws JSONException {
@@ -99,6 +103,7 @@ public class UserReadingModel extends Model {
                 .put("seq", Sequence)
                 .put("wt", Weight)
                 .put("ht", Height)
+                .put("hc", HeadCircum)
                 .put("note", Note);
     }
 
@@ -110,6 +115,7 @@ public class UserReadingModel extends Model {
         reading.Sequence = readingJSON.getLong("seq");
         reading.Weight = readingJSON.getDouble("wt");
         reading.Height = readingJSON.getDouble("ht");
+        reading.HeadCircum = readingJSON.getDouble("hc");
         reading.Note = readingJSON.getString("note");
         reading.User = userModel;
 

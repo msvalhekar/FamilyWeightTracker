@@ -70,7 +70,7 @@ public class UserRepository {
         UserReadingModel.delete(readingId);
     }
 
-    public void updateUnits(long userId, WeightUnit weightUnit, HeightUnit heightUnit) {
-        UserModel.updateUnits(userId, weightUnit, heightUnit);
+    public void updateUnits(long userId, WeightUnit weightUnit, HeightUnit heightUnit, HeightUnit headCircumUnit) {
+        UserModel.updateUnits(userId, weightUnit, heightUnit, headCircumUnit);
     }
 }

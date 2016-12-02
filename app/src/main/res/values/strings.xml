@@ -25,10 +25,12 @@
     <string name="reading_unit_desc_label">One time setting</string>
     <string name="weight_unit_kg">kgs</string>
     <string name="weight_unit_lbs">lbs</string>
+    <string name="reading_head_circum_unit_label">Head Circumference Unit *</string>
     <string name="reading_height_unit_label">Height Unit *</string>
     <string name="height_unit_cms">cms</string>
     <string name="height_unit_inches">inches</string>
     <string name="height_label">Height</string>
+    <string name="head_circum_label">Head Circumference</string>
     <string name="user_name_hint">(nick name)</string>
     <string name="dob_label">Date Of Birth</string>
     <string name="reminder_label">Enable reminder</string>
@@ -58,6 +60,8 @@
 
     <string name="WeekNReadingSavedMessage">Week %d reading saved.</string>
     <string name="WeekNReadingRemovedMessage">Week %d reading removed.</string>
+    <string name="MonthNReadingSavedMessage">Month %d reading saved.</string>
+    <string name="MonthNReadingRemovedMessage">Month %d reading removed.</string>
     <string name="EditDeliveryReadingMessage">Edit Delivery Reading</string>
     <string name="EditPrePregnancyReadingMessage">Edit Pre-pregnancy Reading</string>
     <string name="EditReadingMessage">Edit Reading</string>
@@ -72,9 +76,13 @@
     <string name="ReadingRemovalConfirmationMessage">Are you sure you want to remove this reading?</string>
     <string name="ReadingNoteHintMessage"><![CDATA[<small>[add notes, your feelings, your thoughts or talk to baby]</small>]]></string>
     <string name="WeekNumberMessage">Week Number</string>
+    <string name="MonthNumberMessage">Month Number</string>
     <string name="WeeksMessage">week(s)</string>
-    <string name="Maximum40WeeksDataSupportedMessage">App supports only 40 weeks of pregnancy readings, additional readings cannot be added.</string>
+    <string name="MonthsMessage">month(s)</string>
+    <string name="MaximumNWeeksDataSupportedMessage">App supports only 40 weeks of pregnancy readings, additional readings cannot be added.</string>
+    <string name="MaximumNMonthsDataSupportedMessage">App supports only 36 months of infant growth readings, additional readings cannot be added.</string>
     <string name="SuggestReadingBeyondDeliveryDueDateMessage">Suggested week is %d, App supports only 40 weeks of pregnancy.\nCorrect delivery due date, if delivery delayed.</string>
+    <string name="SuggestReadingBeyondSupportedDataMessage">Suggested month is %d, App supports only 36 months of infant growth data.</string>
 
     <string name="menu_user_detail_media">Media</string>
     <string name="user_media_slideshow_label">Preview</string>
@@ -214,6 +222,10 @@
     <string name="feedback_max_length_label">max 500</string>
     <string name="button_due_date_action_lable">SET NOW</string>
     <string name="add_reading_type_title">Select Reading Type</string>
+    <string name="add_reading_prepregnancy_must_exist_message">Pre-pregnancy reading is required before adding pregnancy readings.</string>
     <string name="add_reading_prepregnancy_exists_message">Pre-pregnancy reading is already added.</string>
     <string name="add_reading_delivery_exists_message">Delivery reading is already added.</string>
+    <string name="add_reading_error_message">Error Adding reading</string>
+    <string name="add_reading_cannot_edit_week_error">Week number cannot be changed in Edit mode.</string>
+    <string name="add_reading_cannot_edit_month_error">Month number cannot be changed in Edit mode.</string>
 </resources>

@@ -73,10 +73,11 @@ public class UserService {
         dataChanged();
     }
 
-    public void updateUnits(long userId, WeightUnit weightUnit, HeightUnit heightUnit) {
+    public void updateUnits(long userId, WeightUnit weightUnit, HeightUnit heightUnit, HeightUnit headCircumUnit) {
         User user = userRepository.getUser(userId);
         boolean convertWeight = user.weightUnit != weightUnit;
         boolean convertHeight = user.heightUnit != heightUnit;
+        boolean convertHeadCircum = user.headCircumUnit != headCircumUnit;
         for (UserReading reading : user.getReadings(true)) {
             if(reading.isPrePregnancyReading()) continue;
 
@@ -84,9 +85,11 @@ public class UserService {
 
             if(convertHeight) reading.Height = Utility.convertHeightTo(reading.Height, heightUnit);
 
+            if(convertHeadCircum) reading.HeadCircumference = Utility.convertHeightTo(reading.HeadCircumference, headCircumUnit);
+
             userRepository.saveReading(reading);
         }
-        userRepository.updateUnits(userId, weightUnit, heightUnit);
+        userRepository.updateUnits(userId, weightUnit, heightUnit, headCircumUnit);
         dataChanged();
     }
 
