@@ -21,12 +21,23 @@ public class Version141DataMigration extends VersionDataMigration {
     int migrate() {
         renameUserImage();
         setUserType();
+        setUserHeadCircumUnit();
         return 0;
+    }
+
+    private void setUserHeadCircumUnit() {
+        // before this version: user headCircum unit column not exists
+        // in next version:     user headCircum unit column is added
+        // what to do:          set user headCircum unit to 'cm/inches'
+        for (UserModel userModel : UserModel.getAll()) {
+            User user = userModel.mapToUser();
+            UserModel.updateUnits(user.getId(), user.weightUnit, user.heightUnit, user.heightUnit);
+        }
     }
 
     private void setUserType() {
         // before this version: user type column not exists
-        // in next version:     user tyoe column is added
+        // in next version:     user type column is added
         // what to do:          set user type to 'pregnancy'
         UserService service = new UserService();
         for (UserModel userModel : UserModel.getAll()) {
