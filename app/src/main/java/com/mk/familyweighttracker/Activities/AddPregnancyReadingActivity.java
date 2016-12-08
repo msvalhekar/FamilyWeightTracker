@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
+import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -95,10 +96,10 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
                (!mSelectedUser.isPregnant() && sequence >= User.MAXIMUM_INFANT_READINGS_COUNT)) {
 
                 String errorMessage = String.format(getResources().getString(R.string.SuggestReadingBeyondSupportedDataMessage), sequence);
-
                 if(mSelectedUser.isPregnant() && sequence >= User.MAXIMUM_PREGNANCY_READINGS_COUNT) {
                     errorMessage = String.format(getResources().getString(R.string.SuggestReadingBeyondDeliveryDueDateMessage), sequence);
                 }
+
                 new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.add_reading_error_message))
                         .setMessage(errorMessage)
@@ -246,6 +247,11 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
     }
 
     private void initImageButtonControl() {
+        ((TextView) findViewById(R.id.add_reading_image_label))
+                .setText(getResources().getText(mSelectedUser.isPregnant()
+                        ? R.string.image_bump_label
+                        : R.string.image_baby_label));
+
         getImageButton().setImageBitmap(mUserReadingToProcess.getImageAsBitmap(false));
 
         getImageButton().setOnClickListener(new View.OnClickListener() {
@@ -259,7 +265,7 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
     }
 
     private void initMeasuredOnDateControl() {
-        ((TextView) findViewById(R.id.add_reading_taken_on_lable))
+        ((TextView) findViewById(R.id.add_reading_taken_on_label))
                 .setText(getResources().getText(mSelectedUser.isPregnant() && mUserReadingToProcess.isPrePregnancyReading()
                         ? R.string.add_user_first_reading_lmp_date_label
                         : R.string.reading_measured_date_label));
@@ -301,6 +307,8 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
         final TextView noteLengthView = ((TextView) findViewById(R.id.add_reading_note_length));
 
         final EditText noteView = ((EditText) findViewById(R.id.add_reading_note_edittext));
+        noteView.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Constants.Settings.USER_NOTE_LENGTH)});
+
         noteView.setText(mUserReadingToProcess.Note);
         noteView.setHint(Html.fromHtml(getString(R.string.ReadingNoteHintMessage)));
         noteView.addTextChangedListener(new TextWatcher() {
@@ -310,7 +318,7 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                noteLengthView.setText(String.format("%d / %d", s.length(), 200));
+                noteLengthView.setText(count == 0 ? "" : String.format("%d / %d", count, Constants.Settings.USER_NOTE_LENGTH));
             }
 
             @Override
@@ -320,6 +328,10 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
     }
 
     private void initWeekSequenceControl() {
+        ((TextView) findViewById(R.id.add_reading_period_label))
+                .setText(getResources().getText(mSelectedUser.isPregnant()
+                        ? R.string.reading_period_week_label
+                        : R.string.reading_period_month_label));
 
         final Button seqButton = ((Button) findViewById(R.id.add_reading_sequence_btn));
         seqButton.setText(String.valueOf(mUserReadingToProcess.Sequence));

@@ -100,7 +100,7 @@ public class PregnantUserProfileFragment extends PregnantUserBaseFragment {
         mFragmentView.findViewById(R.id.view_user_pre_pregnancy_bmi_section).setVisibility(View.GONE);
         mFragmentView.findViewById(R.id.view_user_pre_pregnancy_lmp_section).setVisibility(View.GONE);
 
-        if(getUser().isPregnant() && getUser().getReadingsCount() > 0) {
+        if(getUser().isPregnant() && getUser().getReadingsCount() > 0 && getUser().getPrepregnancyReading() != null) {
 
             mFragmentView.findViewById(R.id.view_user_pre_pregnancy_divider).setVisibility(View.VISIBLE);
             mFragmentView.findViewById(R.id.view_user_pre_pregnancy_section).setVisibility(View.VISIBLE);

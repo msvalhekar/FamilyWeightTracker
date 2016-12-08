@@ -158,7 +158,7 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
                         break;
                     case Pregnancy:
                         if(getUser().getPrepregnancyReading() == null) {
-                            Toast.makeText(view.getContext(), R.string.add_reading_prepregnancy_must_exist_message, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(view.getContext(), R.string.add_reading_prepregnancy_must_exist_for_pregnancy_reading_message, Toast.LENGTH_SHORT).show();
                             return;
                         }
                         if (showDialogIfConflictingReading(view.getContext())) {
@@ -166,6 +166,10 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
                             return;
                         }
                     case Delivery:
+                        if(getUser().getPrepregnancyReading() == null) {
+                            Toast.makeText(view.getContext(), R.string.add_reading_prepregnancy_must_exist_for_delivery_reading_message, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         if(getUser().getDeliveryReading() != null) {
                             Toast.makeText(view.getContext(), R.string.add_reading_delivery_exists_message, Toast.LENGTH_SHORT).show();
                             return;

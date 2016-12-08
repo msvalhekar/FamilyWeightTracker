@@ -24,6 +24,7 @@ import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.PregnancyService;
 import com.mk.familyweighttracker.Services.UserService;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -80,7 +81,10 @@ public class User {
             userIds.add(user.getId());
         }
         Collections.sort(userIds);
-        return userIds.get(userIds.size()-1)+1;
+        int count = userIds.size();
+        if(count > 0)
+            return userIds.get(count -1)+1;
+        return 1;
     }
 
     public long getId() {
@@ -216,8 +220,11 @@ public class User {
     }
 
     public UserReading getPrepregnancyReading() {
-        if(mReadings != null && mReadings.size() > 0)
-            return getReadings(true).get(0);
+        if(mReadings != null && mReadings.size() > 0) {
+            List<UserReading> readings = getReadings(true);
+            if(readings.get(0).isPrePregnancyReading())
+                return readings.get(0);
+        }
         return null;
     }
 
@@ -225,18 +232,14 @@ public class User {
         if(mReadings != null && mReadings.size() > 0) {
             List<UserReading> readings = getReadings(false);
             if(readings.get(0).isDeliveryReading())
-            return readings.get(0);
+                return readings.get(0);
         }
         return null;
     }
 
     public UserReading getLatestReading() {
         if(mReadings != null && mReadings.size() > 0) {
-            List<UserReading> readings = getReadings(false);
-            if (readings.get(0).isDeliveryReading()) {
-                return readings.get(1);
-            }
-            return readings.get(0);
+            return getReadings(false).get(0);
         }
         return null;
     }
@@ -273,7 +276,11 @@ public class User {
     }
 
     public Bitmap getImageAsBitmap(boolean circular){
-        Bitmap bitmap = BitmapFactory.decodeFile(getImagePath());
+        Bitmap bitmap = null;
+
+        if(new File(getImagePath()).exists())
+            bitmap = BitmapFactory.decodeFile(getImagePath());
+
         if (bitmap != null)
             return circular ? ImageUtility.getCircularBitmap(bitmap) : bitmap;
 

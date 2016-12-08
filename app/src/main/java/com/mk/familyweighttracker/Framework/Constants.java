@@ -15,6 +15,10 @@ public class Constants {
     public static final int SPLASH_SCREEN_TIMEOUT_SECONDS = 1800;
     public static final int CHECK_MARKET_APP_UPDATE_AFTER_DAYS = 30;
 
+    public static class Settings {
+        public static final int USER_NOTE_LENGTH = 250;
+    }
+
     public static class AppDirectory {
         public static final String LogDirectory = "sysLog";
         public static final String ImagesDirectory = "imgs";
@@ -24,6 +28,7 @@ public class Constants {
         public static final String SelectedBackgroundAudio = "SelectedBackgroundAudio";
         public static final String AppMarketLastUpdateCheckedOn = "AppMarketLastUpdateCheckedOn";
         public static final String LastRunMigration = "LastRunMigration";
+        public static final String SelectedLanguage = "SelectedLanguage";
     }
 
     public static class Activities {

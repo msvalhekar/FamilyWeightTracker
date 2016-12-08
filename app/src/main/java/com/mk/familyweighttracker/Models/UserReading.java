@@ -9,6 +9,7 @@ import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
+import java.io.File;
 import java.util.Date;
 
 /**
@@ -65,10 +66,8 @@ public class UserReading {
     public Bitmap getImageAsBitmap(boolean circular){
         Bitmap bitmap = null;
 
-        try {
+        if(new File(getImagePath()).exists())
             bitmap = BitmapFactory.decodeFile(getImagePath());
-        } catch (Exception e) {
-        }
 
         if (bitmap == null)
             bitmap = BitmapFactory.decodeResource(

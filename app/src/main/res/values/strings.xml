@@ -13,11 +13,13 @@
     <string name="title_activity_splash">SplashActivity</string>
 
     <string name="add_user_first_reading_lmp_date_label">Last Menstrual Period *</string>
-    <string name="bump_label">Bump photo</string>
+    <string name="image_bump_label">Bump photo</string>
+    <string name="image_baby_label">Photo</string>
     <string name="bump_desc_label">Tap to change photo</string>
     <string name="gender_desc_label">Tap to change gender</string>
     <string name="reading_measured_date_label">Measured on</string>
-    <string name="reading_period_label">Week *</string>
+    <string name="reading_period_week_label">Week *</string>
+    <string name="reading_period_month_label">Month *</string>
     <string name="reading_pending_weeks_label">Missing readings</string>
     <string name="weight_label">Weight</string>
     <!--<string name="add_user_reading_weight_unit_value">(kg)</string>-->
@@ -222,7 +224,8 @@
     <string name="feedback_max_length_label">max 500</string>
     <string name="button_due_date_action_lable">SET NOW</string>
     <string name="add_reading_type_title">Select Reading Type</string>
-    <string name="add_reading_prepregnancy_must_exist_message">Pre-pregnancy reading is required before adding pregnancy readings.</string>
+    <string name="add_reading_prepregnancy_must_exist_for_pregnancy_reading_message">Pre-pregnancy reading is required before adding pregnancy readings.</string>
+    <string name="add_reading_prepregnancy_must_exist_for_delivery_reading_message">Pre-pregnancy reading is required before adding delivery readings.</string>
     <string name="add_reading_prepregnancy_exists_message">Pre-pregnancy reading is already added.</string>
     <string name="add_reading_delivery_exists_message">Delivery reading is already added.</string>
     <string name="add_reading_error_message">Error Adding reading</string>

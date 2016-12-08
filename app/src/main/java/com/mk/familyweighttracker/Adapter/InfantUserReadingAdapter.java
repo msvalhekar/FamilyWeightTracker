@@ -70,20 +70,16 @@ public class InfantUserReadingAdapter extends RecyclerView.Adapter<InfantUserRea
         public void setReading(UserReading reading) {
             mUserReading = reading;
 
-            View sectionView = mView.findViewById(R.id.user_record_for_extra_section);
-            sectionView.setVisibility(View.GONE);
-
-            ///todo: for first reading i.e. month = 0
-            if (mUserReading.isPrePregnancyReading()) {
-                sectionView.setVisibility(View.VISIBLE);
-                ((TextView) mView.findViewById(R.id.record_item_extra_message))
-                        .setText(R.string.pre_pregnancy_label);
-            }
-
+            setExtraControl();
             setPeriodControl();
             setActualWeightControl();
             setExpectedWeightControl();
             setImageControl();
+        }
+
+        private void setExtraControl() {
+            View sectionView = mView.findViewById(R.id.user_record_for_extra_section);
+            sectionView.setVisibility(View.GONE);
         }
 
         private void setExpectedWeightControl() {
