@@ -254,8 +254,14 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
     private void showHideEmptyListControl() {
         mFragmentView.findViewById(R.id.empty_view).setVisibility(View.GONE);
 
+        mFragmentView.findViewById(R.id.user_records_list_record_content_help)
+                .setVisibility(getUser().isPregnant() ? View.VISIBLE : View.GONE);
+        mFragmentView.findViewById(R.id.infant_records_list_record_content_help)
+                .setVisibility(!getUser().isPregnant() ? View.VISIBLE : View.GONE);
+
         if(getUser().getReadingsCount() == 0) {
             mFragmentView.findViewById(R.id.user_records_list_record_content_help).setVisibility(View.GONE);
+            mFragmentView.findViewById(R.id.infant_records_list_record_content_help).setVisibility(View.GONE);
 
             mFragmentView.findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
             ((TextView) mFragmentView.findViewById(R.id.empty_mesage_title)).setText(R.string.user_readings_not_found_message);
@@ -265,23 +271,26 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
 
     private void initReadingListControl() {
 
-        mFragmentView.findViewById(R.id.card_view_help)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        new AlertDialog.Builder(getContext())
-                                .setMessage(Html.fromHtml(getLegendMessage()))
-                                .setPositiveButton(getString(R.string.got_it_label), null)
-                                .create()
-                                .show();
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(getContext())
+                        .setMessage(Html.fromHtml(getLegendMessage()))
+                        .setPositiveButton(getString(R.string.got_it_label), null)
+                        .create()
+                        .show();
 
-                        Analytic.setData(Constants.AnalyticsCategories.Activity,
-                                Constants.AnalyticsEvents.UserReadingHelp,
-                                String.format(Constants.AnalyticsActions.ShowUserReadingHelp, getUser().name),
-                                null);
+                Analytic.setData(Constants.AnalyticsCategories.Activity,
+                        getUser().isPregnant() ? Constants.AnalyticsEvents.UserReadingHelp : Constants.AnalyticsEvents.InfantReadingHelp,
+                        String.format(Constants.AnalyticsActions.ShowUserReadingHelp, getUser().name),
+                        null);
 
-                    }
-                });
+            }
+        };
+        mFragmentView.findViewById(R.id.user_card_view_help)
+                .setOnClickListener(onClickListener);
+        mFragmentView.findViewById(R.id.infant_card_view_help)
+                .setOnClickListener(onClickListener);
     }
 
     private String getLegendMessage() {

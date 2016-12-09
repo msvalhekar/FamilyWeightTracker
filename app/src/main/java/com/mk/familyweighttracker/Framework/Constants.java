@@ -101,5 +101,6 @@ public class Constants {
         public static final String UserAdded = "UserAdded";
         public static final String UserDelete = "UserDelete";
         public static final String UserReadingHelp = "UserReadingHelp";
+        public static final String InfantReadingHelp = "InfantReadingHelp";
     }
 }

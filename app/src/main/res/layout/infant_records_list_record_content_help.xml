@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/user_records_list_record_content_help"
+    android:id="@+id/infant_records_list_record_content_help"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="2dp"
     android:orientation="horizontal"
     android:background="@color/listHeaderColor">
-    <!-- week no + taken on -->
-    <!-- exp min wt + (diff with actual reading) -->
-    <!-- actual wt + (diff with previous reading) -->
-    <!-- exp max wt + (diff with actual reading) -->
+    <!-- month no + taken on -->
+    <!-- measures -> wt + ht + hc -->
+    <!-- 3rd %le + (diff with actual reading) -->
+    <!-- actual  + (diff with previous reading) -->
+    <!-- 97th %le + (diff with actual reading) -->
 
     <android.support.v7.widget.CardView
-        android:id="@+id/user_card_view_help"
+        android:id="@+id/infant_card_view_help"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
@@ -29,37 +30,39 @@
 
             <TableRow
                 android:background="@drawable/background">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_row="0"
-                    android:layout_column="0"
-                    android:layout_gravity="center_vertical|left">
-                    <TextView
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="15dp"
-                        android:gravity="center_horizontal"
-                        android:text="@string/help_record_image"/>
-                </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:layout_row="0"
-                    android:layout_column="1">
+                    android:layout_column="0">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="15dp"
                         android:text="@string/help_record_period"/>
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textSize="11dp"-->
+                        <!--android:text="@string/help_record_date"/>-->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_row="0"
+                    android:layout_column="1">
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
-                        android:textSize="11dp"
-                        android:text="@string/help_record_date"/>
+                        android:textSize="15dp"
+                        android:gravity="center_horizontal"
+                        android:text="Measures"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -73,12 +76,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="15dp"
-                        android:text="@string/help_record_exp_min_wt_message"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12dp"
-                        android:text="@string/help_record_wt_diff_against_actual_message"/>
+                        android:text="3rd %le"/>
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textSize="12dp"-->
+                        <!--android:text="@string/help_record_wt_diff_against_actual_message"/>-->
                 </LinearLayout>
 
                 <LinearLayout
@@ -92,12 +95,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="15dp"
-                        android:text="@string/help_record_weight_message"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12dp"
-                        android:text="@string/help_record_wt_diff_message"/>
+                        android:text="Actual"/>
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textSize="12dp"-->
+                        <!--android:text="@string/help_record_wt_diff_message"/>-->
                 </LinearLayout>
 
                 <LinearLayout
@@ -111,12 +114,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="15dp"
-                        android:text="@string/help_record_exp_max_wt_message"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12dp"
-                        android:text="@string/help_record_wt_diff_against_actual_message"/>
+                        android:text="97th %le"/>
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textSize="12dp"-->
+                        <!--android:text="@string/help_record_wt_diff_against_actual_message"/>-->
                 </LinearLayout>
             </TableRow>
         </TableLayout>

@@ -144,7 +144,7 @@
     <string name="app_update_negative_label">NEXT TIME</string>
     <string name="pre_pregnancy_label">Pre-pregnancy</string>
     <string name="delivery_label">Delivery</string>
-    <string name="add_conflicting_week_message">Suggested current week is %s. But this Reading is already added. What you want to do?</string>
+    <string name="add_conflicting_week_message">Suggested current week is %d. But this Reading is already added. What you want to do?</string>
     <string name="add_conflicting_week_title">Conflicting Week Reading</string>
     <string name="delivery_due_date_required_message">Must set \'Delivery Due Date\' for accuracy of current week suggestion.</string>
     <string name="delivery_due_date_required_title">Delivery Date Not Set</string>
