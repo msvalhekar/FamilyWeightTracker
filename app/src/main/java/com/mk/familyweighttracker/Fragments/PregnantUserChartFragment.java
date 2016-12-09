@@ -152,14 +152,10 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
         dataSets.add(getWeightRangeValues(weightGainRange, true));
         dataSets.add(getWeightRangeValues(weightGainRange, false));
 
-        // make the first DataSet dashed
-        //((LineDataSet) dataSets.get(0)).enableDashedLine(10, 10, 0);
-        //((LineDataSet) dataSets.get(0)).setColors(ColorTemplate.VORDIPLOM_COLORS);
-        //((LineDataSet) dataSets.get(0)).setCircleColors(ColorTemplate.VORDIPLOM_COLORS);
-
         LineData data = new LineData(xVals, dataSets);
         mLineChart.setData(data);
-        mLineChart.invalidate();
+        //mLineChart.invalidate();
+        mLineChart.animateX(1000);
     }
 
     private ILineDataSet getWeightRangeValues(List<WeekWeightGainRange> weightRangeList, boolean isMinimum) {

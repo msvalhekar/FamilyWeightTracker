@@ -26,9 +26,12 @@ public class PregnantUserTabsFactory {
 
             _homeTabs.put("Profile", new PregnantUserProfileFragment());
             _homeTabs.put("Readings", new PregnantUserReadingsFragment());
-            //_homeTabs.put("Trend", new PregnantUserChartFragment());
+            if(userType == UserType.Pregnancy)
+                _homeTabs.put("Trend", new PregnantUserChartFragment());
+            else
+                _homeTabs.put("Growth", new InfantUserChartFragment());
 
-            String mediaLabel = userType == UserType.Pregnancy ? "M.W.P" : "Fun";
+            String mediaLabel = userType == UserType.Pregnancy ? "M.W.P" : "Timeline";
             //_homeTabs.put(mediaLabel, new PregnantUserMediaFragment());
         }
         return _homeTabs;
