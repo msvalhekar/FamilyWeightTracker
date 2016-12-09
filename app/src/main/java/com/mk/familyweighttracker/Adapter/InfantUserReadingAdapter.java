@@ -78,7 +78,7 @@ public class InfantUserReadingAdapter extends RecyclerView.Adapter<InfantUserRea
         }
 
         private void setExtraControl() {
-            View sectionView = mView.findViewById(R.id.user_record_for_extra_section);
+            View sectionView = mView.findViewById(R.id.extra_section);
             sectionView.setVisibility(View.GONE);
         }
 

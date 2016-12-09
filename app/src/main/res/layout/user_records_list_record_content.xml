@@ -3,7 +3,6 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
     android:orientation="horizontal">
     <!-- week no + taken on -->
     <!-- actual wt + (diff with previous reading) -->
@@ -94,12 +93,12 @@
                         android:layout_column="2"
                         >
                         <TextView
-                            android:id="@+id/record_item_weight"
+                            android:id="@+id/record_item_weight_exp_min"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15dp"/>
                         <TextView
-                            android:id="@+id/record_item_weight_diff"
+                            android:id="@+id/record_item_weight_exp_min_diff"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12dp"/>
@@ -113,12 +112,13 @@
                         android:layout_column="3"
                         >
                         <TextView
-                            android:id="@+id/record_item_weight_exp_min"
+                            android:id="@+id/record_item_weight"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textStyle="bold"
                             android:textSize="15dp"/>
                         <TextView
-                            android:id="@+id/record_item_weight_exp_min_diff"
+                            android:id="@+id/record_item_weight_diff"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12dp"/>

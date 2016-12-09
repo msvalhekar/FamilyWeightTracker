@@ -265,7 +265,7 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
 
     private void initReadingListControl() {
 
-        mFragmentView.findViewById(R.id.card_view)
+        mFragmentView.findViewById(R.id.card_view_help)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
