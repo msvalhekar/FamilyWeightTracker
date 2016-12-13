@@ -14,12 +14,12 @@ import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Enums.UserType;
 import com.mk.familyweighttracker.Enums.WeightUnit;
-import com.mk.familyweighttracker.Framework.WeeklyReminderAlarmReceiver;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Framework.StorageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.Utility;
+import com.mk.familyweighttracker.Framework.WeeklyReminderAlarmReceiver;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.PregnancyService;
 import com.mk.familyweighttracker.Services.UserService;
@@ -28,7 +28,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -311,7 +310,7 @@ public class User {
         alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 nextAlarmDateTime.getTimeInMillis(),
-                isPregnant() ? Utility.WEEK_INTERVAL_MILLIS : Utility.WEEK_INTERVAL_MILLIS,
+                isPregnant() ? Utility.WEEK_INTERVAL_MILLIS : Utility.MONTH_INTERVAL_MILLIS,
                 pendingIntent);
     }
 
@@ -372,4 +371,148 @@ public class User {
         return -1;
     }
 
+    public long getMaximumReadingCount() {
+        return isPregnant() ? User.MAXIMUM_PREGNANCY_READINGS_COUNT : User.MAXIMUM_INFANT_READINGS_COUNT;
+    }
+
+    public String getMissingPeriodLabel(Context context) {
+        return context.getString(isPregnant() ? R.string.WeeksMessage : R.string.MonthsMessage);
+    }
+
+    public String getSequenceLabel(Context context) {
+        return context.getString(isPregnant()
+                ? R.string.reading_period_week_label
+                : R.string.reading_period_month_label);
+    }
+
+    public String getEditSequenceErrorMessage(Context context) {
+        return context.getString(isPregnant()
+                ? R.string.add_reading_cannot_edit_week_error
+                : R.string.add_reading_cannot_edit_month_error);
+    }
+
+    public String getSequenceChangeLabel(Context context) {
+        return context.getString(isPregnant() ? R.string.WeekNumberMessage : R.string.MonthNumberMessage);
+    }
+
+    public String getReadingSavedMessage(Context context, long sequence) {
+        return String.format(
+                context.getString(isPregnant() ? R.string.WeekNReadingSavedMessage : R.string.MonthNReadingSavedMessage),
+                sequence);
+    }
+
+    public String getReadingRemovedMessage(Context context, long sequence) {
+        return String.format(
+                context.getString(isPregnant() ? R.string.WeekNReadingRemovedMessage : R.string.MonthNReadingRemovedMessage),
+                sequence);
+    }
+
+    public String getUserDetailsEvent() {
+        return isPregnant() ? Constants.AnalyticsEvents.PregnantDetailsActivity : Constants.AnalyticsEvents.InfantDetailsActivity;
+    }
+
+    public String getDetailsProfileEvent() {
+        return isPregnant() ? Constants.AnalyticsEvents.PregnantDetailsProfile : Constants.AnalyticsEvents.InfantDetailsProfile;
+    }
+
+    public String getDetailsRecordsEvent() {
+        return isPregnant() ? Constants.AnalyticsEvents.PregnantDetailsRecords : Constants.AnalyticsEvents.InfantDetailsRecords;
+    }
+
+    public String getDetailsReadingsHelpEvent() {
+        return isPregnant() ? Constants.AnalyticsEvents.PregnantReadingHelp : Constants.AnalyticsEvents.InfantReadingHelp;
+    }
+
+    public String getDetailsChartEvent() {
+        return isPregnant() ? Constants.AnalyticsEvents.PregnantDetailsChart : Constants.AnalyticsEvents.InfantDetailsChart;
+    }
+
+    public String getDetailsMediaEvent() {
+        return isPregnant() ? Constants.AnalyticsEvents.PregnantDetailsMedia : Constants.AnalyticsEvents.InfantDetailsMedia;
+    }
+
+    public String getAddUserEvent() {
+        return isPregnant() ? Constants.AnalyticsEvents.PregnantAdded : Constants.AnalyticsEvents.InfantAdded;
+    }
+
+    public String getDeleteUserEvent() {
+        return isPregnant() ? Constants.AnalyticsEvents.PregnantDelete : Constants.AnalyticsEvents.InfantDelete;
+    }
+
+    public String getAddReadingEvent() {
+        return isPregnant() ? Constants.AnalyticsEvents.PregnantAddReading : Constants.AnalyticsEvents.InfantAddReading;
+    }
+
+    public String getDeleteReadingEvent() {
+        return isPregnant() ? Constants.AnalyticsEvents.PregnantDeleteReading : Constants.AnalyticsEvents.InfantDeleteReading;
+    }
+
+    public TrackingPeriod getTrackingPeriodByType() {
+        return isPregnant() ? TrackingPeriod.Week : TrackingPeriod.Month;
+    }
+
+    public String getTypeShortName() {
+        switch (type) {
+            case Pregnancy: return "P";
+            case Infant: return "I";
+        }
+        return "P";
+    }
+
+    public String getAddUserActivity() {
+        return isPregnant() ? Constants.Activities.PregnantAddUserActivity : Constants.Activities.InfantAddUserActivity;
+    }
+
+    public String getUserSlideshowActivity() {
+        return isPregnant() ? Constants.Activities.PregnantSlideshowActivity : Constants.Activities.InfantSlideshowActivity;
+    }
+
+    public String getAddReadingActivity() {
+        return isPregnant() ? Constants.Activities.PregnantAddReadingActivity : Constants.Activities.InfantAddReadingActivity;
+    }
+
+    public List<String> getPeriodDays() {
+        return isPregnant() ? Utility.getWeekDays() : Utility.getMonthDays();
+    }
+
+    public String getReminderPeriodLabel(Context context) {
+        return context.getString(isPregnant()
+                ? R.string.add_user_weekly_reminder_text
+                : R.string.add_user_monthly_reminder_text);
+    }
+
+    public String getDayOfPeriodLabel(Context context) {
+        return context.getString(isPregnant()
+                ? R.string.add_user_reminder_dow_text
+                : R.string.add_user_reminder_dom_text);
+    }
+
+    public String getReminderNotificationTitle(Context context) {
+        return String.format(
+                context.getString(isPregnant() ? R.string.notification_pregnancy_title : R.string.notification_infant_title,
+                name));
+    }
+
+    public String getReminderNotificationMessage(Context context) {
+        return String.format(
+                context.getString(isPregnant() ? R.string.notification_pregnancy_message : R.string.notification_infant_message),
+                getEstimatedSequence());
+    }
+
+    public static User createUser(UserType userType) {
+        User user = new User();
+        user.isMale = false;
+        user.haveTwins = false;
+        user.enableReminder = true;
+        user.reminderDay = 1;
+        user.reminderHour = 8;
+        user.reminderMinute = 0;
+        user.weightUnit = WeightUnit.kg;
+        user.heightUnit = HeightUnit.cm;
+        user.headCircumUnit = HeightUnit.cm;
+
+        user.type = userType;
+        user.trackingPeriod = user.getTrackingPeriodByType();
+        return user;
+    }
 }

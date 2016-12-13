@@ -26,7 +26,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.mk.familyweighttracker.Enums.HeightUnit;
-import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Enums.UserType;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.Analytic;
@@ -35,7 +34,6 @@ import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Framework.StorageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
-import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
@@ -55,7 +53,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     public static final String ERROR_FIELD_KEY_BIRTH_DATE = "DOB";
 
     private User mUser;
-    private long mSelectedUserId;
+    private long mUserId;
     boolean mIsEditMode;
     ImageUtility.CropDetail cropDetail = new ImageUtility.CropDetail(800, 800, 1, 1);
 
@@ -72,34 +70,21 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_pregnant_user);
 
-        Analytic.sendScreenView(Constants.Activities.AddPregnantUserActivity);
 
         initToolbarControl();
 
         findAllControls();
 
         mIsEditMode = true;
-        mSelectedUserId = getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
+        mUserId = getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
 
-        mUser = new UserService().get(mSelectedUserId);
+        mUser = new UserService().get(mUserId);
 
         if(mUser == null) {
             mIsEditMode = false;
 
-            mUser = new User();
-            mUser.isMale = false;
-            mUser.haveTwins = false;
-            mUser.enableReminder = true;
-            mUser.reminderDay = 1;
-            mUser.reminderHour = 8;
-            mUser.reminderMinute = 0;
-            mUser.weightUnit = WeightUnit.kg;
-            mUser.heightUnit = HeightUnit.cm;
-            mUser.headCircumUnit = HeightUnit.cm;
-
             String userType = getIntent().getStringExtra(Constants.ExtraArg.ADD_USER_TYPE);
-            mUser.type = UserType.getUserType(userType);
-            mUser.trackingPeriod = mUser.isPregnant() ? TrackingPeriod.Week : TrackingPeriod.Month;
+            mUser = User.createUser(UserType.getUserType(userType));
         }
 
         initImageButtonControl();
@@ -113,6 +98,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         markControlsMandatory();
 
         setTitle(mIsEditMode ? R.string.edit_label : R.string.add_label);
+        Analytic.sendScreenView(mUser.getAddUserActivity());
     }
 
     private void findAllControls() {
@@ -259,13 +245,9 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     }
 
     private void initReminderControl() {
-        ((TextView) findViewById(R.id.add_user_remind_label)).setText(mUser.isPregnant()
-                ? R.string.add_user_weekly_reminder_text
-                : R.string.add_user_monthly_reminder_text);
+        ((TextView) findViewById(R.id.add_user_remind_label)).setText(mUser.getReminderPeriodLabel(this));
 
-        ((TextView) findViewById(R.id.add_user_reminder_day_label)).setText(mUser.isPregnant()
-                ? R.string.add_user_reminder_dow_text
-                : R.string.add_user_reminder_dom_text);
+        ((TextView) findViewById(R.id.add_user_reminder_day_label)).setText(mUser.getDayOfPeriodLabel(this));
 
         android.support.v7.widget.SwitchCompat enableReminderCkBox
                 = ((SwitchCompat) findViewById(R.id.add_user_remind_checkbox));
@@ -296,7 +278,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     private void initDayOfReminderControl() {
         mReminderDaySectionView.setVisibility(mUser.enableReminder ? View.VISIBLE : View.GONE);
 
-        final List<String> days = mUser.isPregnant() ? Utility.getWeekDays() : Utility.getMonthDays();
+        final List<String> days = mUser.getPeriodDays();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, days);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -453,7 +435,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         }
         else if (mIsEditMode) {
             User userWithSameName = new UserService().get(mUser.name);
-            if(userWithSameName != null && userWithSameName.getId() != mSelectedUserId)
+            if(userWithSameName != null && userWithSameName.getId() != mUserId)
                 nameErrors.add(getString(R.string.error_user_name_used_message));
         } else if (new UserService().isAlreadyAdded(mUser.name)) {
             nameErrors.add(getString(R.string.error_user_name_used_message));
@@ -495,8 +477,8 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         Toast.makeText(TrackerApplication.getApp(), message, Toast.LENGTH_SHORT).show();
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,
-                Constants.AnalyticsEvents.UserAdded,
-                String.format(mIsEditMode ? Constants.AnalyticsActions.UserEdited : Constants.AnalyticsActions.UserAdded, mUser.name),
+                mUser.getAddUserEvent(),
+                String.format(mIsEditMode ? Constants.AnalyticsActions.UserEdited : Constants.AnalyticsActions.UserAdded, mUser.name, mUser.getTypeShortName()),
                 null);
 
         //addDummyReadings();

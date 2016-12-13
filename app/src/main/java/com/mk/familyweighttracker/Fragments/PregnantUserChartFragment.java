@@ -48,8 +48,8 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
         initChartControl();
 
         Analytic.setData(Constants.AnalyticsCategories.Fragment,
-                Constants.AnalyticsEvents.UserDetailsChart,
-                String.format(Constants.AnalyticsActions.UserDetailsChart, getUser().name),
+                getUser().getDetailsChartEvent(),
+                String.format(Constants.AnalyticsActions.UserDetailsChart, getUser().name, getUser().getTypeShortName()),
                 null);
 
         return mFragmentView;

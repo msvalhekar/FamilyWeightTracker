@@ -35,10 +35,15 @@ public class Constants {
         public static final String HomeActivity = "HomeActivity";
         public static final String UsersListActivity = "UsersListActivity";
         public static final String TrackerHelpActivity = "TrackerHelpActivity";
-        public static final String UserSlideshowActivity = "UserSlideshowActivity";
-        public static final String AddPregnancyReadingActivity = "AddPregnancyReadingActivity";
         public static final String AppFeedbackActivity = "AppFeedbackActivity";
-        public static final String AddPregnantUserActivity = "AddPregnantUserActivity";
+
+        public static final String PregnantSlideshowActivity = "PregnantSlideshowActivity";
+        public static final String PregnantAddReadingActivity = "PregnantAddReadingActivity";
+        public static final String PregnantAddUserActivity = "PregnantAddUserActivity";
+
+        public static final String InfantSlideshowActivity = "InfantSlideshowActivity";
+        public static final String InfantAddReadingActivity = "InfantAddReadingActivity";
+        public static final String InfantAddUserActivity = "InfantAddUserActivity";
     }
 
     public static class ExtraArg {
@@ -76,31 +81,41 @@ public class Constants {
     }
 
     public static class AnalyticsActions {
-        public static final String UserDetailsProfile = "%s -> DetailsProfile";
-        public static final String UserDetailsChart = "%s -> DetailsChart";
-        public static final String UserDetailsMedia = "%s -> DetailsMedia";
-        public static final String UserDetailsRecords = "%s -> DetailsRecords";
-        public static final String ReadingAdded = "%s -> ReadingAdded %d";
-        public static final String ReadingEdited = "%s -> ReadingEdited %d";
-        public static final String ReadingDeleted = "%s -> ReadingDeleted %d";
-        public static final String UserDetailsLoaded = "%s -> UserDetailsLoaded";
-        public static final String UserDeleted = "%s -> UserDeleted";
-        public static final String ShowUserReadingHelp = "%s -> ShowUserReadingHelp";
-        public static final String UserAdded = "UserAdded : %s";
-        public static final String UserEdited = "UserEdited : %s";
+        public static final String UserDetailsProfile = "%s (%s) -> DetailsProfile";
+        public static final String UserDetailsChart = "%s (%s) -> DetailsChart";
+        public static final String UserDetailsMedia = "%s (%s) -> DetailsMedia";
+        public static final String UserDetailsRecords = "%s (%s) -> DetailsRecords";
+        public static final String ReadingAdded = "%s (%s) -> ReadingAdded %d";
+        public static final String ReadingEdited = "%s (%s) -> ReadingEdited %d";
+        public static final String ReadingDeleted = "%s (%s) -> ReadingDeleted %d";
+        public static final String UserDetailsLoaded = "%s (%s) -> UserDetailsLoaded";
+        public static final String UserDeleted = "%s (%s) -> UserDeleted";
+        public static final String ShowUserReadingHelp = "%s (%s) -> ShowUserReadingHelp";
+        public static final String UserAdded = "UserAdded (%s) : %s";
+        public static final String UserEdited = "UserEdited (%s) : %s";
     }
 
     public static class AnalyticsEvents {
-        public static final String AddReading = "AddReading";
-        public static final String DeleteReading = "DeleteReading";
-        public static final String UserDetailsActivity = "UserDetailsActivity";
-        public static final String UserDetailsProfile = "UserDetailsProfile";
-        public static final String UserDetailsChart = "UserDetailsChart";
-        public static final String UserDetailsRecords = "UserDetailsRecords";
-        public static final String UserDetailsMedia = "UserDetailsMedia";
-        public static final String UserAdded = "UserAdded";
-        public static final String UserDelete = "UserDelete";
-        public static final String UserReadingHelp = "UserReadingHelp";
+        public static final String PregnantAddReading = "PregnantAddReading";
+        public static final String PregnantDeleteReading = "PregnantDeleteReading";
+        public static final String PregnantDetailsActivity = "PregnantDetailsActivity";
+        public static final String PregnantDetailsProfile = "PregnantDetailsProfile";
+        public static final String PregnantDetailsChart = "PregnantDetailsChart";
+        public static final String PregnantDetailsRecords = "PregnantDetailsRecords";
+        public static final String PregnantDetailsMedia = "PregnantDetailsMedia";
+        public static final String PregnantAdded = "PregnantAdded";
+        public static final String PregnantDelete = "PregnantDelete";
+        public static final String PregnantReadingHelp = "PregnantReadingHelp";
+
+        public static final String InfantAddReading = "InfantAddReading";
+        public static final String InfantDeleteReading = "InfantDeleteReading";
+        public static final String InfantDetailsActivity = "InfantDetailsActivity";
+        public static final String InfantDetailsProfile = "InfantDetailsProfile";
+        public static final String InfantDetailsChart = "InfantDetailsChart";
+        public static final String InfantDetailsRecords = "InfantDetailsRecords";
+        public static final String InfantDetailsMedia = "InfantDetailsMedia";
+        public static final String InfantDelete = "InfantDelete";
+        public static final String InfantAdded = "InfantAdded";
         public static final String InfantReadingHelp = "InfantReadingHelp";
     }
 }

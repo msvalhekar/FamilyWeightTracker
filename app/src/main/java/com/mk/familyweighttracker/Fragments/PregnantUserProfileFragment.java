@@ -43,8 +43,8 @@ public class PregnantUserProfileFragment extends PregnantUserBaseFragment {
         initActionControls();
 
         Analytic.setData(Constants.AnalyticsCategories.Fragment,
-                Constants.AnalyticsEvents.UserDetailsProfile,
-                String.format(Constants.AnalyticsActions.UserDetailsProfile, getUser().name),
+                getUser().getDetailsProfileEvent(),
+                String.format(Constants.AnalyticsActions.UserDetailsProfile, getUser().name, getUser().getTypeShortName()),
                 null);
 
         return mFragmentView;
@@ -181,13 +181,13 @@ public class PregnantUserProfileFragment extends PregnantUserBaseFragment {
     }
 
     private void onUserDelete() {
+        Analytic.setData(Constants.AnalyticsCategories.Activity,
+                getUser().getDeleteUserEvent(),
+                String.format(Constants.AnalyticsActions.UserDeleted, getUser().name, getUser().getTypeShortName()),
+                null);
+
         getUser().removeReminder();
         new UserService().remove(getUserId());
-
-        Analytic.setData(Constants.AnalyticsCategories.Activity,
-                Constants.AnalyticsEvents.UserDelete,
-                String.format(Constants.AnalyticsActions.UserDeleted, getUser().name),
-                null);
 
         String message = String.format(getString(R.string.user_removed_message), getUser().name);
         Toast.makeText(TrackerApplication.getApp(), message, Toast.LENGTH_SHORT).show();

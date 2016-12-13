@@ -39,8 +39,8 @@ public class PregnantUserMediaFragment extends PregnantUserBaseFragment {
         initActionControls();
 
         Analytic.setData(Constants.AnalyticsCategories.Fragment,
-                Constants.AnalyticsEvents.UserDetailsMedia,
-                String.format(Constants.AnalyticsActions.UserDetailsMedia, getUser().name),
+                getUser().getDetailsMediaEvent(),
+                String.format(Constants.AnalyticsActions.UserDetailsMedia, getUser().name, getUser().getTypeShortName()),
                 null);
 
         return mFragmentView;

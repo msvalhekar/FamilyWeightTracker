@@ -53,8 +53,8 @@ public class InfantUserChartFragment extends PregnantUserBaseFragment /*implemen
         mFragmentView = inflater.inflate(R.layout.fragment_infant_details_chart, container, false);
 
         Analytic.setData(Constants.AnalyticsCategories.Fragment,
-                Constants.AnalyticsEvents.UserDetailsChart,
-                String.format(Constants.AnalyticsActions.UserDetailsChart, getUser().name),
+                Constants.AnalyticsEvents.InfantDetailsChart,
+                String.format(Constants.AnalyticsActions.UserDetailsChart, getUser().name, getUser().getTypeShortName()),
                 null);
 
         mRecyclerView = ((RecyclerView) mFragmentView.findViewById(R.id.item_list));

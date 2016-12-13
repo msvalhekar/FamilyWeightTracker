@@ -53,10 +53,10 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_slide_show);
 
-        Analytic.sendScreenView(Constants.Activities.UserSlideshowActivity);
-
         mUserId = getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
         mUser = new UserService().get(mUserId);
+
+        Analytic.sendScreenView(mUser.getUserSlideshowActivity());
 
         initSlidesPagerControl();
     }

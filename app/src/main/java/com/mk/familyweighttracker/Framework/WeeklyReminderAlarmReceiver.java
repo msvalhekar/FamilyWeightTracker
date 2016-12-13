@@ -46,11 +46,9 @@ public class WeeklyReminderAlarmReceiver extends BroadcastReceiver {
         if(user == null || !user.enableReminder) return;
 
         PushNotification pushNotification = new PushNotification();
-        String titleFormat = _context.getString(user.isPregnant() ? R.string.notification_pregnancy_title : R.string.notification_infant_title);
-        String messageFormat = _context.getString(user.isPregnant() ? R.string.notification_pregnancy_message : R.string.notification_infant_message);
 
-        pushNotification.title = String.format(titleFormat, user.name);
-        pushNotification.message = String.format(messageFormat, user.getEstimatedSequence());
+        pushNotification.title = user.getReminderNotificationTitle(_context);
+        pushNotification.message = user.getReminderNotificationMessage(_context);
         pushNotification.context = _context;
         pushNotification.requestCode = (int)user.getId();
         NotificationCenter.showNotification(pushNotification);

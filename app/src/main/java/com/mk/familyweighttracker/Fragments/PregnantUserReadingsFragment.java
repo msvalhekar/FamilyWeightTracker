@@ -55,8 +55,8 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
         initReadingListControl();
 
         Analytic.setData(Constants.AnalyticsCategories.Fragment,
-                Constants.AnalyticsEvents.UserDetailsRecords,
-                String.format(Constants.AnalyticsActions.UserDetailsRecords, getUser().name),
+                getUser().getDetailsRecordsEvent(),
+                String.format(Constants.AnalyticsActions.UserDetailsRecords, getUser().name, getUser().getTypeShortName()),
                 null);
 
         mRecyclerView = ((RecyclerView) mFragmentView.findViewById(R.id.user_record_list));
@@ -184,24 +184,17 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
     }
 
     private void gotoEditReading(long readingId) {
-        Intent intent = getReadingActivityIntent();
+        Intent intent = new Intent(getContext(), AddPregnancyReadingActivity.class);
         intent.putExtra(Constants.ExtraArg.USER_ID, getUserId());
         intent.putExtra(Constants.ExtraArg.EDIT_READING_ID, readingId);
         startActivityForResult(intent, Constants.RequestCode.EDIT_READING);
     }
 
     private void gotoAddReading(PregnancyReadingType type) {
-        Intent intent = getReadingActivityIntent();
+        Intent intent = new Intent(getContext(), AddPregnancyReadingActivity.class);
         intent.putExtra(Constants.ExtraArg.USER_ID, getUserId());
         intent.putExtra(Constants.ExtraArg.ADD_READING_TYPE, type == null ? "" : type.toString());
         startActivityForResult(intent, Constants.RequestCode.ADD_READING);
-    }
-
-    private Intent getReadingActivityIntent() {
-        return new Intent(getContext(), AddPregnancyReadingActivity.class);
-//        return new Intent(getContext(), getUser().isPregnant()
-//                ? AddPregnancyReadingActivity.class
-//                : AddInfantReadingActivity.class);
     }
 
     private boolean promptIfDeliveryDateNotSet(final Context context) {
@@ -281,8 +274,8 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
                         .show();
 
                 Analytic.setData(Constants.AnalyticsCategories.Activity,
-                        getUser().isPregnant() ? Constants.AnalyticsEvents.UserReadingHelp : Constants.AnalyticsEvents.InfantReadingHelp,
-                        String.format(Constants.AnalyticsActions.ShowUserReadingHelp, getUser().name),
+                        getUser().getDetailsReadingsHelpEvent(),
+                        String.format(Constants.AnalyticsActions.ShowUserReadingHelp, getUser().name, getUser().getTypeShortName()),
                         null);
 
             }

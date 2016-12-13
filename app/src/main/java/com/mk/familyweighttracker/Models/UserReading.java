@@ -83,4 +83,21 @@ public class UserReading {
             mUser = new UserService().get(UserId);
         return mUser;
     }
+
+    public static UserReading createReading(User user, long sequence) {
+        UserReading userReading = new UserReading();
+        userReading.UserId = user.getId();
+        userReading.TakenOn = new Date();
+        userReading.Sequence = sequence;
+        userReading.Weight = user.getDefaultBaseWeight();
+        userReading.Height = user.getDefaultBaseHeight();
+        userReading.HeadCircumference = user.getDefaultBaseHeadCircum();
+        UserReading previousReading = user.getLatestReading();
+        if(previousReading != null) {
+            userReading.Weight = previousReading.Weight;
+            userReading.Height = previousReading.Height;
+            userReading.HeadCircumference = previousReading.HeadCircumference;
+        }
+        return userReading;
+    }
 }

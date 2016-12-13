@@ -47,8 +47,8 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity {
         setSupportActionBar(toolbar);
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,
-                Constants.AnalyticsEvents.UserDetailsActivity,
-                String.format(Constants.AnalyticsActions.UserDetailsLoaded, getUser().name),
+                getUser().getUserDetailsEvent(),
+                String.format(Constants.AnalyticsActions.UserDetailsLoaded, getUser().name, getUser().getTypeShortName()),
                 null);
 
         initToolbarControl();
