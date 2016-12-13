@@ -53,27 +53,19 @@
                         android:layout_row="0"
                         android:layout_column="0"
                         >
+                        <TextView
+                            android:id="@+id/record_item_period_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14dp"/>
                         <ImageButton
-                            android:id="@+id/user_record_image_button"
+                            android:id="@+id/record_image_button"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_gravity="left|center_vertical"
                             android:scaleType="fitCenter"
                             android:background="#80FFFFFF"
                             />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_row="0"
-                        android:layout_column="1"
-                        >
-                        <TextView
-                            android:id="@+id/record_item_period_no"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="15dp"/>
                         <TextView
                             android:id="@+id/record_item_taken_on"
                             android:layout_width="wrap_content"
@@ -86,18 +78,48 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_row="0"
-                        android:layout_column="2"
-                        >
+                        android:layout_column="1">
+                        <TextView
+                            android:id="@+id/record_item_weight_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:text="Weight"/>
+                        <TextView
+                            android:id="@+id/record_item_height_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:text="Height"/>
+                        <TextView
+                            android:id="@+id/record_item_hd_cr_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:text="Hd Circ"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_row="0"
+                        android:layout_column="2">
                         <TextView
                             android:id="@+id/record_item_weight_exp_min"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15dp"/>
                         <TextView
-                            android:id="@+id/record_item_weight_exp_min_diff"
+                            android:id="@+id/record_item_height_exp_min"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="12dp"/>
+                            android:textSize="15dp"/>
+                        <TextView
+                            android:id="@+id/record_item_hc_exp_min"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -108,15 +130,23 @@
                         android:layout_column="3"
                         >
                         <TextView
-                            android:id="@+id/record_item_weight"
+                            android:id="@+id/record_item_actual_weight"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="15dp"/>
+                            android:textSize="15dp"
+                            android:textStyle="bold"/>
                         <TextView
-                            android:id="@+id/record_item_weight_diff"
+                            android:id="@+id/record_item_actual_height"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="12dp"/>
+                            android:textSize="15dp"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/record_item_actual_hc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:textStyle="bold"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -124,18 +154,22 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_row="0"
-                        android:layout_column="4"
-                        >
+                        android:layout_column="4">
                         <TextView
                             android:id="@+id/record_item_weight_exp_max"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15dp"/>
                         <TextView
-                            android:id="@+id/record_item_weight_exp_max_diff"
+                            android:id="@+id/record_item_height_exp_max"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="12dp"/>
+                            android:textSize="15dp"/>
+                        <TextView
+                            android:id="@+id/record_item_hc_exp_max"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"/>
                     </LinearLayout>
                 </TableRow>
             </TableLayout>

@@ -178,7 +178,7 @@ public class InfantChartListRecyclerViewAdapter extends RecyclerView.Adapter<Inf
                     values.add(entry);
             }
 
-            LineDataSet lineDataSet = new LineDataSet(values, "actualList");
+            LineDataSet lineDataSet = new LineDataSet(values, "actual");
             //LineDataSet lineDataSet = new LineDataSet(values, getString(R.string.chart_actual_weight_legend));
             lineDataSet.setLineWidth(5f);
             lineDataSet.setCircleRadius(2f);

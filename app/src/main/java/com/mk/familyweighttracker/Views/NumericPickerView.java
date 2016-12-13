@@ -39,8 +39,9 @@ public class NumericPickerView extends LinearLayout {
         super(context);
         this.context = context;
 
-        initLayout();
         setNumberFormat(true, true, true, true);
+        initLayout();
+        showHidePickers();
     }
 
     public void setNumberFormat(boolean showHundreds, boolean showTens, boolean showTenths, boolean showHundredths) {
@@ -66,7 +67,6 @@ public class NumericPickerView extends LinearLayout {
             this.showTenths = true;
             this.showDecimal = true;
         }
-        showHidePickers();
     }
 
     private void showHidePickers() {

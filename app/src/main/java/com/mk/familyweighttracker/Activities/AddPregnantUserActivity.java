@@ -88,7 +88,6 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
 
             mUser = new User();
             mUser.isMale = false;
-            mUser.trackingPeriod = TrackingPeriod.Week;
             mUser.haveTwins = false;
             mUser.enableReminder = true;
             mUser.reminderDay = 1;
@@ -100,6 +99,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
 
             String userType = getIntent().getStringExtra(Constants.ExtraArg.ADD_USER_TYPE);
             mUser.type = UserType.getUserType(userType);
+            mUser.trackingPeriod = mUser.isPregnant() ? TrackingPeriod.Week : TrackingPeriod.Month;
         }
 
         initImageButtonControl();
