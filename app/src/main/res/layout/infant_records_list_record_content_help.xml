@@ -71,7 +71,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="15dp"
-                        android:text="3rd %le\n(min)"/>
+                        android:text="3rd %le\n~min"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -85,7 +85,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="15dp"
-                        android:text="Actual"/>
+                        android:text="Actual\n(+/-diff)"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -99,7 +99,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="15dp"
-                        android:text="97th %le\n(max)"/>
+                        android:text="97th %le\n~max"/>
                 </LinearLayout>
             </TableRow>
         </TableLayout>

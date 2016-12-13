@@ -24,9 +24,8 @@
                 android:id="@+id/chart_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold|italic"
-                android:textAlignment="center"
-                android:textAllCaps="true"/>
+                android:textStyle="bold"
+                android:textAlignment="center"/>
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart"
                 android:layout_width="match_parent"

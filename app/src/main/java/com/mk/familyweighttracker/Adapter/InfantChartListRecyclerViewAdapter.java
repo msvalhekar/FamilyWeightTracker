@@ -18,6 +18,7 @@ import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.mk.familyweighttracker.Framework.StringHelper;
 import com.mk.familyweighttracker.Models.MonthGrowthRange;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
@@ -45,9 +46,9 @@ public class InfantChartListRecyclerViewAdapter extends RecyclerView.Adapter<Inf
 
     private void setChartDetailList() {
         mChartDetailList = new ArrayList<>();
-        mChartDetailList.add(new ChartDetail("Weight"));
-        mChartDetailList.add(new ChartDetail("Height"));
-        mChartDetailList.add(new ChartDetail("Head Circumference"));
+        mChartDetailList.add(new ChartDetail(mUser, "Wt"));
+        mChartDetailList.add(new ChartDetail(mUser, "Ht"));
+        mChartDetailList.add(new ChartDetail(mUser, "HC"));
     }
 
     @Override
@@ -95,7 +96,7 @@ public class InfantChartListRecyclerViewAdapter extends RecyclerView.Adapter<Inf
 
         private void setTitleControl() {
             TextView textView = ((TextView) mView.findViewById(R.id.chart_title));
-            textView.setText(mChartDetail.title);
+            textView.setText(mChartDetail.getTitle());
         }
 
         private void setChartControl() {
@@ -214,14 +215,26 @@ public class InfantChartListRecyclerViewAdapter extends RecyclerView.Adapter<Inf
     }
 
     public class ChartDetail {
-        public String title;
+        private String titleType;
+        private User user;
+
         public List<Entry> actualList;
         public List<Double> expMinList;
         public List<Double> expMaxList;
 
-        public ChartDetail(String title) {
-            this.title = title;
+        public ChartDetail(User user, String titleType) {
+            this.user = user;
+            this.titleType = titleType;
             loadData();
+        }
+
+        public String getTitle() {
+            switch (titleType) {
+                case "Wt": return String.format("Weight (%s) - for - Age (%s)", user.weightUnit, user.trackingPeriod);
+                case "Ht": return String.format("Height (%s) - for - Age (%s)", user.heightUnit, user.trackingPeriod);
+                case "HC": return String.format("Head Circumference (%s) - for - Age (%s)", user.headCircumUnit, user.trackingPeriod);
+            }
+            return "";
         }
 
         private void loadData() {
@@ -229,8 +242,8 @@ public class InfantChartListRecyclerViewAdapter extends RecyclerView.Adapter<Inf
             expMinList = new ArrayList<>();
             expMaxList = new ArrayList<>();
 
-            switch (title) {
-                case "Weight":
+            switch (titleType) {
+                case "Wt":
                     for (MonthGrowthRange monthGrowthRange : mMonthGrowthRangeList) {
                         expMinList.add(monthGrowthRange.WeightMinimum);
                         expMaxList.add(monthGrowthRange.WeightMaximum);
@@ -240,7 +253,7 @@ public class InfantChartListRecyclerViewAdapter extends RecyclerView.Adapter<Inf
                             actualList.add(new Entry((float)userReading.Weight, (int)userReading.Sequence));
                     }
                     break;
-                case "Height":
+                case "Ht":
                     for (MonthGrowthRange monthGrowthRange : mMonthGrowthRangeList) {
                         expMinList.add(monthGrowthRange.HeightMinimum);
                         expMaxList.add(monthGrowthRange.HeightMaximum);
@@ -250,7 +263,7 @@ public class InfantChartListRecyclerViewAdapter extends RecyclerView.Adapter<Inf
                             actualList.add(new Entry((float)userReading.Height, (int)userReading.Sequence));
                     }
                     break;
-                case "Head Circumference":
+                case "HC":
                     for (MonthGrowthRange monthGrowthRange : mMonthGrowthRangeList) {
                         expMinList.add(monthGrowthRange.HeadCircumMinimum);
                         expMaxList.add(monthGrowthRange.HeadCircumMaximum);

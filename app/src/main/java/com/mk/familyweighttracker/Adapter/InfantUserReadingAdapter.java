@@ -1,5 +1,6 @@
 package com.mk.familyweighttracker.Adapter;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,7 +71,9 @@ public class InfantUserReadingAdapter extends RecyclerView.Adapter<InfantUserRea
 
             setExtraControl();
             setPeriodControl();
-            setActualValuesControl();
+            setActualWeightControl();
+            setActualHeightControl();
+            setActualHeadCircumControl();
             setExpectedValuesControl();
         }
 
@@ -81,25 +84,86 @@ public class InfantUserReadingAdapter extends RecyclerView.Adapter<InfantUserRea
 
         private void setPeriodControl() {
             ((TextView) mView.findViewById(R.id.record_item_period_no))
-                    .setText(String.format("%s %02d", mUser.trackingPeriod, mUserReading.Sequence));
+                    .setText(String.format("%02d", mUserReading.Sequence));
 
             ((ImageButton) mView.findViewById(R.id.record_image_button))
                     .setImageBitmap(mUserReading.getImageAsBitmap(true));
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd-MMM");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd-MMM-yy");
             ((TextView) mView.findViewById(R.id.record_item_taken_on))
                     .setText(dateFormat.format(mUserReading.TakenOn));
         }
 
-        private void setActualValuesControl() {
+        private void setActualWeightControl() {
             ((TextView) mView.findViewById(R.id.record_item_actual_weight))
                     .setText(String.format("%.2f", mUserReading.Weight));
 
+            TextView weightDiffView = ((TextView) mView.findViewById(R.id.record_item_actual_weight_diff));
+            weightDiffView.setText(String.format(" (%.2f)", 0.0));
+
+            UserReading previousReading = mUser.findReadingBefore(mUserReading.Sequence);
+            if (previousReading != null) {
+                double diff = mUserReading.Weight - previousReading.Weight;
+                String diffSign = "";
+                int diffColor = 1;
+                if (diff < 0) {
+                    diffColor = Color.RED;
+                } else if (diff > 0) {
+                    diffSign = "+";
+                    diffColor = Color.BLUE;
+                }
+                weightDiffView.setText(String.format(" (%s%.2f)", diffSign, diff));
+                if (diff != 0)
+                    weightDiffView.setTextColor(diffColor);
+            }
+        }
+
+        private void setActualHeightControl() {
             ((TextView) mView.findViewById(R.id.record_item_actual_height))
                     .setText(String.format("%.2f", mUserReading.Height));
 
+            TextView heightDiffView = ((TextView) mView.findViewById(R.id.record_item_actual_height_diff));
+            heightDiffView.setText(String.format(" (%.2f)", 0.0));
+
+            UserReading previousReading = mUser.findReadingBefore(mUserReading.Sequence);
+            if (previousReading != null) {
+                double diff = mUserReading.Height - previousReading.Height;
+                String diffSign = "";
+                int diffColor = 1;
+                if (diff < 0) {
+                    diffColor = Color.RED;
+                } else if (diff > 0) {
+                    diffSign = "+";
+                    diffColor = Color.BLUE;
+                }
+                heightDiffView.setText(String.format(" (%s%.2f)", diffSign, diff));
+                if (diff != 0)
+                    heightDiffView.setTextColor(diffColor);
+            }
+        }
+
+        private void setActualHeadCircumControl() {
             ((TextView) mView.findViewById(R.id.record_item_actual_hc))
                     .setText(String.format("%.2f", mUserReading.HeadCircumference));
+
+            TextView hcDiffView = ((TextView) mView.findViewById(R.id.record_item_actual_hc_diff));
+            hcDiffView.setText(String.format(" (%.2f)", 0.0));
+
+            UserReading previousReading = mUser.findReadingBefore(mUserReading.Sequence);
+            if (previousReading != null) {
+                double diff = mUserReading.HeadCircumference - previousReading.HeadCircumference;
+                String diffSign = "";
+                int diffColor = 1;
+                if (diff < 0) {
+                    diffColor = Color.RED;
+                } else if (diff > 0) {
+                    diffSign = "+";
+                    diffColor = Color.BLUE;
+                }
+                hcDiffView.setText(String.format(" (%s%.2f)", diffSign, diff));
+                if (diff != 0)
+                    hcDiffView.setTextColor(diffColor);
+            }
         }
 
         private void setExpectedValuesControl() {
