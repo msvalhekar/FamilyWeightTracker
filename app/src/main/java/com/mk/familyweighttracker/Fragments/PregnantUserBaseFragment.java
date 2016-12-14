@@ -81,17 +81,13 @@ public class PregnantUserBaseFragment extends Fragment {
     }
 
     private void saveBitmapAs(Bitmap bitmap, String filePath) {
-        File f = new File(filePath);
-        if(f.exists())
-            f.delete();
-
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, bytes);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
 
         try {
-
             File newFile = new File(filePath);
-            newFile.createNewFile();
+            if(!newFile.exists())
+                newFile.createNewFile();
 
             FileOutputStream fo = new FileOutputStream(newFile);
             fo.write(bytes.toByteArray());

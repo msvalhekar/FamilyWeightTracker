@@ -63,7 +63,7 @@ public class SplashActivity extends TrackerBaseActivity {
             public void run() {
                 gotoHomeActivity(false);
             }
-        }, Constants.SPLASH_SCREEN_TIMEOUT_SECONDS);
+        }, Constants.Settings.SPLASH_SCREEN_TIMEOUT_SECONDS);
     }
 
     private void initAppVersionControl() {
@@ -106,7 +106,7 @@ public class SplashActivity extends TrackerBaseActivity {
         Date lastCheckedOn = PreferenceHelper.getDate(Constants.SharedPreference.AppMarketLastUpdateCheckedOn, new Date());
         long lastCheckedBeforeDays = Utility.calculateDateDiff(lastCheckedOn);
 
-        return (Constants.CHECK_MARKET_APP_UPDATE_AFTER_DAYS < lastCheckedBeforeDays);
+        return (Constants.Settings.CHECK_MARKET_APP_UPDATE_AFTER_DAYS < lastCheckedBeforeDays);
     }
 
     private void upgradeAppIfRequired(String marketAppVersion) {

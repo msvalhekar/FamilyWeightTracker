@@ -159,7 +159,7 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
         mLineChart.setPinchZoom(false);
 
         Legend legend = mLineChart.getLegend();
-        legend.setPosition(Legend.LegendPosition.LEFT_OF_CHART_INSIDE);
+        legend.setPosition(Legend.LegendPosition.ABOVE_CHART_LEFT);
         legend.setFormSize(15);
     }
 
