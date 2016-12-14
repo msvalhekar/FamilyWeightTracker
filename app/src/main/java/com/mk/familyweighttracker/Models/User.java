@@ -42,6 +42,10 @@ public class User {
     public static int MAXIMUM_INFANT_READINGS_COUNT = 36;
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
     public static String ImageNameFormat = "u%d.jpg";
+    public static String ChartNameFormat = "u%dc.jpg";
+    public static String WeightChartNameFormat = "u%dwc.jpg";
+    public static String HeightChartNameFormat = "u%dhc.jpg";
+    public static String HdCircumChartNameFormat = "u%dhcc.jpg";
 
     private long mId;
 
@@ -267,6 +271,26 @@ public class User {
 
     public BodyWeightCategory getWeightCategory() {
         return new PregnancyService().getWeightCategory(getBmi());
+    }
+
+    public String getChartPath() {
+        String imageName = String.format(ChartNameFormat, getId());
+        return String.format("%s/%s", StorageUtility.getImagesDirectory(), imageName);
+    }
+
+    public String getWeightChartPath() {
+        String imageName = String.format(WeightChartNameFormat, getId());
+        return String.format("%s/%s", StorageUtility.getImagesDirectory(), imageName);
+    }
+
+    public String getHeightChartPath() {
+        String imageName = String.format(HeightChartNameFormat, getId());
+        return String.format("%s/%s", StorageUtility.getImagesDirectory(), imageName);
+    }
+
+    public String getHeadCircumChartPath() {
+        String imageName = String.format(HdCircumChartNameFormat, getId());
+        return String.format("%s/%s", StorageUtility.getImagesDirectory(), imageName);
     }
 
     public String getImagePath() {
@@ -499,6 +523,12 @@ public class User {
                 getEstimatedSequence());
     }
 
+    public String getShareChartSubject() {
+        return String.format("%s - %s chart(s)",
+                name,
+                Utility.getResourceString(isPregnant() ? R.string.preg_weight_gain_message : R.string.physical_growth_message));
+    }
+
     public static User createUser(UserType userType) {
         User user = new User();
         user.isMale = false;
@@ -515,4 +545,5 @@ public class User {
         user.trackingPeriod = user.getTrackingPeriodByType();
         return user;
     }
+
 }

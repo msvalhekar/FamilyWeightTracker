@@ -1,15 +1,18 @@
 package com.mk.familyweighttracker.Fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -34,6 +37,7 @@ import com.mk.familyweighttracker.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,9 +46,14 @@ public class InfantUserChartFragment extends PregnantUserBaseFragment /*implemen
 
     private RecyclerView mRecyclerView;
     private View mFragmentView;
+    InfantChartListRecyclerViewAdapter mChartsAdapter;
 
     public InfantUserChartFragment() {
         // Required empty public constructor
+    }
+
+    public boolean showShareChartMenu() {
+        return true;
     }
 
     @Override
@@ -76,8 +85,8 @@ public class InfantUserChartFragment extends PregnantUserBaseFragment /*implemen
     private void bindChartsList() {
         showHideEmptyListControl();
 
-        InfantChartListRecyclerViewAdapter chartsAdapter = new InfantChartListRecyclerViewAdapter(getContext(), getUser());
-        chartsAdapter.setOnItemClickListener(new InfantChartListRecyclerViewAdapter.OnItemClickListener() {
+        mChartsAdapter = new InfantChartListRecyclerViewAdapter(getContext(), getUser());
+        mChartsAdapter.setOnItemClickListener(new InfantChartListRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(InfantChartListRecyclerViewAdapter.ChartDetail chartDetail) {
 //                Intent intent = new Intent(getContext(), PregnantUserDetailActivity.class);
@@ -86,7 +95,7 @@ public class InfantUserChartFragment extends PregnantUserBaseFragment /*implemen
             }
         });
 
-        mRecyclerView.setAdapter(chartsAdapter);
+        mRecyclerView.setAdapter(mChartsAdapter);
         //usersAdapter.notifyDataSetChanged();
     }
 
@@ -98,5 +107,19 @@ public class InfantUserChartFragment extends PregnantUserBaseFragment /*implemen
             ((TextView) mFragmentView.findViewById(R.id.empty_mesage_title)).setText(R.string.user_readings_not_found_message);
             ((TextView) mFragmentView.findViewById(R.id.empty_mesage_description)).setText(R.string.user_readings_add_user_message);
         }
+    }
+
+    public void onShareChartMenu() {
+        if(getUser().getReadingsCount() == 0) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Cannot proceed")
+                    .setMessage("No chart data available.")
+                    .setPositiveButton(R.string.ok_label, null)
+                    .create()
+                    .show();
+            return;
+        }
+
+        saveBitmapAs(mChartsAdapter.getChartBitmaps());
     }
 }

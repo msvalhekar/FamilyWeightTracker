@@ -2,15 +2,19 @@ package com.mk.familyweighttracker.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Adapter.PregnantUserTabPagerAdapter;
+import com.mk.familyweighttracker.Fragments.PregnantUserBaseFragment;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.SlidingTabLayout;
@@ -69,18 +73,26 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_user_detail, menu);
+
+        if(currentFragment != null) {
+            menu.findItem(R.id.user_detail_share_charts).setVisible(currentFragment.showShareChartMenu());
+        }
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
+            case android.R.id.home: // Respond to the action bar's Up/Home button
                 finish();
                 break;
 
-//            case R.id.user_detail_help:
+            case R.id.user_detail_share_charts:
+                currentFragment.onShareChartMenu();
+                break;
+
+            case R.id.user_detail_help:
 //                View layout = getLayoutInflater().inflate(R.layout.help_popup_user_detail_readings, null);
 //
 //                PopupWindow window = new PopupWindow(this);
@@ -89,7 +101,9 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity {
 //                window.setHeight(900);
 //                window.setFocusable(true);
 //                window.showAtLocation(layout, Gravity.NO_GRAVITY, 40, 20);
-//                return true;
+//                window.setContentView(layout);
+                Toast.makeText(this, "Yet to implement.", Toast.LENGTH_SHORT).show();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -120,9 +134,28 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity {
         }
     }
 
+    PregnantUserBaseFragment currentFragment;
+
     private void initDetailTabControl() {
-        ViewPager viewPager = ((ViewPager) findViewById(R.id.user_detail_pager));
+        final ViewPager viewPager = ((ViewPager) findViewById(R.id.user_detail_pager));
         viewPager.setAdapter(new PregnantUserTabPagerAdapter(getSupportFragmentManager(), getUser().type));
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
+
+            @Override
+            public void onPageSelected(int position) {
+                currentFragment = ((PregnantUserBaseFragment) ((PregnantUserTabPagerAdapter) viewPager.getAdapter()).getItem(position));
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) { }
+        });
+
+        currentFragment = ((PregnantUserBaseFragment) ((PregnantUserTabPagerAdapter) viewPager.getAdapter()).getItem(0));
+        invalidateOptionsMenu();
 
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
         slidingTabLayout.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the slidingTabLayout Space Evenly in Available width

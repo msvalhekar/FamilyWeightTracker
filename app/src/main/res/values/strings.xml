@@ -231,4 +231,6 @@
     <string name="add_reading_error_message">Error Adding reading</string>
     <string name="add_reading_cannot_edit_week_error">Week number cannot be changed in Edit mode.</string>
     <string name="add_reading_cannot_edit_month_error">Month number cannot be changed in Edit mode.</string>
+    <string name="preg_weight_gain_message">Pregnancy Weight Gain</string>
+    <string name="physical_growth_message">Physical Growth</string>
 </resources>

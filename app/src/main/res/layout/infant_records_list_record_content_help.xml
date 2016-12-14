@@ -42,7 +42,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="15dp"
-                        android:text="@string/help_record_period"/>
+                        android:text="Month"/>
                 </LinearLayout>
 
                 <LinearLayout

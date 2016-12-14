@@ -1,13 +1,20 @@
 package com.mk.familyweighttracker.Fragments;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -21,12 +28,24 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.ImageUtility;
+import com.mk.familyweighttracker.Framework.StorageUtility;
+import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.Models.WeekWeightGainRange;
 import com.mk.familyweighttracker.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +57,10 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
 
     public PregnantUserChartFragment() {
         // Required empty public constructor
+    }
+
+    public boolean showShareChartMenu() {
+        return true;
     }
 
     @Override
@@ -104,8 +127,7 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
         }
     }
 
-    private void initChartControl()
-    {
+    private void initChartControl() {
         mLineChart = (LineChart) mFragmentView.findViewById(R.id.user_detail_chart_linechart);
         mLineChart.setOnChartValueSelectedListener(this);
 
@@ -156,6 +178,8 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
         mLineChart.setData(data);
         //mLineChart.invalidate();
         mLineChart.animateX(1000);
+        mLineChart.setDescription(String.format("%s - Weight (%s) for Pregnancy (%s)", getUser().name, getUser().weightUnit, getUser().trackingPeriod));
+        mLineChart.setDescriptionTextSize(15);
     }
 
     private ILineDataSet getWeightRangeValues(List<WeekWeightGainRange> weightRangeList, boolean isMinimum) {
@@ -206,5 +230,23 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
 
     @Override
     public void onNothingSelected() {
+    }
+
+    public void onShareChartMenu() {
+        if(getUser().getReadingsCount() == 0) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Cannot proceed")
+                    .setMessage("No chart data available.")
+                    .setPositiveButton(R.string.ok_label, null)
+                    .create()
+                    .show();
+            return;
+        }
+
+        if(mLineChart != null) {
+            Map<String, Bitmap> map = new HashMap<String, Bitmap>();
+            map.put(getUser().getChartPath(), mLineChart.getChartBitmap());
+            saveBitmapAs(map);
+        }
     }
 }

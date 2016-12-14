@@ -1,6 +1,7 @@
 package com.mk.familyweighttracker.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,7 +19,6 @@ import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.mk.familyweighttracker.Framework.StringHelper;
 import com.mk.familyweighttracker.Models.MonthGrowthRange;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
@@ -26,7 +26,9 @@ import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Repositories.InfantRepository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mvalhekar on 09-12-2016.
@@ -46,9 +48,17 @@ public class InfantChartListRecyclerViewAdapter extends RecyclerView.Adapter<Inf
 
     private void setChartDetailList() {
         mChartDetailList = new ArrayList<>();
-        mChartDetailList.add(new ChartDetail(mUser, "Wt"));
-        mChartDetailList.add(new ChartDetail(mUser, "Ht"));
-        mChartDetailList.add(new ChartDetail(mUser, "HC"));
+        mChartDetailList.add(new ChartDetail(mUser, "Wt", mUser.getWeightChartPath()));
+        mChartDetailList.add(new ChartDetail(mUser, "Ht", mUser.getHeightChartPath()));
+        mChartDetailList.add(new ChartDetail(mUser, "HC", mUser.getHeadCircumChartPath()));
+    }
+
+    public Map<String, Bitmap> getChartBitmaps() {
+        Map<String, Bitmap> map = new HashMap<>();
+        for (ChartDetail chartDetail : mChartDetailList) {
+            map.put(chartDetail.filePath, chartDetail.getChart());
+        }
+        return map;
     }
 
     @Override
@@ -92,6 +102,8 @@ public class InfantChartListRecyclerViewAdapter extends RecyclerView.Adapter<Inf
 
             setTitleControl();
             setChartControl();
+
+            mChartDetail.setChart(mLineChart);
         }
 
         private void setTitleControl() {
@@ -131,7 +143,7 @@ public class InfantChartListRecyclerViewAdapter extends RecyclerView.Adapter<Inf
             mLineChart.setPinchZoom(false);
 
             Legend legend = mLineChart.getLegend();
-            legend.setPosition(Legend.LegendPosition.BELOW_CHART_RIGHT);
+            legend.setPosition(Legend.LegendPosition.ABOVE_CHART_LEFT);
             legend.setFormSize(15);
 
             loadChartData();
@@ -151,6 +163,9 @@ public class InfantChartListRecyclerViewAdapter extends RecyclerView.Adapter<Inf
             mLineChart.setData(data);
             //mLineChart.invalidate();
             mLineChart.animateX(1000);
+
+            mLineChart.setDescription(mChartDetail.getTitle());
+            mLineChart.setDescriptionTextSize(15);
         }
 
         private ILineDataSet getExpectedRangeValues(boolean isMinimum) {
@@ -217,22 +232,25 @@ public class InfantChartListRecyclerViewAdapter extends RecyclerView.Adapter<Inf
     public class ChartDetail {
         private String titleType;
         private User user;
+        private LineChart chart;
+        private String filePath;
 
         public List<Entry> actualList;
         public List<Double> expMinList;
         public List<Double> expMaxList;
 
-        public ChartDetail(User user, String titleType) {
+        public ChartDetail(User user, String titleType, String filePath) {
             this.user = user;
             this.titleType = titleType;
+            this.filePath = filePath;
             loadData();
         }
 
         public String getTitle() {
             switch (titleType) {
-                case "Wt": return String.format("Weight (%s) - for - Age (%s)", user.weightUnit, user.trackingPeriod);
-                case "Ht": return String.format("Height (%s) - for - Age (%s)", user.heightUnit, user.trackingPeriod);
-                case "HC": return String.format("Head Circumference (%s) - for - Age (%s)", user.headCircumUnit, user.trackingPeriod);
+                case "Wt": return String.format("%s - Weight (%s) for Age (%s)", user.name, user.weightUnit, user.trackingPeriod);
+                case "Ht": return String.format("%s - Height (%s) for Age (%s)", user.name, user.heightUnit, user.trackingPeriod);
+                case "HC": return String.format("%s - Head Circumference (%s) for Age (%s)", user.name, user.headCircumUnit, user.trackingPeriod);
             }
             return "";
         }
@@ -274,6 +292,14 @@ public class InfantChartListRecyclerViewAdapter extends RecyclerView.Adapter<Inf
                     }
                     break;
             }
+        }
+
+        public Bitmap getChart() {
+            return chart.getChartBitmap();
+        }
+
+        public void setChart(LineChart chart) {
+            this.chart = chart;
         }
     }
 }
