@@ -19,6 +19,7 @@ import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.MonthGrowthRange;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
@@ -176,8 +177,7 @@ public class InfantChartListRecyclerViewAdapter extends RecyclerView.Adapter<Inf
             for (double value: data) {
                 values.add(new Entry((float) value, index++));
             }
-            String label = isMinimum ? "3rd percentile" : "97th percentile";
-            //getString(R.string.chart_exp_min_legend) : getString(R.string.chart_exp_max_legend);
+            String label = Utility.getResourceString(isMinimum ? R.string.chart_3rd_percentile_legend: R.string.chart_97th_percentile_legend);
             LineDataSet lineDataSet = new LineDataSet(values, label);
             lineDataSet.setLineWidth(2f);
             lineDataSet.setDrawValues(false);

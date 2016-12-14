@@ -211,6 +211,8 @@
     <string name="chart_actual_weight_legend">actual weight</string>
     <string name="chart_exp_min_legend">expected minimum</string>
     <string name="chart_exp_max_legend">expected maximum</string>
+    <string name="chart_3rd_percentile_legend">3rd percentile</string>
+    <string name="chart_97th_percentile_legend">97th percentile</string>
     <string name="chart_desc_current_week_label">Week: %d</string>
     <string name="chart_desc_exp_current_week_label">Exp this Week</string>
     <string name="chart_desc_40th_week_label">Exp on 40th Week</string>
@@ -225,7 +227,7 @@
     <string name="button_due_date_action_lable">SET NOW</string>
     <string name="add_reading_type_title">Select Reading Type</string>
     <string name="add_reading_prepregnancy_must_exist_for_pregnancy_reading_message">Pre-pregnancy reading is required before adding pregnancy readings.</string>
-    <string name="add_reading_prepregnancy_must_exist_for_delivery_reading_message">Pre-pregnancy reading is required before adding delivery readings.</string>
+    <string name="add_reading_prepregnancy_must_exist_for_delivery_reading_message">Pre-pregnancy reading is required before adding delivery reading.</string>
     <string name="add_reading_prepregnancy_exists_message">Pre-pregnancy reading is already added.</string>
     <string name="add_reading_delivery_exists_message">Delivery reading is already added.</string>
     <string name="add_reading_error_message">Error Adding reading</string>
