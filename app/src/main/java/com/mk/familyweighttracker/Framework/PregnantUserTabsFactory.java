@@ -31,8 +31,8 @@ public class PregnantUserTabsFactory {
             else
                 _homeTabs.put("Growth", new InfantUserChartFragment());
 
-            String mediaLabel = userType == UserType.Pregnancy ? "M.W.P" : "Timeline";
-            //_homeTabs.put(mediaLabel, new PregnantUserMediaFragment());
+            if(userType == UserType.Pregnancy)
+                _homeTabs.put("M.W.P", new PregnantUserMediaFragment());
         }
         return _homeTabs;
     }

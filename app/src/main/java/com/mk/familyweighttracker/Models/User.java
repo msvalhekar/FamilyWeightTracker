@@ -375,35 +375,35 @@ public class User {
         return isPregnant() ? User.MAXIMUM_PREGNANCY_READINGS_COUNT : User.MAXIMUM_INFANT_READINGS_COUNT;
     }
 
-    public String getMissingPeriodLabel(Context context) {
-        return context.getString(isPregnant() ? R.string.WeeksMessage : R.string.MonthsMessage);
+    public String getMissingPeriodLabel() {
+        return Utility.getResourceString(isPregnant() ? R.string.WeeksMessage : R.string.MonthsMessage);
     }
 
-    public String getSequenceLabel(Context context) {
-        return context.getString(isPregnant()
+    public String getSequenceLabel() {
+        return Utility.getResourceString(isPregnant()
                 ? R.string.reading_period_week_label
                 : R.string.reading_period_month_label);
     }
 
-    public String getEditSequenceErrorMessage(Context context) {
-        return context.getString(isPregnant()
+    public String getEditSequenceErrorMessage() {
+        return Utility.getResourceString(isPregnant()
                 ? R.string.add_reading_cannot_edit_week_error
                 : R.string.add_reading_cannot_edit_month_error);
     }
 
-    public String getSequenceChangeLabel(Context context) {
-        return context.getString(isPregnant() ? R.string.WeekNumberMessage : R.string.MonthNumberMessage);
+    public String getSequenceChangeLabel() {
+        return Utility.getResourceString(isPregnant() ? R.string.WeekNumberMessage : R.string.MonthNumberMessage);
     }
 
-    public String getReadingSavedMessage(Context context, long sequence) {
+    public String getReadingSavedMessage(long sequence) {
         return String.format(
-                context.getString(isPregnant() ? R.string.WeekNReadingSavedMessage : R.string.MonthNReadingSavedMessage),
+                Utility.getResourceString(isPregnant() ? R.string.WeekNReadingSavedMessage : R.string.MonthNReadingSavedMessage),
                 sequence);
     }
 
-    public String getReadingRemovedMessage(Context context, long sequence) {
+    public String getReadingRemovedMessage(long sequence) {
         return String.format(
-                context.getString(isPregnant() ? R.string.WeekNReadingRemovedMessage : R.string.MonthNReadingRemovedMessage),
+                Utility.getResourceString(isPregnant() ? R.string.WeekNReadingRemovedMessage : R.string.MonthNReadingRemovedMessage),
                 sequence);
     }
 
@@ -475,27 +475,27 @@ public class User {
         return isPregnant() ? Utility.getWeekDays() : Utility.getMonthDays();
     }
 
-    public String getReminderPeriodLabel(Context context) {
-        return context.getString(isPregnant()
+    public String getReminderPeriodLabel() {
+        return Utility.getResourceString(isPregnant()
                 ? R.string.add_user_weekly_reminder_text
                 : R.string.add_user_monthly_reminder_text);
     }
 
-    public String getDayOfPeriodLabel(Context context) {
-        return context.getString(isPregnant()
+    public String getDayOfPeriodLabel() {
+        return Utility.getResourceString(isPregnant()
                 ? R.string.add_user_reminder_dow_text
                 : R.string.add_user_reminder_dom_text);
     }
 
-    public String getReminderNotificationTitle(Context context) {
+    public String getReminderNotificationTitle() {
         return String.format(
-                context.getString(isPregnant() ? R.string.notification_pregnancy_title : R.string.notification_infant_title,
-                name));
+                Utility.getResourceString(isPregnant() ? R.string.notification_pregnancy_title : R.string.notification_infant_title),
+                name);
     }
 
-    public String getReminderNotificationMessage(Context context) {
+    public String getReminderNotificationMessage() {
         return String.format(
-                context.getString(isPregnant() ? R.string.notification_pregnancy_message : R.string.notification_infant_message),
+                Utility.getResourceString(isPregnant() ? R.string.notification_pregnancy_message : R.string.notification_infant_message),
                 getEstimatedSequence());
     }
 

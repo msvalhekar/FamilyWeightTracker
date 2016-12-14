@@ -317,7 +317,7 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
 
     private void initWeekSequenceControl() {
         ((TextView) findViewById(R.id.add_reading_period_label))
-                .setText(mUser.getSequenceLabel(this));
+                .setText(mUser.getSequenceLabel());
 
         final Button seqButton = ((Button) findViewById(R.id.add_reading_sequence_btn));
         seqButton.setText(String.valueOf(mUserReadingToProcess.Sequence));
@@ -329,7 +329,7 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
                 if (nonEditable) {
                     Toast.makeText(
                             AddPregnancyReadingActivity.this,
-                            mUser.getEditSequenceErrorMessage(v.getContext()),
+                            mUser.getEditSequenceErrorMessage(),
                             Toast.LENGTH_SHORT)
                             .show();
                     return;
@@ -357,7 +357,7 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
                 AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
                         .setView(layout)
                         .setCancelable(false)
-                        .setMessage(mUser.getSequenceChangeLabel(v.getContext()))
+                        .setMessage(mUser.getSequenceChangeLabel())
                         .setPositiveButton(R.string.set_label, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -438,7 +438,7 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
             ((TextView) findViewById(R.id.add_reading_week_pending))
                     .setText(String.format("%s %s",
                             TextUtils.join(", ", pendingItems),
-                            mUser.getMissingPeriodLabel(this)));
+                            mUser.getMissingPeriodLabel()));
         }
     }
 
@@ -710,7 +710,7 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
 
-        String message = mUser.getReadingSavedMessage(this, mUserReadingToProcess.Sequence);
+        String message = mUser.getReadingSavedMessage(mUserReadingToProcess.Sequence);
         Toast.makeText(TrackerApplication.getApp(), message, Toast.LENGTH_SHORT).show();
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,
@@ -739,7 +739,7 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
 
-        String message = mUser.getReadingRemovedMessage(this, mUserReadingToProcess.Sequence);
+        String message = mUser.getReadingRemovedMessage(mUserReadingToProcess.Sequence);
         Toast.makeText(TrackerApplication.getApp(), message, Toast.LENGTH_SHORT).show();
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,

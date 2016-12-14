@@ -245,9 +245,9 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     }
 
     private void initReminderControl() {
-        ((TextView) findViewById(R.id.add_user_remind_label)).setText(mUser.getReminderPeriodLabel(this));
+        ((TextView) findViewById(R.id.add_user_remind_label)).setText(mUser.getReminderPeriodLabel());
 
-        ((TextView) findViewById(R.id.add_user_reminder_day_label)).setText(mUser.getDayOfPeriodLabel(this));
+        ((TextView) findViewById(R.id.add_user_reminder_day_label)).setText(mUser.getDayOfPeriodLabel());
 
         android.support.v7.widget.SwitchCompat enableReminderCkBox
                 = ((SwitchCompat) findViewById(R.id.add_user_remind_checkbox));

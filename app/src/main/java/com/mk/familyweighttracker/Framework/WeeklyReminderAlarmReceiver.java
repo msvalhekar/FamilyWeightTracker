@@ -47,8 +47,8 @@ public class WeeklyReminderAlarmReceiver extends BroadcastReceiver {
 
         PushNotification pushNotification = new PushNotification();
 
-        pushNotification.title = user.getReminderNotificationTitle(_context);
-        pushNotification.message = user.getReminderNotificationMessage(_context);
+        pushNotification.title = user.getReminderNotificationTitle();
+        pushNotification.message = user.getReminderNotificationMessage();
         pushNotification.context = _context;
         pushNotification.requestCode = (int)user.getId();
         NotificationCenter.showNotification(pushNotification);
