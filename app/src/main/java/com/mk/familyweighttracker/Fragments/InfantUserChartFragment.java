@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +39,8 @@ import com.mk.familyweighttracker.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -120,6 +123,20 @@ public class InfantUserChartFragment extends PregnantUserBaseFragment /*implemen
             return;
         }
 
-        saveBitmapAs(mChartsAdapter.getChartBitmaps());
+        final Handler handler = new Handler();
+        final int[] i = {0};
+        final long delay = 100;
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if(i[0] < mChartsAdapter.getItemCount()) {
+                    mRecyclerView.scrollToPosition(i[0]++);
+                    handler.postDelayed(this, delay *5);
+                } else {
+                    saveBitmapAs(mChartsAdapter.getChartBitmaps());
+                }
+            }
+        };
+        handler.postDelayed(runnable, delay);
     }
 }
