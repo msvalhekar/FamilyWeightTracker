@@ -46,13 +46,13 @@ public class WhatIsNewActivity extends TrackerBaseActivity {
 
     private String getWhatsNewMessage() {
         StringBuilder builder = new StringBuilder();
-        //builder.append("<big>");
+        builder.append("<big>");
         builder.append("<br />" + "<b>" + "Infant growth tracking" + "</b>");
         builder.append("<br />" + "Infant physical growth can now be tracked for Weight, Height and Head Circumference.");
         builder.append("<br />");
         builder.append("<br />" + "<b>" + "Share growth chart" + "</b>");
         builder.append("<br />" + "Pregnancy weight gain / Infant physical growth chart(s) can now be shared with others/social media.");
-        //builder.append("</big>");
+        builder.append("</big>");
         return builder.toString();
     }
 }
