@@ -90,6 +90,12 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
             findViewById(R.id.add_reading_delete_button).setVisibility(View.GONE);
 
             long sequence = getSequenceFor();
+            if(sequence < 0) {
+                Toast.makeText(this, "Cannot add readings.", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
+
             if(( mUser.isPregnant() && sequence >= User.MAXIMUM_PREGNANCY_READINGS_COUNT) ||
                (!mUser.isPregnant() && sequence >= User.MAXIMUM_INFANT_READINGS_COUNT)) {
 
@@ -325,13 +331,15 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
         seqButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean nonEditable = bEditMode || mUserReadingToProcess.isPrePregnancyReading();
-                if (nonEditable) {
+                if (bEditMode) {
                     Toast.makeText(
                             AddPregnancyReadingActivity.this,
                             mUser.getEditSequenceErrorMessage(),
                             Toast.LENGTH_SHORT)
                             .show();
+                    return;
+                }
+                if (mUser.isPregnant() && (mUserReadingToProcess.isPrePregnancyReading() || mUserReadingToProcess.isDeliveryReading())) {
                     return;
                 }
 
@@ -384,11 +392,14 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
 
         long startFrom = 1;
         long endAt = mUser.getMaximumReadingCount();
+        if(mUser.isPregnant())
+            endAt = endAt-2;
+
         final long incrementFactor = 1;
 
         List<UserReading> readings = mUser.getReadings(true);
         final List<String> itemsToDisplay = new ArrayList<>();
-        for (long seqValue = startFrom; seqValue < endAt; seqValue += incrementFactor) {
+        for (long seqValue = startFrom; seqValue <= endAt; seqValue += incrementFactor) {
             boolean found = false;
             for (UserReading reading : readings) {
                 if (reading.Sequence == seqValue) {

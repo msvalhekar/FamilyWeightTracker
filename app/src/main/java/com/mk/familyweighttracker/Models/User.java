@@ -385,12 +385,13 @@ public class User {
 
     public long getNextAvailableSequence() {
         long estSeq = getEstimatedSequence();
-        Boolean found = false;
-        while (!found) {
+        while (true) {
             UserReading reading = getReadingBySequence(estSeq);
             if(reading == null)
                 return estSeq;
             estSeq ++;
+            if((isPregnant() && estSeq > 40) || (!isPregnant() && estSeq > 36))
+                break;
         }
         return -1;
     }
