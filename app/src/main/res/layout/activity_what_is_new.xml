@@ -22,25 +22,26 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <TextView
             android:id="@+id/what_is_new_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:maxLines="20"
             android:scrollbars="vertical">
         </TextView>
-        <Button
-            android:id="@+id/what_is_new_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom"
-            android:background="@drawable/round_shape_button"
-            android:text="@string/ok_label"/>
-    </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/what_is_new_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/round_shape_button"
+        android:layout_margin="5dp"
+        android:text="@string/got_it_label"/>
 
 </LinearLayout>
