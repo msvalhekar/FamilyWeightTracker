@@ -24,13 +24,16 @@ import com.mk.familyweighttracker.Activities.AddPregnantUserActivity;
 import com.mk.familyweighttracker.Adapter.InfantUserReadingAdapter;
 import com.mk.familyweighttracker.Adapter.PregnantUserReadingAdapter;
 import com.mk.familyweighttracker.Enums.PregnancyReadingType;
+import com.mk.familyweighttracker.Enums.UserType;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -324,9 +327,49 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
 
         switch (requestCode) {
             case Constants.RequestCode.ADD_READING:
+                onUserDataChange();
+                createInfantUserIfRequired();
+                break;
             case Constants.RequestCode.EDIT_READING:
                 onUserDataChange();
                 break;
         }
+    }
+
+    private void createInfantUserIfRequired() {
+        if(!getUser().isPregnant())
+            return;
+
+        final UserReading latestReading = getUser().getLatestReading();
+        if(latestReading != null && latestReading.isDeliveryReading()) {
+
+            Toast.makeText(getContext(), R.string.welcome_newborn_message, Toast.LENGTH_LONG).show();
+
+            new AlertDialog.Builder(getContext())
+                    .setTitle(getString(R.string.create_newborn_dialog_title))
+                    .setMessage(getString(R.string.create_newborn_dialog_message))
+                    .setPositiveButton(R.string.yes_label, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            createInfantUser("Baby", latestReading.TakenOn);
+                            if(getUser().haveTwins) {
+                                createInfantUser("Baby2", latestReading.TakenOn);
+                            }
+
+                            Toast.makeText(getContext(), R.string.created_newborn_message, Toast.LENGTH_LONG).show();
+                            getActivity().finish();
+                        }
+                    })
+                    .setNegativeButton(R.string.no_label, null)
+                    .create()
+                    .show();
+        }
+    }
+
+    private void createInfantUser(String userName, Date dob) {
+        User baby = User.createUser(UserType.Infant);
+        baby.name = userName;
+        baby.dateOfBirth = dob;
+        new UserService().add(baby);
     }
 }

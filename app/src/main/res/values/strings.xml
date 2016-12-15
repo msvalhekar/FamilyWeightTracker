@@ -234,4 +234,9 @@
     <string name="add_reading_cannot_edit_month_error">Month number cannot be changed in Edit mode.</string>
     <string name="preg_weight_gain_message">Pregnancy Weight Gain</string>
     <string name="physical_growth_message">Physical Growth</string>
+
+    <string name="create_newborn_dialog_title">Track newborn\'s growth?</string>
+    <string name="create_newborn_dialog_message">Do you want to track your newborn\'s physical development, month-by-month?</string>
+    <string name="welcome_newborn_message">Congratulations and Welcome Baby !!!</string>
+    <string name="created_newborn_message">Infant profile created, update details.</string>
 </resources>

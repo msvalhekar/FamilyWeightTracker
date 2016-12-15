@@ -721,8 +721,10 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
 
-        String message = mUser.getReadingSavedMessage(mUserReadingToProcess.Sequence);
-        Toast.makeText(TrackerApplication.getApp(), message, Toast.LENGTH_SHORT).show();
+        if(!mUser.isPregnant() || !mUserReadingToProcess.isDeliveryReading()) {
+            String message = mUser.getReadingSavedMessage(mUserReadingToProcess.Sequence);
+            Toast.makeText(TrackerApplication.getApp(), message, Toast.LENGTH_SHORT).show();
+        }
 
         Analytic.setData(Constants.AnalyticsCategories.Activity,
                 mUser.getAddReadingEvent(),
