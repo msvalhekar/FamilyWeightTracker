@@ -23,7 +23,7 @@
             android:value="MkWeighTracker.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="4" />
+            android:value="5" />
         <meta-data
             android:name="AA_MODELS"
             android:value="com.mk.familyweighttracker.DbModels.UserModel, com.mk.familyweighttracker.DbModels.UserReadingModel" />
@@ -65,7 +65,7 @@
         <!-- </activity> -->
         <activity
             android:name=".Activities.TrackerHelpActivity"
-            android:label="@string/title_tracker_help"
+            android:label="@string/title_activity_tracker_help"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -73,7 +73,7 @@
         </activity>
         <activity
             android:name=".Activities.UsersListActivity"
-            android:label="@string/title_item_list"
+            android:label="@string/title_activity_user_list"
             android:parentActivityName=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -90,7 +90,7 @@
         </activity>
         <activity
             android:name=".Activities.UserSlideshowActivity"
-            android:label="@string/title_user_slideshow"
+            android:label="@string/title_activity_user_slideshow"
             android:theme="@style/splashScreenTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -98,7 +98,7 @@
         </activity>
         <activity
             android:name=".Activities.AppFeedbackActivity"
-            android:label="@string/title_app_feedback"
+            android:label="@string/title_activity_app_feedback"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -115,6 +115,11 @@
         <activity
             android:name=".Activities.AddPregnancyReadingActivity"
             android:label="@string/title_activity_add_user_reading"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".Activities.WhatIsNewActivity"
+            android:label="@string/title_activity_what_is_new"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 

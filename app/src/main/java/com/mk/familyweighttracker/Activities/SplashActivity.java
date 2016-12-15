@@ -79,9 +79,17 @@ public class SplashActivity extends TrackerBaseActivity {
     }
 
     private void gotoHomeActivity(boolean promptUpgrade) {
-        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-        intent.putExtra(Constants.ExtraArg.PROMPT_FOR_UPGRADE, promptUpgrade);
-        startActivity(intent);
+
+        int whatsNewShownFor = PreferenceHelper.getInt(Constants.SharedPreference.WhatsNewShownFor, 0);
+        int appVersionCode = SystemInformation.getAppVersionCode();
+        if(whatsNewShownFor < appVersionCode) {
+            Intent intent = new Intent(getApplicationContext(), WhatIsNewActivity.class);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+            intent.putExtra(Constants.ExtraArg.PROMPT_FOR_UPGRADE, promptUpgrade);
+            startActivity(intent);
+        }
 
         finish();
     }

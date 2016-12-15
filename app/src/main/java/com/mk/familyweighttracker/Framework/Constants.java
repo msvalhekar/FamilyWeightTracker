@@ -29,6 +29,7 @@ public class Constants {
         public static final String AppMarketLastUpdateCheckedOn = "AppMarketLastUpdateCheckedOn";
         public static final String LastRunMigration = "LastRunMigration";
         public static final String SelectedLanguage = "SelectedLanguage";
+        public static final String WhatsNewShownFor = "WhatsNewShownFor";
     }
 
     public static class Activities {

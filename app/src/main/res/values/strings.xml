@@ -2,15 +2,14 @@
     <string name="app_name">Pregnancy Weight Tracker</string>
     <string name="action_settings">Settings</string>
 
-    <string name="title_item_list">Users</string>
-    <string name="title_tracker_help">Help / Instructions</string>
-    <string name="title_user_slideshow">Slides</string>
-    <string name="title_app_feedback">Share feedback</string>
-    <string name="title_item_detail">User Detail</string>
-    <string name="button_home_start_text">Start</string>
+    <string name="title_activity_user_list">Family Member(s)</string>
+    <string name="title_activity_tracker_help">Help / Instructions</string>
+    <string name="title_activity_user_slideshow">Slides</string>
+    <string name="title_activity_app_feedback">Share feedback</string>
     <string name="title_activity_add_user_reading">Add/Edit Reading</string>
     <string name="title_activity_add_user_first_reading">Add/Edit First Reading</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_what_is_new">What\'s New?</string>
 
     <string name="add_user_first_reading_lmp_date_label">Last Menstrual Period *</string>
     <string name="image_bump_label">Bump photo</string>
@@ -93,7 +92,7 @@
     <string name="slideshow_empty_note_message">[add notes, your feelings, your thoughts or talk to baby]</string>
     <string name="slideshow_week_number_format">Week %d</string>
     <string name="user_readings_not_found_message">No data found.</string>
-    <string name="user_readings_add_user_message">Add user(s) using \'+\' button below.</string>
+    <string name="user_readings_add_user_message">Add family member(s) using \'+\' button below.</string>
     <string name="user_readings_add_reading_message">Add reading(s) using \'+\' button below.</string>
     <string name="user_detail_activity_title">My Wonderful Pregnancy</string>
     <string name="background_audio_not_set_message">Background music not set.</string>
@@ -118,7 +117,7 @@
     <string name="delivery_have_twins_label">Pregnant with twins?</string>
     <string name="delivery_remaining_days_label">Remaining</string>
     <string name="delete_user_warning_message">User data will be lost permanently. Do you want to continue?</string>
-    <string name="delete_user_warning_title">Remove User?</string>
+    <string name="delete_user_warning_title">Remove family member?</string>
     <string name="value_not_set_message">Not set</string>
 
     <string name="add_user_weekly_reminder_text">Remind Weekly?</string>
