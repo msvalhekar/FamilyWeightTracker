@@ -22,18 +22,12 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ScrollView
+    <ExpandableListView
+        android:id="@+id/what_is_new_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
-        <TextView
-            android:id="@+id/what_is_new_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:scrollbars="vertical">
-        </TextView>
-    </ScrollView>
+    </ExpandableListView>
 
     <Button
         android:id="@+id/what_is_new_btn"
