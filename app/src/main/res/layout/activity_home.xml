@@ -26,7 +26,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -81,19 +82,18 @@
                     android:gravity="center"
                     android:textSize="11sp"
                     android:text="@string/home_app_disclaimer_message"/>
-
-                <TextView
-                    android:id="@+id/home_app_disclaimer_ok"
-                    android:layout_width="60dip"
-                    android:layout_height="60dip"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textSize="25sp"
-                    android:textColor="@color/negative_button_color"
-                    android:background="@drawable/pink_border_circle"
-                    android:text="@string/ok_label" />
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
+    <TextView
+        android:id="@+id/home_app_disclaimer_ok"
+        android:layout_width="80dip"
+        android:layout_height="40dip"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_margin="4dp"
+        android:textSize="15sp"
+        android:textColor="@color/negative_button_color"
+        android:background="@drawable/pink_border_circle"
+        android:text="I Agree" />
 </LinearLayout>
