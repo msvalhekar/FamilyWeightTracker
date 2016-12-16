@@ -43,6 +43,10 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
     private View mFragmentView;
     private RecyclerView mRecyclerView;
 
+    public boolean showHelpMenu() {
+        return true;
+    }
+
     public PregnantUserReadingsFragment() {
         // Required empty public constructor
     }
@@ -267,29 +271,34 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
 
     private void initReadingListControl() {
 
-        View.OnClickListener onClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(getContext())
-                        .setMessage(Html.fromHtml(getLegendMessage()))
-                        .setPositiveButton(getString(R.string.got_it_label), null)
-                        .create()
-                        .show();
-
-                Analytic.setData(Constants.AnalyticsCategories.Activity,
-                        getUser().getDetailsReadingsHelpEvent(),
-                        String.format(Constants.AnalyticsActions.ShowUserReadingHelp, getUser().name, getUser().getTypeShortName()),
-                        null);
-
-            }
-        };
         mFragmentView.findViewById(R.id.user_card_view_help)
                 .setOnClickListener(onClickListener);
         mFragmentView.findViewById(R.id.infant_card_view_help)
                 .setOnClickListener(onClickListener);
     }
 
-    private String getLegendMessage() {
+    public void onHelpMenu() {
+        onClickListener.onClick(null);
+    }
+
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            new AlertDialog.Builder(getContext())
+                    .setMessage(Html.fromHtml(getUser().isPregnant() ? getPregnancyHelpMessage() : getInfantHelpMessage()))
+                    .setPositiveButton(getString(R.string.got_it_label), null)
+                    .create()
+                    .show();
+
+            Analytic.setData(Constants.AnalyticsCategories.Activity,
+                    getUser().getDetailsReadingsHelpEvent(),
+                    String.format(Constants.AnalyticsActions.ShowUserReadingHelp, getUser().name, getUser().getTypeShortName()),
+                    null);
+
+        }
+    };
+
+    private String getPregnancyHelpMessage() {
         StringBuilder builder = new StringBuilder();
         builder.append("<big>");
         builder.append("<b>" + "Period" + "</b>");
@@ -303,7 +312,7 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
         builder.append("<br />" + "The difference between actual weight recorded for this week and previous week.");
         builder.append("<br />");
         builder.append("<br /><b>" + "Exp Min" + "</b>");
-        builder.append("<br />" + "The minimum weight expected for this week, as per Pregnancy Weight Gain chart.");
+        builder.append("<br />" + "The minimum weight expected for this week, as per Pregnancy Weight Gain chart (per WHO Standards).");
         builder.append("<br /><b>" + "(v/s actual)" + "</b>");
         builder.append("<br />" + "The difference between actual weight recorded and minimum expected weight for this week.");
         builder.append("<br /><font color=\"#ff0000\">RED</font>: indicates that the actual weight is lower than minimum expected, may need to gain more weight.");
@@ -315,6 +324,39 @@ public class PregnantUserReadingsFragment extends PregnantUserBaseFragment {
         builder.append("<br />" + "The difference between actual weight recorded and maximum expected weight for this week.");
         builder.append("<br /><font color=\"#0000ff\">BLUE</font>: indicates that the actual weight is lower than minimum expected, good.");
         builder.append("<br /><font color=\"#ff0000\">RED</font>: indicates that the actual weight is more than maximum expected, may need to loose weight.");
+        builder.append("</big>");
+        return builder.toString();
+    }
+
+    private String getInfantHelpMessage() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("<big>");
+        builder.append("<b>" + "Month" + "</b>");
+        builder.append("<br />" + "Month number, for which the reading was taken.");
+        builder.append("<br /><b>" + "Date" + "</b>");
+        builder.append("<br />" + "The date when the reading was recorded.");
+        builder.append("<br />");
+        builder.append("<br /><b>" + "Measure" + "</b>");
+        builder.append("<br />" + "The infant's physical growth is tracked by Weight, Height and Head Circumference.");
+        builder.append("<br />");
+        builder.append("<br /><b>" + "Actual reading" + "</b>");
+        builder.append("<br />" + "The actual weight/height/head circumference recorded for this month.");
+        builder.append("<br /><b>" + "(+/-diff)" + "</b>");
+        builder.append("<br />" + "The difference between actual value recorded for this month and previous month.");
+        builder.append("<br />");
+        builder.append("<br /><b>" + "3rd Percentile" + "</b>");
+        builder.append("<br />" + "The minimum percentile expected for this month, as per Infant growth chart (per WHO Standards).");
+        builder.append("<br />" + "Being on the 3rd percentile for weight would mean that 3% of children at this age are lighter than your child and 97% are heavier.");
+        builder.append("<br />" + "As for height, 3% are shorter and 97% are taller.");
+        builder.append("<br />" + "As for head circumference, 3% have smaller head and 97% have bigger.");
+        builder.append("<br />");
+        builder.append("<br /><b>" + "97th Percentile" + "</b>");
+        builder.append("<br />" + "The maximum percentile expected for this month, as per Infant growth chart (per WHO Standards).");
+        builder.append("<br />" + "Being on the 97th percentile for weight would mean that 97% of children at this age are lighter than your child and 3% are heavier.");
+        builder.append("<br />" + "As for height, 97% are shorter and 3% are taller.");
+        builder.append("<br />" + "As for head circumference, 97% have smaller head and 3% have bigger.");
+        builder.append("<br />");
+        builder.append("<br />" + "Consult your paediatrician if definite pattern is not observed.");
         builder.append("</big>");
         return builder.toString();
     }

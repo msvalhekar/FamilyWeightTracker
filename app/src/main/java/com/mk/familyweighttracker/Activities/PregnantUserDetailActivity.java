@@ -76,6 +76,7 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity {
 
         if(currentFragment != null) {
             menu.findItem(R.id.user_detail_share_charts).setVisible(currentFragment.showShareChartMenu());
+            menu.findItem(R.id.user_detail_help).setVisible(currentFragment.showHelpMenu());
         }
 
         return true;
@@ -93,16 +94,7 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity {
                 break;
 
             case R.id.user_detail_help:
-//                View layout = getLayoutInflater().inflate(R.layout.help_popup_user_detail_readings, null);
-//
-//                PopupWindow window = new PopupWindow(this);
-//                window.setContentView(layout);
-//                window.setWidth(900);
-//                window.setHeight(900);
-//                window.setFocusable(true);
-//                window.showAtLocation(layout, Gravity.NO_GRAVITY, 40, 20);
-//                window.setContentView(layout);
-                Toast.makeText(this, "Yet to implement.", Toast.LENGTH_SHORT).show();
+                currentFragment.onHelpMenu();
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -60,9 +60,12 @@ public class PregnantUserBaseFragment extends Fragment {
     public boolean showShareChartMenu() {
         return false;
     }
-
-    public void onShareChartMenu() {
+    public boolean showHelpMenu() {
+        return false;
     }
+
+    public void onShareChartMenu() { }
+    public void onHelpMenu() { }
 
     protected void saveBitmapAs(Map<String, Bitmap> map) {
         ArrayList<Uri> uris = new ArrayList<>();

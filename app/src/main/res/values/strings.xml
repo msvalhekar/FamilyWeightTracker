@@ -2,7 +2,7 @@
     <string name="app_name">Pregnancy Weight Tracker</string>
     <string name="action_settings">Settings</string>
 
-    <string name="title_activity_user_list">Family Member(s)</string>
+    <string name="title_activity_user_list">Family</string>
     <string name="title_activity_tracker_help">Help / Instructions</string>
     <string name="title_activity_user_slideshow">Slides</string>
     <string name="title_activity_app_feedback">Share feedback</string>
@@ -117,7 +117,7 @@
     <string name="delivery_have_twins_label">Pregnant with twins?</string>
     <string name="delivery_remaining_days_label">Remaining</string>
     <string name="delete_user_warning_message">User data will be lost permanently. Do you want to continue?</string>
-    <string name="delete_user_warning_title">Remove family member?</string>
+    <string name="delete_user_warning_title">Confirm stop tracking</string>
     <string name="value_not_set_message">Not set</string>
 
     <string name="add_user_weekly_reminder_text">Remind Weekly?</string>

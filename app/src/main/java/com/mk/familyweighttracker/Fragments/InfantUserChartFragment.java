@@ -51,12 +51,12 @@ public class InfantUserChartFragment extends PregnantUserBaseFragment /*implemen
     private View mFragmentView;
     InfantChartListRecyclerViewAdapter mChartsAdapter;
 
-    public InfantUserChartFragment() {
-        // Required empty public constructor
-    }
-
     public boolean showShareChartMenu() {
         return true;
+    }
+
+    public InfantUserChartFragment() {
+        // Required empty public constructor
     }
 
     @Override
