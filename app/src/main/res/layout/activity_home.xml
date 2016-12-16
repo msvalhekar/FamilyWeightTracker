@@ -93,7 +93,7 @@
         android:gravity="center"
         android:layout_margin="4dp"
         android:textSize="15sp"
-        android:textColor="@color/negative_button_color"
+        android:textColor="@color/app_social_button_text"
         android:background="@drawable/pink_border_circle"
-        android:text="I Agree" />
+        android:text="@string/start_label" />
 </LinearLayout>

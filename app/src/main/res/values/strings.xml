@@ -161,6 +161,7 @@
     <string name="boy_label">Boy</string>
     <string name="girl_label">Girl</string>
     <string name="continue_label">Continue</string>
+    <string name="start_label">Start</string>
 
     <string name="WEEK_DAY_SUNDAY">Sunday</string>
     <string name="WEEK_DAY_MONDAY">Monday</string>
