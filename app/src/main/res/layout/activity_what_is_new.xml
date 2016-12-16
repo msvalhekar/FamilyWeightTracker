@@ -42,6 +42,6 @@
         android:layout_gravity="center_horizontal"
         android:background="@drawable/round_shape_button"
         android:layout_margin="5dp"
-        android:text="@string/got_it_label"/>
+        android:text="@string/continue_label"/>
 
 </LinearLayout>
