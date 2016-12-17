@@ -207,7 +207,7 @@
     <string name="error_feedback_content_required_message">No feedback shared. Write your feedback and then Send.</string>
     <string name="feedback_email_subject_message">PWT Feedback - %s</string>
     <string name="user_removed_message">\'%s\' removed.</string>
-    <string name="add_user_options_title">*** Start tracking ***</string>
+    <string name="add_user_options_title">Start tracking</string>
     <string name="bmi_with_value_label">BMI: %s</string>
     <string name="chart_actual_weight_legend">actual weight</string>
     <string name="chart_exp_min_legend">expected minimum</string>
