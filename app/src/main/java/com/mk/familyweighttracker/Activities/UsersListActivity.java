@@ -16,6 +16,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import com.mk.familyweighttracker.Adapter.UserListRecyclerViewAdapter;
+import com.mk.familyweighttracker.Adapter.UserTypeSelectionAdapter;
 import com.mk.familyweighttracker.Enums.UserType;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
@@ -69,19 +70,16 @@ public class UsersListActivity extends TrackerBaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final ArrayAdapter<String> userTypesAdapter = new ArrayAdapter<String>(UsersListActivity.this, android.R.layout.select_dialog_singlechoice);
 
-                for (UserType userType : UserType.values()) {
-                    userTypesAdapter.add(userType.toString());
-                }
+                final UserTypeSelectionAdapter userTypesAdapter = new UserTypeSelectionAdapter(view.getContext());
 
                 new AlertDialog.Builder(view.getContext())
                         .setTitle(getString(R.string.add_user_options_title))
                         .setAdapter(userTypesAdapter, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String selectedUserType = userTypesAdapter.getItem(which);
-                                gotoAddUserActivityOfType(UserType.getUserType(selectedUserType));
+                                UserType selectedUserType = (UserType) userTypesAdapter.getItem(which);
+                                gotoAddUserActivityOfType(selectedUserType);
                             }
                         })
                         .create()
