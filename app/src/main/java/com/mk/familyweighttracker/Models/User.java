@@ -307,10 +307,10 @@ public class User {
         if (bitmap != null)
             return circular ? ImageUtility.getCircularBitmap(bitmap) : bitmap;
 
-        bitmap = BitmapFactory.decodeResource(TrackerApplication.getApp().getResources(),
-                isPregnant()
-                        ? R.drawable.splash
-                        : isMale ? R.drawable.boy : R.drawable.girl);
+        bitmap = BitmapFactory.decodeResource(
+                TrackerApplication.getApp().getResources(),
+                isPregnant() ? R.drawable.splash : R.drawable.baby);
+
         return circular ? ImageUtility.getCircularBitmap(bitmap) : bitmap;
     }
 
