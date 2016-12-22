@@ -46,7 +46,7 @@ public class WhatIsNewListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return list.get(groupPosition).getFeatureMap().keySet().toArray()[childPosition];
+        return list.get(groupPosition).getFeatureMap().get(childPosition);
     }
 
     @Override
@@ -85,8 +85,9 @@ public class WhatIsNewListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean b, View convertView, ViewGroup parent) {
         WhatIsNewActivity.IWhatIsNew whatIsNew = list.get(groupPosition);
-        String title = whatIsNew.getFeatureMap().keySet().toArray()[childPosition].toString();
-        String description = whatIsNew.getFeatureMap().values().toArray()[childPosition].toString();
+        WhatIsNewActivity.WhatIsNewMessage whatIsNewMessage = whatIsNew.getFeatureMap().get(childPosition);
+        String title = whatIsNewMessage.title;
+        String description = whatIsNewMessage.description;
 
         if(convertView == null) {
             convertView = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))

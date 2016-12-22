@@ -19,6 +19,7 @@ import com.mk.familyweighttracker.HomeActivity;
 import com.mk.familyweighttracker.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -88,11 +89,12 @@ public class WhatIsNewActivity extends TrackerBaseActivity {
             }
 
             @Override
-            public Map<String, String> getFeatureMap() {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Infant growth tracking", "Infant physical growth can now be tracked for Weight, Height and Head Circumference.");
-                map.put("Share growth chart", "Pregnancy weight gain / Infant physical growth chart(s) can now be shared with others/social media.");
-                return map;
+            public List<WhatIsNewMessage> getFeatureMap() {
+                return Arrays.asList(
+                        new WhatIsNewMessage(1, "Infant growth tracking", "Infant's physical growth can now be tracked for Weight, Height and Head Circumference up to 36 months of age."),
+                        new WhatIsNewMessage(2, "Multiple pregnancies tracking", "Next pregnancy of user or relative's or friend's pregnancy can now be tracked for Weight gain."),
+                        new WhatIsNewMessage(3, "Share growth chart", "Pregnancy weight gain / Infant physical growth chart(s) can now be shared with others/social media."),
+                        new WhatIsNewMessage(4, "Android M support", "Supporting Android M permissions model."));
             }
         });
 
@@ -109,15 +111,14 @@ public class WhatIsNewActivity extends TrackerBaseActivity {
             }
 
             @Override
-            public Map<String, String> getFeatureMap() {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Twins", "Pregnancy with \"twins\" can also be tracked.");
-                map.put("Less calculations", "Delivery Due date is mandatory so that current week suggestion is near accurate.");
-                map.put("Current week number suggestion", "Week number is auto-calculated based on Delivery Due Date.");
-                map.put("Post-delivery reading", "Post-delivery reading can be added (completing pregnancy tracking).");
-                map.put("User name length restriction", "Restricting length of user name to 15 chars.");
-                map.put("Better UI", "Improved look and feel");
-                return map;
+            public List<WhatIsNewMessage> getFeatureMap() {
+                return Arrays.asList(
+                        new WhatIsNewMessage(1, "Twins", "Pregnancy with \"twins\" can also be tracked."),
+                        new WhatIsNewMessage(2, "Less calculations", "Delivery Due date is mandatory so that current week suggestion is near accurate."),
+                        new WhatIsNewMessage(3, "Current week number suggestion", "Week number is auto-calculated based on Delivery Due Date."),
+                        new WhatIsNewMessage(4, "Post-delivery reading", "Post-delivery reading can be added (completing pregnancy tracking)."),
+                        new WhatIsNewMessage(5, "User name length restriction", "Restricting length of user name to 15 chars."),
+                        new WhatIsNewMessage(6, "Better UI", "Improved look and feel"));
             }
         });
 
@@ -127,6 +128,18 @@ public class WhatIsNewActivity extends TrackerBaseActivity {
     public interface IWhatIsNew {
         String getVersion();
         Date getReleaseDate();
-        Map<String, String> getFeatureMap();
+        List<WhatIsNewMessage> getFeatureMap();
+    }
+
+    public class WhatIsNewMessage {
+        public int order;
+        public String title;
+        public String description;
+
+        public WhatIsNewMessage (int order, String title, String description) {
+            this.order = order;
+            this.title = title;
+            this.description = description;
+        }
     }
 }
