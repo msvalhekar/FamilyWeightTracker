@@ -5,6 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.mk.familyweighttracker.DbModels.UserModel;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -17,25 +21,34 @@ public class TrackerApplication extends com.activeandroid.app.Application {
     private static TrackerApplication application;
     private Tracker mTracker;
 
-    private Thread.UncaughtExceptionHandler exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
-
     public static TrackerApplication getApp() { return application; }
 
     public void onCreate() {
         super.onCreate();
         application = this;
 
+        //LocaleHelper.onCreate(this, "fr");
+
         final Fabric fabric = new Fabric.Builder(this)
                 .kits(new Crashlytics())
                 .debuggable(true)
                 .build();
-        Fabric.with(this, new Crashlytics());
+        Fabric.with(fabric);
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable e) {
-                e.printStackTrace(); // not all Android versions will print the stack trace automatically
-                Crashlytics.logException(e);
+
+                try {
+                    JSONArray array = new JSONArray();
+                    for(UserModel userModel: UserModel.getAll()) {
+                        array.put(userModel.toJSON());
+                    }
+                    Crashlytics.log(array.toString());
+                    Crashlytics.logException(e);
+                } catch (JSONException je) {
+                    Crashlytics.logException(e);
+                }
 
 //                Intent intent = new Intent ();
 //                intent.setAction("com.mk.familyweighttracker.Framework.SEND_LOG");
