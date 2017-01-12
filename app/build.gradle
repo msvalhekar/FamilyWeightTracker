@@ -14,7 +14,16 @@ apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
 
 def getAppVersionCode() {
-    return 123
+    return 200
+}
+
+def getAppVersionName() {
+    def major = (int) (getAppVersionCode() / 100)
+    def minor = (int) ((getAppVersionCode() % 100) / 10)
+
+    SimpleDateFormat format = new SimpleDateFormat("yyMMdd")
+    //return String.format("%s.%s.%s", major, minor, format.format(new Date(2017, 0, 4)))
+    return String.format("%s.%s.%s", major, minor, format.format(new Date()))
 }
 
 def computeApkName(variant) {
@@ -27,14 +36,6 @@ def computeApkName(variant) {
     return String.format("pwt-%s%s.apk", getAppVersionName(), flavorSuffix)
 }
 
-def getAppVersionName() {
-    def major = (int) (getAppVersionCode() / 100)
-    def minor = (int) ((getAppVersionCode() % 100) / 10)
-
-    SimpleDateFormat format = new SimpleDateFormat("yyMMdd")
-    //return String.format("%s.%s.%s", major, minor, format.format(new Date(2016, 9, 6)))
-    return String.format("%s.%s.%s", major, minor, format.format(new Date()))
-}
 
 android {
     compileSdkVersion 23
@@ -117,4 +118,5 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') { transitive = true; }
     compile 'com.google.android.gms:play-services-analytics:9.0.0'
     compile 'org.jsoup:jsoup:1.8.3'
+    compile 'net.danlew:android.joda:2.9.5.1'
 }

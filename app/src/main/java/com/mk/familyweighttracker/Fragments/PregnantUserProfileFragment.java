@@ -91,7 +91,7 @@ public class PregnantUserProfileFragment extends PregnantUserBaseFragment {
 
         if(getUser().dateOfBirth != null) {
             ((TextView) mFragmentView.findViewById(R.id.view_user_dob))
-                    .setText(String.format("%s (%s)", getUser().getDateOfBirthStr(), Utility.calculateAge(getUser().dateOfBirth)));
+                    .setText(String.format("%s (%s)", getUser().getDateOfBirthStr(), Utility.getAge(getUser().dateOfBirth, !getUser().isPregnant())));
         }
     }
 

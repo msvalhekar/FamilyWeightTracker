@@ -4,6 +4,9 @@ import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.R;
 
+import org.joda.time.Instant;
+import org.joda.time.Period;
+
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -81,57 +84,24 @@ public class Utility {
         return height / CENTIMETERS_PER_INCH;
     }
 
-    public static String calculateAge(Date dateOfBirth) {
-        if(dateOfBirth == null) return "-";
+    public static String getAge(Date dateOfBirth, boolean includeWeek) {
+        Instant nowInstant = Instant.now();
+        Instant dobInstant = new Instant(dateOfBirth);
 
-        Calendar dob = Calendar.getInstance();
-        dob.setTime(dateOfBirth);
+        Period period = new Period(dobInstant, nowInstant);
 
-        Calendar now = Calendar.getInstance();
-
-        if(dob.after(now)) {
-            int ageYear = (dob.get(Calendar.YEAR) - now.get(Calendar.YEAR));
-            int ageMonth = (dob.get(Calendar.MONTH) - now.get(Calendar.MONTH));
-            if(ageYear > 0 || ageMonth > 9)
-                return "Invalid DoB";
-            return "Baby in womb";
-        }
-
-        //calculate age .
-        int ageYear = (now.get(Calendar.YEAR) - dob.get(Calendar.YEAR));
-        int ageMonth = (now.get(Calendar.MONTH) - dob.get(Calendar.MONTH));
-        int ageDays = (now.get(Calendar.DAY_OF_MONTH) - dob.get(Calendar.DAY_OF_MONTH));
-
-        if(ageYear == 0) {
-            if(ageMonth == 0) {
-                return String.format("%d days", ageDays);
-            } else {
-                if (ageDays < 0) {
-                    GregorianCalendar gregCal = new GregorianCalendar(
-                            now.get(Calendar.YEAR),
-                            now.get(Calendar.MONTH)-1,
-                            now.get(Calendar.DAY_OF_MONTH));
-                    ageDays += gregCal.getActualMaximum(Calendar.DAY_OF_MONTH);
-                    ageMonth --;
-                }
-                if(ageMonth == 0)
-                    return String.format("%d days", ageDays);
-                else
-                    return String.format("%dm %dd", ageMonth, ageDays);
-            }
-        } else {
-            if(ageMonth == 0)
-                return String.format("%d yrs", ageYear);
-            else if(ageMonth < 0){
-                ageMonth += 12;
-                ageYear--;
-                if(ageYear == 0)
-                    return String.format("%d months", ageMonth);
-                return String.format("%dy %dm", ageYear, ageMonth);
-            } else {
-                return String.format("%dy %dm", ageYear, ageMonth);
-            }
-        }
+        String sAge = "";
+        if(period.getYears() > 0)
+            sAge = period.getYears() + "y";
+        if(period.getMonths() > 0)
+            sAge += " " + period.getMonths() + "m";
+        if(includeWeek && period.getWeeks() > 0)
+            sAge += " " + period.getWeeks() + "w";
+        if(period.getDays() > 0)
+            sAge += " " + (period.getDays() + (includeWeek ? 0 : period.getWeeks()*7)) + "d";
+        if(StringHelper.isNullOrEmpty(sAge))
+            sAge = "Today";
+        return sAge;
     }
 
     public static Date getInitialDateOfReminder(boolean isWeekly, int reminderDay, int reminderHour, int reminderMinute) {

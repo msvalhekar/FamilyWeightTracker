@@ -193,7 +193,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                         new DatePickerDialog.OnDateSetListener() {
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                 Calendar newDate = Calendar.getInstance();
-                                newDate.set(year, monthOfYear, dayOfMonth);
+                                newDate.set(year, monthOfYear, dayOfMonth, 0, 0, 0);
 
                                 mUser.dateOfBirth = newDate.getTime();
                                 dobButton.setText(mUser.getDateOfBirthStr(), TextView.BufferType.SPANNABLE);

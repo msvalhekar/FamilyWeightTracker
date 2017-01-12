@@ -7,6 +7,8 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.mk.familyweighttracker.DbModels.UserModel;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -34,6 +36,8 @@ public class TrackerApplication extends com.activeandroid.app.Application {
                 .debuggable(true)
                 .build();
         Fabric.with(fabric);
+
+        JodaTimeAndroid.init(this);
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
