@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
@@ -69,7 +70,6 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_pregnant_user);
-
 
         initToolbarControl();
 
@@ -156,7 +156,9 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     }
 
     private void initImageButtonControl() {
-        mImageButton.setImageBitmap(mUser.getImageAsBitmap(false));
+        try {
+            mImageButton.setImageBitmap(mUser.getImageAsBitmap(false, ImageUtility.OneHundred));
+        } catch (OutOfMemoryError e) { }
 
         mImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -485,7 +487,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
     }
 
     private void addDummyReadings() {
-        for (int i=0;i<41;i++) {
+        for (int i=0;i<42;i++) {
             UserReading reading = new UserReading();
             reading.TakenOn = new Date();
             reading.UserId = mUser.getId();

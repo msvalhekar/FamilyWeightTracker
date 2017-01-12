@@ -246,7 +246,10 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
                         ? R.string.image_bump_label
                         : R.string.image_baby_label));
 
-        getImageButton().setImageBitmap(mUserReadingToProcess.getImageAsBitmap(false));
+        try {
+            getImageButton().setImageBitmap(
+                    mUserReadingToProcess.getImageAsBitmap(false, ImageUtility.SeventyFive, ImageUtility.OneHundred));
+        } catch (OutOfMemoryError e) { }
 
         getImageButton().setOnClickListener(new View.OnClickListener() {
             @Override

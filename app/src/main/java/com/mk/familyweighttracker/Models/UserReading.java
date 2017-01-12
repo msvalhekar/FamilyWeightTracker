@@ -63,16 +63,17 @@ public class UserReading {
         return Sequence == User.MAXIMUM_PREGNANCY_READINGS_COUNT -1;
     }
 
-    public Bitmap getImageAsBitmap(boolean circular){
+    public Bitmap getImageAsBitmap(boolean circular, int newWidth, int newHeight){
         Bitmap bitmap = null;
 
         if(new File(getImagePath()).exists())
-            bitmap = BitmapFactory.decodeFile(getImagePath());
+            bitmap = ImageUtility.decodeSampledBitmapFromFile(getImagePath(), newWidth, newHeight);
 
-        if (bitmap == null)
+        if (bitmap == null) {
             bitmap = BitmapFactory.decodeResource(
                     TrackerApplication.getApp().getResources(),
                     getUser().isPregnant() ? R.drawable.weekly : getUser().isMale ? R.drawable.boy : R.drawable.girl);
+        }
 
         return circular ? ImageUtility.getCircularBitmap(bitmap) : bitmap;
     }

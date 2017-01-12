@@ -298,18 +298,17 @@ public class User {
         return String.format("%s/%s", StorageUtility.getImagesDirectory(), imageName);
     }
 
-    public Bitmap getImageAsBitmap(boolean circular){
+    public Bitmap getImageAsBitmap(boolean circular, int newWidthHeight){
         Bitmap bitmap = null;
 
         if(new File(getImagePath()).exists())
-            bitmap = BitmapFactory.decodeFile(getImagePath());
+            bitmap = ImageUtility.decodeSampledBitmapFromFile(getImagePath(), newWidthHeight, newWidthHeight);
 
-        if (bitmap != null)
-            return circular ? ImageUtility.getCircularBitmap(bitmap) : bitmap;
-
-        bitmap = BitmapFactory.decodeResource(
-                TrackerApplication.getApp().getResources(),
-                isPregnant() ? R.drawable.splash : R.drawable.baby);
+        if(bitmap == null) {
+            bitmap = BitmapFactory.decodeResource(
+                    TrackerApplication.getApp().getResources(),
+                    isPregnant() ? R.drawable.splash : R.drawable.baby);
+        }
 
         return circular ? ImageUtility.getCircularBitmap(bitmap) : bitmap;
     }

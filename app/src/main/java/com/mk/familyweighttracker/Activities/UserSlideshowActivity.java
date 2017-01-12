@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Framework.PreferenceHelper;
 import com.mk.familyweighttracker.Framework.StringHelper;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
@@ -158,8 +159,10 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
 
             UserReading reading = mUserReadings.get(position);
 
-            ((ImageView) itemView.findViewById(R.id.user_slideshow_item_image))
-                    .setImageBitmap(reading.getImageAsBitmap(false));
+            try {
+                ((ImageView) itemView.findViewById(R.id.user_slideshow_item_image))
+                        .setImageBitmap(reading.getImageAsBitmap(false, ImageUtility.SixHundred, ImageUtility.EightHundred));
+            } catch (OutOfMemoryError e) { }
 
             String weekMsg = String.format(getString(R.string.slideshow_week_number_format), reading.Sequence);
             if(reading.isPrePregnancyReading())

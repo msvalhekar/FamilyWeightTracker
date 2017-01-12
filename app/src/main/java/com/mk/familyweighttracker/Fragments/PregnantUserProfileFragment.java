@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.mk.familyweighttracker.Activities.AddPregnantUserActivity;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
+import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.R;
@@ -81,7 +82,10 @@ public class PregnantUserProfileFragment extends PregnantUserBaseFragment {
     }
 
     private void initUserDetailsControls() {
-        ((ImageButton) mFragmentView.findViewById(R.id.view_user_image_button)).setImageBitmap(getUser().getImageAsBitmap(true));
+        try {
+            ((ImageButton) mFragmentView.findViewById(R.id.view_user_image_button))
+                    .setImageBitmap(getUser().getImageAsBitmap(true, ImageUtility.OneHundred));
+        } catch (OutOfMemoryError e) { }
 
         ((TextView) mFragmentView.findViewById(R.id.view_user_name)).setText(getUser().name);
 

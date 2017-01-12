@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.mk.familyweighttracker.Fragments.PregnantUserReadingsFragment;
+import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.Models.WeekWeightGainRange;
@@ -162,8 +163,10 @@ public class PregnantUserReadingAdapter extends RecyclerView.Adapter<PregnantUse
         }
 
         private void setImageControl() {
-            ImageButton button = ((ImageButton) mView.findViewById(R.id.user_record_image_button));
-            button.setImageBitmap(mUserReading.getImageAsBitmap(true));
+            try {
+                ((ImageButton) mView.findViewById(R.id.user_record_image_button))
+                        .setImageBitmap(mUserReading.getImageAsBitmap(true, ImageUtility.SeventyFive, ImageUtility.OneHundred));
+            } catch (OutOfMemoryError e) { }
         }
     }
 

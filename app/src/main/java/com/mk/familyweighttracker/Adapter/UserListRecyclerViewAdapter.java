@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
+import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
@@ -195,7 +196,9 @@ public class UserListRecyclerViewAdapter extends RecyclerView.Adapter<UserListRe
 
         private void setUserImageControl() {
             ImageView imageView = (ImageView) mView.findViewById(R.id.list_item_image);
-            imageView.setImageBitmap(mUser.getImageAsBitmap(true));
+            try {
+                imageView.setImageBitmap(mUser.getImageAsBitmap(true, ImageUtility.TwoHundred));
+            } catch (OutOfMemoryError e) { }
         }
     }
 
