@@ -177,7 +177,7 @@ public class PregnantUserChartFragment extends PregnantUserBaseFragment implemen
         LineData data = new LineData(xVals, dataSets);
         mLineChart.setData(data);
         //mLineChart.invalidate();
-        mLineChart.animateX(1000);
+        //mLineChart.animateX(1000);
         mLineChart.setDescription(String.format("%s - Weight (%s) for Pregnancy (%s)", getUser().name, getUser().weightUnit, getUser().trackingPeriod));
         mLineChart.setDescriptionTextSize(15);
     }

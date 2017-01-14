@@ -163,7 +163,7 @@ public class InfantChartListRecyclerViewAdapter extends RecyclerView.Adapter<Inf
             LineData data = new LineData(xVals, dataSets);
             mLineChart.setData(data);
             //mLineChart.invalidate();
-            mLineChart.animateX(1000);
+            //mLineChart.animateX(1000);
 
             mLineChart.setDescription(mChartDetail.getTitle());
             mLineChart.setDescriptionTextSize(15);
