@@ -111,17 +111,20 @@ public class UserListRecyclerViewAdapter extends RecyclerView.Adapter<UserListRe
 
             bmiView.setText(String.format(mContext.getString(R.string.bmi_with_value_label), mUser.getBmiStr()));
 
-            BodyWeightCategory weightCategory = mUser.getWeightCategory();
-            bmiCategoryView.setText(weightCategory.toString());
+            bmiCategoryView.setText("");
+            if (mUser.isPregnant()) {
+                BodyWeightCategory weightCategory = mUser.getWeightCategory();
+                bmiCategoryView.setText(weightCategory.toString());
 
-            if (weightCategory == BodyWeightCategory.UnderWeight) {
-                bmiCategoryView.setBackgroundColor(Color.rgb(255, 255, 153));
-            } else if (weightCategory == BodyWeightCategory.Normal) {
-                bmiCategoryView.setBackgroundColor(Color.rgb(153, 255, 153));
-            } else if (weightCategory == BodyWeightCategory.OverWeight) {
-                bmiCategoryView.setBackgroundColor(Color.rgb(255, 255, 153));
-            } else if (weightCategory == BodyWeightCategory.Obese) {
-                bmiCategoryView.setBackgroundColor(Color.rgb(255, 102, 102));
+                if (weightCategory == BodyWeightCategory.UnderWeight) {
+                    bmiCategoryView.setBackgroundColor(Color.rgb(255, 255, 153));
+                } else if (weightCategory == BodyWeightCategory.Normal) {
+                    bmiCategoryView.setBackgroundColor(Color.rgb(153, 255, 153));
+                } else if (weightCategory == BodyWeightCategory.OverWeight) {
+                    bmiCategoryView.setBackgroundColor(Color.rgb(255, 255, 153));
+                } else if (weightCategory == BodyWeightCategory.Obese) {
+                    bmiCategoryView.setBackgroundColor(Color.rgb(255, 102, 102));
+                }
             }
         }
 
@@ -133,7 +136,7 @@ public class UserListRecyclerViewAdapter extends RecyclerView.Adapter<UserListRe
         private void setAgeControl() {
             String ageValue = "";
             if (mUser.dateOfBirth != null) {
-                ageValue = Utility.calculateAge(mUser.dateOfBirth);
+                ageValue = Utility.getAge(mUser.dateOfBirth, !mUser.isPregnant());
             }
             ((TextView) mView.findViewById(R.id.list_item_age)).setText(ageValue);
         }
