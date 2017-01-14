@@ -7,6 +7,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Models.UserReading;
 
 import org.json.JSONException;
@@ -104,7 +105,8 @@ public class UserReadingModel extends Model {
                 .put("wt", Weight)
                 .put("ht", Height)
                 .put("hc", HeadCircum)
-                .put("note", Note);
+                .put("note", Note)
+                .put("imgSz", ImageUtility.getBitmapSize(ImageUtility.getReadingImagePath(User.getId(), Sequence)));
     }
 
     public static void saveFrom(JSONObject readingJSON, UserModel userModel) throws JSONException {

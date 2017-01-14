@@ -33,6 +33,12 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import static com.mk.familyweighttracker.Framework.ImageUtility.ChartNameFormat;
+import static com.mk.familyweighttracker.Framework.ImageUtility.HdCircumChartNameFormat;
+import static com.mk.familyweighttracker.Framework.ImageUtility.HeightChartNameFormat;
+import static com.mk.familyweighttracker.Framework.ImageUtility.UserImageNameFormat;
+import static com.mk.familyweighttracker.Framework.ImageUtility.WeightChartNameFormat;
+
 /**
  * Created by mvalhekar on 25-03-2016.
  */
@@ -41,11 +47,6 @@ public class User {
     public static int MAXIMUM_PREGNANCY_READINGS_COUNT = 42;
     public static int MAXIMUM_INFANT_READINGS_COUNT = 36;
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
-    public static String ImageNameFormat = "u%d.jpg";
-    public static String ChartNameFormat = "u%dc.jpg";
-    public static String WeightChartNameFormat = "u%dwc.jpg";
-    public static String HeightChartNameFormat = "u%dhc.jpg";
-    public static String HdCircumChartNameFormat = "u%dhcc.jpg";
 
     private long mId;
 
@@ -294,8 +295,7 @@ public class User {
     }
 
     public String getImagePath() {
-        String imageName = String.format(ImageNameFormat, getId());
-        return String.format("%s/%s", StorageUtility.getImagesDirectory(), imageName);
+        return ImageUtility.getUserImagePath(getId());
     }
 
     public Bitmap getImageAsBitmap(boolean circular, int newWidthHeight){

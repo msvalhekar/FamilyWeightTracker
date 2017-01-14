@@ -12,6 +12,8 @@ import com.mk.familyweighttracker.Services.UserService;
 import java.io.File;
 import java.util.Date;
 
+import static com.mk.familyweighttracker.Framework.ImageUtility.UserReadingImageNameFormat;
+
 /**
  * Created by mvalhekar on 26-03-2016.
  */
@@ -22,7 +24,6 @@ public class UserReading {
     public static final double DEFAULT_INFANT_BASE_WEIGHT = 2.5;
     public static final double DEFAULT_INFANT_BASE_HEIGHT = 50.0;
     public static final double DEFAULT_INFANT_BASE_HEADCIRCUM = 35;
-    public static String ImageNameFormat = "u%d_w%d.jpg";
 
     public long Id;
     public long UserId;
@@ -33,12 +34,8 @@ public class UserReading {
     public Date TakenOn;
     public String Note;
 
-    public String getImageName() {
-        return String.format(ImageNameFormat, UserId, Sequence);
-    }
-
     public String getImagePath() {
-        return String.format("%s/%s", StorageUtility.getImagesDirectory(), getImageName());
+        return ImageUtility.getReadingImagePath(UserId, Sequence);
     }
 
     public UserReading () {

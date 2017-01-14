@@ -8,6 +8,7 @@ import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Enums.UserType;
 import com.mk.familyweighttracker.Enums.WeightUnit;
+import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Models.User;
 
 import org.json.JSONArray;
@@ -194,7 +195,8 @@ public class UserModel extends Model {
                 .put("remDay", reminderDay)
                 .put("remHr", reminderHour)
                 .put("remMin", reminderMinute)
-                .put("readings", readingsJSONArray);
+                .put("readings", readingsJSONArray)
+                .put("imgSz", ImageUtility.getBitmapSize(ImageUtility.getUserImagePath(getId())));
     }
 
     public static void saveFrom(JSONObject userJSON) throws JSONException {

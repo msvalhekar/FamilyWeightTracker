@@ -50,6 +50,39 @@ public class ImageUtility {
     public static final int OneHundred = 100;
     public static final int TwoHundred = 200;
 
+    public static String UserImageNameFormat = "u%d.jpg";
+    public static String UserReadingImageNameFormat = "u%d_w%d.jpg";
+    public static String ChartNameFormat = "u%dc.jpg";
+    public static String WeightChartNameFormat = "u%dwc.jpg";
+    public static String HeightChartNameFormat = "u%dhc.jpg";
+    public static String HdCircumChartNameFormat = "u%dhcc.jpg";
+
+    public static String getUserImagePath(long userId) {
+        String imageName = String.format(UserImageNameFormat, userId);
+        return String.format("%s/%s", StorageUtility.getImagesDirectory(), imageName);
+    }
+
+    public static String getReadingImagePath(long userId, long sequence) {
+        String imageName = String.format(UserReadingImageNameFormat, userId, sequence);
+        return String.format("%s/%s", StorageUtility.getImagesDirectory(), imageName);
+    }
+
+    public static String getBitmapSize(String imagePath) {
+        String sImageSize = "";
+        if (new File(imagePath).exists()) {
+            BitmapFactory.Options options = getBitmapOptions(imagePath);
+            sImageSize = String.format("%dx%d", options.outWidth, options.outHeight);
+        }
+        return sImageSize;
+    }
+
+    public static BitmapFactory.Options getBitmapOptions(String imagePath) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(imagePath, options);
+        return options;
+    }
+
     public static Bitmap decodeSampledBitmapFromFile(
             String imagePath, int reqWidth, int reqHeight) {
 
