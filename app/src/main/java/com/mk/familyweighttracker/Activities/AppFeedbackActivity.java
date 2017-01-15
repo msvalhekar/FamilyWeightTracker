@@ -1,6 +1,9 @@
 package com.mk.familyweighttracker.Activities;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -16,13 +19,11 @@ import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.StringHelper;
 import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
-import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
-import com.mk.familyweighttracker.Services.UserService;
+
+import java.util.List;
 
 public class AppFeedbackActivity extends TrackerBaseActivity {
-
-    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +33,6 @@ public class AppFeedbackActivity extends TrackerBaseActivity {
         Analytic.sendScreenView(Constants.Activities.AppFeedbackActivity);
 
         initToolbarControl();
-
-        long userId = getIntent().getLongExtra(Constants.ExtraArg.USER_ID, 0);
-        mUser = new UserService().get(userId);
 
         initNoteControl();
         initActionButtonControls();
@@ -74,15 +72,16 @@ public class AppFeedbackActivity extends TrackerBaseActivity {
                         }
                         finish();
 
-                        Intent emailIntent = new Intent (Intent.ACTION_SEND);
-                        emailIntent.setType("plain/text");
-                        emailIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");
-                        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"mvalhekar@gmail.com"});
-                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, String.format(getString(R.string.feedback_email_subject_message), mUser.name));
-                        emailIntent.putExtra(Intent.EXTRA_TEXT, feedbackMessage); // do this so some email clients don't complain about empty body.
-                        startActivity (emailIntent);
-
-                        Toast.makeText(AppFeedbackActivity.this, R.string.app_feedback_thanks_message, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(Intent.ACTION_SENDTO);
+                        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"mvalhekar@gmail.com"});
+                        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedback_email_subject_message));
+                        if (intent.resolveActivity(getPackageManager()) != null) {
+                            startActivity(intent);
+                            Toast.makeText(AppFeedbackActivity.this, R.string.app_feedback_thanks_message, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(AppFeedbackActivity.this, R.string.app_feedback_error_message, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 

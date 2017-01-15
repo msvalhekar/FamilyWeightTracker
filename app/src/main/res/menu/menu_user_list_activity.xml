@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Activities.UsersListActivity">
+    <item
+        android:id="@+id/user_list_share"
+        android:icon="@drawable/ic_share"
+        android:title="@string/app_share_label"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/user_list_feedback"
+        android:icon="@drawable/ic_feedback"
+        android:title="@string/app_feedback_label"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/user_list_rate"
+        android:icon="@drawable/ic_thumb_up"
+        android:title="@string/app_rate_label"
+        app:showAsAction="never"/>
+</menu>

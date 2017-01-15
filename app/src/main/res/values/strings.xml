@@ -105,6 +105,7 @@
     <string name="app_rate_label">Like</string>
     <string name="app_feedback_label">Feedback</string>
     <string name="app_feedback_thanks_message">Thank you for your valuable feedback !!!</string>
+    <string name="app_feedback_error_message">Some problem sending feedback. Try later.</string>
     <string name="app_feedback_hint_message">[your feedback]</string>
     <string name="home_app_introduction_message">Smart and Simple. \nCapture special pregnancy moments. \nExperience \'My Wonderful Pregnancy\'.</string>
     <string name="home_app_disclaimer_label">Disclaimer</string>
@@ -205,7 +206,7 @@
     <string name="error_user_name_used_message">This name is already used, try different</string>
     <string name="error_field_required_message">Required</string>
     <string name="error_feedback_content_required_message">No feedback shared. Write your feedback and then Send.</string>
-    <string name="feedback_email_subject_message">PWT Feedback - %s</string>
+    <string name="feedback_email_subject_message">PWT Feedback</string>
     <string name="user_removed_message">\'%s\' removed.</string>
     <string name="add_user_options_title">Start tracking</string>
     <string name="bmi_with_value_label">BMI: %s</string>

@@ -168,19 +168,14 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity {
         findViewById(R.id.app_share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, getShareText());
-                startActivity(shareIntent);
+                navigateToShareIntent();
             }
         });
 
         findViewById(R.id.app_feedback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent feedbackIntent = new Intent(v.getContext(), AppFeedbackActivity.class);
-                feedbackIntent.putExtra(Constants.ExtraArg.USER_ID, mUserId);
-                startActivity(feedbackIntent);
+                navigateToFeedbackActivity(v.getContext());
             }
         });
 
@@ -190,15 +185,6 @@ public class PregnantUserDetailActivity extends TrackerBaseActivity {
                 navigateToAppStore();
             }
         });
-    }
-
-    private String getShareText() {
-        return String.format("\'%s\'", getString(R.string.app_name)) +
-                getString(R.string.app_share_line_2) +
-                getString(R.string.app_share_line_3) +
-                getString(R.string.app_share_line_4) +
-                "\n\n" +
-                String.format(Constants.PLAY_STORE_APP_SEARCH_URL, TrackerApplication.getApp().getPackageName());
     }
 
     public List<WeekWeightGainRange> getWeightGainRangeTable() {

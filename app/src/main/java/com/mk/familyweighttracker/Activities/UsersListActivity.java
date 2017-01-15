@@ -8,6 +8,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
@@ -38,6 +40,9 @@ public class UsersListActivity extends TrackerBaseActivity {
 
         Analytic.sendScreenView(Constants.Activities.UsersListActivity);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_users_list);
+        setSupportActionBar(toolbar);
+
         initToolbarControl();
 
         initAddNewUserControl();
@@ -57,12 +62,40 @@ public class UsersListActivity extends TrackerBaseActivity {
     private void initToolbarControl() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar_users_list);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_user_list_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: // Respond to the action bar's Up/Home button
+                finish();
+                break;
+
+            case R.id.user_list_share:
+                navigateToShareIntent();
+                break;
+
+            case R.id.user_list_rate:
+                navigateToAppStore();
+                break;
+
+            case R.id.user_list_feedback:
+                navigateToFeedbackActivity(getApplication());
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initAddNewUserControl() {
