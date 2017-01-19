@@ -35,7 +35,7 @@ import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
-import com.mk.familyweighttracker.Services.FcmService;
+import com.mk.familyweighttracker.Services.FirebaseNotificationService;
 import com.mk.familyweighttracker.Services.UserService;
 
 import java.io.File;
@@ -471,7 +471,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             intent.putExtra(Constants.ExtraArg.USER_ID, userId);
             startActivity(intent);
         }
-        FcmService.deleteCurrentToken();
+        FirebaseNotificationService.deleteCurrentToken();
         finish();
 
         String message = mIsEditMode ? getString(R.string.user_details_updated_message) : getString(R.string.user_added_message);
