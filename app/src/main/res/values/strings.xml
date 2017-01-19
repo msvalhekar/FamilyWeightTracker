@@ -242,4 +242,6 @@
     <string name="create_newborn_dialog_message">Do you want to track your newborn\'s physical development, month-by-month?</string>
     <string name="welcome_newborn_message">Congratulations and Welcome Baby !!!</string>
     <string name="created_newborn_message">Infant profile created, update details.</string>
+    <string name="birthday_wish_message">May this day bring countless happiness and endless joy and live with peace and serenity.</string>
+    <string name="birthday_wish_title">Happy Birthday %s</string>
 </resources>

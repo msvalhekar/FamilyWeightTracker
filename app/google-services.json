@@ -1,9 +1,42 @@
 {
   "project_info": {
     "project_number": "224359654867",
-    "project_id": "pregnancy-weight-tracker"
+    "project_id": "pregnancy-weight-tracker",
+    "firebase_url": "https://pregnancy-weight-tracker.firebaseio.com",
+    "storage_bucket": "pregnancy-weight-tracker.appspot.com"
   },
   "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224359654867:android:1c1e465c7779a161",
+        "android_client_info": {
+          "package_name": "com.mk.familyweighttracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "224359654867-68o6v96ln0deknjqckd7uch6buolbmod.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuPcmhgc60KpFqOc4KCMPJPqhf0cF55fw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
     {
       "client_info": {
         "mobilesdk_app_id": "1:224359654867:android:3c4badfaaf1dcd91",

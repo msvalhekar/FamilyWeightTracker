@@ -12,6 +12,17 @@ public class Constants {
     public static final String PLAY_STORE_MARKET_SEARCH_URL = "market://details?id=%s";
     public static final String PLAY_STORE_APP_SEARCH_URL = "http://play.google.com/store/apps/details?id=%s";
 
+    public static class FirebaseNotificationTopic {
+        public static final String DeliveryDueDateFormat = "DELIVERY_DUE_%s";
+        public static final String BirthDateFormat = "DOB_%s";
+        public static final String InfantBirthDateFormat = "INFANT_DOB_%s";
+    }
+
+    public static class FirebaseNotificationHandler {
+        public static final String DeliveryDue = "DELIVERY_DUE";
+        public static final String BirthDate = "DOB";
+        public static final String InfantBirthDate = "INFANT_DOB";
+    }
 
     public static class Settings {
         public static final int USER_NOTE_LENGTH = 250;

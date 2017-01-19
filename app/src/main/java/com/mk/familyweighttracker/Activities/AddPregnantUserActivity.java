@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
@@ -26,9 +25,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.mk.familyweighttracker.Enums.HeightUnit;
 import com.mk.familyweighttracker.Enums.UserType;
-import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.ImageUtility;
@@ -38,6 +35,7 @@ import com.mk.familyweighttracker.Framework.TrackerBaseActivity;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
 import com.mk.familyweighttracker.R;
+import com.mk.familyweighttracker.Services.FcmService;
 import com.mk.familyweighttracker.Services.UserService;
 
 import java.io.File;
@@ -370,11 +368,11 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
                         calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH));
 
-//                Calendar maxDate = Calendar.getInstance();
-//                maxDate.setTime(new Date());
-//                datePickerDialog.getDatePicker().setMinDate(maxDate.getTimeInMillis());
-//                maxDate.add(Calendar.DAY_OF_MONTH, 287);
-//                datePickerDialog.getDatePicker().setMaxDate(maxDate.getTimeInMillis());
+                Calendar maxDate = Calendar.getInstance();
+                maxDate.setTime(new Date());
+                datePickerDialog.getDatePicker().setMinDate(maxDate.getTimeInMillis());
+                maxDate.add(Calendar.DAY_OF_MONTH, 290);
+                datePickerDialog.getDatePicker().setMaxDate(maxDate.getTimeInMillis());
 
                 datePickerDialog.show();
             }
@@ -473,6 +471,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
             intent.putExtra(Constants.ExtraArg.USER_ID, userId);
             startActivity(intent);
         }
+        FcmService.deleteCurrentToken();
         finish();
 
         String message = mIsEditMode ? getString(R.string.user_details_updated_message) : getString(R.string.user_added_message);
