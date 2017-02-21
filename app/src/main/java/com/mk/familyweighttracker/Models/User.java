@@ -373,9 +373,6 @@ public class User {
             if (dateOfBirth == null || now.before(dateOfBirth))
                 return -1;
 
-            if (getPrepregnancyReading() == null)
-                return 0;
-
             long days = Utility.calculateDateDiff(dateOfBirth, now);
             long estSeq = days / 30;
             return estSeq;
