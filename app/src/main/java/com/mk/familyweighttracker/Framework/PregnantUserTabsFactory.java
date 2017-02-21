@@ -26,13 +26,14 @@ public class PregnantUserTabsFactory {
 
             _homeTabs.put("Profile", new PregnantUserProfileFragment());
             _homeTabs.put("Readings", new PregnantUserReadingsFragment());
-            if(userType == UserType.Pregnancy)
-                _homeTabs.put("Trend", new PregnantUserChartFragment());
-            else
-                _homeTabs.put("Growth", new InfantUserChartFragment());
 
-            if(userType == UserType.Pregnancy)
+            if(userType == UserType.Pregnancy) {
+                _homeTabs.put("Trend", new PregnantUserChartFragment());
                 _homeTabs.put("M.W.P", new PregnantUserMediaFragment());
+            }
+            else {
+                _homeTabs.put("Growth", new InfantUserChartFragment());
+            }
         }
         return _homeTabs;
     }
