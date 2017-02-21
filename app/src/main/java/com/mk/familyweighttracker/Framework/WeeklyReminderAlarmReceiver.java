@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Vibrator;
 
 import com.activeandroid.ActiveAndroid;
+import com.mk.familyweighttracker.Activities.SplashActivity;
 import com.mk.familyweighttracker.Models.PushNotification;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.R;
@@ -43,7 +44,15 @@ public class WeeklyReminderAlarmReceiver extends BroadcastReceiver {
 
     private void sendReminderNotification(long userId) throws ClassNotFoundException {
         User user = new UserService().get(userId);
-        if(user == null || !user.enableReminder) return;
+        if(user == null || !user.enableReminder)
+            return;
+
+        if(user.getDeliveryReading() != null) {
+            user.enableReminder = false;
+            new UserService().add(user);
+            user.resetReminder();
+            return;
+        }
 
         PushNotification pushNotification = new PushNotification();
 
@@ -51,6 +60,7 @@ public class WeeklyReminderAlarmReceiver extends BroadcastReceiver {
         pushNotification.message = user.getReminderNotificationMessage();
         pushNotification.context = _context;
         pushNotification.requestCode = (int)user.getId();
+        pushNotification.toClass = SplashActivity.class;
         NotificationCenter.showNotification(pushNotification);
     }
 }
