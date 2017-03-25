@@ -8,6 +8,7 @@ import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.Framework.Utility;
 import com.mk.familyweighttracker.Models.User;
 import com.mk.familyweighttracker.Models.UserReading;
+import com.mk.familyweighttracker.Repositories.IUserRepository;
 import com.mk.familyweighttracker.Repositories.UserRepository;
 
 import java.io.File;
@@ -17,7 +18,7 @@ import java.util.List;
  * Created by mvalhekar on 25-03-2016.
  */
 public class UserService {
-    private UserRepository userRepository = new UserRepository();
+    private IUserRepository userRepository = new UserRepository();
 
     public List<User> getAll() {
         return userRepository.getAll();
