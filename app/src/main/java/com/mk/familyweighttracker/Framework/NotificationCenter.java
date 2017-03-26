@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
 
-import com.mk.familyweighttracker.Activities.SplashActivity;
 import com.mk.familyweighttracker.Models.PushNotification;
 import com.mk.familyweighttracker.R;
 
@@ -24,7 +23,7 @@ public class NotificationCenter {
                         .setContentText(pushNotification.message)
                         .setAutoCancel(true);
 
-        Intent intent = new Intent(pushNotification.context, SplashActivity.class);
+        Intent intent = new Intent(pushNotification.context, pushNotification.toClass);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(pushNotification.context);
         stackBuilder.addNextIntent(intent);

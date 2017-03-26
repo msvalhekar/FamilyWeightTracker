@@ -10,4 +10,5 @@ public class PushNotification {
     public String message;
     public Context context;
     public int requestCode;
+    public Class<?> toClass;
 }

@@ -1,5 +1,7 @@
 package com.mk.familyweighttracker.Handlers.FirebaseNotification;
 
+import com.mk.familyweighttracker.Framework.StringHelper;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,6 +17,9 @@ public class FirebaseNotificationHandlerFactory {
     );
 
     public static IFirebaseNotificationHandler getHandlerFor(String notificationType) {
+        if(StringHelper.isNullOrEmpty(notificationType))
+            return new DefaultFcmNotificationHandler();
+
         for (IFirebaseNotificationHandler handler : handlers) {
             if(handler.canHandle(notificationType))
                 return handler;

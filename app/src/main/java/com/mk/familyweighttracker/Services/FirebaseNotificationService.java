@@ -72,25 +72,18 @@ public class FirebaseNotificationService {
     }
 
     public static void handleNotification(RemoteMessage remoteMessage) {
-        if (remoteMessage.getData().size() > 0) {
-            try {
-                Map<String, String> data = remoteMessage.getData();
-                JSONObject json = new JSONObject(data);
-                String notificationType = json.getString("type");
+        if (remoteMessage.getData().size() == 0)
+            return;
 
-                IFirebaseNotificationHandler handler = FirebaseNotificationHandlerFactory.getHandlerFor(notificationType);
-                handler.handleRequest(json);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        try {
+            Map<String, String> data = remoteMessage.getData();
+
+            IFirebaseNotificationHandler.NotificationData notificationData = new IFirebaseNotificationHandler.NotificationData(data);
+
+            IFirebaseNotificationHandler handler = FirebaseNotificationHandlerFactory.getHandlerFor(notificationData.type);
+            handler.handleRequest(notificationData);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        //// Check if message contains a notification payload.
-        //if (remoteMessage.getNotification() != null) {
-        //    //Log.d(Constants.LogTag.App, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-        //}
-
-        //// Also if you intend on generating your own notifications as a result of a received FCM
-        //// message, here is where that should be initiated. See sendNotification method below.
     }
 }
