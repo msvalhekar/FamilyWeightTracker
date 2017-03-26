@@ -10,5 +10,5 @@ public class DefaultFcmNotificationHandler implements IFirebaseNotificationHandl
     }
 
     @Override
-    public void handleRequest(JSONObject jsonData) { }
+    public void handleRequest(NotificationData data) { }
 }

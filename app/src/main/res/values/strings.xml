@@ -109,7 +109,7 @@
     <string name="app_feedback_hint_message">[your feedback]</string>
     <string name="home_app_introduction_message">Smart and Simple. \nCapture special pregnancy moments. \nExperience \'My Wonderful Pregnancy\'.</string>
     <string name="home_app_disclaimer_label">Disclaimer</string>
-    <string name="home_app_disclaimer_message">This App is for making user\'s pregnancy a wonderful experience by making use of information and data that user provide in the App. The calculations are indicative and may vary from person to person. App is not approved or sponsored by medical professionals. Always raise any and all questions or concerns about your pregnancy with your doctor. App do not share user\'s personal data outside of this app.</string>
+    <string name="home_app_disclaimer_message">This App is for making user\'s pregnancy (and also monitoring baby\'s growth) a wonderful experience by making use of information and data that user provide in the App. The calculations are indicative and may vary from person to person. App is not approved or sponsored by medical professionals. Always raise any and all questions or concerns about your pregnancy with your doctor. App do not share user\'s personal data outside of this app, except for troubleshooting if any issue occurs, so that user can seamlessly use the app.</string>
     <string name="notification_pregnancy_title">%s - Pregnancy weight reading</string>
     <string name="notification_infant_title">%s - Infant growth reading</string>
     <string name="notification_pregnancy_message">Touch to record %d week pregnancy weight.</string>

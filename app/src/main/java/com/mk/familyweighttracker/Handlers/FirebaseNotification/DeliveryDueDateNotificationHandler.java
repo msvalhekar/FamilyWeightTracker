@@ -13,7 +13,7 @@ public class DeliveryDueDateNotificationHandler implements IFirebaseNotification
         return notificationType.equals(Constants.FirebaseNotificationHandler.DeliveryDue);
     }
 
-    public void handleRequest(JSONObject jsonData) {
+    public void handleRequest(NotificationData data) {
 
     }
 }

@@ -68,7 +68,7 @@ public class ImageUtility {
     }
 
     public static String getBitmapSize(String imagePath) {
-        String sImageSize = "";
+        String sImageSize = "Image not found";
         if (new File(imagePath).exists()) {
             BitmapFactory.Options options = getBitmapOptions(imagePath);
             sImageSize = String.format("%dx%d", options.outWidth, options.outHeight);

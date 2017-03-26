@@ -13,7 +13,7 @@ public class InfantBirthdayNotificationHandler implements IFirebaseNotificationH
         return notificationType.equals(Constants.FirebaseNotificationHandler.InfantBirthDate);
     }
 
-    public void handleRequest(JSONObject jsonData) {
+    public void handleRequest(NotificationData data) {
 
     }
 }
