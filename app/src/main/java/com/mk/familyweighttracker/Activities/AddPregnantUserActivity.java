@@ -81,7 +81,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
         if(mUser == null) {
             mIsEditMode = false;
 
-            String userType = getIntent().getStringExtra(Constants.ExtraArg.ADD_USER_TYPE);
+            String userType = getIntent().getStringExtra(Constants.ExtraArg.USER_TYPE);
             mUser = User.createUser(UserType.getUserType(userType));
         }
 

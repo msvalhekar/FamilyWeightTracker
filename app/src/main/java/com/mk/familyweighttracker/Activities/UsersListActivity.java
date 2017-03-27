@@ -11,9 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -126,7 +124,7 @@ public class UsersListActivity extends TrackerBaseActivity {
             case Pregnancy:
             case Infant:
                 Intent intent = new Intent(TrackerApplication.getApp(), AddPregnantUserActivity.class);
-                intent.putExtra(Constants.ExtraArg.ADD_USER_TYPE, userType.toString());
+                intent.putExtra(Constants.ExtraArg.USER_TYPE, userType.toString());
                 startActivityForResult(intent, Constants.RequestCode.ADD_USER);
                 break;
         }
