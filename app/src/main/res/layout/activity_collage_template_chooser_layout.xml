@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".Activities.UsersListActivity"
+    tools:context=".Activities.CollageTemplateChooserActivity"
     android:background="@drawable/background">
 
     <android.support.design.widget.AppBarLayout
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
         <android.support.v7.widget.Toolbar
-            android:id="@+id/tool_bar_users_list"
+            android:id="@+id/tool_bar_collage_template_chooser"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
@@ -27,17 +27,11 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/empty_view" />
-        <include layout="@layout/users_list" />
+        <GridView
+            android:id="@+id/collage_template_chooser_grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:numColumns="2">
+        </GridView>
     </FrameLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/button_users_list_add_user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@color/colorPrimaryDark"
-        android:src="@android:drawable/ic_input_add" />
-
 </android.support.design.widget.CoordinatorLayout>

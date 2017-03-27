@@ -10,6 +10,7 @@
     <string name="title_activity_add_user_first_reading">Add/Edit First Reading</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_what_is_new">What\'s New?</string>
+    <string name="title_activity_collage_template_chooser">Select template</string>
 
     <string name="add_user_first_reading_lmp_date_label">Last Menstrual Period *</string>
     <string name="image_bump_label">Bump photo</string>
@@ -88,7 +89,7 @@
     <string name="menu_user_detail_media">Media</string>
     <string name="user_media_slideshow_label">Preview</string>
     <string name="user_media_bkgnd_music_label">Set Background Music</string>
-    <string name="user_media_export_label">Export</string>
+    <string name="user_media_collage_label">Collage</string>
     <string name="slideshow_empty_note_message">[add notes, your feelings, your thoughts or talk to baby]</string>
     <string name="slideshow_week_number_format">Week %d</string>
     <string name="user_readings_not_found_message">No data found.</string>

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mk.familyweighttracker.Activities.CollageTemplateChooserActivity;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.PreferenceHelper;
@@ -92,11 +93,17 @@ public class PregnantUserMediaFragment extends PregnantUserBaseFragment {
                 }
             });
 
-        mFragmentView.findViewById(R.id.media_export_button)
+        mFragmentView.findViewById(R.id.media_collage_button)
             .setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Export", Toast.LENGTH_SHORT).show();
+                    //https://developer.android.com/reference/android/media/MediaCodec.html
+                    //http://stackoverflow.com/questions/20463719/ffmpegmultiple-image-frames-1-audio-1-video/21304505#21304505
+                    //https://www.vitamio.org/en/2013/Tutorial_0509/13.html
+
+                    Intent intent = new Intent(v.getContext(), CollageTemplateChooserActivity.class);
+                    intent.putExtra(Constants.ExtraArg.USER_TYPE, getUser().isPregnant());
+                    startActivity(intent);
                 }
             });
 

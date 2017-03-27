@@ -42,12 +42,11 @@
         android:text="@string/app_share_label"/>
 
     <Button
-        android:id="@+id/media_export_button"
+        android:id="@+id/media_collage_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
-        android:visibility="gone"
         android:background="@drawable/round_shape_button"
-        android:text="@string/user_media_export_label"/>
+        android:text="@string/user_media_collage_label"/>
 
 </LinearLayout>
