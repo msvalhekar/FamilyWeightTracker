@@ -3,6 +3,7 @@ package com.mk.familyweighttracker.DbModels;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.activeandroid.Cache;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -24,14 +25,36 @@ public class CollageTemplateModel extends Model {
     @Column(name = "Name")
     public String Name;
 
-    @Column(name = "ImageContent")
-    public byte[] ImageContent;
-
     @Column(name = "TemplateType")
     public CollageTemplateType TemplateType;
 
+    @Column(name = "ImageContent")
+    public byte[] ImageContent;
+
+    @Column(name = "Width")
+    public int Width;
+
+    @Column(name = "Height")
+    public int Height;
+
     @Column(name = "CreatedOn")
     public Date CreatedOn;
+
+
+    public static CollageTemplateModel get(int templateId) {
+        return new Select()
+                .from(CollageTemplateModel.class)
+                .where("id=?", templateId)
+                .executeSingle();
+    }
+
+    public List<CollageTemplateItemModel> getItems() {
+        return new Select()
+                .from(CollageTemplateItemModel.class)
+                .where("CollageTemplateItems.CollageTemplate=?", getId())
+                .orderBy("Sequence")
+                .execute();
+    }
 
     public Bitmap getImageBitmap() {
         return BitmapFactory.decodeByteArray(ImageContent, 0, ImageContent.length);
@@ -41,20 +64,11 @@ public class CollageTemplateModel extends Model {
         return TemplateType == CollageTemplateType.Pregnancy;
     }
 
+    public String getDisplayName () {
+        return String.format("%s - %s", isPregnancyTemplate() ? "Pregnancy" : "Infant", Name);
+    }
+
     public static List<CollageTemplateModel> getAllFor(boolean isPregnant) {
-
-//        CollageTemplateModel ct1 = new CollageTemplateModel();
-//        ct1.Name = "first temp";
-//        ct1.TemplateType = CollageTemplateType.Pregnancy;
-//        ct1.CreatedOn = new Date();
-//        ct1.save();
-//
-//        CollageTemplateModel ct2 = new CollageTemplateModel();
-//        ct2.Name = "second temp";
-//        ct2.TemplateType = CollageTemplateType.Infant;
-//        ct2.CreatedOn = new Date();
-//        ct2.save();
-
         return new Select().from(CollageTemplateModel.class)
                 .where("TemplateType = ?", isPregnant ? CollageTemplateType.Pregnancy : CollageTemplateType.Infant)
                 .orderBy("CreatedOn")

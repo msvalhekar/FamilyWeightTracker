@@ -1,5 +1,6 @@
 package com.mk.familyweighttracker.Activities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -8,10 +9,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mk.familyweighttracker.DbModels.CollageTemplateModel;
 import com.mk.familyweighttracker.Enums.CollageTemplateType;
@@ -35,23 +38,26 @@ public class CollageTemplateChooserActivity extends TrackerBaseActivity {
 
         initToolbarControl();
 
-//        List<UserReading> userReadings = getUser().getReadings(true);
-//        List<Bitmap> bitmaps = new ArrayList<Bitmap>();
-//        for (int i = 0; i < userReadings.size(); i++) {
-//            bitmaps.add(userReadings.get(i).getImageAsBitmap(true, ImageUtility.SixHundred, ImageUtility.EightHundred));
-//        }
-//
-//        Bitmap resultBitmap = Bitmap.createBitmap(ImageUtility.SixHundred * userReadings.size(), ImageUtility.EightHundred + 10, Bitmap.Config.ARGB_8888);
-//        Canvas canvas = new Canvas(resultBitmap);
-//        Paint paint = new Paint();
-//        for (int i = 0; i < bitmaps.size(); i++) {
-//            canvas.drawBitmap(bitmaps.get(i), ImageUtility.SixHundred * i, 5, paint);
-//        }
-//        ImageUtility.saveImage("temp.jpg", resultBitmap);
-
+        final long userId = getIntent().getLongExtra(Constants.ExtraArg.USER_ID, -1);
         boolean isPregnant = getIntent().getBooleanExtra(Constants.ExtraArg.USER_TYPE, true);
+
         GridView gridView = ((GridView) findViewById(R.id.collage_template_chooser_grid));
-        gridView.setAdapter(new CollageTemplateChooserAdapter(isPregnant));
+        final CollageTemplateChooserAdapter adapter = new CollageTemplateChooserAdapter(isPregnant);
+        gridView.setAdapter(adapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CollageTemplateModel item = (CollageTemplateModel) adapter.getItem(position);
+
+                Toast.makeText(CollageTemplateChooserActivity.this, String.format("'%s' selected", item.Name), Toast.LENGTH_SHORT).show();
+                int templateId = (int)((long) item.getId());
+
+                Intent intent = new Intent(parent.getContext(), CollagePreviewActivity.class);
+                intent.putExtra(Constants.ExtraArg.USER_ID, userId);
+                intent.putExtra(Constants.ExtraArg.COLLAGE_TEMPLATE_ID, templateId);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initToolbarControl() {
@@ -66,18 +72,15 @@ public class CollageTemplateChooserActivity extends TrackerBaseActivity {
 
     private class CollageTemplateChooserAdapter extends BaseAdapter {
         List<CollageTemplateModel> templateList;
+
         public CollageTemplateChooserAdapter(boolean isPregnant) {
             templateList = CollageTemplateModel.getAllFor(isPregnant);
 
+            //todo: remove below four lines
             Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.baby);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
             templateList.get(0).ImageContent = stream.toByteArray();
-
-//            Bitmap bmpg = BitmapFactory.decodeResource(getResources(), R.drawable.girl);
-//            ByteArrayOutputStream streamg = new ByteArrayOutputStream();
-//            bmpg.compress(Bitmap.CompressFormat.PNG, 100, streamg);
-//            templateList.get(1).ImageContent = streamg.toByteArray();
         }
 
         @Override
@@ -103,7 +106,7 @@ public class CollageTemplateChooserActivity extends TrackerBaseActivity {
 
             CollageTemplateModel template = ((CollageTemplateModel) getItem(position));
             ((ImageView) convertView.findViewById(R.id.item_image)).setImageBitmap(template.getImageBitmap());
-            ((TextView) convertView.findViewById(R.id.item_name)).setText(template.Name);
+            ((TextView) convertView.findViewById(R.id.item_name)).setText(template.getDisplayName());
             return convertView;
         }
     }

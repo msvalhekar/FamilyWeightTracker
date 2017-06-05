@@ -13,7 +13,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 def getAppVersionCode() {
-    return 200
+    return 210
 }
 
 def getAppVersionName() {
@@ -21,7 +21,7 @@ def getAppVersionName() {
     def minor = (int) ((getAppVersionCode() % 100) / 10)
 
     SimpleDateFormat format = new SimpleDateFormat("yyMMdd")
-    return String.format("%s.%s.%s", major, minor, format.format(new Date(2017, 0, 7)))
+    return String.format("%s.%s.%s", major, minor, format.format(new Date(2017, 6, 1)))
     //return String.format("%s.%s.%s", major, minor, format.format(new Date()))
 }
 
@@ -52,9 +52,7 @@ android {
     signingConfigs {
         release {
             storeFile file("FamilyWeightTracker.jks")
-            storePassword ""
             keyAlias "MeenalkumarSubhashValhekar"
-            keyPassword ""
         }
     }
 

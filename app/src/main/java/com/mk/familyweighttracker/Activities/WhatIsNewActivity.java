@@ -76,6 +76,27 @@ public class WhatIsNewActivity extends TrackerBaseActivity {
     private List<IWhatIsNew> getWhatsNewList() {
         List<IWhatIsNew> list = new ArrayList<>();
 
+        // 2.1.170701
+        list.add(new IWhatIsNew() {
+            @Override
+            public String getVersion() { return "2.1"; }
+
+            @Override
+            public Date getReleaseDate() {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(2017, 6, 1);
+                return calendar.getTime();
+            }
+
+            @Override
+            public List<WhatIsNewMessage> getFeatureMap() {
+                return Arrays.asList(
+                        new WhatIsNewMessage(1, "Collage", "Choose from various templates and create wonderful, printable collage."),
+                        new WhatIsNewMessage(2, "<title>", "<desc>"),
+                        new WhatIsNewMessage(3, "<title>", "<desc>"));
+            }
+        });
+
         // 2.0.170103
         list.add(new IWhatIsNew() {
             @Override

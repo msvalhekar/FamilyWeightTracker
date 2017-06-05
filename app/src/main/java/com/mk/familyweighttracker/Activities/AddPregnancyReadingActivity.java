@@ -115,6 +115,8 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
                         })
                         .create()
                         .show();
+//                Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+//                finish();
                 return;
             }
 
@@ -268,8 +270,7 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
                         : R.string.reading_measured_date_label));
 
         final Button takenOnView = ((Button) findViewById(R.id.add_reading_taken_on_btn));
-        final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
-        takenOnView.setText(dateFormatter.format(mUserReadingToProcess.TakenOn));
+        takenOnView.setText(mUserReadingToProcess.getDisplayTakenOn());
 
         takenOnView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -284,7 +285,7 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
                                 newDate.set(year, monthOfYear, dayOfMonth);
 
                                 mUserReadingToProcess.TakenOn = newDate.getTime();
-                                takenOnView.setText(dateFormatter.format(mUserReadingToProcess.TakenOn));
+                                takenOnView.setText(mUserReadingToProcess.getDisplayTakenOn());
                             }
                         },
                         calendar.get(Calendar.YEAR),

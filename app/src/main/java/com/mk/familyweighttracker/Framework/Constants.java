@@ -53,6 +53,7 @@ public class Constants {
         public static final String PregnantAddReadingActivity = "PregnantAddReadingActivity";
         public static final String PregnantAddUserActivity = "PregnantAddUserActivity";
         public static final String CollageTemplateChooserActivity = "CollageTemplateChooserActivity";
+        public static final String CollagePreviewActivity = "CollagePreviewActivity";
 
         public static final String InfantSlideshowActivity = "InfantSlideshowActivity";
         public static final String InfantAddReadingActivity = "InfantAddReadingActivity";
@@ -65,6 +66,7 @@ public class Constants {
         public static final String ADD_READING_TYPE = "AddReadingType";
         public static final String EDIT_READING_ID = "EditReadingId";
         public static final String PROMPT_FOR_UPGRADE = "PromptForUpgrade";
+        public static final String COLLAGE_TEMPLATE_ID = "CollageTemplateId";
     }
 
     public static class RequestCode {

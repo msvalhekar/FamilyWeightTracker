@@ -10,6 +10,7 @@ import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static com.mk.familyweighttracker.Framework.ImageUtility.UserReadingImageNameFormat;
@@ -54,6 +55,11 @@ public class UserReading {
 
     public boolean isPrePregnancyReading() {
         return Sequence == 0;
+    }
+
+    public String getDisplayTakenOn() {
+        final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
+        return dateFormatter.format(this.TakenOn);
     }
 
     public boolean isDeliveryReading() {

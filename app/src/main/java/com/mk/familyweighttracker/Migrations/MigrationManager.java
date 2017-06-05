@@ -41,7 +41,8 @@ public class MigrationManager {
     private List<VersionDataMigration> getMigrations() {
         return Arrays.asList(
                 new Version131DataMigration(),
-                new Version141DataMigration()
+                new Version141DataMigration(),
+                new Version210DataMigration()
         );
     }
 }

@@ -102,6 +102,7 @@ public class PregnantUserMediaFragment extends PregnantUserBaseFragment {
                     //https://www.vitamio.org/en/2013/Tutorial_0509/13.html
 
                     Intent intent = new Intent(v.getContext(), CollageTemplateChooserActivity.class);
+                    intent.putExtra(Constants.ExtraArg.USER_ID, getUser().getId());
                     intent.putExtra(Constants.ExtraArg.USER_TYPE, getUser().isPregnant());
                     startActivity(intent);
                 }

@@ -148,7 +148,7 @@ public class User {
     }
 
     public String getLastMenstrualPeriodStr() {
-        return dateFormat.format(getPrepregnancyReading().TakenOn);
+        return getPrepregnancyReading().getDisplayTakenOn();
     }
 
     public String getStartingWeightStr() {
