@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.mk.familyweighttracker.Enums.ImageShapeType;
 import com.mk.familyweighttracker.Fragments.PregnantUserReadingsFragment;
 import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Models.MonthGrowthRange;
@@ -89,7 +90,7 @@ public class InfantUserReadingAdapter extends RecyclerView.Adapter<InfantUserRea
 
             try {
                 ((ImageButton) mView.findViewById(R.id.record_image_button))
-                        .setImageBitmap(mUserReading.getImageAsBitmap(true, ImageUtility.SeventyFive, ImageUtility.OneHundred));
+                        .setImageBitmap(mUserReading.getImageAsBitmap(ImageShapeType.Oval, ImageUtility.SeventyFive, ImageUtility.OneHundred));
             } catch (OutOfMemoryError e) { }
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd-MMM-yy");

@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mk.familyweighttracker.Enums.ImageShapeType;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
 import com.mk.familyweighttracker.Framework.ImageUtility;
@@ -161,7 +162,7 @@ public class UserSlideshowActivity extends TrackerBaseActivity {
 
             try {
                 ((ImageView) itemView.findViewById(R.id.user_slideshow_item_image))
-                        .setImageBitmap(reading.getImageAsBitmap(false, ImageUtility.SixHundred, ImageUtility.EightHundred));
+                        .setImageBitmap(reading.getImageAsBitmap(ImageShapeType.Rectangle, ImageUtility.SixHundred, ImageUtility.EightHundred));
             } catch (OutOfMemoryError e) { }
 
             String weekMsg = String.format(getString(R.string.slideshow_week_number_format), reading.Sequence);

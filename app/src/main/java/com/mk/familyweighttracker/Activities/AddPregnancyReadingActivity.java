@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mk.familyweighttracker.Enums.HeightUnit;
+import com.mk.familyweighttracker.Enums.ImageShapeType;
 import com.mk.familyweighttracker.Enums.PregnancyReadingType;
 import com.mk.familyweighttracker.Enums.WeightUnit;
 import com.mk.familyweighttracker.Framework.Analytic;
@@ -104,19 +105,8 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
                     errorMessage = String.format(getResources().getString(R.string.SuggestReadingBeyondDeliveryDueDateMessage), sequence);
                 }
 
-                new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.add_reading_error_message))
-                        .setMessage(errorMessage)
-                        .setPositiveButton(R.string.ok_label, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                            }
-                        })
-                        .create()
-                        .show();
-//                Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
-//                finish();
+                Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+                finish();
                 return;
             }
 
@@ -250,7 +240,7 @@ public class AddPregnancyReadingActivity extends TrackerBaseActivity {
 
         try {
             getImageButton().setImageBitmap(
-                    mUserReadingToProcess.getImageAsBitmap(false, ImageUtility.SeventyFive, ImageUtility.OneHundred));
+                    mUserReadingToProcess.getImageAsBitmap(ImageShapeType.Rectangle, ImageUtility.SeventyFive, ImageUtility.OneHundred));
         } catch (OutOfMemoryError e) { }
 
         getImageButton().setOnClickListener(new View.OnClickListener() {

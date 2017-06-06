@@ -3,8 +3,8 @@ package com.mk.familyweighttracker.Models;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.mk.familyweighttracker.Enums.ImageShapeType;
 import com.mk.familyweighttracker.Framework.ImageUtility;
-import com.mk.familyweighttracker.Framework.StorageUtility;
 import com.mk.familyweighttracker.Framework.TrackerApplication;
 import com.mk.familyweighttracker.R;
 import com.mk.familyweighttracker.Services.UserService;
@@ -12,8 +12,6 @@ import com.mk.familyweighttracker.Services.UserService;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import static com.mk.familyweighttracker.Framework.ImageUtility.UserReadingImageNameFormat;
 
 /**
  * Created by mvalhekar on 26-03-2016.
@@ -66,7 +64,7 @@ public class UserReading {
         return Sequence == User.MAXIMUM_PREGNANCY_READINGS_COUNT -1;
     }
 
-    public Bitmap getImageAsBitmap(boolean circular, int newWidth, int newHeight){
+    public Bitmap getImageAsBitmap(ImageShapeType shapeType, int newWidth, int newHeight){
         Bitmap bitmap = null;
 
         if(new File(getImagePath()).exists())
@@ -77,8 +75,9 @@ public class UserReading {
                     TrackerApplication.getApp().getResources(),
                     getUser().isPregnant() ? R.drawable.weekly : getUser().isMale ? R.drawable.boy : R.drawable.girl);
         }
-
-        return circular ? ImageUtility.getCircularBitmap(bitmap) : bitmap;
+        if(shapeType == ImageShapeType.Oval || shapeType == ImageShapeType.Circle)
+            return ImageUtility.transformBitmapToShape(shapeType, bitmap);
+        return bitmap;
     }
 
     private User mUser;

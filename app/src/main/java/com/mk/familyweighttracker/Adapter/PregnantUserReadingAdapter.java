@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.mk.familyweighttracker.Enums.ImageShapeType;
 import com.mk.familyweighttracker.Fragments.PregnantUserReadingsFragment;
 import com.mk.familyweighttracker.Framework.ImageUtility;
 import com.mk.familyweighttracker.Models.User;
@@ -165,7 +166,7 @@ public class PregnantUserReadingAdapter extends RecyclerView.Adapter<PregnantUse
         private void setImageControl() {
             try {
                 ((ImageButton) mView.findViewById(R.id.user_record_image_button))
-                        .setImageBitmap(mUserReading.getImageAsBitmap(true, ImageUtility.SeventyFive, ImageUtility.OneHundred));
+                        .setImageBitmap(mUserReading.getImageAsBitmap(ImageShapeType.Oval, ImageUtility.SeventyFive, ImageUtility.OneHundred));
             } catch (OutOfMemoryError e) { }
         }
     }

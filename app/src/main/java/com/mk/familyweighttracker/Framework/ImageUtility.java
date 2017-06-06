@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mk.familyweighttracker.Enums.ImageShapeType;
 import com.mk.familyweighttracker.R;
 
 import java.io.ByteArrayOutputStream;
@@ -122,21 +123,25 @@ public class ImageUtility {
         return inSampleSize;
     }
 
-    public static Bitmap getCircularBitmap(Bitmap bitmap) {
+    public static Bitmap transformBitmapToShape(ImageShapeType shapeType, Bitmap bitmap) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
         final Bitmap output = Bitmap.createBitmap(
-                bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+                width, height, Bitmap.Config.ARGB_8888);
 
         final Canvas canvas = new Canvas(output);
 
-        final int color = Color.RED;
         final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final Rect rect = new Rect(0, 0, width, height);
         final RectF rectF = new RectF(rect);
 
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        canvas.drawOval(rectF, paint);
+        if(ImageShapeType.Circle == shapeType) {
+            canvas.drawCircle(width / 2, height / 2, Math.min(width, height) / 2, paint);
+        } else {
+            canvas.drawOval(rectF, paint);
+        }
 
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
@@ -219,11 +224,9 @@ public class ImageUtility {
         }
     }
 
-    public static String saveImage(String fileName, Bitmap bitmap) {
+    public static String saveImage(String filePath, Bitmap bitmap) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        String imagesDirectory = StorageUtility.getImagesDirectory();
-        String filePath = String.format("%s/%s", imagesDirectory, fileName);
         File destination = new File(filePath);
 
         FileOutputStream fileOutputStream;

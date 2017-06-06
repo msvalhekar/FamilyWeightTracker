@@ -25,6 +25,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.mk.familyweighttracker.Enums.ImageShapeType;
 import com.mk.familyweighttracker.Enums.UserType;
 import com.mk.familyweighttracker.Framework.Analytic;
 import com.mk.familyweighttracker.Framework.Constants;
@@ -155,7 +156,7 @@ public class AddPregnantUserActivity extends TrackerBaseActivity {
 
     private void initImageButtonControl() {
         try {
-            mImageButton.setImageBitmap(mUser.getImageAsBitmap(false, ImageUtility.OneHundred));
+            mImageButton.setImageBitmap(mUser.getImageAsBitmap(ImageShapeType.Rectangle, ImageUtility.OneHundred));
         } catch (OutOfMemoryError e) { }
 
         mImageButton.setOnClickListener(new View.OnClickListener() {

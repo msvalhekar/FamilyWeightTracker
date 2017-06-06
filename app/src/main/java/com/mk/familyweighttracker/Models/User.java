@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.mk.familyweighttracker.Enums.BodyWeightCategory;
 import com.mk.familyweighttracker.Enums.HeightUnit;
+import com.mk.familyweighttracker.Enums.ImageShapeType;
 import com.mk.familyweighttracker.Enums.TrackingPeriod;
 import com.mk.familyweighttracker.Enums.UserType;
 import com.mk.familyweighttracker.Enums.WeightUnit;
@@ -36,7 +37,6 @@ import java.util.List;
 import static com.mk.familyweighttracker.Framework.ImageUtility.ChartNameFormat;
 import static com.mk.familyweighttracker.Framework.ImageUtility.HdCircumChartNameFormat;
 import static com.mk.familyweighttracker.Framework.ImageUtility.HeightChartNameFormat;
-import static com.mk.familyweighttracker.Framework.ImageUtility.UserImageNameFormat;
 import static com.mk.familyweighttracker.Framework.ImageUtility.WeightChartNameFormat;
 
 /**
@@ -298,7 +298,7 @@ public class User {
         return ImageUtility.getUserImagePath(getId());
     }
 
-    public Bitmap getImageAsBitmap(boolean circular, int newWidthHeight){
+    public Bitmap getImageAsBitmap(ImageShapeType shapeType, int newWidthHeight){
         Bitmap bitmap = null;
 
         if(new File(getImagePath()).exists())
@@ -310,7 +310,10 @@ public class User {
                     isPregnant() ? R.drawable.splash : R.drawable.baby);
         }
 
-        return circular ? ImageUtility.getCircularBitmap(bitmap) : bitmap;
+        if(shapeType == ImageShapeType.Oval || shapeType == ImageShapeType.Circle)
+            return ImageUtility.transformBitmapToShape(shapeType, bitmap);
+
+        return bitmap;
     }
 
     public void resetReminder() {
