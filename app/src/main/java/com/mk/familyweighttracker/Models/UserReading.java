@@ -70,14 +70,12 @@ public class UserReading {
         if(new File(getImagePath()).exists())
             bitmap = ImageUtility.decodeSampledBitmapFromFile(getImagePath(), newWidth, newHeight);
 
-        if (bitmap == null) {
+        if(bitmap == null) {
             bitmap = BitmapFactory.decodeResource(
                     TrackerApplication.getApp().getResources(),
                     getUser().isPregnant() ? R.drawable.weekly : getUser().isMale ? R.drawable.boy : R.drawable.girl);
         }
-        if(shapeType == ImageShapeType.Oval || shapeType == ImageShapeType.Circle)
-            return ImageUtility.transformBitmapToShape(shapeType, bitmap);
-        return bitmap;
+        return ImageUtility.transformBitmapToShape(shapeType, bitmap);
     }
 
     private User mUser;

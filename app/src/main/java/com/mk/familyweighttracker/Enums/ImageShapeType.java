@@ -1,10 +1,12 @@
 package com.mk.familyweighttracker.Enums;
 
 public enum ImageShapeType {
-    Rectangle(1),
-    Circle(2),
-    Oval(3),
-    Square(4);
+    Square(1),
+    RoundSquare(2),
+    Rectangle(3),
+    RoundRectangle(4),
+    Circle(5),
+    Oval(6);
 
     private final int value;
 

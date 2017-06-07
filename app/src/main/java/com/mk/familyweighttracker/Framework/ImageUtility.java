@@ -124,28 +124,62 @@ public class ImageUtility {
     }
 
     public static Bitmap transformBitmapToShape(ImageShapeType shapeType, Bitmap bitmap) {
+        if(shapeType == ImageShapeType.Rectangle)
+            return bitmap;
+
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
-        final Bitmap output = Bitmap.createBitmap(
-                width, height, Bitmap.Config.ARGB_8888);
+        int startX = 0, startY = 0, endX = width, endY = height;
+        int min = Math.min(width, height);
+        float curve = 100;
 
+        final Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(output);
 
         final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, width, height);
-        final RectF rectF = new RectF(rect);
+        Rect rect = new Rect(0, 0, width, height);
 
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
-        if(ImageShapeType.Circle == shapeType) {
-            canvas.drawCircle(width / 2, height / 2, Math.min(width, height) / 2, paint);
-        } else {
-            canvas.drawOval(rectF, paint);
+        switch (shapeType) {
+            case Circle:
+                canvas.drawCircle(width / 2, height / 2, Math.min(width, height) / 2, paint);
+                paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+                break;
+            case Oval:
+                canvas.drawOval(new RectF(rect), paint);
+                paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+                break;
+            case RoundRectangle:
+                canvas.drawRoundRect(new RectF(rect), curve, curve, paint);
+                paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+                break;
+            case Square:
+                if (width == min) {
+                    startY = (height - width) / 2;
+                    endY = endY - startY;
+                } else {
+                    startX = (width - height) / 2;
+                    endX = endX - startX;
+                }
+
+                rect = new Rect(startX, startY, endX, endY);
+                break;
+            case RoundSquare:
+                if (width == min) {
+                    startY = (height - width) / 2;
+                    endY = endY - startY;
+                } else {
+                    startX = (width - height) / 2;
+                    endX = endX - startX;
+                }
+
+                rect = new Rect(startX, startY, endX, endY);
+                canvas.drawRoundRect(new RectF(rect), curve, curve, paint);
+                paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+                break;
         }
-
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
-
         bitmap.recycle();
 
         return output;

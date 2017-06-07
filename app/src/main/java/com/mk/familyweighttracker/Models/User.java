@@ -309,11 +309,7 @@ public class User {
                     TrackerApplication.getApp().getResources(),
                     isPregnant() ? R.drawable.splash : R.drawable.baby);
         }
-
-        if(shapeType == ImageShapeType.Oval || shapeType == ImageShapeType.Circle)
-            return ImageUtility.transformBitmapToShape(shapeType, bitmap);
-
-        return bitmap;
+        return ImageUtility.transformBitmapToShape(shapeType, bitmap);
     }
 
     public void resetReminder() {
